@@ -1,0 +1,89 @@
+/* MACHINE-GENERATED ! */
+
+frame pad_down {
+	set odd = n*2+1
+
+	__0: vec @(pad_width/2, -pad_height)
+	__1: vec @(-pad_width/2, 0mm)
+	pad "$odd" . __0
+}
+
+frame pad_up {
+	set even = (n+1)*2
+
+	__0: vec @(pad_width/2, pad_height)
+	__1: vec @(-pad_width/2, 0mm)
+	pad "$even" . __0
+	__2: vec @(0mm, pad_height/2)
+}
+
+frame pads {
+	loop n = 0, 11
+
+	__0: vec @(-1mm*n, 0mm)
+	frame pad_down .
+	__1: vec @(0mm, 1mm)
+	__2: vec .(-1mm*n, 0mm)
+	frame pad_up .
+}
+
+frame contianer {
+	set width = 23.2mm
+
+	set height = 22.71mm
+
+	set tab_width = 4.25mm
+
+	set tab_height = 5.13mm
+
+	set mount_hole = 1.588mm
+
+	set between = 3mm
+
+	__0: vec @(width/2, height/2)
+	__1: vec @(-width/2, -height/2)
+	rect . __0 
+	__2: vec @(-width/2, between/2)
+	__3: vec .(-tab_width, tab_height)
+	rect __2 . 
+	__4: vec @(width/2, between/2)
+	__5: vec .(tab_width, tab_height)
+	rect __4 . 
+	__6: vec @(width/2, -between/2)
+	__7: vec .(tab_width, -tab_height)
+	rect __6 . 
+	__8: vec @(-width/2, -between/2)
+	__9: vec .(-tab_width, -tab_height)
+	rect __8 . 
+	__10: vec __8(-tab_width/2, -tab_height/2)
+	__11: vec .(mount_hole/2, mount_hole/2)
+	circ __10 . 
+	__15: vec __4(tab_width/2-0.3mm, tab_height/2)
+	__17: vec .(mount_hole/2, mount_hole/2)
+	circ __15 . 
+	__12: vec __4(tab_width/2+0.3mm, tab_height/2)
+	__13: vec .(mount_hole/2, mount_hole/2)
+	circ __12 . 
+	__14: vec @(-7.5mm, -height/2-5.5mm)
+	__16: vec @(5mm, -height/2)
+	__18: vec @(-5mm, -height/2-5.5mm)
+	rect __16 . 
+	__19: vec @(7.5mm, -height/2-13.5mm)
+	rect __14 . 
+}
+
+package "ML-24-2"
+unit mm
+
+set pad_width = 0.6mm
+
+set pad_height = 2mm
+
+__0: vec @(11mm/2, -22.71mm/2-10mm)
+frame pads .
+frame contianer @
+measy contianer.__0 >> contianer.__2 8mm
+measy contianer.__0 >> contianer.__8 13mm
+measy contianer.__16 >> contianer.__19 10mm
+measy contianer.__16 >> pads.__1 13mm
+measy contianer.__16 << pad_up.__2 5mm

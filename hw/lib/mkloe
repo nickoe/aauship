@@ -1,0 +1,75 @@
+#!/bin/bash
+# Make a Library of Everything
+
+MODS="apc220 ml-24-2 f3611"
+
+LIB=argo.mod
+
+
+usage()
+{
+    echo "$0: [ --ps | --one-ps file | --one-pdf file ]" 1>&2
+    exit 1
+}
+
+
+for n in $MODS; do
+    if [ ! -r $n.fpd ]; then
+	echo $n.fpd: cannot read 1>&2
+	exit 1
+    fi
+done
+
+if [ "$1" = "-ps" -o "$1" = "--ps" ]; then
+    for n in $MODS; do
+	fped -p $n.fpd || exit 1
+    done
+    exit 0
+fi
+
+if [ "$1" = "-one-ps" -o "$1" = "--one-ps" ]; then
+    [ ! -z "$2" ] || usage
+    eval psmerge -o$2 `for n in $MODS; do \
+      echo "<(fped -p $n.fpd -)"; done`
+    exit 0
+fi
+
+if [ "$1" = "-one-pdf" -o "$1" = "--one-pdf" ]; then
+    [ ! -z "$2" ] || usage
+    eval gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$2 -f \
+      `for n in $MODS; do echo "<(fped -p $n.fpd -)"; done`
+    exit 0
+fi
+
+
+for n in $MODS; do
+    fped -k $n.fpd - || { echo "$n" 1>&2; exit 1; }
+done |
+perl -e '
+while (<>) {
+    if (/^\$EndINDEX/) {
+	$index = 0;
+	next;
+    }
+    if ($index) {
+	push(@index, $_);
+	next;
+    }
+    if (/^\$INDEX/) {
+	$index = 1;
+	next;
+    }
+    if (/^PCBNEW-LibModule/) {
+	$head = $_;
+	next;
+    }
+    if (/^\$EndLIBRARY/) {
+	$tail = $_;
+	next;
+    }
+    push(@body, $_);
+}
+print $head;
+print "\$INDEX\n", join("", @index), "\$EndINDEX\n";
+print join("", @body), $tail;
+' >$LIB

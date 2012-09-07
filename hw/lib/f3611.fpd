@@ -1,0 +1,67 @@
+/* MACHINE-GENERATED ! */
+
+frame pads {
+	__0: vec @(2mm, 6mm)
+	__1: vec @(2mm, -6mm)
+	__2: vec @(2mm+12.2mm, 6mm)
+	__3: vec @(2mm+12.2mm, -6mm)
+	__4: vec __0(hole_r, hole_r)
+	__5: vec __0(-hole_r, -hole_r)
+	hole . __4
+	__6: vec __2(-hole_r, -hole_r)
+	__7: vec __2(hole_r, hole_r)
+	hole __6 .
+	__8: vec __2(pad_r, -pad_r)
+	__9: vec __2(-pad_r, pad_r)
+	rpad "5" . __8
+	__10: vec __0(-pad_r, pad_r)
+	__11: vec __0(pad_r, -pad_r)
+	rpad "1" __10 .
+	__12: vec @(-pad_r, pad_r)
+	__13: vec @(pad_r, -pad_r)
+	rpad "2" __12 .
+	__14: vec @(hole_r, hole_r)
+	__15: vec @(-hole_r, -hole_r)
+	hole __14 .
+	__16: vec __1(hole_r, hole_r)
+	__17: vec __1(-hole_r, -hole_r)
+	hole __16 .
+	__18: vec __1(-pad_r, pad_r)
+	__19: vec __1(pad_r, -pad_r)
+	rpad "3" __18 .
+	__20: vec __3(-hole_r, -hole_r)
+	__21: vec __3(hole_r, hole_r)
+	hole . __20
+	__22: vec __3(-pad_r, pad_r)
+	__23: vec __3(pad_r, -pad_r)
+	rpad "4" __22 .
+}
+
+frame outline {
+	__0: vec @(0mm, 15.5mm/2)
+	__1: vec @(21.5mm, -15.5mm/2)
+	rect __0 . 
+}
+
+package "F3611"
+unit mm
+
+set pad_r = pad_d/2
+
+set pad_d = 3mm
+
+set hole_d = 1.5mm
+
+set hole_r = hole_d/2
+
+__0: vec @(-2.2mm, 0mm)
+frame outline .
+frame pads @
+measx outline.__0 >> outline.__1 5mm
+measy outline.__1 >> outline.__0 -5mm
+measx pads.__1 >> pads.__3 -7mm
+measy pads.__3 >> pads.__2 -15mm
+measy __0 >> pads.__0 2mm
+measy pads.__1 >> __0 6.2mm
+measx pads.__9 >> pads.__8 15mm
+measx pads.__6 >> pads.__7 -5mm

@@ -1,0 +1,511 @@
+%!PS-Adobe-3.0
+%%Pages: 1
+%%EndComments
+%%BeginDefaults
+%%PageResources: font Helvetica Helvetica-Bold
+%%EndDefaults
+%%BeginProlog
+/dotpath {
+    gsave flattenpath pathbbox clip newpath
+    1 setlinecap 100 setlinewidth
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    llx 300 urx {
+	lly 300 ury {
+	    1 index exch moveto 0 0 rlineto stroke
+	} for
+    } for
+    grestore newpath } def
+/hatchpath {
+     gsave flattenpath pathbbox clip newpath
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    lly ury sub 1000 urx llx sub {
+	llx add dup lly moveto
+	ury lly sub add ury lineto stroke
+    } for
+    grestore newpath } def
+/backhatchpath {
+     gsave flattenpath pathbbox clip newpath
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    0 1000 ury lly sub urx llx sub add {
+	llx add dup lly moveto
+	ury lly sub sub ury lineto stroke
+    } for
+    grestore newpath } def
+/crosspath {
+    gsave hatchpath grestore backhatchpath } def
+/horpath {
+     gsave flattenpath pathbbox clip newpath
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    lly 800 ury {
+	dup llx exch moveto
+	urx exch lineto stroke
+    } for
+    grestore newpath } def
+/sdiv { dup 0 eq { pop 1 } if div } def
+/maxfont {
+    gsave 0 0 moveto
+    /f exch def /h exch def /w exch def
+    exch f scalefont setfont
+    false charpath flattenpath pathbbox
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    w urx llx sub sdiv h ury lly sub sdiv 2 copy gt { exch } if pop
+    f mul grestore } def
+/getscale { matrix currentmatrix dup 0 get dup mul exch 1 get dup mul
+    add sqrt } def
+/center {
+    currentpoint /y exch def /x exch def
+    gsave dup false charpath flattenpath pathbbox
+    /ury exch def /urx exch def
+    /lly exch def /llx exch def
+    grestore
+    x llx urx add 2 div sub y lly ury add 2 div sub rmoveto } def
+/hcenter {
+    /off exch def
+    gsave matrix setmatrix dup false charpath flattenpath pathbbox
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    grestore
+    llx urx sub 2 div
+    off rmoveto } def
+/showoutlined {
+    gsave 2 mul setlinewidth 1 setgray
+    dup false charpath flattenpath stroke grestore
+    show } def
+/debugbox { gsave dup false charpath flattenpath pathbbox
+    /ury exch def /urx exch def /lly exch def /llx exch def
+    0 setgray 100 setlinewidth
+    llx lly urx llx sub ury lly sub rectstroke grestore } def
+/originalsize 1 0 matrix currentmatrix idtransform pop def
+/realsize {
+    254 div 72 mul 1000 div 0 matrix currentmatrix idtransform
+    dup mul exch dup mul add sqrt
+    originalsize div } def
+/boxfont { 4 copy 1000 maxfont maxfont scalefont setfont } def
+/pdfmark where { pop }
+    { /globaldict where { pop globaldict } { userdict } ifelse    /pdfmark /cleartomark load put } ifelse
+%%EndProlog
+%%Page: 1 1
+%%BeginPageSetup
+currentpagedevice /PageSize get
+    aload pop
+    2 div exch 2 div exch
+    translate
+    72 254 div 1000 div dup scale
+%%EndPageSetup
+[ /Title (APC220) /OUT pdfmark
+gsave -950000 1165000 moveto
+    /Helvetica-Bold findfont dup
+    (APC220) 950000 80000
+    boxfont
+    (APC220) show grestore
+gsave 5000 setlinewidth
+    -950000 1145000 moveto
+    1900000 0 rlineto stroke grestore
+gsave 0 572500 translate
+gsave 1.000000 dup scale
+gsave 0 setgray 100 setlinewidth
+    [1000] 0 setdash
+    -8000 0 moveto 210000 0 lineto
+    0 -37000 moveto 0 466905 lineto
+    stroke grestore
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  170000 370000 moveto
+  0 370000 lineto
+  0 0 lineto
+  170000 0 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  10000 380000 moveto
+  60500 380000 lineto
+  60500 400000 lineto
+  10000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  5000 455000 moveto
+  65000 455000 lineto
+  65000 400000 lineto
+  5000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  60000 465000 moveto
+  10000 465000 lineto
+  10000 455000 lineto
+  60000 455000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 380000 moveto
+  5000 380000 lineto
+  5000 370000 lineto
+  65000 370000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  10000 380000 moveto
+  60500 380000 lineto
+  60500 400000 lineto
+  10000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  5000 455000 moveto
+  65000 455000 lineto
+  65000 400000 lineto
+  5000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  60000 465000 moveto
+  10000 465000 lineto
+  10000 455000 lineto
+  60000 455000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 380000 moveto
+  5000 380000 lineto
+  5000 370000 lineto
+  65000 370000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  10000 380000 moveto
+  60500 380000 lineto
+  60500 400000 lineto
+  10000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  5000 455000 moveto
+  65000 455000 lineto
+  65000 400000 lineto
+  5000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  60000 465000 moveto
+  10000 465000 lineto
+  10000 455000 lineto
+  60000 455000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 380000 moveto
+  5000 380000 lineto
+  5000 370000 lineto
+  65000 370000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  10000 380000 moveto
+  60500 380000 lineto
+  60500 400000 lineto
+  10000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  5000 455000 moveto
+  65000 455000 lineto
+  65000 400000 lineto
+  5000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  60000 465000 moveto
+  10000 465000 lineto
+  10000 455000 lineto
+  60000 455000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 380000 moveto
+  5000 380000 lineto
+  5000 370000 lineto
+  65000 370000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  10000 380000 moveto
+  60500 380000 lineto
+  60500 400000 lineto
+  10000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  5000 455000 moveto
+  65000 455000 lineto
+  65000 400000 lineto
+  5000 400000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  60000 465000 moveto
+  10000 465000 lineto
+  10000 455000 lineto
+  60000 455000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 380000 moveto
+  5000 380000 lineto
+  5000 370000 lineto
+  65000 370000 lineto
+  closepath stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 415000 moveto 5000 410000 lineto stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 423000 moveto 5000 418000 lineto stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 431000 moveto 5000 426000 lineto stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 439000 moveto 5000 434000 lineto stroke
+1 setlinecap 0.5 setgray 3810 setlinewidth
+  65000 447000 moveto 5000 442000 lineto stroke
+0 setgray 150 setlinewidth
+  10000 5000 moveto
+  10000 13000 8000 -90 90 arc
+  10000 21000 lineto
+  10000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  35000 5000 moveto
+  35000 13000 8000 -90 90 arc
+  35000 21000 lineto
+  35000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  60000 5000 moveto
+  60000 13000 8000 -90 90 arc
+  60000 21000 lineto
+  60000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  85000 5000 moveto
+  85000 13000 8000 -90 90 arc
+  85000 21000 lineto
+  85000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  110000 5000 moveto
+  110000 13000 8000 -90 90 arc
+  110000 21000 lineto
+  110000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  135000 5000 moveto
+  135000 13000 8000 -90 90 arc
+  135000 21000 lineto
+  135000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  160000 5000 moveto
+  160000 13000 8000 -90 90 arc
+  160000 21000 lineto
+  160000 13000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  160000 348000 moveto
+  160000 356000 8000 -90 90 arc
+  160000 364000 lineto
+  160000 356000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+0 setgray 150 setlinewidth
+  135000 348000 moveto
+  135000 356000 8000 -90 90 arc
+  135000 364000 lineto
+  135000 356000 8000 90 270 arc
+  closepath gsave crosspath grestore stroke
+1 setgray 200 setlinewidth
+  10000 9000 moveto
+  10000 13000 4000 -90 90 arc
+  10000 17000 lineto
+  10000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (1) 8000 8000
+   boxfont
+   10000 13000 moveto
+   (1) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  35000 9000 moveto
+  35000 13000 4000 -90 90 arc
+  35000 17000 lineto
+  35000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (2) 8000 8000
+   boxfont
+   35000 13000 moveto
+   (2) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  60000 9000 moveto
+  60000 13000 4000 -90 90 arc
+  60000 17000 lineto
+  60000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (3) 8000 8000
+   boxfont
+   60000 13000 moveto
+   (3) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  85000 9000 moveto
+  85000 13000 4000 -90 90 arc
+  85000 17000 lineto
+  85000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (4) 8000 8000
+   boxfont
+   85000 13000 moveto
+   (4) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  110000 9000 moveto
+  110000 13000 4000 -90 90 arc
+  110000 17000 lineto
+  110000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (5) 8000 8000
+   boxfont
+   110000 13000 moveto
+   (5) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  135000 9000 moveto
+  135000 13000 4000 -90 90 arc
+  135000 17000 lineto
+  135000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (6) 8000 8000
+   boxfont
+   135000 13000 moveto
+   (6) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  160000 9000 moveto
+  160000 13000 4000 -90 90 arc
+  160000 17000 lineto
+  160000 13000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (7) 8000 8000
+   boxfont
+   160000 13000 moveto
+   (7) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  160000 352000 moveto
+  160000 356000 4000 -90 90 arc
+  160000 360000 lineto
+  160000 356000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (NC) 8000 8000
+   boxfont
+   160000 356000 moveto
+   (NC) center 250 showoutlined newpath
+1 setgray 200 setlinewidth
+  135000 352000 moveto
+  135000 356000 4000 -90 90 arc
+  135000 360000 lineto
+  135000 356000 4000 90 270 arc
+  closepath gsave fill grestore
+  0 setgray stroke
+0 setgray /Helvetica-Bold findfont dup
+   (NC) 8000 8000
+   boxfont
+   135000 356000 moveto
+   (NC) center 250 showoutlined newpath
+1 setlinecap 0 setgray 1000 realsize setlinewidth
+  10000 13000 moveto
+  10000 -27000 lineto
+  35000 -27000 lineto
+  35000 13000 lineto
+  stroke
+  33701 -26251 moveto
+  35000 -27000 lineto
+  33701 -27750 moveto
+  35000 -27000 lineto
+  stroke
+  11299 -27749 moveto
+  10000 -27000 lineto
+  11299 -26250 moveto
+  10000 -27000 lineto
+  stroke
+gsave 22500 -27000 moveto
+    /Helvetica-Bold findfont dup
+    (2.5) 45000 realsize 15000 realsize
+    boxfont
+    0.000000 rotate
+    (2.5) 5750 realsize hcenter
+    show grestore
+1 setlinecap 0 setgray 1000 realsize setlinewidth
+  2000 5000 moveto
+  -8000 5000 lineto
+  -8000 21000 lineto
+  18000 21000 lineto
+  stroke
+  -8749 19701 moveto
+  -8000 21000 lineto
+  -7250 19701 moveto
+  -8000 21000 lineto
+  stroke
+  -7251 6299 moveto
+  -8000 5000 lineto
+  -8750 6299 moveto
+  -8000 5000 lineto
+  stroke
+gsave -8000 13000 moveto
+    /Helvetica-Bold findfont dup
+    (1.6) 45000 realsize 15000 realsize
+    boxfont
+    90.000000 rotate
+    (1.6) 5750 realsize hcenter
+    show grestore
+1 setlinecap 0 setgray 1000 realsize setlinewidth
+  160000 13000 moveto
+  210000 13000 lineto
+  210000 356000 lineto
+  160000 356000 lineto
+  stroke
+  209251 354701 moveto
+  210000 356000 lineto
+  210750 354701 moveto
+  210000 356000 lineto
+  stroke
+  210749 14299 moveto
+  210000 13000 lineto
+  209250 14299 moveto
+  210000 13000 lineto
+  stroke
+gsave 210000 184500 moveto
+    /Helvetica-Bold findfont dup
+    (34.3) 340750 30000 realsize
+    boxfont
+    90.000000 rotate
+    (34.3) 5000 realsize hcenter
+    show grestore
+1 setlinecap 0 setgray 1000 realsize setlinewidth
+  10000 13000 moveto
+  10000 -37000 lineto
+  160000 -37000 lineto
+  160000 13000 lineto
+  stroke
+  158701 -36251 moveto
+  160000 -37000 lineto
+  158701 -37750 moveto
+  160000 -37000 lineto
+  stroke
+  11299 -37749 moveto
+  10000 -37000 lineto
+  11299 -36250 moveto
+  10000 -37000 lineto
+  stroke
+gsave 85000 -37000 moveto
+    /Helvetica-Bold findfont dup
+    (15) 147750 30000 realsize
+    boxfont
+    0.000000 rotate
+    (15) 5000 realsize hcenter
+    show grestore
+grestore
+grestore
+gsave -950000 20000 moveto
+    /Helvetica findfont dup
+    (Dimensions in mm) 950000 30000
+    boxfont
+    (Dimensions in mm) show grestore
+gsave 5000 setlinewidth
+    -950000 0 moveto
+    1900000 0 rlineto stroke grestore
+showpage
+%%EOF
