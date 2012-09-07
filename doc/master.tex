@@ -1,0 +1,42 @@
+\input{preamble}
+
+\hypersetup{
+  pdftitle={AAUB\AA D},
+  pdfsubject={1st semester Control and Automation, Aalborg University},
+  pdfauthor={Rasmus Lundgaard Christensen, Nick Østergaard, Frederik Juul, Atilla, Tudor},
+  pdfcreator=LaTeX,
+  linkcolor=black,
+  citecolor=black,
+  filecolor=black,
+  urlcolor=black
+}
+
+\begin{document}
+\chapterstyle{nickoe}
+\frontmatter
+
+%\layout
+\includepdf{illustrations/cover}
+%\cleardoublepage
+%\input{formalities/titelbladdk}
+\cleardoublepage
+\input{formalities/titlepage}
+\input{formalities/preface}
+\input{formalities/terminology}
+
+%%%%%%% Maybe we should have an overview of the system here
+\cleardoublepage
+\tableofcontents
+\input{formalities/acronyms}
+
+\mainmatter
+\descpart{Worksheets}{%
+
+\backmatter
+\bibliography{formalities/litterature}
+\label{ch:litt}
+
+%\settocdepth{section}
+%\listoftodos
+\end{document}
+
