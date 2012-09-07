@@ -1,0 +1,19 @@
+AAUSHIP
+=======
+An Autonomous Unmanned Vessel platform
+
+
+Git repository
+--------------
+We now have a common git repository we han push to. You can clone it like this
+on unix. If you are not familiar with git, I reccomend that you read through
+http://gitref.org/, use it as a reference and try to do all of it just to get
+familiar with git.
+
+	git clone /afs/ies.auc.dk/www/www.auv.aau.dk/repo/aauship.git
+
+You now have a folder called aauship in the folder you cloned it in.
+
+As you see the repository is directly on AFS, so you have to be authenticated to
+ be able to pull and push.
+
