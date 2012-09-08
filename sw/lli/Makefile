@@ -63,7 +63,9 @@ OBJ = $(patsubst %.c,%.o,${SOURCES})
 all: $(PROGRAM).hex $(PROGRAM).lst $(PROGRAM).sym size
 
 program: $(PROGRAM).hex
-	$(AVRDUDE) -c$(PROGID) $(PROGBAUD_FLAG) -p$(MCU_TARGET) -P$(PROGPORT) -F -U flash:w:$^
+	@echo ""
+	@echo "UPLOADING"
+	@$(AVRDUDE) -c$(PROGID) $(PROGBAUD_FLAG) -p$(MCU_TARGET) -P$(PROGPORT) -F -U flash:w:$^
 
 clean:
 	rm -rf *.o *.elf *.lst *.map *.sym *.lss *.eep *.srec *.bin *.hex *.al *.i *.s *~

@@ -4,20 +4,14 @@
  
 int main (void)
 {
-  /* set PORTB for output*/
-  DDRB = 0xFF;
-  DDRD = 0xFF;
-
-	PORTB = 0x00;
-	PORTD = 0xff;
+  /* set PORTB.5 for output*/
+  DDRB = (1<<PB5);
  
   while (1)
     {
-      /* set PORTB.2 high */
-      PORTB ^= 0xFF;
-      PORTD ^= 0xFF;
+      /* flip PORTB.2 */
+      PORTB ^= (1<<PB5);
 	  	_delay_ms(100);
-
     }
  
   return 1;
