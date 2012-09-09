@@ -19,3 +19,7 @@ avrdude -p m328p -P /dev/ttyACM0 -c arduino -b 115200 -U flash:w:blink.hex
 
 Program (upload) with the ISP:
 avrdude -p m328p -c usbasp -U flash:w:blink.hex
+
+Source files
+------------
+uart.{c,h} is the derivative work by David A. Mellis from the original Peter Fleury UART library under GPL. http://beaststwo.org/avr-uart/index.shtml
