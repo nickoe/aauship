@@ -4,7 +4,8 @@
 # 	GNU General Public License
 
 # Change these to suit your hardware    
-MCU_TARGET = atmega328p
+#MCU_TARGET = atmega328p
+MCU_TARGET = atmega2560
 
 # CPU clock rate
 F_CPU = 16000000L
@@ -28,12 +29,12 @@ PROGPORT = /dev/ttyACM0
 #
 # Set PROGBAUD to 0 (Zero) for programmers.
 PROGBAUD = 115200
-PROGBAUD = 0
+#PROGBAUD = 0
 
 # Firmware upload device type.
 #PROGID = stk500v1
-#PROGID = stk500v2
-PROGID = arduino # Used with optiboot bootloader
+PROGID = stk500v2 # Default bootloader for arduino mega 2560
+#PROGID = arduino # Used with optiboot bootloader
 #PROGID = avr910
 #PROGID = usbasp
 
@@ -65,7 +66,7 @@ all: $(PROGRAM).hex $(PROGRAM).lst $(PROGRAM).sym size
 program: $(PROGRAM).hex
 	@echo ""
 	@echo "UPLOADING"
-	@$(AVRDUDE) -c$(PROGID) $(PROGBAUD_FLAG) -p$(MCU_TARGET) -P$(PROGPORT) -F -U flash:w:$^
+	$(AVRDUDE) -c$(PROGID) $(PROGBAUD_FLAG) -p$(MCU_TARGET) -P$(PROGPORT) -F -U flash:w:$^
 
 clean:
 	rm -rf *.o *.elf *.lst *.map *.sym *.lss *.eep *.srec *.bin *.hex *.al *.i *.s *~
