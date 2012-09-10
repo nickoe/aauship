@@ -1,0 +1,28 @@
+Nr	Dev		Msg L-H		Msg H-L
+1	Gps		1	Lat			
+			2	Long		
+			3	Time		
+			4	Date		
+			5	Accuracy	
+			6	Raw			en_Raw(1/0)
+			
+2	IMU		1	X-Gyro
+			2	Y-Gyro
+			3	Z-Gyro
+			4	X-Acc
+			5	Y-Acc
+			6	Z-Acc
+			7	X-Magnet
+			8	Y-Magnet
+			9	Z-Magnet
+			10	Init		Init
+			11	STestresult	Self_test_start
+
+3	Temp	1	read_Temp(1)
+			2	read_Temp(2)
+			
+4	Motor	1	read_Speed	set_Speed
+	
+5	Rudder	1	read_Angle	set_Angle
+	
+	
