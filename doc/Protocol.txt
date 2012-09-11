@@ -1,5 +1,5 @@
 Nr	Dev		Msg L-H		Msg H-L
-1	Gps		1	Lat			
+1	Gps		1	Lat //dscmn 			
 			2	Long		
 			3	Time		
 			4	Date		
