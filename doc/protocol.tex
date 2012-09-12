@@ -1,0 +1,37 @@
+\documentclass{article}
+% Pakker
+\usepackage[utf8]{inputenc} % Så må vi bruge æ, ø og å
+%\usepackage[ansinew]{inputenc}
+%\usepackage[danish]{babel} % Dansk opsætning
+\usepackage[T1]{fontenc} % Hjælper med ordeling ved æ, ø og å. Sætter fontene til at være ps-fonte i stedet for bmp.
+\usepackage{array,booktabs} % Til gode tabeller
+\usepackage{acronym} % Smart akronymhåndtering
+\usepackage{minitoc} % Vi kan lave del inholdsfortegnelser forhåbentlig
+\usepackage{bytefield}
+\begin{document}
+\section{FAPS LLI interface}
+\section{Standard format of messages}
+\begin{bytefield}{15}
+\bitbox{5}{DevID} & \bitbox{5}{MsgID} 
+\bitbox{16}{Data } \quad \raisebox{2ex}{\dots}  \bitbox{4}{CRC16 }
+\end{bytefield}
+
+Little endian...
+
+\begin{table}
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Description}\\
+		\midrule
+		startchar & 1 (uint8) & Start character (\texttt{\$}) \\
+		devid & 1 (uint8) & Device identifier \\
+		msgid & 1 (uint8) & Message identifier \\
+		data & 1--250 (uint8) & Data portion (binary)\\
+		checksum & 2 (uint8) & CRC-16 checksum on data part \\
+		endchar & 1 (uint8) & Newline character (\texttt{\textbackslash n})\\
+		\bottomrule
+	\end{tabular}
+	\caption{General description of the packet format}
+\end{table}
+\end{document}
