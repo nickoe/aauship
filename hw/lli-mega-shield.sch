@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date ons 12 sep 2012 21:52:31 CEST
+EESchema Schematic File Version 2  date ons 12 sep 2012 21:55:21 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -607,7 +607,7 @@ Wire Notes Line
 	150  4000 900  4550
 Wire Notes Line
 	900  4550 750  4550
-Text Notes -2000 4050 0    60   ~ 0
+Text Notes 200  6050 1    60   ~ 0
 Maybe theese should be conn_3 molex\ninstead, so they can be placed remotely
 Text Notes 4400 4450 0    60   Italic 12
 DC-DC converter 5V
