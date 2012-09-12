@@ -3,6 +3,11 @@
 
 #include "crc16.h"
 
+/*
+ * Function to generate CRC-16 checksum of a byte array.
+ * Code is taken from http://stackoverflow.com/questions/10564491/function-to-calculate-a-crc16-checksum
+ */
+
 uint16_t gen_crc16(const uint8_t *data, uint16_t size)
 {
     uint16_t out = 0;
