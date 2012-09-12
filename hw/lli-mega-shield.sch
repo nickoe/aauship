@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date ons 12 sep 2012 14:36:52 CEST
+EESchema Schematic File Version 2  date ons 12 sep 2012 16:27:32 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -46,14 +46,66 @@ Comment2 "AAUSHIP"
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text Notes 8500 2000 0    60   Italic 12
+PWM controlled actuators
 Wire Wire Line
-	8450 4050 8150 4050
+	10500 2550 10300 2550
 Wire Wire Line
-	7800 4050 7800 4150
+	9100 2550 8900 2550
 Wire Wire Line
-	7800 4150 8050 4150
+	4750 2000 5000 2000
+Connection ~ 6950 4250
 Wire Wire Line
-	8050 4150 8050 4000
+	7050 4200 7050 4250
+Wire Wire Line
+	7050 4250 6900 4250
+Wire Wire Line
+	6900 3700 7250 3700
+Wire Wire Line
+	7250 3500 6900 3500
+Wire Wire Line
+	1850 1200 1500 1200
+Wire Notes Line
+	2200 600  550  600 
+Wire Notes Line
+	2200 600  2200 1650
+Wire Notes Line
+	2200 1650 550  1650
+Wire Wire Line
+	7250 3300 6900 3300
+Wire Wire Line
+	10950 5800 10950 5900
+Wire Wire Line
+	10650 5250 10650 5300
+Wire Wire Line
+	10650 4800 10650 4850
+Wire Wire Line
+	10900 3900 10950 3900
+Wire Wire Line
+	10950 3900 10950 3850
+Wire Wire Line
+	10500 4250 10500 4200
+Connection ~ 4950 2100
+Wire Wire Line
+	5000 2100 4850 2100
+Wire Wire Line
+	4950 2100 4950 2200
+Wire Wire Line
+	4950 2200 5000 2200
+Wire Wire Line
+	4850 2100 4850 2150
+Wire Wire Line
+	4850 4400 4850 4350
+Wire Wire Line
+	4700 4900 5000 4900
+Wire Wire Line
+	4700 4700 5000 4700
+Wire Wire Line
+	9250 2550 9250 2650
+Wire Wire Line
+	9250 2650 9500 2650
+Wire Wire Line
+	9500 2650 9500 2500
 Wire Notes Line
 	2200 1900 550  1900
 Wire Notes Line
@@ -63,29 +115,29 @@ Wire Notes Line
 Wire Notes Line
 	550  6000 550  1900
 Wire Notes Line
-	10500 1200 10450 1250
+	3600 4750 3550 4800
 Wire Notes Line
-	9400 700  9300 700 
+	2500 4250 2400 4250
 Wire Notes Line
-	9300 700  9300 1000
+	2400 4250 2400 4550
 Wire Notes Line
-	9300 1000 9400 1000
+	2400 4550 2500 4550
 Wire Notes Line
-	9350 1050 9400 1000
+	2450 4600 2500 4550
 Wire Wire Line
-	9800 1350 9700 1350
+	2900 4900 2800 4900
 Wire Wire Line
-	9600 1350 9600 1550
+	2700 4900 2700 5100
 Wire Wire Line
-	10700 1500 10200 1500
+	3800 5050 3300 5050
 Wire Wire Line
-	10200 1500 10200 1350
+	3300 5050 3300 4900
 Wire Wire Line
-	10700 1400 10300 1400
+	3800 4950 3400 4950
 Wire Wire Line
-	10300 1400 10300 1350
+	3400 4950 3400 4900
 Wire Wire Line
-	10000 1350 10000 1450
+	3100 4900 3100 5000
 Wire Wire Line
 	4200 6250 4000 6250
 Wire Wire Line
@@ -122,23 +174,13 @@ Connection ~ 850  6600
 Wire Wire Line
 	700  6600 1050 6600
 Wire Notes Line
-	550  600  1850 600 
-Wire Notes Line
-	550  600  550  1650
-Wire Notes Line
-	550  1650 1850 1650
-Wire Notes Line
-	1850 1650 1850 600 
-Wire Wire Line
-	1500 1100 1700 1100
+	550  1650 550  600 
 Wire Wire Line
 	1500 1400 1600 1400
 Wire Wire Line
 	1600 1550 1600 1500
 Wire Wire Line
 	1600 1500 1500 1500
-Wire Wire Line
-	1700 1200 1500 1200
 Wire Wire Line
 	1750 900  1500 900 
 Wire Wire Line
@@ -220,104 +262,418 @@ Wire Wire Line
 Wire Wire Line
 	1950 5900 1950 5850
 Wire Wire Line
-	10100 1350 10100 1550
+	3200 4900 3200 5100
 Wire Wire Line
-	10100 1550 9600 1550
+	3200 5100 2700 5100
 Wire Wire Line
-	9350 1350 9500 1350
+	2450 4900 2600 4900
 Wire Notes Line
-	9400 1000 9350 950 
+	2500 4550 2450 4500
 Wire Notes Line
-	10500 950  10450 950 
+	3600 4500 3550 4500
 Wire Notes Line
-	10450 950  10450 1250
+	3550 4500 3550 4800
 Wire Notes Line
-	10450 1250 10400 1200
+	3550 4800 3500 4750
 Wire Notes Line
-	9250 1600 9250 600 
+	2350 5150 2350 4150
 Wire Notes Line
-	9250 1600 11150 1600
+	2350 5150 4250 5150
 Wire Notes Line
-	11150 1600 11150 600 
+	4250 5150 4250 4150
 Wire Notes Line
-	11150 600  9250 600 
+	4250 4150 2350 4150
 Wire Wire Line
-	8150 4050 8150 4000
+	9600 2500 9600 2550
 Wire Wire Line
-	7950 4050 7950 4000
+	9400 2550 9400 2500
+Wire Wire Line
+	4700 4600 5000 4600
+Wire Wire Line
+	4700 4800 5000 4800
+Wire Wire Line
+	5000 4450 4950 4450
+Wire Wire Line
+	4950 4450 4950 4350
+Wire Wire Line
+	4850 4350 5000 4350
+Connection ~ 4950 4350
+Wire Wire Line
+	6900 1500 6950 1500
+Wire Wire Line
+	6950 1500 6950 1450
+Wire Wire Line
+	6950 1450 7050 1450
+Wire Wire Line
+	7050 1450 7050 1500
+Wire Wire Line
+	10000 3850 10000 3900
+Wire Wire Line
+	10000 3900 10100 3900
+Wire Wire Line
+	10950 4800 10950 4850
+Wire Wire Line
+	10950 5250 10950 5300
+Wire Wire Line
+	10650 5800 10650 5850
+Wire Wire Line
+	6900 3200 7250 3200
+Wire Wire Line
+	1850 1100 1500 1100
+Wire Wire Line
+	7250 3400 6900 3400
+Wire Wire Line
+	7250 3600 6900 3600
+Wire Wire Line
+	6900 4150 6950 4150
+Wire Wire Line
+	6950 4150 6950 4250
+Wire Wire Line
+	4850 1900 5000 1900
+Wire Wire Line
+	8700 2550 8700 2500
+Wire Wire Line
+	8900 2550 8900 2500
+Wire Wire Line
+	8800 2500 8800 2650
+Wire Wire Line
+	8800 2650 8550 2650
+Wire Wire Line
+	8550 2650 8550 2550
+Wire Wire Line
+	10100 2550 10100 2500
+Wire Wire Line
+	10300 2550 10300 2500
+Wire Wire Line
+	10200 2500 10200 2650
+Wire Wire Line
+	10200 2650 9950 2650
+Wire Wire Line
+	9950 2650 9950 2550
+Wire Wire Line
+	9600 2550 9800 2550
+$Comp
+L CONN_3 K?
+U 1 1 50509B5D
+P 10200 2150
+F 0 "K?" V 10150 2150 50  0000 C CNN
+F 1 "AC3" V 10250 2150 40  0000 C CNN
+	1    10200 2150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 50509B5C
+P 10100 2550
+F 0 "#PWR?" H 10100 2550 30  0001 C CNN
+F 1 "GND" H 10100 2480 30  0001 C CNN
+	1    10100 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 50509B5B
+P 9950 2550
+F 0 "#PWR?" H 9950 2640 20  0001 C CNN
+F 1 "+5V" H 9950 2640 30  0000 C CNN
+	1    9950 2550
+	1    0    0    -1  
+$EndComp
+Text Label 10500 2550 2    60   ~ 0
+AC3
+$Comp
+L CONN_3 K?
+U 1 1 50509B50
+P 8800 2150
+F 0 "K?" V 8750 2150 50  0000 C CNN
+F 1 "AC1" V 8850 2150 40  0000 C CNN
+	1    8800 2150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 50509B4F
+P 8700 2550
+F 0 "#PWR?" H 8700 2550 30  0001 C CNN
+F 1 "GND" H 8700 2480 30  0001 C CNN
+	1    8700 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 50509B4E
+P 8550 2550
+F 0 "#PWR?" H 8550 2640 20  0001 C CNN
+F 1 "+5V" H 8550 2640 30  0000 C CNN
+	1    8550 2550
+	1    0    0    -1  
+$EndComp
+Text Label 9100 2550 2    60   ~ 0
+AC1
+Text Label 9800 2550 2    60   ~ 0
+AC2
+$Comp
+L +5V #PWR?
+U 1 1 50509B2C
+P 9250 2550
+F 0 "#PWR?" H 9250 2640 20  0001 C CNN
+F 1 "+5V" H 9250 2640 30  0000 C CNN
+	1    9250 2550
+	1    0    0    -1  
+$EndComp
+Text Notes 9950 3400 0    60   ~ 0
+This should probably be\nseperated from the arduino\n5V regulator
+$Comp
+L +3.3V #PWR?
+U 1 1 50509AF2
+P 4850 1900
+F 0 "#PWR?" H 4850 1860 30  0001 C CNN
+F 1 "+3.3V" H 4850 2010 30  0000 C CNN
+	1    4850 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 50509AEA
+P 4750 2000
+F 0 "#PWR?" H 4750 2090 20  0001 C CNN
+F 1 "+5V" H 4750 2090 30  0000 C CNN
+	1    4750 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 50509AE3
+P 7050 4200
+F 0 "#PWR?" H 7050 4290 20  0001 C CNN
+F 1 "+5V" H 7050 4290 30  0000 C CNN
+	1    7050 4200
+	1    0    0    -1  
+$EndComp
+Text Label 7250 3600 2    60   ~ 0
+LLH_RX
+Text Label 7250 3700 2    60   ~ 0
+LLH_TX
+Text Label 7250 3400 2    60   ~ 0
+RF_RX
+Text Label 7250 3500 2    60   ~ 0
+RF_TX
+Text Label 7250 3300 2    60   ~ 0
+GPS_TX
+Text Label 7250 3200 2    60   ~ 0
+GPS_RX
+Text Label 7250 2600 0    60   ~ 0
+LED2
+Text Label 7250 2500 0    60   ~ 0
+LED1
+Text Notes 10400 4600 0    60   Italic 12
+Blinkenlights
+Text Label 10950 5900 2    60   ~ 0
+LED2
+Text Label 10650 5850 2    60   ~ 0
+LED1
+$Comp
+L +5V #PWR?
+U 1 1 505098DD
+P 10950 4800
+F 0 "#PWR?" H 10950 4890 20  0001 C CNN
+F 1 "+5V" H 10950 4890 30  0000 C CNN
+	1    10950 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 505098DA
+P 10650 4800
+F 0 "#PWR?" H 10650 4890 20  0001 C CNN
+F 1 "+5V" H 10650 4890 30  0000 C CNN
+	1    10650 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 505098D1
+P 10950 5550
+F 0 "R?" V 11030 5550 50  0000 C CNN
+F 1 "R" V 10950 5550 50  0000 C CNN
+	1    10950 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 505098CF
+P 10650 5550
+F 0 "R?" V 10730 5550 50  0000 C CNN
+F 1 "R" V 10650 5550 50  0000 C CNN
+	1    10650 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D?
+U 1 1 505098CA
+P 10950 5050
+F 0 "D?" H 10950 5150 50  0000 C CNN
+F 1 "LED" H 10950 4950 50  0000 C CNN
+	1    10950 5050
+	0    1    1    0   
+$EndComp
+$Comp
+L LED D?
+U 1 1 505098C6
+P 10650 5050
+F 0 "D?" H 10650 5150 50  0000 C CNN
+F 1 "LED" H 10650 4950 50  0000 C CNN
+	1    10650 5050
+	0    1    1    0   
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 5050985E
+P 10950 3850
+F 0 "#PWR?" H 10950 3940 20  0001 C CNN
+F 1 "+5V" H 10950 3940 30  0000 C CNN
+	1    10950 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L +BATT #PWR?
+U 1 1 5050984F
+P 10000 3850
+F 0 "#PWR?" H 10000 3800 20  0001 C CNN
+F 1 "+BATT" H 10000 3950 30  0000 C CNN
+	1    10000 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 50509846
+P 10500 4250
+F 0 "#PWR?" H 10500 4250 30  0001 C CNN
+F 1 "GND" H 10500 4180 30  0001 C CNN
+	1    10500 4250
+	1    0    0    -1  
+$EndComp
+Text Notes 10250 3650 0    30   ~ 0
+Switching Regulator,\n6.5-18Vin,5Vout 1.5A 
+$Comp
+L 7805 U?
+U 1 1 50509732
+P 10500 3950
+F 0 "U?" H 10650 3754 60  0000 C CNN
+F 1 "R-78B-1.5" H 10500 4150 60  0000 C CNN
+	1    10500 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 505083B3
+P 7050 1500
+F 0 "#PWR?" H 7050 1500 30  0001 C CNN
+F 1 "GND" H 7050 1430 30  0001 C CNN
+	1    7050 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 505083A5
+P 4850 2150
+F 0 "#PWR?" H 4850 2150 30  0001 C CNN
+F 1 "GND" H 4850 2080 30  0001 C CNN
+	1    4850 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 50508390
+P 4850 4400
+F 0 "#PWR?" H 4850 4400 30  0001 C CNN
+F 1 "GND" H 4850 4330 30  0001 C CNN
+	1    4850 4400
+	1    0    0    -1  
+$EndComp
+Text Label 4400 4550 0    60   ~ 0
+IRQ
+Text Label 4700 4600 0    60   ~ 0
+~CS
+Text Label 4700 4700 0    60   ~ 0
+SCLK
+Text Label 4700 4900 0    60   ~ 0
+DOUT
+Text Label 4700 4800 0    60   ~ 0
+DIN
 $Comp
 L GND #PWR?
 U 1 1 505081AF
-P 7950 4050
-F 0 "#PWR?" H 7950 4050 30  0001 C CNN
-F 1 "GND" H 7950 3980 30  0001 C CNN
-	1    7950 4050
+P 9400 2550
+F 0 "#PWR?" H 9400 2550 30  0001 C CNN
+F 1 "GND" H 9400 2480 30  0001 C CNN
+	1    9400 2550
 	1    0    0    -1  
 $EndComp
 $Comp
 L CONN_3 K?
 U 1 1 505081A7
-P 8050 3650
-F 0 "K?" V 8000 3650 50  0000 C CNN
-F 1 "CONN_3" V 8100 3650 40  0000 C CNN
-	1    8050 3650
+P 9500 2150
+F 0 "K?" V 9450 2150 50  0000 C CNN
+F 1 "AC2" V 9550 2150 40  0000 C CNN
+	1    9500 2150
 	0    -1   -1   0   
 $EndComp
 Text Notes 9000 6350 0    60   ~ 0
-3.3 V  from Arduino\n5.0 V  from Arduino\n5.0 V  seperatly directly from battery packs\n14.0 V Battery supply
-Text Notes 9250 600  0    60   Italic 12
+ 3.3 V from Arduino\n 5.0 V from Arduino\n 5.0 V seperatly directly from battery packs\n14.4 V battery supply
+Text Notes 2350 4150 0    60   Italic 12
 GPS receiver
-Text Notes 10550 950  0    60   ~ 0
+Text Notes 3650 4500 0    60   ~ 0
 If pull up\nresistors\nis needed,\nenable them\nin the AVR
-Text Notes 9450 700  0    60   ~ 0
+Text Notes 2550 4250 0    60   ~ 0
 Jumper to select supply voltage\nfor the GPS connection
-Text Label 10700 1400 2    60   ~ 0
+Text Label 3800 4950 2    60   ~ 0
 GPS_RX
-Text Label 10700 1500 2    60   ~ 0
+Text Label 3800 5050 2    60   ~ 0
 GPS_TX
 $Comp
 L CONN_3 K?
 U 1 1 50507D05
-P 9600 1000
-F 0 "K?" V 9550 1000 50  0000 C CNN
-F 1 "PWR source" V 9650 1000 40  0000 C CNN
-	1    9600 1000
+P 2700 4550
+F 0 "K?" V 2650 4550 50  0000 C CNN
+F 1 "PWR source" V 2750 4550 40  0000 C CNN
+	1    2700 4550
 	0    -1   -1   0   
 $EndComp
 $Comp
 L +3.3V #PWR?
 U 1 1 50507C4E
-P 9350 1350
-F 0 "#PWR?" H 9350 1310 30  0001 C CNN
-F 1 "+3.3V" H 9350 1460 30  0000 C CNN
-	1    9350 1350
+P 2450 4900
+F 0 "#PWR?" H 2450 4860 30  0001 C CNN
+F 1 "+3.3V" H 2450 5010 30  0000 C CNN
+	1    2450 4900
 	1    0    0    -1  
 $EndComp
 $Comp
 L +5V #PWR?
 U 1 1 50507A74
-P 9800 1350
-F 0 "#PWR?" H 9800 1440 20  0001 C CNN
-F 1 "+5V" H 9800 1440 30  0000 C CNN
-	1    9800 1350
+P 2900 4900
+F 0 "#PWR?" H 2900 4990 20  0001 C CNN
+F 1 "+5V" H 2900 4990 30  0000 C CNN
+	1    2900 4900
 	1    0    0    -1  
 $EndComp
 $Comp
 L GND #PWR?
 U 1 1 50507A6B
-P 10000 1450
-F 0 "#PWR?" H 10000 1450 30  0001 C CNN
-F 1 "GND" H 10000 1380 30  0001 C CNN
-	1    10000 1450
+P 3100 5000
+F 0 "#PWR?" H 3100 5000 30  0001 C CNN
+F 1 "GND" H 3100 4930 30  0001 C CNN
+	1    3100 5000
 	1    0    0    -1  
 $EndComp
 $Comp
 L CONN_4 P?
 U 1 1 50507A5C
-P 10150 1000
-F 0 "P?" V 10100 1000 50  0000 C CNN
-F 1 "GPS" V 10200 1000 50  0000 C CNN
-	1    10150 1000
+P 3250 4550
+F 0 "P?" V 3200 4550 50  0000 C CNN
+F 1 "GPS" V 3300 4550 50  0000 C CNN
+	1    3250 4550
 	0    -1   -1   0   
 $EndComp
 Text Notes 550  2000 0    60   ~ 0
@@ -397,7 +753,7 @@ $EndComp
 Text Notes 2350 5400 0    60   ~ 0
 1 internal temperature sensor\n3D Accelerometer\n3D Magnetometer\n3D Gyrometer
 Text Notes 2350 5300 0    60   Italic 12
-UHF Radio Module
+IMU
 Text Label 2400 6350 0    60   ~ 0
 ~CS
 Text Label 2400 6450 0    60   ~ 0
@@ -464,7 +820,7 @@ F 1 "ADIS16405" H 3300 6200 60  0000 C CNN
 	1    3300 6550
 	1    0    0    -1  
 $EndComp
-Text Notes 2500 4700 0    60   Italic 12
+Text Notes 2600 2750 0    60   Italic 12
 Battery Sensor
 Text Notes 550  1900 0    60   Italic 12
 Auxiliary temperature sensors
@@ -639,8 +995,8 @@ Text Notes 550  600  0    60   Italic 12
 UHF Radio Module
 Text Notes 850  700  0    60   ~ 0
 RF_EN high to enable\n
-Text Label 1700 1200 2    60   ~ 0
-RXD
+Text Label 1850 1200 2    60   ~ 0
+RF_RX
 NoConn ~ 1500 1000
 NoConn ~ 1500 1300
 $Comp
@@ -663,8 +1019,8 @@ F 1 "GND" H 1600 1480 30  0001 C CNN
 $EndComp
 Text Label 1750 900  2    60   ~ 0
 RF_EN
-Text Label 1700 1100 2    60   ~ 0
-TXD
+Text Label 1850 1100 2    60   ~ 0
+RF_TX
 $Comp
 L APC220 U?
 U 1 1 504A274B
