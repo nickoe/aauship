@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date ons 12 sep 2012 16:29:45 CEST
+EESchema Schematic File Version 2  date ons 12 sep 2012 20:10:29 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -46,8 +46,12 @@ Comment2 "AAUSHIP"
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text Notes 8500 2000 0    60   Italic 12
-PWM controlled actuators
+Wire Wire Line
+	8950 3650 8650 3650
+Wire Wire Line
+	8450 3600 8450 3650
+Wire Wire Line
+	8550 3600 8550 3700
 Wire Wire Line
 	10500 2550 10300 2550
 Wire Wire Line
@@ -352,6 +356,38 @@ Wire Wire Line
 	9950 2650 9950 2550
 Wire Wire Line
 	9600 2550 9800 2550
+Wire Wire Line
+	2050 7200 1850 7200
+Wire Wire Line
+	8650 3650 8650 3600
+Wire Wire Line
+	8450 3650 8150 3650
+Text Label 8950 3650 2    60   ~ 0
+ENC_B
+Text Label 8150 3650 0    60   ~ 0
+ENC_A
+$Comp
+L GND #PWR?
+U 1 1 5050CF4A
+P 8550 3700
+F 0 "#PWR?" H 8550 3700 30  0001 C CNN
+F 1 "GND" H 8550 3630 30  0001 C CNN
+	1    8550 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_3 K?
+U 1 1 5050BA91
+P 8550 3250
+F 0 "K?" V 8500 3250 50  0000 C CNN
+F 1 "CONN_3" V 8600 3250 40  0000 C CNN
+	1    8550 3250
+	0    -1   -1   0   
+$EndComp
+Text Label 2050 7200 2    60   ~ 0
+~KILL
+Text Notes 8500 2000 0    60   Italic 12
+PWM controlled actuators
 $Comp
 L CONN_3 K?
 U 1 1 50509B5D
@@ -978,7 +1014,7 @@ L DIODE D?
 U 1 1 504A2907
 P 850 6800
 F 0 "D?" H 850 6900 40  0000 C CNN
-F 1 "DIODE" H 850 6700 40  0000 C CNN
+F 1 "1N4148" H 850 6700 40  0000 C CNN
 	1    850  6800
 	0    -1   -1   0   
 $EndComp
