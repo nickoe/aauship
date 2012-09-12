@@ -11,6 +11,9 @@
 \begin{document}
 \section{FAPS LLI interface}
 \section{Standard format of messages}
+To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail. For instance, the \ac{IMU} has a lot of different outputs and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwith which could be used for other (and more important) tasks. 
+
+As both the \ac{IMU} and \ac{GPS} is sending packets af varying size, the data field in the protocol should be variable, however - there are some fixed elements, thats able to decide upon now. The number of sensors/actuators connected to the \ac{LLI} are by design not to be more than 256 (this makes way for a 1-byte device resolution). As each device might contain several outputs (as seen from the \ac{IMU}) each device is then given an additional byte for message IDs. Lastly, the packet contains a training sequence to make packet detection easier - as well as some \ac{CRC} checksums to verify the contents. Figure \vref{insert figure and reference} depicts the packet structure.
 \begin{bytefield}{15}
 \bitbox{5}{DevID} & \bitbox{5}{MsgID} 
 \bitbox{16}{Data } \quad \raisebox{2ex}{\dots}  \bitbox{4}{CRC16 }
