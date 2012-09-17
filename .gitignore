@@ -1,2 +1,16 @@
 *~
 *.out
+
+doc/protocol.aux
+
+doc/protocol.log
+
+doc/protocol.maf
+
+doc/protocol.mtc
+
+doc/protocol.mtc0
+
+doc/protocol.pdf
+
+doc/protocol.synctex.gz
