@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = ons 19 sep 2012 08:30:12 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = ons 19 sep 2012 10:22:57 CEST
 
 BeginCmp
 TimeStamp = /504A39C7;
@@ -95,7 +95,7 @@ BeginCmp
 TimeStamp = /505081A7;
 Reference = K5;
 ValeurCmp = AC2;
-IdModule  = pin_array_3x2;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
@@ -109,7 +109,7 @@ BeginCmp
 TimeStamp = /50509B5D;
 Reference = K7;
 ValeurCmp = AC3;
-IdModule  = pin_array_3x2;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp

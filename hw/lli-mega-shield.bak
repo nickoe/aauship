@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date ons 19 sep 2012 09:57:55 CEST
+EESchema Schematic File Version 2  date ons 19 sep 2012 09:59:29 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -46,6 +46,40 @@ Comment2 "AAUSHIP"
 Comment3 ""
 Comment4 ""
 $EndDescr
+NoConn ~ 8100 2600
+NoConn ~ 8100 2700
+NoConn ~ 8100 2500
+NoConn ~ 8100 2400
+NoConn ~ 8100 1800
+NoConn ~ 10000 900 
+NoConn ~ 10000 1100
+NoConn ~ 10000 1200
+NoConn ~ 10000 1300
+NoConn ~ 10000 1400
+NoConn ~ 10000 1500
+NoConn ~ 10000 1600
+NoConn ~ 10000 1800
+NoConn ~ 10000 1900
+NoConn ~ 10000 2000
+NoConn ~ 10000 2100
+NoConn ~ 10000 2200
+NoConn ~ 10000 2300
+NoConn ~ 10000 2400
+NoConn ~ 10000 2500
+NoConn ~ 10000 3300
+NoConn ~ 10000 3400
+NoConn ~ 8100 3300
+NoConn ~ 8100 5050
+NoConn ~ 8100 5150
+NoConn ~ 8100 5250
+NoConn ~ 8100 5700
+NoConn ~ 8100 5600
+NoConn ~ 8100 5500
+NoConn ~ 8100 5400
+NoConn ~ 10000 5150
+NoConn ~ 10000 5250
+NoConn ~ 10000 5350
+NoConn ~ 10000 5450
 Wire Wire Line
 	10000 3900 10350 3900
 Wire Wire Line
