@@ -1,0 +1,526 @@
+\documentclass[a4paper,11pt,fleqn,openright]{memoir} % Brug openright hvis chapters skal starte p� h�jresider; openany, oneside
+%\usepackage{arrayjobx}
+%\usepackage{multido}
+
+\usepackage{pstricks}
+\usepackage{xstring}
+%\usepackage{pgfmath}
+%%%% PACKAGES %%%%
+
+%\usepackage[table]{xcolor} % Så man kan farve forskellige line i en tabel
+
+% �� Oversættelse og tegnsætning �� %
+\usepackage[utf8]{inputenc}							% Gør det muligt at bruge æ, ø og å i sine .tex-filer
+\usepackage[danish]{babel}							% Dansk sporg, fx tabel, figur og kapitel
+\renewcommand\danishhyphenmins{22} 					% retter fejl i dk babel 
+\usepackage[T1]{fontenc}							% Hjælper med orddeling ved æ, ø og å. Sætter fontene til at 
+										% være ps-fonte, i stedet for bmp	
+\usepackage{cmap}									% Make PDF files searchable and copyable
+\usepackage{latexsym}								% LaTeX symboler
+\usepackage{xcolor,ragged2e,fix-cm}						% Justering af elementer
+\usepackage{pdfpages}								% Gør det muligt at inkludere pdf-dokumenter med kommandoen 
+										% \includepdf[pages={x-y}]{fil.pdf}	
+\pretolerance=2500 								% Gør det muligt at justre afstanden med ord 
+										% (højt tal, mindre orddeling og mere space mellem ord)
+\usepackage{ulem}                       					% Gennemstregning af ord med koden \sout{}
+\usepackage{fixltx2e}								% Retter forskellige bugs i LaTeX-kernen
+\usepackage{gensymb}								% Tilføjer \celsius og \degree notation	
+\usepackage{lineno}								% Bruges til at tilføje linjetal
+\usepackage{graphicx}
+\usepackage{epstopdf}
+																	
+% �� Figurer og tabeller � floats  �� %
+\usepackage{flafter}								% S�rger for at dine floats ikke optr�der i teksten f�r de er sat ind.
+\usepackage{multirow}                						% Fletning af r�kker
+\usepackage{hhline}                   						% Dobbelte horisontale linier
+\usepackage{multicol}         	        					% Fletning af kolonner
+\usepackage{colortbl} 								% Mulig�re farver i tabeller
+\usepackage{float}								% G�r det muligt at placere figurer hvor du vil.   \begin{figure}[!h] % Will not be floating.
+\usepackage{wrapfig}								% Indsættelse af figurer omsvøbt af tekst. \begin{wrapfigure}{Placering}{Størrelse}
+\usepackage{graphicx} 								% Pakke til jpeg/png billeder
+\pdfoptionpdfminorversion=6							% Muligg�r inkludering af pdf dokumenter, af version 1.6 og h�jere
+	
+% �� Matematiske formler og maskinkode ��
+\usepackage{amsmath,amssymb,stmaryrd} 						% Bedre matematik og ekstra fonte
+\usepackage{mathrsfs}								% Laplace skrifttype
+\usepackage{textcomp}                 						% Adgang til tekstsymboler
+\usepackage{mathtools}								% Udvidelse af amsmath-pakken. 
+\usepackage{eso-pic}								% Tilf�j billedekommandoer p� hver side
+\usepackage{lipsum}								% Dummy text \lipsum[..]
+\usepackage{rsphrase}								% Kemi-pakke til RS-s�tninger
+\usepackage[version=3]{mhchem} 							% Kemi-pakke til lettere notation af formler
+
+% �� Referencer, bibtex og url'er �� %
+\usepackage{url}								% Til at s�tte urler op med. Virker sammen med hyperref
+\usepackage[danish]{varioref}							% Giver flere bedre mulighed for at lave krydshenvisninger
+\usepackage{natbib}								% Litteraturliste med forfatter-�r og nummerede referencer
+\usepackage{xr}									% Referencer til eksternt dokument med \externaldocument{<NAVN>}
+\usepackage{titletoc}								% More fancy section macros
+
+% �� Floats �� %
+%\let\newfloat\relax 								% Memoir har allerede defineret denne, men det g�r float pakken ogs�
+%\usepackage{float}
+
+\usepackage[footnote,draft,danish,silent,nomargin]{fixme}			% Inds�t rettelser og lignende med \fixme{...} Med final i stedet for
+										% draft, udl�ses en error for hver fixme, der ikke er slettet, n�r rapporten bygges.
+\renewcommand{\fixme}[1]{\fxfatal{#1}}
+%%%% CUSTOM SETTINGS %%%%
+
+% �� Marginer �� %
+\setlrmarginsandblock{3.0cm}{2.0cm}{*}			% \setlrmarginsandblock{Indbinding}{Kant}{Ratio}
+\setulmarginsandblock{2.0cm}{2.0cm}{*}			%					% \setulmarginsandblock{Top}{Bund}{Ratio}
+\checkandfixthelayout 								% Laver forskellige beregninger og s�tter de almindelige l�ngder op til brug ikke memoir pakker
+
+% �� Afsnitsformatering �� %
+\setlength{\parindent}{0mm}           						% St�rrelse af indryk
+\setlength{\parskip}{4mm}          						% Afstand mellem afsnit ved brug af double Enter
+\linespread{1,1}								% Linie afstand
+
+% �� Litteraturlisten �� %
+\bibpunct[,]{[}{]}{;}{a}{,}{,} 							% Definerer de 6 parametre ved Harvard henvisning (bl.a. parantestype 
+										% og seperatortegn)
+\bibliographystyle{bibtex/harvard}						% Udseende af litteraturlisten. Ligner dk-apali - mvh Klein
+
+% �� Indholdsfortegnelse �� %
+\setsecnumdepth{subsection}		 					% Dybden af nummerede overkrifter (part/chapter/section/subsection)
+\maxsecnumdepth{subsection}							% �ndring af dokumentklassens gr�nse for nummereringsdybde
+\settocdepth{section} 								% Dybden af indholdsfortegnelsen
+
+% �� Visuelle referencer �� %
+\usepackage[colorlinks=true]{hyperref}			 	% Giver mulighed for at ens referencer bliver til klikbare hyperlinks. .. [colorlinks]{..}
+\hypersetup{pdfborder = 0 0 0}							% Fjerner ramme omkring links i fx indholsfotegnelsen og ved kildehenvisninger ��
+\hypersetup{									% Ops�tning af farvede hyperlinks
+    colorlinks = true,
+    linkcolor = black,
+    anchorcolor = black,
+    citecolor = black,
+    urlcolor = black
+}
+
+\definecolor{gray}{gray}{0.80}							% Definerer farven gr�
+
+% �� Ops�tning af figur- og tabeltekst �� %
+ 	\captionnamefont{
+ 		\small\bfseries\itshape}					% Ops�tning af tekstdelen (''Figur'' eller ''Tabel'')
+  \captiontitlefont{\small}							% Ops�tning af nummerering
+  \captiondelim{. }								% Seperator mellem nummerering og figurtekst
+  \hangcaption									% Venstrejusterer flere-liniers figurtekst under hinanden
+  \captionwidth{\linewidth}							% Bredden af figurteksten
+	\setlength{\belowcaptionskip}{6pt}					% Afstand under figurteksten
+		
+% �� Navngivning �� %
+\addto\captionsdanish{
+	\renewcommand\appendixname{Appendiks}
+	\renewcommand\contentsname{Indholdsfortegnelse}	
+	\renewcommand\appendixpagename{Appendiks}
+%	\renewcommand\cftchaptername{\chaptername~}				% Skriver ''Kapitel'' foran kapitlerne i indholdsfortegnelsen
+	\renewcommand\cftappendixname{\appendixname~}				% Skriver ''Appendiks'' foran bilagene i indholdsfortegnelsen
+	\renewcommand\appendixtocname{Appendiks}
+}
+
+% �� Kapiteludssende �� %
+\definecolor{numbercolor}{gray}{0.7}						% Definerer en farve til brug til kapiteludseende
+\newif\ifchapternonum
+
+\makechapterstyle{jenor}{							% Definerer kapiteludseende -->
+  \renewcommand\printchaptername{}
+  \renewcommand\printchapternum{}
+  \renewcommand\printchapternonum{\chapternonumtrue}
+  \renewcommand\chaptitlefont{\fontfamily{pbk}\fontseries{db}\fontshape{n}\fontsize{25}{35}\selectfont\raggedleft}
+  \renewcommand\chapnumfont{\fontfamily{pbk}\fontseries{m}\fontshape{n}\fontsize{1in}{0in}\selectfont\color{numbercolor}}
+  \renewcommand\printchaptertitle[1]{%
+    \noindent
+    \ifchapternonum
+    \begin{tabularx}{\textwidth}{X}
+    {\let\\\newline\chaptitlefont ##1\par} 
+    \end{tabularx}
+    \par\vskip-2.5mm\hrule
+    \else
+    \begin{tabularx}{\textwidth}{Xl}
+    {\parbox[b]{\linewidth}{\chaptitlefont ##1}} & \raisebox{-15pt}{\chapnumfont \thechapter}
+    \end{tabularx}
+    \par\vskip2mm\hrule
+    \fi
+  }
+      \setlength{\beforechapskip}{-30pt} % Der skal ikke være så meget plads inden overskriften, mindre end ingenting fordi det virker
+  \setlength{\afterchapskip}{16pt} % Der skal ikke være så meget plads efter overskriften
+}																						% <--
+
+\chapterstyle{jenor}								% Valg af kapiteludseende - dette kan udskiftes efter �nske
+
+% �� Sidehoved �� %
+
+%\makepagestyle{custom}																				% Definerer sidehoved og sidefod - kan modificeres efter �nske -->
+%\makepsmarks{custom}{																						
+%\def\chaptermark##1{\markboth{\itshape\thechapter. ##1}{}}			% Henter kapitlet den p�g�ldende side h�rer under med kommandoen \leftmark. \itshape g�r teksten kursiv
+%\def\sectionmark##1{\markright{\thesection. ##1}{}}				% Henter afsnittet den p�g�ldende side h�rer under med kommandoen \rightmark
+%}																														% Sidetallet skrives med kommandoen \thepage	
+%\makeevenhead{custom}{Gruppe B130}{}{\leftmark}				% Definerer lige siders sidehoved efter modellen \makeevenhead{Navn}{Venstre}{Center}{H�jre}
+%\makeoddhead{custom}{\rightmark}{}{Aalborg Universitet}			% Definerer ulige siders sidehoved efter modellen \makeoddhead{Navn}{Venstre}{Center}{H�jre}
+%\makeevenfoot{custom}{\thepage}{}{}						% Definerer lige siders sidefod efter modellen \makeevenfoot{Navn}{Venstre}{Center}{H�jre}
+%\makeoddfoot{custom}{}{}{\thepage}						% Definerer ulige siders sidefod efter modellen \makeoddfoot{Navn}{Venstre}{Center}{H�jre}		
+%\makeheadrule{custom}{\textwidth}{0.5pt}					% Tilf�jer en streg under sidehovedets indhold
+%\makefootrule{custom}{\textwidth}{0.5pt}{1mm}					% Tilf�jer en streg under sidefodens indhold
+
+%\copypagestyle{nychapter}{custom}						% F�lgende linier s�rger for, at sidefoden bibeholdes p� kapitlets f�rste side
+%\makeoddhead{nychapter}{}{}{}
+%\makeevenhead{nychapter}{}{}{}
+%\makeheadrule{nychapter}{\textwidth}{0pt}
+%\aliaspagestyle{chapter}{nychapter}						% <--
+
+\pagestyle{plain}								% Valg af sidehoved og sidefod
+
+% �� Fjerner den vertikale afstand mellem listeopstillinger og punktopstillinger �� %
+\let\olditemize=\itemize							
+\def\itemize{\olditemize\setlength{\itemsep}{-1ex}}
+\let\oldenumerate=\enumerate						
+\def\enumerate{\oldenumerate\setlength{\itemsep}{-1ex}}
+
+%%%% CUSTOM COMMANDS %%%%
+\usepackage{graphics}
+
+%cd refference
+\newcommand{\cd}[1] {
+	\includegraphics{billeder/cd.jpg} {#1}
+}
+
+%cd refference for literature list
+\newcommand{\cdl}[1]{
+	Kopi på CD \includegraphics{billeder/cd.jpg} : {\url{#1}}
+}
+
+\newcounter{myfootertablecounter}
+
+\newcommand\myfootnotemark{
+	%\refstepcounter{footnote}
+	\addtocounter{footnote}{1}
+	\footnotemark[\thefootnote]
+}
+
+\newcommand\myfootnotetext[1]{
+	\addtocounter{myfootertablecounter}{1}
+	\footnotetext[\value{myfootertablecounter}]{#1}
+}	
+	
+	
+% �� Billede hack �� %
+\newcommand{\figur}[3]{
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1.0\textwidth]{#1}
+\caption{#2}
+\label{fig:#3}
+\end{figure} 
+}
+
+% �� Specielle tegn �� %
+\newcommand{\grader}{^{\circ}C}
+\newcommand{\gr}{^{\circ}}
+\newcommand{\g}{\cdot}
+
+% �� Promille-hack (\promille) �� %
+\newcommand{\promille}{%
+  \relax\ifmmode\promillezeichen
+        \else\leavevmode\(\mathsurround=0pt\promillezeichen\)\fi}
+\newcommand{\promillezeichen}{%
+  \kern-.05em%
+  \raise.5ex\hbox{\the\scriptfont0 0}%
+  \kern-.15em/\kern-.15em
+  \lower.25ex\hbox{\the\scriptfont0 00}}
+
+%%%% ORDDELING %%%%
+
+\hyphenation{hvad hvem hvor}
+
+%%%% Tabeler %%%%
+\usepackage{threeparttable}
+\usepackage[tableposition=top]{caption}
+
+%%%% listings %%%%
+\usepackage{listings}
+\lstset{language=C}
+\lstset{backgroundcolor=,rulecolor=}
+\lstset{commentstyle=\textit}
+\usepackage{lastpage}
+
+\usepackage{marvosym}
+
+\usepackage{nicefrac}
+
+%%%% top/tail %%%%
+%\newcommand{\toptail}[1]{\fboxsep2mm\fbox{\begin{minipage}{145.3mm}#1\end{minipage}}}
+
+%%%% Enheder %%%%%
+\newcommand{\Ohm}{\ohm}
+\newcommand{\Volt}{\mathrm{V}}
+\newcommand{\volt}{\Volt}
+\newcommand{\Ampere}{\mathrm{A}}
+\newcommand{\ampere}{\Ampere}
+\newcommand{\Farad}{\mathrm{F}}
+\newcommand{\farad}{\Farad}
+\newcommand{\f}{\Farad}
+\newcommand{\Meter}{\mathrm{m}}
+\newcommand{\meter}{\Meter}
+\newcommand{\m}{\Meter}
+\newcommand{\Weber}{\mathrm{Wb}}
+\newcommand{\weber}{\Weber}
+\newcommand{\wb}{\Weber}
+\newcommand{\Wb}{\Weber}
+\newcommand{\Sek}{\mathrm{s}}
+\newcommand{\sek}{\Sek}
+\newcommand{\s}{\Sek}
+\newcommand{\sekunder}{\Sek}
+\newcommand{\Minutter}{\mathrm{min}}
+\newcommand{\minutter}{\Minutter}
+\newcommand{\Timer}{\mathrm{t}}
+\newcommand{\timer}{\Timer}
+\newcommand{\Hz}{\mathrm{Hz}}
+\newcommand{\hz}{\Hz}
+\newcommand{\hertz}{\Hz}
+\newcommand{\Hertz}{\Hz}
+\newcommand{\Gram}{\mathrm{g}}
+\newcommand{\gram}{\Gram}
+\newcommand{\Pascal}{\mathrm{Pa}}
+\newcommand{\pascal}{\Pascal}
+\newcommand{\pa}{\Pascal}
+\newcommand{\Pa}{\Pascal}
+\newcommand{\visc}{\nicefrac{\mathrm{kg}}{(\mathrm{s \cdot m)}}}
+\newcommand{\Nmeter}{\mathrm{N \cdot m}}
+\newcommand{\inerti}{\mathrm{kg \cdot m^2}}
+
+\newcommand{\kB}{\mathrm{KiB}}
+\newcommand{\kibibyte}{\kB}
+\newcommand{\MB}{\mathrm{MiB}}
+\newcommand{\mebibyte}{\MB}
+
+\newcommand{\kmpt}{\nicefrac{\mathrm{km}}{\mathrm{t}}}
+\newcommand{\hast}{\nicefrac{\mathrm{m}}{\mathrm{s}}}
+\newcommand{\acc}{\nicefrac{\mathrm{m}}{\mathrm{s^2}}}
+\newcommand{\rsec}{\nicefrac{\mathrm{rad}}{\mathrm{s}}}
+\newcommand{\racc}{\nicefrac{\mathrm{rad}}{\mathrm{s^2}}}
+\newcommand{\Nratio}{\nicefrac{\mathrm{1}}{\mathrm{N}}}
+\newcommand{\PulsS}{\nicefrac{\mathrm{puls}}{\mathrm{sec}}}
+\newcommand{\rpm}{\mathrm{rpm}}
+
+%%%% Præfiks %%%%%
+\newcommand{\Giga}{\mathrm{G}}
+\newcommand{\giga}{\Giga}
+\newcommand{\Mega}{\mathrm{M}}
+\newcommand{\mega}{\Mega}
+\newcommand{\M}{\Mega}
+\newcommand{\Kilo}{\mathrm{k}}
+\newcommand{\kilo}{\Kilo}
+\newcommand{\Deci}{\mathrm{d}}
+\newcommand{\deci}{\Deci}
+\newcommand{\Centi}{\mathrm{c}}
+\newcommand{\centi}{\Centi}
+\newcommand{\Mili}{\mathrm{m}}
+\newcommand{\mili}{\Mili}
+\newcommand{\Mikro}{\mu}
+\newcommand{\mikro}{\Mikro}
+\newcommand{\my}{\mu}
+\newcommand{\Nano}{\mathrm{n}}
+\newcommand{\nano}{\Nano}
+\newcommand{\Pico}{\mathrm{p}}
+\newcommand{\pico}{\Pico}
+
+%%%% Kilde %%%%%
+\newcommand{\kilde}[1]{\fixme{Kilde: #1}}
+
+%%%% NOT (Linie over teksten) %%%%%
+\newcommand{\inv}[1]{$\overline{\mathrm{#1}}$}
+\newcommand{\Inv[1]}{$\overline{\mathrm{#1}}$}
+\newcommand{\INV}[1]{$\overline{\mathrm{#1}}$}
+
+%%%% Andre tegn %%%%%
+\usepackage[electronic]{ifsym}
+
+%%%% Blank side %%%%
+\newcommand{\blankpage}{\thispagestyle{empty}\newpage\mbox{}\newpage}
+
+%%%% Tanke %%%%
+\newcommand{\tanke}[1]{\textcolor{red}{Tanke: #1}}
+
+%%%% Skal læses %%%%%
+\newcommand{\laeses}{\fixme{Skal læses}\textcolor{red}{Skal læses}~}
+
+\definecolor{rowcolor}{gray}{0.9}
+
+%%%% Hex %%%%
+\newcommand{\hex}{$_\mathrm{h}$}
+\newcommand{\bin}{$_\mathrm{b}$}
+
+\usepackage{subfig}
+
+
+\usepackage{listings}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+}
+
+\usepackage{titlesec}
+\titlespacing*{\subparagraph}{\parindent}{0.75ex plus 0.1ex minus 0.1ex}{.75ex plus 1ex}
+
+\lstdefinelanguage{Java}{ sensitive=true, morekeywords=[1]{  abstract, as, base, break, case,  catch, checked, class, const, continue,  default, delegate, do, else, enum,  event, explicit, extern, false,  finally, fixed, for, foreach, goto, if,  implicit, in, interface, internal, is,  lock, namespace, new, null, operator,  out, override, params, private,  protected, public, readonly, ref,  return, sealed, sizeof, stackalloc,  static, struct, switch, this, throw,  true, try, typeof, unchecked, unsafe,  using, virtual, volatile, while, bool,  byte, char, decimal, double, float,  int, lock, object, sbyte, short, string,  uint, ulong, ushort, void,get,set,define,implements},morekeywords=[2]{},morekeywords=[3]{UInt32, UInt16,String,Byte,Parity,Stream, Object,EventArgs,Array}, morecomment=[l]{//}, morecomment=[s]{/*}{*/}, morecomment=[l][keywordstyle4]{\#}, morestring=[b]'', morestring=[b]',}
+
+\lstdefinelanguage{C}{morekeywords=[1]{define},}
+
+\lstdefinelanguage{asm}%
+{morekeywords={ANDK, EINT, ABS, ADCB, ADD, ADDB, ADDC, ADDS, ADDT, AND, ANDB, APAC, BSAR, CMPL, CRGT, CRLT, EXAR, LACB, LACC, LACL, LACT, LAMM, NEG, NORM, OR, ORB, ROL, ROLB, ROR, RORB, SACB, SACH, SACL, SAMM, SATH, SATL, SBB, SBBB, SFL, SFLB, SFR, SRFB, SUB, SUBB, SUBC, SUBS, SUBT, XOR, XORB, ZALR, ZAP, ADRK, CMPR, LAR, LDP, MAR, SAR, SBRK, APL, CPL, OPL, SPLK, XPL, LPH, LT, LTA, LTD, LTP, LTS, MAC, MACD, MADD, MADS, MPY, MPYA, MPYS, MPYU, PAC, SPAC, SPH, SPL, SPM, SQRA, SQRS, ZPR, B, BACC, BACCD, BANZ, BANZD, BCND, BCNDD, BD, CALA, CALAD, CALL, CALLD, CC, CCD, INTR, NMI, RET, RETC, RETCD, RETD, RETE, RETI, TRAP, XC, BLDD, BLDP, BLPD, DMOV, IN, LMMR, OUT, SMMR, TBLR, TBLW, BIT, BITT, CLRC, IDLE, IDLE2, LST, NOP, POP, POPD, PSHD, PUSH, RPT, RPTB, RPTZ, SETC, SST, ADDH, ROVM, SOVM },%
+   basicstyle=\small,%
+   tabsize=8,%
+   sensitive=false,%
+   literate={~} {$\sim$}{1},
+   morecomment=[l];%
+   }[keywords,comments,strings]
+
+
+\lstset{
+		 language=matlab,
+		 name=kode,
+		 %lstlistingname=kode,
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %numbersep=20pt,
+         firstnumber=1,
+         stepnumber=5,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen
+         keywordstyle=\color{red},
+    		frame=b,         
+		keywordstyle=\color[rgb]{1.0,0,0}, 
+		keywordstyle=[1]\color[rgb]{0,0,0.75}, 
+		keywordstyle=[2]\color[rgb]{0.5,0.0,0.0}, 
+		keywordstyle=[3]\color[rgb]{0.127,0.427,0.514}, 
+		keywordstyle=[4]\color[rgb]{0.4,0.4,0.4}, 
+		commentstyle=\color[rgb]{0.133,0.545,0.133}, 
+		stringstyle=\color[rgb]{0.639,0.082,0.082},
+         showspaces=false,           % Leerzeichen anzeigen ?
+         showtabs=false,             % Tabs anzeigen ?
+         xleftmargin=17pt,
+         framexleftmargin=17pt,
+         framexrightmargin=5pt,
+         framexbottommargin=4pt,
+         caption=kode,
+		backgroundcolor=\color[rgb]{0.95, 0.95, 0.95},
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
+ }
+ 
+
+\renewcommand*{\lstlistingname}{Kodeeksempel} 
+ 
+ \lstloadlanguages{
+         C,
+		 Java
+ }
+ 
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+% Tikz vector graphics macros (flowcharts and more)
+\usepackage{tikz}
+%Pgfplots - Plotting package
+\usepackage{pgfplots}
+% load tikz libraries
+\usetikzlibrary{shapes,arrows,decorations.markings}
+%%% Define block styles for TikZ package
+\tikzstyle{decision} = [diamond, draw, fill=white!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=white!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{wideblock} = [rectangle, draw, fill=white!20, 
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{start} = [rectangle, draw, fill=white!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{widestart} = [rectangle, draw, fill=white!20, 
+    text width=7em, text centered, rounded corners, minimum height=4em]    
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=white!20, node distance=3cm,
+    minimum height=2em]
+    %For Block-diagram:
+\tikzstyle{block} = [draw, fill=cyan!35!white, rectangle, 
+    minimum height=3em, minimum width=6em, rounded corners]
+\tikzstyle{block2} = [rectangle, draw, fill=cyan!35!white, 
+text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{decision2} = [diamond, draw, fill=cyan!35!white, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{smallblock} = [draw, fill=cyan!35!white, rectangle, minimum height=2em, minimum width=3em, rounded corners]
+\tikzstyle{sum} = [draw, fill=cyan!35!white, circle, node distance=1cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+\tikzstyle{plot legend} = [font=\footnotesize, rounded corners=2.5pt]
+\tikzstyle{gainleft} = [draw, fill=cyan!35!white, isosceles triangle, shape border rotate=180, minimum height=2em, minimum width=3em]
+\tikzstyle{gainright} = [draw, fill=cyan!35!white, isosceles triangle, minimum height=2em, minimum width=3em]
+
+\usepackage{xifthen}
+
+
+\newcommand{\formII}[2]{
+\def\ListIIR{#1}
+\def\ListFIR{#2}
+\begin{tikzpicture}[node distance = 0]
+\def\trim{50pt}
+\begin{scope}[decoration={markings,mark=at position 0.5 with {\arrow{>}}}]
+\tikzstyle{sum} = [draw, fill=black, circle, node distance=\textwidth/5, inner sep = 0pt, minimum size = 5pt]
+\node at (0,0)[input, name=input]{};
+\node at (\textwidth/2,0)[sum, name = delay1]{};
+\node[sum, left of = delay1, name = IIR1]{};
+\node[sum, right of = delay1, name = FIR1]{};
+\node at (\textwidth,0)[name = output]{};
+
+\draw[>-,postaction={decorate}](input) --node[pos=0.5, above]{Input} (IIR1);
+\draw[postaction={decorate}](IIR1) -- (delay1);
+\draw[postaction={decorate}](delay1) -- (FIR1);
+\draw[->,postaction={decorate}](FIR1) -- node[pos=0.5,above]{Output}(output);
+\StrCount{\ListIIR,}{,}[\IIRVariables]
+\StrCount{\ListFIR,}{,}[\FIRVariables]
+\newcounter{IIRCounter}
+\newcounter{FIRCounter}
+\setcounter{IIRCounter}{1}
+\setcounter{FIRCounter}{1}
+\pgfmathtruncatemacro{\max}{\FIRVariables}
+\ifnum\max<\IIRVariables
+\pgfmathtruncatemacro{\max}{\IIRVariables}
+\fi
+
+
+\foreach \m in {1,...,\max}{
+	\pgfmathtruncatemacro{\x}{\m+1}
+	\node[sum, below of = delay\m, name=delay\x]{};
+	\draw[postaction={decorate}](delay\m) --node[pos=0.5, above right]{$z^{-1}$} (delay\x);
+	
+}
+
+\psforeach{\I}{\ListIIR}{
+	\pgfmathtruncatemacro{\x}{\value{IIRCounter}+1}
+	\node[sum, below of = IIR\arabic{IIRCounter}, name= IIR\x]{};
+	\draw[postaction={decorate}](delay\x) -- node[pos=0.5, above]{\I} (IIR\x);
+	\draw[postaction={decorate}](IIR\x) -- (IIR\arabic{IIRCounter});
+	\stepcounter{IIRCounter}
+}
+
+\psforeach{\F}{\ListFIR}{
+	\pgfmathtruncatemacro{\x}{\value{FIRCounter}+1}
+	\node[sum, below of = FIR\arabic{FIRCounter}, name = FIR\x]{};
+	\draw[postaction={decorate}](delay\x) --node[pos=0.5, above]{\F} (FIR\x);
+	\draw[postaction={decorate}](FIR\x) -- (FIR\arabic{FIRCounter});
+	\stepcounter{FIRCounter}
+}
+
+\end{scope}
+\end{tikzpicture}
+}
+\usepgfplotslibrary{polar}
+\usetikzlibrary{chains}
+\pgfmathsetmacro{\highres}{1}
