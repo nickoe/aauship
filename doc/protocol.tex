@@ -48,3 +48,4 @@ Little endian...
 	\caption{General description of the packet format}
 \end{table}
 \end{document}
+The device ID (devid) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example the temperature drift of the two \ac{IMU}s are less important than the \ac{GPS} signals which we should use to navigate after. 

@@ -1,0 +1,23 @@
+\section{Bandwith}
+The bandwith of the system is maxed by the UART interface connecting the \ac{LLI} and the \ac{HLI}. This bandwith is given as 115200 bits per second (or 14400 bytes per second). This gives the highest number of bytes the \ac{LLI} and \ac{HLI} can exchange at any given time. A systematic overview is given in the table below - stating the size and frequency of all the packets to be sent from the \ac{LLI} to the \ac{HLI}. 
+
+\begin{tabular}{l*{6}{c}r}
+DevID          & Device & Frequency & Size\\
+\hline
+Outgoing transmissions:\\
+\hline
+2 & Kill switch & 2 Hz & 1 byte\\
+3 & GPS & 2 Hz & 459 bytes\\
+4 & IMU & 10 Hz & 20 bytes\\
+5 & Tacho meter & 1 byte\\
+6 & Thermometer & 1 byte\\
+\hline
+Incoming transmissions:\\
+\hline
+1 & Kill switch & 2 Hz & 1 byte\\
+7 & PWM1 & 2 Hz & 1 byte\\
+8 & PWM2 & 2 Hz & 1 byte\\
+9 & Remote Control & 10 Hz & x bytes\\
+\end{tabular}
+
+To estimate the highest number of bytes sent per second, the protocol overhead is added (5 bytes for each packet), which totals the amount of packets to be per second at 1214 bytes. To make debugging easier the data could be transmitted in plain-text using 8-bit ASCII symbols to represent the individual characters. This increases the amount of bytes to be sent to 9712. About a third of the band with, allowing for extra uses of the bandwith - eg. by adding other sensors. 
