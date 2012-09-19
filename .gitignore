@@ -1,4 +1,5 @@
 *~
+<<<<<<< HEAD
 doc/*.out
 doc/*.aux
 doc/*.log
@@ -6,3 +7,20 @@ doc/*.maf
 doc/*.mtc
 doc/*.mtc0
 doc/*.pdf
+=======
+*.out
+
+doc/protocol.aux
+
+doc/protocol.log
+
+doc/protocol.maf
+
+doc/protocol.mtc
+
+doc/protocol.mtc0
+
+doc/protocol.pdf
+
+doc/protocol.synctex.gz
+>>>>>>> 4e93d187e09c1c44d3b5bb8e0b543831ae36ea31
