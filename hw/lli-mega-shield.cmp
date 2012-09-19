@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = ons 12 sep 2012 22:35:08 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = ons 19 sep 2012 08:30:12 CEST
 
 BeginCmp
 TimeStamp = /504A39C7;
@@ -25,42 +25,42 @@ BeginCmp
 TimeStamp = /504EF348;
 Reference = C4;
 ValeurCmp = C;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /504A2907;
 Reference = D1;
 ValeurCmp = 1N4148;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098C6;
 Reference = D2;
 ValeurCmp = LED;
-IdModule  = ;
+IdModule  = LED-1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098CA;
 Reference = D3;
 ValeurCmp = LED;
-IdModule  = ;
+IdModule  = LED-1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A7;
 Reference = D4;
 ValeurCmp = LED;
-IdModule  = ;
+IdModule  = LEDV;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A6;
 Reference = D5;
 ValeurCmp = LED;
-IdModule  = ;
+IdModule  = LEDV;
 EndCmp
 
 BeginCmp
@@ -74,84 +74,84 @@ BeginCmp
 TimeStamp = /50509B50;
 Reference = K2;
 ValeurCmp = AC1;
-IdModule  = ;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
 TimeStamp = /50507D05;
 Reference = K3;
 ValeurCmp = PWR_source;
-IdModule  = ;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050DF28;
 Reference = K4;
 ValeurCmp = Encoder_1;
-IdModule  = ;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
 TimeStamp = /505081A7;
 Reference = K5;
 ValeurCmp = AC2;
-IdModule  = ;
+IdModule  = pin_array_3x2;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050BA91;
 Reference = K6;
 ValeurCmp = Encoder_2;
-IdModule  = ;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
 TimeStamp = /50509B5D;
 Reference = K7;
 ValeurCmp = AC3;
-IdModule  = ;
+IdModule  = pin_array_3x2;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E726;
 Reference = K8;
 ValeurCmp = LLH_UART;
-IdModule  = ;
+IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050DCF7;
 Reference = P1;
 ValeurCmp = Enable;
-IdModule  = ;
+IdModule  = PIN_ARRAY_2X1;
 EndCmp
 
 BeginCmp
 TimeStamp = /50507A5C;
 Reference = P2;
 ValeurCmp = GPS;
-IdModule  = ;
+IdModule  = PIN_ARRAY_4x1;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050EA6D;
 Reference = P3;
-ValeurCmp = CONN_5X2;
-IdModule  = ;
+ValeurCmp = AUX_A;
+IdModule  = PIN_ARRAY_5x2;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050EA6F;
 Reference = P4;
-ValeurCmp = CONN_5X2;
-IdModule  = ;
+ValeurCmp = AUX_B;
+IdModule  = PIN_ARRAY_5x2;
 EndCmp
 
 BeginCmp
 TimeStamp = /504A28F4;
 Reference = Q1;
 ValeurCmp = NPN;
-IdModule  = ;
+IdModule  = SOT23EBC;
 EndCmp
 
 BeginCmp
@@ -186,42 +186,42 @@ BeginCmp
 TimeStamp = /5050DCFD;
 Reference = R5;
 ValeurCmp = R;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050DD01;
 Reference = R6;
 ValeurCmp = R;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098CF;
 Reference = R7;
 ValeurCmp = R;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098D1;
 Reference = R8;
 ValeurCmp = R;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A5;
 Reference = R9;
 ValeurCmp = R;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A4;
 Reference = R10;
 ValeurCmp = R;
-IdModule  = ;
+IdModule  = SM1206;
 EndCmp
 
 BeginCmp
