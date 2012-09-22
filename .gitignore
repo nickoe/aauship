@@ -17,3 +17,7 @@ doc/*.synctex.gz
 *.hex
 *.lst
 *.sym
+
+# Hardware files
+hw/*.bak
+hw/*.dcm
