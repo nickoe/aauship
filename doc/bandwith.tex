@@ -1,7 +1,20 @@
-\section{Bandwith}
-The bandwith of the system is maxed by the UART interface connecting the \ac{LLI} and the \ac{HLI}. This bandwith is given as 115200 bits per second (or 14400 bytes per second). This gives the highest number of bytes the \ac{LLI} and \ac{HLI} can exchange at any given time. A systematic overview is given in the table below - stating the size and frequency of all the packets to be sent from the \ac{LLI} to the \ac{HLI}. 
+\documentclass{article}
+% Pakker
+\usepackage[utf8]{inputenc} % Så må vi bruge æ, ø og å
+%\usepackage[ansinew]{inputenc}
+%\usepackage[danish]{babel} % Dansk opsætning
+\usepackage[T1]{fontenc} % Hjælper med ordeling ved æ, ø og å. Sætter fontene til at være ps-fonte i stedet for bmp.
+\usepackage[english,final]{varioref} % Vi kan anvende \vref
+\usepackage{array,booktabs} % Til gode tabeller
+\usepackage{acronym} % Smart akronymhåndtering
+\usepackage{minitoc} % Vi kan lave del inholdsfortegnelser forhåbentlig
+\usepackage{bytefield}
+\begin{document}
 
-\begin{tabular}{l*{6}{c}r}
+\section{Bandwith}
+The bandwith of the system is maxed by the UART interface connecting the LLI and the HLI. This bandwith is given as 115200 bits per second (or 14400 bytes per second). This gives the highest number of bytes the LLI and HLI can exchange at any given time. A systematic overview is given in the table below - stating the size and frequency of all the packets to be sent from the LLI to the HLI. 
+
+\begin{tabular}{l*{5}{c}r}
 DevID          & Device & Frequency & Size\\
 \hline
 Outgoing transmissions:\\
