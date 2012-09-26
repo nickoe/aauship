@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date søn 23 sep 2012 11:39:56 CEST
+EESchema Schematic File Version 2  date søn 23 sep 2012 11:40:33 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -1395,7 +1395,7 @@ DOUT
 Text Label 7800 4300 0    60   ~ 0
 DIN
 Text Notes 9000 6350 0    60   ~ 0
- 3.3 V from Arduino\n 5.0 V from Arduino\n 5.0 V seperatly directly from battery packs\n14.4 V battery supply
+ 3.3 V from Arduino\n 5.0 V from Arduino\n 5.0 V seperatly directly from battery packs\n14.8 V battery supply
 Text Notes 5600 5250 0    60   Italic 12
 GPS receiver
 Text Notes 5700 5400 0    60   ~ 0

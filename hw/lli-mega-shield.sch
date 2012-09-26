@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date søn 23 sep 2012 11:40:33 CEST
+EESchema Schematic File Version 2  date søn 23 sep 2012 12:03:57 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -664,7 +664,7 @@ RL_BATT
 Text Label 2150 6500 2    60   ~ 0
 RL_BATT
 Text Notes 2400 2350 0    60   ~ 0
-I2C not planned for any use
+I2C not planned for any use,\nmaybe for OpenServo devices?
 Text Notes 4850 2350 2    60   ~ 0
 I2C
 Text Label 5050 2400 0    60   ~ 0
