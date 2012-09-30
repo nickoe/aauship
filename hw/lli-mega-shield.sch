@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date søn 30 sep 2012 19:45:06 CEST
+EESchema Schematic File Version 2  date søn 30 sep 2012 20:16:28 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -1254,8 +1254,8 @@ Text Label 5350 7600 2    60   ~ 0
 LED4
 Text Notes 8150 6950 0    60   ~ 0
 TODO:\n* Differentiate between arduino 5V and DC-DC 5V\n* Differentiate between Battery direct and relayed battery supply
-Text Notes 2300 2200 0    60   ~ 0
-Auxiliary Input/Output pins, can\nalso be used with the ADC.
+Text Notes 2300 2100 0    60   ~ 0
+Auxiliary Input/Output pins, can\nalso be used with the ADC. Comms\nwith advanced survailence of power\nsplitter.
 Text Label 4950 2100 0    60   ~ 0
 IO1
 Text Label 4950 2200 0    60   ~ 0
