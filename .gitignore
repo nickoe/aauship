@@ -21,3 +21,4 @@ doc/*.synctex.gz
 # Hardware files
 hw/*.bak
 hw/*.dcm
+hw/*.ps
