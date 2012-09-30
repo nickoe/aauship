@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = søn 30 sep 2012 19:45:50 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = søn 30 sep 2012 20:22:08 CEST
 
 BeginCmp
 TimeStamp = /504A39C7;
@@ -39,28 +39,28 @@ BeginCmp
 TimeStamp = /505098C6;
 Reference = D2;
 ValeurCmp = LED;
-IdModule  = LED-1206;
+IdModule  = LED-1206-header;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098CA;
 Reference = D3;
 ValeurCmp = LED;
-IdModule  = LED-1206;
+IdModule  = LED-1206-header;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A7;
 Reference = D4;
 ValeurCmp = LED;
-IdModule  = LEDV;
+IdModule  = LED-1206-header;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A6;
 Reference = D5;
 ValeurCmp = LED;
-IdModule  = LEDV;
+IdModule  = LED-1206-header;
 EndCmp
 
 BeginCmp

@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  søn 30 sep 2012 19:45:50 CEST
+# EESchema Netlist Version 1.1 created  søn 30 sep 2012 20:22:08 CEST
 (
  ( /504A39C7 SM1210L C1 1uF
   ( 1 N-000069 )
@@ -20,19 +20,19 @@
   ( 1 /RL_BATT )
   ( 2 +5VP )
  )
- ( /505098C6 LED-1206 D2 LED
+ ( /505098C6 LED-1206-header D2 LED
   ( 1 +5V )
   ( 2 N-000079 )
  )
- ( /505098CA LED-1206 D3 LED
+ ( /505098CA LED-1206-header D3 LED
   ( 1 +5V )
   ( 2 N-000078 )
  )
- ( /5050E0A7 LEDV D4 LED
+ ( /5050E0A7 LED-1206-header D4 LED
   ( 1 +5V )
   ( 2 N-000029 )
  )
- ( /5050E0A6 LEDV D5 LED
+ ( /5050E0A6 LED-1206-header D5 LED
   ( 1 +5V )
   ( 2 N-000030 )
  )
