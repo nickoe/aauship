@@ -1,282 +1,189 @@
-# EESchema Netlist Version 1.1 created  tor 20 sep 2012 14:21:49 CEST
+# EESchema Netlist Version 1.1 created  søn 30 sep 2012 19:45:50 CEST
 (
- ( /5050EA6F $noname  P4 AUX_B {Lib=CONN_5X2}
-  (    1 /AUX_B1 )
-  (    2 /AUX_B2 )
-  (    3 /AUX_B3 )
-  (    4 /AUX_B4 )
-  (    5 /AUX_B5 )
-  (    6 /AUX_B6 )
-  (    7 +3.3V )
-  (    8 +5V )
-  (    9 GND )
-  (   10 ? )
+ ( /504A39C7 SM1210L C1 1uF
+  ( 1 N-000069 )
+  ( 2 GND )
  )
- ( /5050EA6D $noname  P3 AUX_A {Lib=CONN_5X2}
-  (    1 /AUX_A1 )
-  (    2 /AUX_A2 )
-  (    3 /AUX_A3 )
-  (    4 /AUX_A4 )
-  (    5 /AUX_A5 )
-  (    6 /AUX_A6 )
-  (    7 +3.3V )
-  (    8 +5V )
-  (    9 GND )
-  (   10 ? )
+ ( /504A41AC SM1210L C2 1uF
+  ( 1 N-000057 )
+  ( 2 GND )
  )
- ( /5050E726 $noname  K8 LLH_UART {Lib=CONN_3}
-  (    1 /LLH_TX )
-  (    2 /LLH_RX )
-  (    3 GND )
+ ( /5050796A SM1210L C3 1uF
+  ( 1 N-000077 )
+  ( 2 GND )
  )
- ( /5050E0A7 $noname  D4 LED {Lib=LED}
-  (    1 +5V )
-  (    2 N-000012 )
+ ( /504EF348 SM1206 C4 C
+  ( 1 +5V )
+  ( 2 GND )
  )
- ( /5050E0A6 $noname  D5 LED {Lib=LED}
-  (    1 +5V )
-  (    2 N-000013 )
+ ( /504A2907 SM1206 D1 1N4148
+  ( 1 /RL_BATT )
+  ( 2 +5VP )
  )
- ( /5050E0A5 $noname  R9 R {Lib=R}
-  (    1 N-000012 )
-  (    2 /LED3 )
+ ( /505098C6 LED-1206 D2 LED
+  ( 1 +5V )
+  ( 2 N-000079 )
  )
- ( /5050E0A4 $noname  R10 R {Lib=R}
-  (    1 N-000013 )
-  (    2 /LED4 )
+ ( /505098CA LED-1206 D3 LED
+  ( 1 +5V )
+  ( 2 N-000078 )
  )
- ( /5050DF28 $noname  K4 Encoder_1 {Lib=CONN_3}
-  (    1 /ENC1_A )
-  (    2 GND )
-  (    3 /ENC1_B )
+ ( /5050E0A7 LEDV D4 LED
+  ( 1 +5V )
+  ( 2 N-000029 )
  )
- ( /5050DD01 $noname  R6 R {Lib=R}
-  (    1 /BATV )
-  (    2 GND )
+ ( /5050E0A6 LEDV D5 LED
+  ( 1 +5V )
+  ( 2 N-000030 )
  )
- ( /5050DCFD $noname  R5 R {Lib=R}
-  (    1 N-000015 )
-  (    2 /BATV )
+ ( /505B1C3F DB25 J1 DB25
+  ( 1 GND )
+  ( 2 GND )
+  ( 3 +5VP )
+  ( 4 /T3 )
+  ( 5 /SCL )
+  ( 6 /IO4 )
+  ( 7 /IO2 )
+  ( 8 /RCPWM5 )
+  ( 9 /DCDIR3 )
+  ( 10 /RCPWM3 )
+  ( 11 /DCPWM2 )
+  ( 12 /DCDIR1 )
+  ( 13 /RCPWM1 )
+  ( 14 +BATT )
+  ( 15 +BATT )
+  ( 16 /RL_BATT )
+  ( 17 /T2 )
+  ( 18 /SDA )
+  ( 19 /IO3 )
+  ( 20 /IO1 )
+  ( 21 /RCPWM4 )
+  ( 22 /DCPWM3 )
+  ( 23 /DCDIR2 )
+  ( 24 /RCPWM2 )
+  ( 25 /DCPWM1 )
  )
- ( /5050DCF7 $noname  P1 Enable {Lib=CONN_2}
-  (    1 +BATT )
-  (    2 N-000015 )
+ ( /5050DCF7 PIN_ARRAY_2X1 P1 Enable
+  ( 1 +BATT )
+  ( 2 N-000074 )
  )
- ( /5050BA91 $noname  K6 Encoder_2 {Lib=CONN_3}
-  (    1 /ENC2_A )
-  (    2 GND )
-  (    3 /ENC2_B )
+ ( /504A28F4 SOT23EBC Q1 NPN
+  ( 1 /RL_BATT )
+  ( 2 N-000071 )
+  ( 3 GND )
  )
- ( /50509B5D $noname  K7 AC3 {Lib=CONN_3}
-  (    1 GND )
-  (    2 +5VP )
-  (    3 /AC3 )
+ ( /504A2942 SM1206 R1 1K
+  ( 1 N-000071 )
+  ( 2 /~KILL )
  )
- ( /50509B50 $noname  K2 AC1 {Lib=CONN_3}
-  (    1 GND )
-  (    2 +5VP )
-  (    3 /AC1 )
+ ( /504A39C1 SM1206 R2 75
+  ( 1 /T1 )
+  ( 2 N-000069 )
  )
- ( /505098D1 $noname  R8 R {Lib=R}
-  (    1 N-000001 )
-  (    2 /LED2 )
+ ( /504A41AD SM1206 R3 75
+  ( 1 /T2 )
+  ( 2 N-000057 )
  )
- ( /505098CF $noname  R7 R {Lib=R}
-  (    1 N-000002 )
-  (    2 /LED1 )
+ ( /50507969 SM1206 R4 75
+  ( 1 /T3 )
+  ( 2 N-000077 )
  )
- ( /505098CA $noname  D3 LED {Lib=LED}
-  (    1 +5V )
-  (    2 N-000001 )
+ ( /5050DCFD SM1206 R5 R
+  ( 1 N-000074 )
+  ( 2 /BATV )
  )
- ( /505098C6 $noname  D2 LED {Lib=LED}
-  (    1 +5V )
-  (    2 N-000002 )
+ ( /5050DD01 SM1206 R6 R
+  ( 1 /BATV )
+  ( 2 GND )
  )
- ( /50509732 $noname  U6 R-78B5.0-1.5_ {Lib=7805}
-  (  GND GND )
-  (   VI +BATT )
-  (   VO +5VP )
+ ( /505098CF SM1206 R7 R
+  ( 1 N-000079 )
+  ( 2 /LED1 )
  )
- ( /505081A7 $noname  K5 AC2 {Lib=CONN_3}
-  (    1 GND )
-  (    2 +5VP )
-  (    3 /AC2 )
+ ( /505098D1 SM1206 R8 R
+  ( 1 N-000078 )
+  ( 2 /LED2 )
  )
- ( /50507D05 $noname  K3 PWR_source {Lib=CONN_3}
-  (    1 +3.3V )
-  (    2 N-000011 )
-  (    3 +5VP )
+ ( /5050E0A5 SM1206 R9 R
+  ( 1 N-000029 )
+  ( 2 /LED3 )
  )
- ( /50507A5C $noname  P2 GPS {Lib=CONN_4}
-  (    1 GND )
-  (    2 N-000011 )
-  (    3 /GPS_TX )
-  (    4 /GPS_RX )
+ ( /5050E0A4 SM1206 R10 R
+  ( 1 N-000030 )
+  ( 2 /LED4 )
  )
- ( /5050796A $noname  C3 1uF {Lib=C}
-  (    1 N-000010 )
-  (    2 GND )
- )
- ( /50507969 $noname  R4 75 {Lib=R}
-  (    1 /T3 )
-  (    2 N-000010 )
- )
- ( /50507968 $noname  U4 LM35 {Lib=LM35}
-  (    1 /T3 )
-  (    2 GND )
-  (    3 +5V )
- )
- ( /504EF348 $noname  C4 C {Lib=C}
-  (    1 +5V )
-  (    2 GND )
- )
- ( /504EF28A $noname  U5 ADIS16405 {Lib=ADIS16405}
-  (    1 ? )
-  (    2 ? )
-  (    3 /SCLK )
-  (    4 /DOUT )
-  (    5 /DIN )
-  (    6 /~CS )
-  (    7 ? )
-  (    8 ? )
-  (    9 ? )
-  (   10 +5V )
-  (   11 +5V )
-  (   12 +5V )
-  (   13 GND )
-  (   14 GND )
-  (   15 GND )
-  (   20 ? )
-  (   21 ? )
- )
- ( /504A41AD $noname  R3 75 {Lib=R}
-  (    1 /T2 )
-  (    2 N-000078 )
- )
- ( /504A41AC $noname  C2 1uF {Lib=C}
-  (    1 N-000078 )
-  (    2 GND )
- )
- ( /504A41A9 $noname  U3 LM35 {Lib=LM35}
-  (    1 /T2 )
-  (    2 GND )
-  (    3 +5V )
- )
- ( /504A39C7 $noname  C1 1uF {Lib=C}
-  (    1 N-000091 )
-  (    2 GND )
- )
- ( /504A39C1 $noname  R2 75 {Lib=R}
-  (    1 /T1 )
-  (    2 N-000091 )
- )
- ( /504A39B9 $noname  U2 LM35 {Lib=LM35}
-  (    1 /T1 )
-  (    2 GND )
-  (    3 +5V )
- )
- ( /504A2942 $noname  R1 1K {Lib=R}
-  (    1 N-000092 )
-  (    2 /~KILL )
- )
- ( /504A2907 $noname  D1 1N4148 {Lib=DIODE}
-  (    1 N-000090 )
-  (    2 +5V )
- )
- ( /504A28F4 $noname  Q1 NPN {Lib=NPN}
-  (    1 N-000090 )
-  (    2 N-000092 )
-  (    3 GND )
- )
- ( /504A274B $noname  U1 APC220 {Lib=APC220}
-  (    1 GND )
-  (    2 +5V )
-  (    3 ? )
-  (    4 /RF_RX )
-  (    5 /RF_TX )
-  (    6 ? )
-  (    7 ? )
- )
- ( /504A271B $noname  K1 36.11.9.003.4000 {Lib=RELAY_1RT}
-  (    1 +5V )
-  (    2 +BATT )
-  (    3 N-000090 )
-  (    4 ? )
-  (    5 ? )
- )
- ( /504A215E $noname  SHIELD1 Arduino_Mega_2580 {Lib=ARDUINO_MEGA_SHIELD}
-  (    0 ? )
-  (    1 ? )
-  (    2 ? )
-  (    3 ? )
-  (    4 ? )
-  (    5 ? )
-  (   5V +5V )
-  (    6 ? )
-  (    7 ? )
-  (    8 ? )
-  (    9 ? )
-  (   10 ? )
-  (   11 ? )
-  (   12 ? )
-  (   13 ? )
-  (   14 /GPS_RX )
-  (   15 /GPS_TX )
-  (   16 /RF_RX )
-  (   17 /RF_TX )
-  (   18 /LLH_RX )
-  (   19 /LLH_TX )
-  (   20 ? )
-  (   21 ? )
-  (   22 /AUX_A1 )
-  (   23 /AUX_A2 )
-  (   24 /AUX_A3 )
-  (   25 /AUX_A4 )
-  (   26 /AUX_A5 )
-  (   27 /AUX_A6 )
-  (   28 /AUX_B1 )
-  (   29 /AUX_B2 )
-  (   30 /AUX_B3 )
-  (   31 /AUX_B4 )
-  (   32 /AUX_B5 )
-  (   33 /AUX_B6 )
-  (   34 ? )
-  (   35 ? )
-  (   36 ? )
-  (   37 ? )
-  (   38 ? )
-  (   39 ? )
-  (   40 ? )
-  (   41 ? )
-  (   42 ? )
-  (   43 ? )
-  (   44 ? )
-  (   45 /~KILL )
-  (   46 /LED4 )
-  (   47 /LED3 )
-  (   48 /LED2 )
-  (   49 /LED1 )
-  (   50 /DOUT )
-  (   51 /DIN )
-  (   52 /SCLK )
-  (   53 /~CS )
-  (  3V3 +3.3V )
+ ( /504A215E ARDUINO_MEGA_SHIELD SHIELD1 Arduino_Mega_2580
+  ( 0 ? )
+  ( 1 ? )
+  ( 2 /DCPWM1 )
+  ( 3 /DCPWM2 )
+  ( 3V3 +3.3V )
+  ( 4 ? )
+  ( 5 /DCPWM3 )
+  ( 5V +5V )
   ( 5V_4 +5V )
   ( 5V_5 +5V )
-  (  AD0 /AC1 )
-  (  AD1 /AC2 )
-  (  AD2 /AC3 )
-  (  AD3 /BATV )
-  (  AD4 ? )
-  (  AD5 ? )
-  (  AD6 ? )
-  (  AD7 ? )
-  (  AD8 /ENC1_A )
-  (  AD9 /ENC1_B )
-  ( AD10 /ENC2_A )
-  ( AD11 /ENC2_B )
-  ( AD12 ? )
+  ( 6 ? )
+  ( 7 /RCPWM4 )
+  ( 8 /RCPWM5 )
+  ( 9 ? )
+  ( 10 ? )
+  ( 11 /RCPWM1 )
+  ( 12 /RCPWM2 )
+  ( 13 /RCPWM3 )
+  ( 14 /GPS_RX )
+  ( 15 /GPS_TX )
+  ( 16 /RF_RX )
+  ( 17 /RF_TX )
+  ( 18 ? )
+  ( 19 ? )
+  ( 20 /SDA )
+  ( 21 /SCL )
+  ( 22 ? )
+  ( 23 ? )
+  ( 24 ? )
+  ( 25 ? )
+  ( 26 ? )
+  ( 27 ? )
+  ( 28 ? )
+  ( 29 ? )
+  ( 30 ? )
+  ( 31 ? )
+  ( 32 ? )
+  ( 33 ? )
+  ( 34 ? )
+  ( 35 ? )
+  ( 36 ? )
+  ( 37 ? )
+  ( 38 ? )
+  ( 39 ? )
+  ( 40 ? )
+  ( 41 ? )
+  ( 42 ? )
+  ( 43 ? )
+  ( 44 ? )
+  ( 45 /~KILL )
+  ( 46 /LED4 )
+  ( 47 /LED3 )
+  ( 48 /LED2 )
+  ( 49 /LED1 )
+  ( 50 /DOUT )
+  ( 51 /DIN )
+  ( 52 /SCLK )
+  ( 53 /~CS )
+  ( AD0 /DCDIR1 )
+  ( AD1 /DCDIR2 )
+  ( AD2 /DCDIR3 )
+  ( AD3 /BATV )
+  ( AD4 ? )
+  ( AD5 ? )
+  ( AD6 /~RST )
+  ( AD7 /IRQ )
+  ( AD8 /IO1 )
+  ( AD9 /IO2 )
+  ( AD10 /IO3 )
+  ( AD11 /IO4 )
+  ( AD12 /RF_EN )
   ( AD13 /T1 )
   ( AD14 /T2 )
   ( AD15 /T3 )
@@ -286,12 +193,100 @@
   ( GND3 GND )
   ( GND4 GND )
   ( GND5 GND )
-  (  RST ? )
+  ( RST ? )
   ( V_IN ? )
+ )
+ ( /504A274B APC220 U1 APC220
+  ( 1 GND )
+  ( 2 +5V )
+  ( 3 ? )
+  ( 4 /RF_RX )
+  ( 5 /RF_TX )
+  ( 6 ? )
+  ( 7 /RF_EN )
+ )
+ ( /504A39B9 PIN_ARRAY_3X1 U2 LM35
+  ( 1 /T1 )
+  ( 2 GND )
+  ( 3 +5V )
+ )
+ ( /504EF28A ML-24-2 U5 ADIS16405
+  ( 1 ? )
+  ( 2 ? )
+  ( 3 /SCLK )
+  ( 4 /DOUT )
+  ( 5 /DIN )
+  ( 6 /~CS )
+  ( 7 /IRQ )
+  ( 8 /~RST )
+  ( 9 ? )
+  ( 10 +5V )
+  ( 11 +5V )
+  ( 12 +5V )
+  ( 13 GND )
+  ( 14 GND )
+  ( 15 GND )
+  ( 20 ? )
+  ( 21 ? )
+ )
+ ( /50509732 TO220_VERT U6 R-78B5.0-1.5_
+  ( GND GND )
+  ( VI +BATT )
+  ( VO +5VP )
+ )
+ ( /505E2B7A UP500/UP501 U7 UP500/UP501
+  ( 1 /GPS_RX )
+  ( 2 /GPS_TX )
+  ( 3 GND )
+  ( 4 +3.3V )
+  ( 5 +3.3V )
+  ( 6 ? )
  )
 )
 *
 { Allowed footprints by component:
+$component C1
+ SM*
+ C?
+ C1-1
+$endlist
+$component C2
+ SM*
+ C?
+ C1-1
+$endlist
+$component C3
+ SM*
+ C?
+ C1-1
+$endlist
+$component C4
+ SM*
+ C?
+ C1-1
+$endlist
+$component D1
+ D?
+ S*
+$endlist
+$component D2
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
+$component D3
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
 $component D4
  LED-3MM
  LED-5MM
@@ -310,6 +305,65 @@ $component D5
  LED-1206
  LEDV
 $endlist
+$component J1
+ DB25*
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R6
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R7
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R8
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
 $component R9
  R?
  SM0603
@@ -324,325 +378,8 @@ $component R10
  R?-*
  SM1206
 $endlist
-$component R6
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R5
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R8
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R7
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component D3
- LED-3MM
- LED-5MM
- LED-10MM
- LED-0603
- LED-0805
- LED-1206
- LEDV
-$endlist
-$component D2
- LED-3MM
- LED-5MM
- LED-10MM
- LED-0603
- LED-0805
- LED-1206
- LEDV
-$endlist
-$component C3
- SM*
- C?
- C1-1
-$endlist
-$component R4
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component C4
- SM*
- C?
- C1-1
-$endlist
 $component U5
  ML-24-2
 $endlist
-$component R3
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component C2
- SM*
- C?
- C1-1
-$endlist
-$component C1
- SM*
- C?
- C1-1
-$endlist
-$component R2
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R1
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component D1
- D?
- S*
-$endlist
 $endfootprintlist
 }
-{ Pin List by Nets
-Net 1 "" ""
- R8 1
- D3 2
-Net 2 "" ""
- R7 1
- D2 2
-Net 3 "+5V" "+5V"
- C4 1
- U1 2
- K1 1
- U2 3
- D1 2
- D5 1
- D4 1
- U3 3
- SHIELD1 5V_4
- SHIELD1 5V_5
- SHIELD1 5V
- U5 10
- U5 11
- U5 12
- P4 8
- P3 8
- U4 3
- D3 1
- D2 1
-Net 4 "+BATT" "+BATT"
- K1 2
- P1 1
- U6 VI
-Net 5 "GND" "GND"
- U3 2
- SHIELD1 GND3
- SHIELD1 GND1
- SHIELD1 GND2
- C1 2
- SHIELD1 GND4
- Q1 3
- U1 1
- SHIELD1 GND5
- C4 2
- C3 2
- K4 2
- K8 3
- U2 2
- U5 15
- K5 1
- U6 GND
- P4 9
- P3 9
- U5 14
- U5 13
- P2 1
- U4 2
- K2 1
- C2 2
- R6 2
- K6 2
- K7 1
-Net 6 "/AC2" "AC2"
- SHIELD1 AD1
- K5 3
-Net 8 "/LED2" "LED2"
- R8 2
- SHIELD1 48
-Net 9 "/LED1" "LED1"
- SHIELD1 49
- R7 2
-Net 10 "" ""
- C3 1
- R4 2
-Net 11 "" ""
- P2 2
- K3 2
-Net 12 "" ""
- D4 2
- R9 1
-Net 13 "" ""
- R10 1
- D5 2
-Net 15 "" ""
- R5 1
- P1 2
-Net 16 "/AC1" "AC1"
- K2 3
- SHIELD1 AD0
-Net 17 "/GPS_RX" "GPS_RX"
- P2 4
- SHIELD1 14
-Net 19 "/AUX_B5" "AUX_B5"
- P4 5
- SHIELD1 32
-Net 22 "/AUX_A2" "AUX_A2"
- SHIELD1 23
- P3 2
-Net 26 "/GPS_TX" "GPS_TX"
- P2 3
- SHIELD1 15
-Net 27 "/AUX_A4" "AUX_A4"
- SHIELD1 25
- P3 4
-Net 29 "/~KILL" "~KILL"
- SHIELD1 45
- R1 2
-Net 30 "/RF_RX" "RF_RX"
- U1 4
- SHIELD1 16
-Net 49 "/T1" "T1"
- R2 1
- SHIELD1 AD13
- U2 1
-Net 52 "/ENC1_A" "ENC1_A"
- K4 1
- SHIELD1 AD8
-Net 53 "/ENC1_B" "ENC1_B"
- SHIELD1 AD9
- K4 3
-Net 54 "/ENC2_A" "ENC2_A"
- SHIELD1 AD10
- K6 1
-Net 55 "/ENC2_B" "ENC2_B"
- K6 3
- SHIELD1 AD11
-Net 58 "/T2" "T2"
- SHIELD1 AD14
- U3 1
- R3 1
-Net 59 "/T3" "T3"
- U4 1
- R4 1
- SHIELD1 AD15
-Net 62 "/LED4" "LED4"
- R10 2
- SHIELD1 46
-Net 63 "/RF_TX" "RF_TX"
- SHIELD1 17
- U1 5
-Net 64 "/AUX_A6" "AUX_A6"
- SHIELD1 27
- P3 6
-Net 66 "/LED3" "LED3"
- SHIELD1 47
- R9 2
-Net 67 "/LLH_RX" "LLH_RX"
- K8 2
- SHIELD1 18
-Net 69 "/LLH_TX" "LLH_TX"
- K8 1
- SHIELD1 19
-Net 72 "/AC3" "AC3"
- K7 3
- SHIELD1 AD2
-Net 73 "/BATV" "BATV"
- R5 2
- R6 1
- SHIELD1 AD3
-Net 74 "+3.3V" "+3.3V"
- K3 1
- P3 7
- P4 7
- SHIELD1 3V3
-Net 78 "" ""
- C2 1
- R3 2
-Net 83 "/SCLK" "SCLK"
- SHIELD1 52
- U5 3
-Net 84 "/DOUT" "DOUT"
- SHIELD1 50
- U5 4
-Net 85 "/DIN" "DIN"
- SHIELD1 51
- U5 5
-Net 86 "/~CS" "~CS"
- SHIELD1 53
- U5 6
-Net 90 "" ""
- D1 1
- Q1 1
- K1 3
-Net 91 "" ""
- C1 1
- R2 2
-Net 92 "" ""
- R1 1
- Q1 2
-Net 93 "/AUX_B2" "AUX_B2"
- SHIELD1 29
- P4 2
-Net 94 "/AUX_B4" "AUX_B4"
- SHIELD1 31
- P4 4
-Net 95 "/AUX_A1" "AUX_A1"
- SHIELD1 22
- P3 1
-Net 96 "/AUX_A3" "AUX_A3"
- SHIELD1 24
- P3 3
-Net 97 "/AUX_A5" "AUX_A5"
- SHIELD1 26
- P3 5
-Net 98 "+5VP" "+5VP"
- K5 2
- U6 VO
- K3 3
- K7 2
- K2 2
-Net 99 "/AUX_B1" "AUX_B1"
- P4 1
- SHIELD1 28
-Net 100 "/AUX_B3" "AUX_B3"
- SHIELD1 30
- P4 3
-Net 101 "/AUX_B6" "AUX_B6"
- SHIELD1 33
- P4 6
-}
-#End

@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = ons 19 sep 2012 10:22:57 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = søn 30 sep 2012 19:45:50 CEST
 
 BeginCmp
 TimeStamp = /504A39C7;
@@ -64,59 +64,10 @@ IdModule  = LEDV;
 EndCmp
 
 BeginCmp
-TimeStamp = /504A271B;
-Reference = K1;
-ValeurCmp = 36.11.9.003.4000;
-IdModule  = F3611;
-EndCmp
-
-BeginCmp
-TimeStamp = /50509B50;
-Reference = K2;
-ValeurCmp = AC1;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /50507D05;
-Reference = K3;
-ValeurCmp = PWR_source;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /5050DF28;
-Reference = K4;
-ValeurCmp = Encoder_1;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /505081A7;
-Reference = K5;
-ValeurCmp = AC2;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /5050BA91;
-Reference = K6;
-ValeurCmp = Encoder_2;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /50509B5D;
-Reference = K7;
-ValeurCmp = AC3;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /5050E726;
-Reference = K8;
-ValeurCmp = LLH_UART;
-IdModule  = PIN_ARRAY_3X1;
+TimeStamp = /505B1C3F;
+Reference = J1;
+ValeurCmp = DB25;
+IdModule  = DB25;
 EndCmp
 
 BeginCmp
@@ -124,27 +75,6 @@ TimeStamp = /5050DCF7;
 Reference = P1;
 ValeurCmp = Enable;
 IdModule  = PIN_ARRAY_2X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /50507A5C;
-Reference = P2;
-ValeurCmp = GPS;
-IdModule  = PIN_ARRAY_4x1;
-EndCmp
-
-BeginCmp
-TimeStamp = /5050EA6D;
-Reference = P3;
-ValeurCmp = AUX_A;
-IdModule  = PIN_ARRAY_5x2;
-EndCmp
-
-BeginCmp
-TimeStamp = /5050EA6F;
-Reference = P4;
-ValeurCmp = AUX_B;
-IdModule  = PIN_ARRAY_5x2;
 EndCmp
 
 BeginCmp
@@ -246,20 +176,6 @@ IdModule  = PIN_ARRAY_3X1;
 EndCmp
 
 BeginCmp
-TimeStamp = /504A41A9;
-Reference = U3;
-ValeurCmp = LM35;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
-TimeStamp = /50507968;
-Reference = U4;
-ValeurCmp = LM35;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
-
-BeginCmp
 TimeStamp = /504EF28A;
 Reference = U5;
 ValeurCmp = ADIS16405;
@@ -269,8 +185,15 @@ EndCmp
 BeginCmp
 TimeStamp = /50509732;
 Reference = U6;
-ValeurCmp = R-78B-1.5;
+ValeurCmp = R-78B5.0-1.5_;
 IdModule  = TO220_VERT;
+EndCmp
+
+BeginCmp
+TimeStamp = /505E2B7A;
+Reference = U7;
+ValeurCmp = UP500/UP501;
+IdModule  = UP500/UP501;
 EndCmp
 
 EndListe
