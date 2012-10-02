@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  man 01 okt 2012 15:15:14 CEST
+# EESchema Netlist Version 1.1 created  tir 02 okt 2012 09:01:17 CEST
 (
  ( /504A215E $noname  SHIELD1 Arduino_Mega_2580 {Lib=ARDUINO_MEGA_SHIELD}
   (    0 ? )
@@ -59,10 +59,10 @@
   (  3V3 +3.3V )
   ( 5V_4 +5V )
   ( 5V_5 +5V )
-  (  AD0 /DCDIR1 )
-  (  AD1 /DCDIR2 )
-  (  AD2 /DCDIR3 )
-  (  AD3 /BATV )
+  (  AD0 /BATV )
+  (  AD1 /DCDIR1 )
+  (  AD2 /DCDIR2 )
+  (  AD3 /DCDIR3 )
   (  AD4 ? )
   (  AD5 /T1 )
   (  AD6 /T2 )
@@ -410,7 +410,7 @@ Net 30 "" ""
  R10 1
 Net 31 "/BATV" "BATV"
  R6 1
- SHIELD1 AD3
+ SHIELD1 AD0
  R5 2
 Net 32 "+3.3V" "+3.3V"
  U7 5
@@ -468,13 +468,13 @@ Net 43 "/DCPWM2" "DCPWM2"
  J1 11
 Net 44 "/DCDIR1" "DCDIR1"
  J1 12
- SHIELD1 AD0
+ SHIELD1 AD1
 Net 45 "/DCPWM3" "DCPWM3"
  SHIELD1 5
  J1 22
 Net 46 "/DCDIR2" "DCDIR2"
+ SHIELD1 AD2
  J1 23
- SHIELD1 AD1
 Net 47 "/DCPWM1" "DCPWM1"
  J1 25
  SHIELD1 2
@@ -496,13 +496,13 @@ Net 52 "/RCPWM5" "RCPWM5"
  SHIELD1 8
 Net 53 "/DCDIR3" "DCDIR3"
  J1 9
- SHIELD1 AD2
+ SHIELD1 AD3
 Net 57 "" ""
- C2 1
  R3 2
+ C2 1
 Net 58 "/IRQ" "IRQ"
- SHIELD1 AD15
  U5 7
+ SHIELD1 AD15
 Net 59 "/~RST" "~RST"
  U5 8
  SHIELD1 AD14

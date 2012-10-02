@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date man 01 okt 2012 15:15:10 CEST
+EESchema Schematic File Version 2  date tir 02 okt 2012 09:01:13 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -38,7 +38,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Low Level Interface"
-Date "1 oct 2012"
+Date "2 oct 2012"
 Rev "1"
 Comp "Aalborg University"
 Comment1 "Nick Østergaard"
@@ -285,7 +285,7 @@ Connection ~ 5750 5700
 Wire Wire Line
 	5850 5700 5750 5700
 Wire Wire Line
-	8100 2200 7800 2200
+	8100 2300 7800 2300
 Wire Notes Line
 	10150 2450 10100 2450
 Wire Wire Line
@@ -295,7 +295,7 @@ Wire Wire Line
 Wire Wire Line
 	5000 6000 5000 5950
 Wire Wire Line
-	8100 2100 7800 2100
+	8100 2200 7800 2200
 Wire Wire Line
 	8100 4950 7800 4950
 Wire Notes Line
@@ -561,7 +561,7 @@ Wire Wire Line
 Wire Wire Line
 	3400 4950 3400 4750
 Wire Wire Line
-	7800 2300 8100 2300
+	7800 2000 8100 2000
 Wire Notes Line
 	2900 4350 2950 4400
 Wire Notes Line
@@ -637,7 +637,7 @@ Wire Notes Line
 Wire Notes Line
 	5150 5150 5250 5250
 Wire Wire Line
-	8100 2000 7800 2000
+	8100 2100 7800 2100
 Wire Notes Line
 	4200 5150 4200 6100
 Wire Notes Line
@@ -1004,11 +1004,11 @@ F 1 "UP500/UP501" H 6450 6000 60  0000 C CNN
 $EndComp
 Text Notes 4250 4600 0    60   ~ 0
 Fastrax UP501 default firmware configuration:\n1. Port 0: NMEA 9600 baud\n2. NMEA output: GGA, RMC, GSV, GSA (all 1 sec interval)\n3. DGPS/SBAS: Disabled (Module supports WAAS/EGNOS)\n4. Datum: WGS84
-Text Label 7800 2000 0    60   ~ 0
-DCDIR1
 Text Label 7800 2100 0    60   ~ 0
-DCDIR2
+DCDIR1
 Text Label 7800 2200 0    60   ~ 0
+DCDIR2
+Text Label 7800 2300 0    60   ~ 0
 DCDIR3
 $Comp
 L DB25 J1
@@ -1262,7 +1262,7 @@ Text Label 4950 2200 0    60   ~ 0
 IO2
 Text Notes 3000 4500 0    60   ~ 0
 Jumper to enable\nbattery measurements
-Text Label 7800 2300 0    60   ~ 0
+Text Label 7800 2000 0    60   ~ 0
 BATV
 Text Label 3650 4750 2    60   ~ 0
 BATV
