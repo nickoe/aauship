@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date søn 30 sep 2012 20:16:28 CEST
+EESchema Schematic File Version 2  date man 01 okt 2012 15:15:10 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -38,7 +38,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Low Level Interface"
-Date "30 sep 2012"
+Date "1 oct 2012"
 Rev "1"
 Comp "Aalborg University"
 Comment1 "Nick Østergaard"
@@ -51,9 +51,9 @@ Wire Wire Line
 Wire Wire Line
 	4400 5650 4600 5650
 Wire Notes Line
-	7750 2600 7700 2550
+	7750 3500 7700 3450
 Wire Notes Line
-	7750 2500 7700 2550
+	7750 3400 7700 3450
 Wire Notes Line
 	7650 3250 7700 3250
 Wire Wire Line
@@ -65,9 +65,9 @@ Wire Notes Line
 Wire Notes Line
 	7700 4350 7750 4400
 Wire Notes Line
-	7750 2600 7700 2650
+	7750 3500 7700 3550
 Wire Notes Line
-	7750 2700 7700 2650
+	7750 3600 7700 3550
 Wire Notes Line
 	2550 2000 2500 2000
 Wire Notes Line
@@ -329,13 +329,13 @@ Wire Notes Line
 Wire Notes Line
 	7700 3150 7750 3200
 Wire Notes Line
-	7700 3450 7650 3450
+	7700 2550 7650 2550
 Wire Notes Line
-	7750 3600 7700 3550
+	7750 2700 7700 2650
 Wire Notes Line
-	7700 3550 7700 3350
+	7700 2650 7700 2450
 Wire Wire Line
-	7800 3500 8100 3500
+	7800 2600 8100 2600
 Wire Wire Line
 	1450 3150 1150 3150
 Wire Wire Line
@@ -601,15 +601,15 @@ Wire Wire Line
 Wire Wire Line
 	950  3150 650  3150
 Wire Wire Line
-	8100 3600 7800 3600
+	8100 2700 7800 2700
 Wire Wire Line
-	8100 3400 7800 3400
+	8100 2500 7800 2500
 Wire Wire Line
 	8100 3100 7800 3100
 Wire Wire Line
 	7800 3200 8100 3200
 Wire Notes Line
-	7700 3350 7750 3300
+	7700 2450 7750 2400
 Wire Notes Line
 	7700 3000 7650 3000
 Wire Notes Line
@@ -792,9 +792,9 @@ Wire Notes Line
 Wire Notes Line
 	2550 2600 2500 2600
 Wire Wire Line
-	7800 2700 8100 2700
+	7800 3600 8100 3600
 Wire Notes Line
-	7700 2650 7650 2650
+	7700 3550 7650 3550
 Wire Notes Line
 	7700 4200 7650 4200
 Wire Notes Line
@@ -802,9 +802,9 @@ Wire Notes Line
 Wire Notes Line
 	7700 3250 7750 3200
 Wire Wire Line
-	7800 2600 8100 2600
+	7800 3500 8100 3500
 Wire Notes Line
-	7700 2550 7650 2550
+	7700 3450 7650 3450
 Wire Wire Line
 	950  6700 1350 6700
 $Comp
@@ -818,9 +818,9 @@ F 1 "+BATT" H 4400 5750 30  0000 C CNN
 $EndComp
 Text Notes 2900 8950 0    30   ~ 0
 +5VP switch\nregulator needs\nno flag to pass\nDRC
-Text Notes 7600 2600 2    60   ~ 0
+Text Notes 7600 3500 2    60   ~ 0
 IMU Reset
-Text Label 7800 2600 0    60   ~ 0
+Text Label 7800 3500 0    60   ~ 0
 ~RST
 $Comp
 L ARDUINO_MEGA_SHIELD SHIELD1
@@ -837,9 +837,9 @@ Text Label 7800 3300 0    60   ~ 0
 RF_EN
 Text Notes 7600 4250 2    60   ~ 0
 IMU SPI
-Text Notes 7600 2700 2    60   ~ 0
+Text Notes 7600 3600 2    60   ~ 0
 IMU IRQ
-Text Label 7800 2700 0    60   ~ 0
+Text Label 7800 3600 0    60   ~ 0
 IRQ
 NoConn ~ 3900 6550
 NoConn ~ 3900 6650
@@ -1059,7 +1059,7 @@ F 1 "+5VP" H 5450 5690 30  0000 C CNN
 	1    5450 5600
 	1    0    0    -1  
 $EndComp
-NoConn ~ 8100 2500
+NoConn ~ 8100 3400
 NoConn ~ 8100 2400
 NoConn ~ 8100 1800
 NoConn ~ 10000 900 
@@ -1180,13 +1180,13 @@ Text Label 7800 3100 0    60   ~ 0
 IO3
 Text Label 7800 3200 0    60   ~ 0
 IO4
-Text Notes 7600 3500 2    60   ~ 0
+Text Notes 7600 2600 2    60   ~ 0
 Temperature
-Text Label 7800 3600 0    60   ~ 0
+Text Label 7800 2700 0    60   ~ 0
 T3
-Text Label 7800 3500 0    60   ~ 0
+Text Label 7800 2600 0    60   ~ 0
 T2
-Text Label 7800 3400 0    60   ~ 0
+Text Label 7800 2500 0    60   ~ 0
 T1
 Text Label 950  3150 2    60   ~ 0
 T3
