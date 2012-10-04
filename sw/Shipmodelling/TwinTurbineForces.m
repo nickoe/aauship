@@ -16,7 +16,3 @@ Fy = safety(theta)*(Fyl-Fyr)
 FRl=Fl-Ftl;
 FRr=Fr-Ftr;
 FR=safety(theta)*(FRr-FRl)
-
-%% Twin Turbine
-
-ftl-fl
