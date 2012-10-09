@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date tir 09 okt 2012 09:21:07 CEST
+EESchema Schematic File Version 2  date tir 09 okt 2012 11:29:43 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -46,6 +46,8 @@ Comment2 "AAUSHIP"
 Comment3 ""
 Comment4 ""
 $EndDescr
+Wire Wire Line
+	5350 2900 4850 2900
 Wire Wire Line
 	1350 6700 950  6700
 Wire Notes Line
@@ -101,9 +103,9 @@ Wire Notes Line
 Wire Wire Line
 	5350 2800 4950 2800
 Wire Wire Line
-	5100 3050 5100 3000
+	4850 2900 4850 2950
 Wire Wire Line
-	5100 3050 5050 3050
+	4850 2950 4800 2950
 Wire Wire Line
 	10000 1600 10400 1600
 Wire Notes Line
@@ -216,7 +218,7 @@ Wire Notes Line
 Wire Notes Line
 	4200 5150 4200 6100
 Wire Wire Line
-	8100 2100 7800 2100
+	8100 2200 7800 2200
 Wire Notes Line
 	5250 5250 5150 5150
 Wire Notes Line
@@ -556,9 +558,7 @@ Wire Notes Line
 Wire Notes Line
 	5550 5250 4200 5250
 Wire Wire Line
-	8100 4950 7800 4950
-Wire Wire Line
-	8100 2200 7800 2200
+	8100 2300 7800 2300
 Wire Wire Line
 	4900 5950 4900 5900
 Wire Wire Line
@@ -568,7 +568,7 @@ Wire Wire Line
 Wire Notes Line
 	10100 2450 10150 2450
 Wire Wire Line
-	8100 2300 7800 2300
+	8100 2400 7800 2400
 Wire Wire Line
 	5850 5700 5750 5700
 Connection ~ 5750 5700
@@ -631,8 +631,6 @@ Wire Wire Line
 	5350 3200 5200 3200
 Wire Wire Line
 	5200 3200 5200 3450
-Wire Wire Line
-	5100 3000 5350 3000
 Wire Notes Line
 	4850 1950 4800 1950
 Wire Notes Line
@@ -680,7 +678,7 @@ Wire Notes Line
 Wire Wire Line
 	10400 1800 10000 1800
 Wire Wire Line
-	4950 2900 5350 2900
+	4950 3000 5350 3000
 Wire Wire Line
 	4950 2700 5350 2700
 Wire Wire Line
@@ -807,11 +805,14 @@ Wire Wire Line
 	4300 5600 4500 5600
 Wire Wire Line
 	800  6600 650  6600
+Wire Wire Line
+	8100 2100 7800 2100
+NoConn ~ 8100 4950
 $Comp
-L GND #PWR01
+L GND #PWR27
 U 1 1 5073CEED
 P 5300 6000
-F 0 "#PWR01" H 5300 6000 30  0001 C CNN
+F 0 "#PWR27" H 5300 6000 30  0001 C CNN
 F 1 "GND" H 5300 5930 30  0001 C CNN
 	1    5300 6000
 	1    0    0    -1  
@@ -826,10 +827,10 @@ F 1 "22uF" H 5350 5700 50  0000 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +BATT #PWR02
+L +BATT #PWR19
 U 1 1 5068671E
 P 4300 5600
-F 0 "#PWR02" H 4300 5550 20  0001 C CNN
+F 0 "#PWR19" H 4300 5550 20  0001 C CNN
 F 1 "+BATT" H 4300 5700 30  0000 C CNN
 	1    4300 5600
 	1    0    0    -1  
@@ -866,9 +867,9 @@ Text Notes 2300 2700 0    60   ~ 0
 External sensors to be mounted\ni.e. on the motors.
 Text Notes 4750 2700 2    60   ~ 0
 External\ntemperature
-Text Label 4950 2800 0    60   ~ 0
+Text Label 4950 2000 0    60   ~ 0
 T3
-Text Label 4950 2700 0    60   ~ 0
+Text Label 4950 2200 0    60   ~ 0
 T2
 Text Notes 6350 100  0    60   ~ 0
 DCPWMx PWM pulse for 0-100% duty cycle for custom H-bridge like driver\nDCDIRx direction control for the H-bridge like dirver\nRCPWM RC standard 50 Hz 1-2ms signal
@@ -921,13 +922,13 @@ Text Notes 4750 2000 2    60   ~ 0
 Aux. servo
 Text Notes 4750 1900 2    60   ~ 0
 Rudder servo
-Text Label 4950 2000 0    60   ~ 0
+Text Label 4950 2100 0    60   ~ 0
 RCPWM5
 Text Label 4950 1900 0    60   ~ 0
 RCPWM4
 Text Notes 2300 2950 0    60   ~ 0
 RL_BATT and +5VP has to be\nactivated by the microcontroller
-Text Label 4950 2900 0    60   ~ 0
+Text Label 4950 3000 0    60   ~ 0
 RL_BATT
 Text Label 1350 6700 2    60   ~ 0
 RL_BATT
@@ -935,9 +936,9 @@ Text Notes 2300 2500 0    60   ~ 0
 I2C not planned for any use,\nmaybe for OpenServo devices?
 Text Notes 4750 2550 2    60   ~ 0
 I2C
-Text Label 4950 2600 0    60   ~ 0
+Text Label 4950 1000 0    60   ~ 0
 SCL
-Text Label 4950 2500 0    60   ~ 0
+Text Label 4950 1100 0    60   ~ 0
 SDA
 Text Notes 10550 3350 0    60   ~ 0
 I2C
@@ -946,30 +947,30 @@ SCL
 Text Label 10350 3300 2    60   ~ 0
 SDA
 $Comp
-L +5VP #PWR03
+L +5VP #PWR2
 U 1 1 505ECFE2
 P 650 6600
-F 0 "#PWR03" H 650 6690 20  0001 C CNN
+F 0 "#PWR2" H 650 6690 20  0001 C CNN
 F 1 "+5VP" H 650 6690 30  0000 C CNN
 	1    650  6600
 	1    0    0    -1  
 $EndComp
 $Comp
-L +BATT #PWR04
+L +BATT #PWR25
 U 1 1 505ECF52
 P 5100 3300
-F 0 "#PWR04" H 5100 3250 20  0001 C CNN
+F 0 "#PWR25" H 5100 3250 20  0001 C CNN
 F 1 "+BATT" H 5100 3400 30  0000 C CNN
 	1    5100 3300
 	1    0    0    -1  
 $EndComp
 Text Notes 4750 2200 2    60   ~ 0
 Auxiliary\nInput/Output
-Text Label 4950 1800 0    60   ~ 0
+Text Label 4950 2400 0    60   ~ 0
 DCDIR3
-Text Label 4950 1500 0    60   ~ 0
+Text Label 4950 2600 0    60   ~ 0
 DCDIR2
-Text Label 4950 1200 0    60   ~ 0
+Text Label 4950 2800 0    60   ~ 0
 DCDIR1
 Text Notes 2300 1200 0    60   ~ 0
 RCPWMx is common RC\npulse standard while\nthe DCPWMx is common\nPWM with dutycycle\n0-100%
@@ -978,34 +979,34 @@ Bow thruster
 Text Notes 4750 1200 2    60   ~ 0
 Thrusters
 $Comp
-L GND #PWR05
+L GND #PWR26
 U 1 1 505EC919
 P 5200 3450
-F 0 "#PWR05" H 5200 3450 30  0001 C CNN
+F 0 "#PWR26" H 5200 3450 30  0001 C CNN
 F 1 "GND" H 5200 3380 30  0001 C CNN
 	1    5200 3450
 	1    0    0    -1  
 $EndComp
 Text Label 4950 1700 0    60   ~ 0
 DCPWM3
-Text Label 4950 1400 0    60   ~ 0
+Text Label 4950 1500 0    60   ~ 0
 DCPWM2
-Text Label 4950 1100 0    60   ~ 0
+Text Label 4950 1300 0    60   ~ 0
 DCPWM1
 $Comp
-L GND #PWR06
+L GND #PWR31
 U 1 1 505E2D13
 P 5750 5950
-F 0 "#PWR06" H 5750 5950 30  0001 C CNN
+F 0 "#PWR31" H 5750 5950 30  0001 C CNN
 F 1 "GND" H 5750 5880 30  0001 C CNN
 	1    5750 5950
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR07
+L +3.3V #PWR30
 U 1 1 505E2CDD
 P 5750 5650
-F 0 "#PWR07" H 5750 5610 30  0001 C CNN
+F 0 "#PWR30" H 5750 5610 30  0001 C CNN
 F 1 "+3.3V" H 5750 5760 30  0000 C CNN
 	1    5750 5650
 	1    0    0    -1  
@@ -1022,11 +1023,11 @@ F 1 "UP500/UP501" H 6450 6000 60  0000 C CNN
 $EndComp
 Text Notes 4250 4600 0    60   ~ 0
 Fastrax UP501 default firmware configuration:\n1. Port 0: NMEA 9600 baud\n2. NMEA output: GGA, RMC, GSV, GSA (all 1 sec interval)\n3. DGPS/SBAS: Disabled (Module supports WAAS/EGNOS)\n4. Datum: WGS84
-Text Label 7800 2100 0    60   ~ 0
-DCDIR1
 Text Label 7800 2200 0    60   ~ 0
-DCDIR2
+DCDIR1
 Text Label 7800 2300 0    60   ~ 0
+DCDIR2
+Text Label 7800 2400 0    60   ~ 0
 DCDIR3
 $Comp
 L DB25 J1
@@ -1042,43 +1043,42 @@ Using Arduino\nUSB connection
 $Comp
 L +5VP #PWR?
 U 1 1 50597D3E
-P 5050 3050
+P 4800 2950
 AR Path="/50597D3B" Ref="#PWR?"  Part="1" 
-AR Path="/50597D3E" Ref="#PWR08"  Part="1" 
-F 0 "#PWR08" H 5050 3140 20  0001 C CNN
-F 1 "+5VP" H 5050 3140 30  0000 C CNN
-	1    5050 3050
+AR Path="/50597D3E" Ref="#PWR23"  Part="1" 
+F 0 "#PWR23" H 4800 3040 20  0001 C CNN
+F 1 "+5VP" H 4800 3040 30  0000 C CNN
+	1    4800 2950
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR09
+L +5V #PWR15
 U 1 1 504EF314
 P 3200 5550
-F 0 "#PWR09" H 3200 5640 20  0001 C CNN
+F 0 "#PWR15" H 3200 5640 20  0001 C CNN
 F 1 "+5V" H 3200 5640 30  0000 C CNN
 	1    3200 5550
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR010
+L +5V #PWR1
 U 1 1 504A39DE
 P 650 2250
-F 0 "#PWR010" H 650 2340 20  0001 C CNN
+F 0 "#PWR1" H 650 2340 20  0001 C CNN
 F 1 "+5V" H 650 2340 30  0000 C CNN
 	1    650  2250
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5VP #PWR011
+L +5VP #PWR28
 U 1 1 50597D11
 P 5350 5550
-F 0 "#PWR011" H 5350 5640 20  0001 C CNN
+F 0 "#PWR28" H 5350 5640 20  0001 C CNN
 F 1 "+5VP" H 5350 5640 30  0000 C CNN
 	1    5350 5550
 	1    0    0    -1  
 $EndComp
 NoConn ~ 8100 3400
-NoConn ~ 8100 2400
 NoConn ~ 8100 1800
 NoConn ~ 10000 900 
 NoConn ~ 10000 1400
@@ -1105,7 +1105,7 @@ Text Notes 3300 9000 0    30   ~ 0
 Shield regulator
 Text Notes 2050 8850 0    30   ~ 0
 From\narduino\nregulator
-Text Label 7800 4950 0    60   ~ 0
+Text Label 7800 2100 0    60   ~ 0
 ~KILL
 Text Notes 4200 5250 0    60   Italic 12
 DC-DC converter 5V
@@ -1121,73 +1121,73 @@ LED2
 Text Label 7800 4550 0    60   ~ 0
 LED1
 $Comp
-L +BATT #PWR012
+L +BATT #PWR17
 U 1 1 5050E3F6
 P 3200 8800
-F 0 "#PWR012" H 3200 8750 20  0001 C CNN
+F 0 "#PWR17" H 3200 8750 20  0001 C CNN
 F 1 "+BATT" H 3200 8900 30  0000 C CNN
 	1    3200 8800
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG013
+L PWR_FLAG #FLG4
 U 1 1 5050E3F5
 P 3000 8800
-F 0 "#FLG013" H 3000 8895 30  0001 C CNN
+F 0 "#FLG4" H 3000 8895 30  0001 C CNN
 F 1 "PWR_FLAG" H 3000 8980 30  0000 C CNN
 	1    3000 8800
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR014
+L +3.3V #PWR10
 U 1 1 5050E33E
 P 2300 8800
-F 0 "#PWR014" H 2300 8760 30  0001 C CNN
+F 0 "#PWR10" H 2300 8760 30  0001 C CNN
 F 1 "+3.3V" H 2300 8910 30  0000 C CNN
 	1    2300 8800
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR015
+L GND #PWR13
 U 1 1 5050E33D
 P 2750 9000
-F 0 "#PWR015" H 2750 9000 30  0001 C CNN
+F 0 "#PWR13" H 2750 9000 30  0001 C CNN
 F 1 "GND" H 2750 8930 30  0001 C CNN
 	1    2750 9000
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR016
+L +5V #PWR11
 U 1 1 5050E33C
 P 2300 9050
-F 0 "#PWR016" H 2300 9140 20  0001 C CNN
+F 0 "#PWR11" H 2300 9140 20  0001 C CNN
 F 1 "+5V" H 2300 9140 30  0000 C CNN
 	1    2300 9050
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG017
+L PWR_FLAG #FLG1
 U 1 1 5050E33B
 P 2500 8800
-F 0 "#FLG017" H 2500 8895 30  0001 C CNN
+F 0 "#FLG1" H 2500 8895 30  0001 C CNN
 F 1 "PWR_FLAG" H 2500 8980 30  0000 C CNN
 	1    2500 8800
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG018
+L PWR_FLAG #FLG3
 U 1 1 5050E33A
 P 2750 8950
-F 0 "#FLG018" H 2750 9045 30  0001 C CNN
+F 0 "#FLG3" H 2750 9045 30  0001 C CNN
 F 1 "PWR_FLAG" H 2750 9130 30  0000 C CNN
 	1    2750 8950
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG019
+L PWR_FLAG #FLG2
 U 1 1 5050E337
 P 2500 9050
-F 0 "#FLG019" H 2500 9145 30  0001 C CNN
+F 0 "#FLG2" H 2500 9145 30  0001 C CNN
 F 1 "PWR_FLAG" H 2500 9230 30  0000 C CNN
 	1    2500 9050
 	1    0    0    -1  
@@ -1249,19 +1249,19 @@ F 1 "R" V 5350 7150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR020
+L +5V #PWR24
 U 1 1 5050E0A3
 P 5050 6400
-F 0 "#PWR020" H 5050 6490 20  0001 C CNN
+F 0 "#PWR24" H 5050 6490 20  0001 C CNN
 F 1 "+5V" H 5050 6490 30  0000 C CNN
 	1    5050 6400
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR021
+L +5V #PWR29
 U 1 1 5050E0A2
 P 5350 6400
-F 0 "#PWR021" H 5350 6490 20  0001 C CNN
+F 0 "#PWR29" H 5350 6490 20  0001 C CNN
 F 1 "+5V" H 5350 6490 30  0000 C CNN
 	1    5350 6400
 	1    0    0    -1  
@@ -1274,9 +1274,9 @@ Text Notes 8150 6950 0    60   ~ 0
 TODO:\n* Differentiate between arduino 5V and DC-DC 5V\n* Differentiate between Battery direct and relayed battery supply
 Text Notes 2300 2100 0    60   ~ 0
 Auxiliary Input/Output pins, can\nalso be used with the ADC. Comms\nwith advanced survailence of power\nsplitter.
-Text Label 4950 2100 0    60   ~ 0
+Text Label 4950 1800 0    60   ~ 0
 IO1
-Text Label 4950 2200 0    60   ~ 0
+Text Label 4950 1600 0    60   ~ 0
 IO2
 Text Notes 3000 4500 0    60   ~ 0
 Jumper to enable\nbattery measurements
@@ -1285,19 +1285,19 @@ BATV
 Text Label 3650 4750 2    60   ~ 0
 BATV
 $Comp
-L GND #PWR022
+L GND #PWR14
 U 1 1 5050DD55
 P 2800 5000
-F 0 "#PWR022" H 2800 5000 30  0001 C CNN
+F 0 "#PWR14" H 2800 5000 30  0001 C CNN
 F 1 "GND" H 2800 4930 30  0001 C CNN
 	1    2800 5000
 	1    0    0    -1  
 $EndComp
 $Comp
-L +BATT #PWR023
+L +BATT #PWR12
 U 1 1 5050DD1E
 P 2450 4750
-F 0 "#PWR023" H 2450 4700 20  0001 C CNN
+F 0 "#PWR12" H 2450 4700 20  0001 C CNN
 F 1 "+BATT" H 2450 4850 30  0000 C CNN
 	1    2450 4750
 	1    0    0    -1  
@@ -1333,41 +1333,41 @@ Text Label 7800 3000 0    60   ~ 0
 IO2
 Text Label 7800 2900 0    60   ~ 0
 IO1
-Text Label 4950 2400 0    60   ~ 0
+Text Label 4950 1200 0    60   ~ 0
 IO4
-Text Label 4950 2300 0    60   ~ 0
+Text Label 4950 1400 0    60   ~ 0
 IO3
 Text Label 2000 7200 2    60   ~ 0
 ~KILL
-Text Label 4950 1600 0    60   ~ 0
+Text Label 4950 2700 0    60   ~ 0
 RCPWM3
-Text Label 4950 1000 0    60   ~ 0
+Text Label 4950 2300 0    60   ~ 0
 RCPWM1
-Text Label 4950 1300 0    60   ~ 0
+Text Label 4950 2500 0    60   ~ 0
 RCPWM2
 $Comp
-L +3.3V #PWR024
+L +3.3V #PWR33
 U 1 1 50509AF2
 P 7950 1400
-F 0 "#PWR024" H 7950 1360 30  0001 C CNN
+F 0 "#PWR33" H 7950 1360 30  0001 C CNN
 F 1 "+3.3V" H 7950 1510 30  0000 C CNN
 	1    7950 1400
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR025
+L +5V #PWR32
 U 1 1 50509AEA
 P 7850 1500
-F 0 "#PWR025" H 7850 1590 20  0001 C CNN
+F 0 "#PWR32" H 7850 1590 20  0001 C CNN
 F 1 "+5V" H 7850 1590 30  0000 C CNN
 	1    7850 1500
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR026
+L +5V #PWR36
 U 1 1 50509AE3
 P 10150 3700
-F 0 "#PWR026" H 10150 3790 20  0001 C CNN
+F 0 "#PWR36" H 10150 3790 20  0001 C CNN
 F 1 "+5V" H 10150 3790 30  0000 C CNN
 	1    10150 3700
 	1    0    0    -1  
@@ -1387,19 +1387,19 @@ LED2
 Text Label 4450 7450 2    60   ~ 0
 LED1
 $Comp
-L +5V #PWR027
+L +5V #PWR21
 U 1 1 505098DD
 P 4750 6400
-F 0 "#PWR027" H 4750 6490 20  0001 C CNN
+F 0 "#PWR21" H 4750 6490 20  0001 C CNN
 F 1 "+5V" H 4750 6490 30  0000 C CNN
 	1    4750 6400
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR028
+L +5V #PWR20
 U 1 1 505098DA
 P 4450 6400
-F 0 "#PWR028" H 4450 6490 20  0001 C CNN
+F 0 "#PWR20" H 4450 6490 20  0001 C CNN
 F 1 "+5V" H 4450 6490 30  0000 C CNN
 	1    4450 6400
 	1    0    0    -1  
@@ -1441,10 +1441,10 @@ F 1 "LED" H 4450 6550 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR029
+L GND #PWR22
 U 1 1 50509846
 P 4900 5950
-F 0 "#PWR029" H 4900 5950 30  0001 C CNN
+F 0 "#PWR22" H 4900 5950 30  0001 C CNN
 F 1 "GND" H 4900 5880 30  0001 C CNN
 	1    4900 5950
 	1    0    0    -1  
@@ -1461,28 +1461,28 @@ F 1 "R-78B5.0-1.5" H 4900 5850 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR030
+L GND #PWR37
 U 1 1 505083B3
 P 10200 950
-F 0 "#PWR030" H 10200 950 30  0001 C CNN
+F 0 "#PWR37" H 10200 950 30  0001 C CNN
 F 1 "GND" H 10200 880 30  0001 C CNN
 	1    10200 950 
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR031
+L GND #PWR34
 U 1 1 505083A5
 P 7950 1650
-F 0 "#PWR031" H 7950 1650 30  0001 C CNN
+F 0 "#PWR34" H 7950 1650 30  0001 C CNN
 F 1 "GND" H 7950 1580 30  0001 C CNN
 	1    7950 1650
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR032
+L GND #PWR35
 U 1 1 50508390
 P 7950 3900
-F 0 "#PWR032" H 7950 3900 30  0001 C CNN
+F 0 "#PWR35" H 7950 3900 30  0001 C CNN
 F 1 "GND" H 7950 3830 30  0001 C CNN
 	1    7950 3900
 	1    0    0    -1  
@@ -1508,19 +1508,19 @@ GPS_TX
 Text Notes 550  2000 0    60   ~ 0
 10.0 mV/°C up to +150°C
 $Comp
-L GND #PWR033
+L GND #PWR9
 U 1 1 5050797D
 P 1900 3350
-F 0 "#PWR033" H 1900 3350 30  0001 C CNN
+F 0 "#PWR9" H 1900 3350 30  0001 C CNN
 F 1 "GND" H 1900 3280 30  0001 C CNN
 	1    1900 3350
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR034
+L GND #PWR3
 U 1 1 5050796E
 P 750 4200
-F 0 "#PWR034" H 750 4200 30  0001 C CNN
+F 0 "#PWR3" H 750 4200 30  0001 C CNN
 F 1 "GND" H 750 4130 30  0001 C CNN
 	1    750  4200
 	1    0    0    -1  
@@ -1562,10 +1562,10 @@ NoConn ~ 3900 6450
 Text Label 4100 6250 2    60   ~ 0
 ~RST
 $Comp
-L GND #PWR035
+L GND #PWR18
 U 1 1 504EF355
 P 3800 6050
-F 0 "#PWR035" H 3800 6050 30  0001 C CNN
+F 0 "#PWR18" H 3800 6050 30  0001 C CNN
 F 1 "GND" H 3800 5980 30  0001 C CNN
 	1    3800 6050
 	1    0    0    -1  
@@ -1575,15 +1575,15 @@ L C C4
 U 1 1 504EF348
 P 3800 5800
 F 0 "C4" H 3850 5900 50  0000 L CNN
-F 1 "C" H 3850 5700 50  0000 L CNN
+F 1 "C42" H 3850 5700 50  0000 L CNN
 	1    3800 5800
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR036
+L GND #PWR16
 U 1 1 504EF2ED
 P 3200 7600
-F 0 "#PWR036" H 3200 7600 30  0001 C CNN
+F 0 "#PWR16" H 3200 7600 30  0001 C CNN
 F 1 "GND" H 3200 7530 30  0001 C CNN
 	1    3200 7600
 	1    0    0    -1  
@@ -1621,19 +1621,19 @@ F 1 "1uF" H 1300 3850 50  0000 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR037
+L GND #PWR6
 U 1 1 504A41A8
 P 1250 4200
-F 0 "#PWR037" H 1250 4200 30  0001 C CNN
+F 0 "#PWR6" H 1250 4200 30  0001 C CNN
 F 1 "GND" H 1250 4130 30  0001 C CNN
 	1    1250 4200
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR038
+L GND #PWR5
 U 1 1 504A39D5
 P 1250 2900
-F 0 "#PWR038" H 1250 2900 30  0001 C CNN
+F 0 "#PWR5" H 1250 2900 30  0001 C CNN
 F 1 "GND" H 1250 2830 30  0001 C CNN
 	1    1250 2900
 	1    0    0    -1  
@@ -1679,10 +1679,10 @@ F 1 "1K" V 1550 7200 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR039
+L GND #PWR4
 U 1 1 504A293C
 P 950 7450
-F 0 "#PWR039" H 950 7450 30  0001 C CNN
+F 0 "#PWR4" H 950 7450 30  0001 C CNN
 F 1 "GND" H 950 7380 30  0001 C CNN
 	1    950  7450
 	1    0    0    -1  
@@ -1714,19 +1714,19 @@ RF_RX
 NoConn ~ 1500 1100
 NoConn ~ 1500 1400
 $Comp
-L +5V #PWR040
+L +5V #PWR7
 U 1 1 504A27A3
 P 1600 1500
-F 0 "#PWR040" H 1600 1590 20  0001 C CNN
+F 0 "#PWR7" H 1600 1590 20  0001 C CNN
 F 1 "+5V" H 1600 1590 30  0000 C CNN
 	1    1600 1500
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR041
+L GND #PWR8
 U 1 1 504A279C
 P 1600 1650
-F 0 "#PWR041" H 1600 1650 30  0001 C CNN
+F 0 "#PWR8" H 1600 1650 30  0001 C CNN
 F 1 "GND" H 1600 1580 30  0001 C CNN
 	1    1600 1650
 	1    0    0    -1  

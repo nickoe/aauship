@@ -1,38 +1,45 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = tir 09 okt 2012 09:05:58 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = tir 09 okt 2012 10:43:10 CEST
 
 BeginCmp
 TimeStamp = /504A39C7;
 Reference = C1;
 ValeurCmp = 1uF;
-IdModule  = SM1210L;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /504A41AC;
 Reference = C2;
 ValeurCmp = 1uF;
-IdModule  = SM1210L;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050796A;
 Reference = C3;
 ValeurCmp = 1uF;
-IdModule  = SM1210L;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /504EF348;
 Reference = C4;
-ValeurCmp = C;
-IdModule  = SM1206;
+ValeurCmp = C42;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5073CEE4;
+Reference = C5;
+ValeurCmp = 22uF;
+IdModule  = SM1206POL;
 EndCmp
 
 BeginCmp
 TimeStamp = /504A2907;
 Reference = D1;
 ValeurCmp = 1N4148;
-IdModule  = SM1206;
+IdModule  = SM1206POL;
 EndCmp
 
 BeginCmp
@@ -185,7 +192,7 @@ EndCmp
 BeginCmp
 TimeStamp = /50509732;
 Reference = U6;
-ValeurCmp = R-78B5.0-1.5_;
+ValeurCmp = R-78B5.0-1.5;
 IdModule  = R-78Bxx;
 EndCmp
 
