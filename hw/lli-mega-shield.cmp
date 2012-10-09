@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = søn 30 sep 2012 20:22:08 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = tir 09 okt 2012 09:05:58 CEST
 
 BeginCmp
 TimeStamp = /504A39C7;
@@ -88,70 +88,70 @@ BeginCmp
 TimeStamp = /504A2942;
 Reference = R1;
 ValeurCmp = 1K;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /504A39C1;
 Reference = R2;
 ValeurCmp = 75;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /504A41AD;
 Reference = R3;
 ValeurCmp = 75;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /50507969;
 Reference = R4;
 ValeurCmp = 75;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050DCFD;
 Reference = R5;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050DD01;
 Reference = R6;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098CF;
 Reference = R7;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /505098D1;
 Reference = R8;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A5;
 Reference = R9;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
 TimeStamp = /5050E0A4;
 Reference = R10;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = SM0805;
 EndCmp
 
 BeginCmp
@@ -186,7 +186,7 @@ BeginCmp
 TimeStamp = /50509732;
 Reference = U6;
 ValeurCmp = R-78B5.0-1.5_;
-IdModule  = TO220_VERT;
+IdModule  = R-78Bxx;
 EndCmp
 
 BeginCmp
