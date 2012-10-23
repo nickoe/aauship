@@ -15,8 +15,10 @@ import numpy
 import scipy
 #import control
 #import slycot
-import ObjectLibrary as OL
 import matplotlib.pyplot as plt
+
+import ObjectLibrary as OL
+import FunctionLibrary as FL
 
 
 
@@ -35,7 +37,7 @@ Outputs:
 '''
 Simulated coast-line:
 '''
-coastlength = 1000;
+coastlength = 10000;
 i = 0;
 coast = scipy.randn(coastlength);
 initial = 0;
@@ -51,18 +53,37 @@ while i < coastlength:
 '''
 Transformations will be necessary...
 '''
-coast = coast - numpy.max(coast) - 10;
-decimation = 20;
-safety = 2
-waypoints = OL.O_PathWayPoints(coast, coastlength, decimation, safety)
+    
 
+decimation = 200;
+safety = 10;
+coast = coast - numpy.max(coast) - 2* safety;
 
+Waypoints = OL.O_PathWayPoints(coast, coastlength, decimation, safety);
+
+data = Waypoints.get_WayPoints();
+'''
 plt.plot(coast)
-data = waypoints.get_WayPoints();
 plt.plot(data[1], data[0]);
+plt.show();
+'''
 
+Euler = FL.fcn_GenerateEuler(2);
+#Euler.draw_Euler_Spiral();
+
+NextWaypointNo = 63;
+
+PosData = OL.O_PosData(0,0, 0,1);
+
+#P = OL.O_LocalPath(Waypoints, NextWaypointNo, Euler, PosData)
+OL.O_LocalPath(Waypoints, 1,1)
+#corr = P.get_PathPoly();
+
+#Euler.draw_Euler_Spiral();
+'''
+plt.plot(corr)
 plt.show()
-print(data[0])
+'''
 
 '''
 Control Procedure:
