@@ -175,10 +175,13 @@ LICENSE:
 /* ATmega with two USART */
   #define ATMEGA_USART0
   #define ATMEGA_USART1
+  #define ATMEGA_USART2
   #define UART0_RECEIVE_INTERRUPT   USART0_RX_vect
   #define UART1_RECEIVE_INTERRUPT   USART1_RX_vect
+  #define UART2_RECEIVE_INTERRUPT   USART2_RX_vect
   #define UART0_TRANSMIT_INTERRUPT  USART0_UDRE_vect
   #define UART1_TRANSMIT_INTERRUPT  USART1_UDRE_vect
+  #define UART2_TRANSMIT_INTERRUPT  USART2_UDRE_vect
   #define UART0_STATUS   UCSR0A
   #define UART0_CONTROL  UCSR0B
   #define UART0_DATA     UDR0
@@ -187,6 +190,10 @@ LICENSE:
   #define UART1_CONTROL  UCSR1B
   #define UART1_DATA     UDR1
   #define UART1_UDRIE    UDRIE1  
+  #define UART2_STATUS   UCSR2A
+  #define UART2_CONTROL  UCSR2B
+  #define UART2_DATA     UDR2
+  #define UART2_UDRIE    UDRIE2
 #elif defined(__AVR_ATmega644__)
  /* ATmega with one USART */
  #define ATMEGA_USART0
@@ -236,6 +243,16 @@ static volatile unsigned char UART1_TxTail;
 static volatile unsigned char UART1_RxHead;
 static volatile unsigned char UART1_RxTail;
 static volatile unsigned char UART1_LastRxError;
+#endif
+
+#if defined( ATMEGA_USART2 )
+static volatile unsigned char UART2_TxBuf[UART_TX_BUFFER_SIZE];
+static volatile unsigned char UART2_RxBuf[UART_RX_BUFFER_SIZE];
+static volatile unsigned char UART2_TxHead;
+static volatile unsigned char UART2_TxTail;
+static volatile unsigned char UART2_RxHead;
+static volatile unsigned char UART2_RxTail;
+static volatile unsigned char UART2_LastRxError;
 #endif
 
 
@@ -651,5 +668,193 @@ void uart1_puts_p(const char *progmem_s )
 
 }/* uart1_puts_p */
 
+// ==================================== new uart stuff start
+/*
+ * these functions are only for ATmegas with two USART
+ */
+#endif
+
+#if defined( ATMEGA_USART2 )
+
+ISR(UART2_RECEIVE_INTERRUPT)
+/*************************************************************************
+Function: UART2 Receive Complete interrupt
+Purpose:  called when the UART2 has received a character
+**************************************************************************/
+{
+    unsigned char tmphead;
+
+    unsigned char data;
+    unsigned char usr;
+    unsigned char lastRxError;
+ 
+ 
+    /* read UART status register and UART data register */ 
+    usr  = UART2_STATUS;
+    data = UART2_DATA;
+    
+    /* */
+    lastRxError = (usr & (_BV(FE2)|_BV(DOR2)) );
+        
+    /* calculate buffer index */ 
+    tmphead = ( UART2_RxHead + 1) & UART_RX_BUFFER_MASK;
+    
+    if ( tmphead == UART2_RxTail ) {
+        /* error: receive buffer overflow */
+        lastRxError = UART_BUFFER_OVERFLOW >> 8;
+    }else{
+        /* store new index */
+        UART2_RxHead = tmphead;
+        /* store received data in buffer */
+        UART2_RxBuf[tmphead] = data;
+    }
+    UART2_LastRxError |= lastRxError;   
+}
+
+
+ISR(UART2_TRANSMIT_INTERRUPT)
+/*************************************************************************
+Function: UART1 Data Register Empty interrupt
+Purpose:  called when the UART1 is ready to transmit the next byte
+**************************************************************************/
+{
+    unsigned char tmptail;
+
+    
+    if ( UART2_TxHead != UART2_TxTail) {
+        /* calculate and store new buffer index */
+        tmptail = (UART2_TxTail + 1) & UART_TX_BUFFER_MASK;
+        UART2_TxTail = tmptail;
+        /* get one byte from buffer and write it to UART */
+        UART2_DATA = UART2_TxBuf[tmptail];  /* start transmission */
+    }else{
+        /* tx buffer empty, disable UDRE interrupt */
+        UART2_CONTROL &= ~_BV(UART2_UDRIE);
+    }
+}
+
+
+/*************************************************************************
+Function: uart1_init()
+Purpose:  initialize UART1 and set baudrate
+Input:    baudrate using macro UART_BAUD_SELECT()
+Returns:  none
+**************************************************************************/
+void uart2_init(unsigned int baudrate)
+{
+    UART2_TxHead = 0;
+    UART2_TxTail = 0;
+    UART2_RxHead = 0;
+    UART2_RxTail = 0;
+    
+
+    /* Set baud rate */
+    if ( baudrate & 0x8000 ) 
+    {
+    	UART2_STATUS = (1<<U2X2);  //Enable 2x speed 
+      baudrate &= ~0x8000;
+    }
+    UBRR2H = (unsigned char)(baudrate>>8);
+    UBRR2L = (unsigned char) baudrate;
+
+    /* Enable USART receiver and transmitter and receive complete interrupt */
+    UART2_CONTROL = _BV(RXCIE2)|(1<<RXEN2)|(1<<TXEN2);
+    
+    /* Set frame format: asynchronous, 8data, no parity, 1stop bit */   
+    #ifdef URSEL2
+    UCSR2C = (1<<URSEL2)|(3<<UCSZ20);
+    #else
+    UCSR2C = (3<<UCSZ20);
+    #endif 
+}/* uart_init */
+
+
+/*************************************************************************
+Function: uart1_getc()
+Purpose:  return byte from ringbuffer  
+Returns:  lower byte:  received byte from ringbuffer
+          higher byte: last receive error
+**************************************************************************/
+unsigned int uart2_getc(void)
+{    
+    unsigned char tmptail;
+    unsigned char data;
+
+
+    if ( UART2_RxHead == UART2_RxTail ) {
+        return UART_NO_DATA;   /* no data available */
+    }
+    
+    /* calculate /store buffer index */
+    tmptail = (UART2_RxTail + 1) & UART_RX_BUFFER_MASK;
+    UART2_RxTail = tmptail; 
+    
+    /* get data from receive buffer */
+    data = UART2_RxBuf[tmptail];
+    
+    data = (UART2_LastRxError << 8) + data;
+    UART_LastRxError = 0;
+    return data;
+
+}/* uart1_getc */
+
+
+/*************************************************************************
+Function: uart1_putc()
+
+Purpose:  write byte to ringbuffer for transmitting via UART
+Input:    byte to be transmitted
+Returns:  none          
+**************************************************************************/
+void uart2_putc(unsigned char data)
+{
+    unsigned char tmphead;
+
+    
+    tmphead  = (UART2_TxHead + 1) & UART_TX_BUFFER_MASK;
+    
+    while ( tmphead == UART2_TxTail ){
+        ;/* wait for free space in buffer */
+    }
+    
+    UART2_TxBuf[tmphead] = data;
+    UART2_TxHead = tmphead;
+
+    /* enable UDRE interrupt */
+    UART2_CONTROL    |= _BV(UART2_UDRIE);
+
+}/* uart1_putc */
+
+
+/*************************************************************************
+Function: uart1_puts()
+Purpose:  transmit string to UART1
+Input:    string to be transmitted
+Returns:  none          
+**************************************************************************/
+void uart2_puts(const char *s )
+{
+    while (*s) 
+      uart2_putc(*s++);
+
+}/* uart1_puts */
+
+
+/*************************************************************************
+
+Function: uart1_puts_p()
+Purpose:  transmit string from program memory to UART1
+Input:    program memory string to be transmitted
+Returns:  none
+**************************************************************************/
+void uart2_puts_p(const char *progmem_s )
+{
+    register char c;
+    
+    while ( (c = pgm_read_byte(progmem_s++)) ) 
+      uart2_putc(c);
+
+}/* uart1_puts_p */
+// ==================================== new uart stuff stop
 
 #endif

@@ -188,6 +188,19 @@ extern void uart1_puts_p(const char *s );
 /** @brief  Macro to automatically put a string constant into program memory */
 #define uart1_puts_P(__s)       uart1_puts_p(PSTR(__s))
 
+/** @brief  Initialize USART2 (only available on selected ATmegas) @see uart_init */
+extern void uart2_init(unsigned int baudrate);
+/** @brief  Get received byte of USART2 from ringbuffer. (only available on selected ATmega) @see uart_getc */
+extern unsigned int uart2_getc(void);
+/** @brief  Put byte to ringbuffer for transmitting via USART2 (only available on selected ATmega) @see uart_putc */
+extern void uart2_putc(unsigned char data);
+/** @brief  Put string to ringbuffer for transmitting via USART2 (only available on selected ATmega) @see uart_puts */
+extern void uart2_puts(const char *s );
+/** @brief  Put string from program memory to ringbuffer for transmitting via USART2 (only available on selected ATmega) @see uart_puts_p */
+extern void uart2_puts_p(const char *s );
+/** @brief  Macro to automatically put a string constant into program memory */
+#define uart2_puts_P(__s)       uart2_puts_p(PSTR(__s))
+
 /**@}*/
 
 

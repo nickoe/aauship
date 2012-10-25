@@ -29,11 +29,13 @@ int main (void)
 
 	/* initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); 
+  uart2_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // APC220 radio
   /*
    * now enable interrupt, since UART library is interrupt controlled
    */
   sei();
      uart_puts("String stored in SRAM\n");
+     uart2_puts("Printing via radio\n");
   while (1)
     {
       /* flip PORTB.2 */
