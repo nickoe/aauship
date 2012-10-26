@@ -686,7 +686,7 @@ void uart1_puts_p(const char *progmem_s )
 
 }/* uart1_puts_p */
 
-// ==================================== new uart stuff start
+
 /*
  * these functions are only for ATmegas with two USART
  */
@@ -874,20 +874,7 @@ void uart2_puts_p(const char *progmem_s )
 
 }/* uart1_puts_p */
 
-
 #endif
-// ==================================== new uart stuff stop
-
-
-
-
-
-
-
-
-
-
-
 
 #if defined( ATMEGA_USART3 )
 
@@ -1077,6 +1064,5 @@ void uart3_puts_p(const char *progmem_s )
       uart3_putc(c);
 
 }/* uart3_puts_p */
-// ==================================== new uart stuff stop
 
 #endif
