@@ -14,6 +14,8 @@
 
 //#define UART_BAUD_RATE      9600
 #define UART_BAUD_RATE      38400
+#define UART2_BAUD_RATE      38400
+#define UART3_BAUD_RATE      38400
 
 int main (void)
 {
@@ -29,13 +31,15 @@ int main (void)
 
 	/* initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); 
-  uart2_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // APC220 radio
+  uart2_init( UART_BAUD_SELECT(UART2_BAUD_RATE,F_CPU) ); // APC220 radio
+  uart3_init( UART_BAUD_SELECT(UART3_BAUD_RATE,F_CPU) ); // UP-501 GPS
   /*
    * now enable interrupt, since UART library is interrupt controlled
    */
   sei();
      uart_puts("String stored in SRAM\n");
      uart2_puts("Printing via radio\n");
+     uart2_puts("Printing to GPS\n");
   while (1)
     {
       /* flip PORTB.2 */

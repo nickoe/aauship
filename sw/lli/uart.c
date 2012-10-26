@@ -172,16 +172,19 @@ LICENSE:
   #define UART0_DATA     UDR0
   #define UART0_UDRIE    UDRIE0
 #elif defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega1280__)  || defined(__AVR_ATmega1281__) || defined(__AVR_ATmega640__)
-/* ATmega with two USART */
+/* ATmega with four USART */
   #define ATMEGA_USART0
   #define ATMEGA_USART1
   #define ATMEGA_USART2
+  #define ATMEGA_USART3
   #define UART0_RECEIVE_INTERRUPT   USART0_RX_vect
   #define UART1_RECEIVE_INTERRUPT   USART1_RX_vect
   #define UART2_RECEIVE_INTERRUPT   USART2_RX_vect
+  #define UART3_RECEIVE_INTERRUPT   USART3_RX_vect
   #define UART0_TRANSMIT_INTERRUPT  USART0_UDRE_vect
   #define UART1_TRANSMIT_INTERRUPT  USART1_UDRE_vect
   #define UART2_TRANSMIT_INTERRUPT  USART2_UDRE_vect
+  #define UART3_TRANSMIT_INTERRUPT  USART3_UDRE_vect
   #define UART0_STATUS   UCSR0A
   #define UART0_CONTROL  UCSR0B
   #define UART0_DATA     UDR0
@@ -194,6 +197,10 @@ LICENSE:
   #define UART2_CONTROL  UCSR2B
   #define UART2_DATA     UDR2
   #define UART2_UDRIE    UDRIE2
+  #define UART3_STATUS   UCSR3A
+  #define UART3_CONTROL  UCSR3B
+  #define UART3_DATA     UDR3
+  #define UART3_UDRIE    UDRIE3
 #elif defined(__AVR_ATmega644__)
  /* ATmega with one USART */
  #define ATMEGA_USART0
@@ -254,6 +261,17 @@ static volatile unsigned char UART2_RxHead;
 static volatile unsigned char UART2_RxTail;
 static volatile unsigned char UART2_LastRxError;
 #endif
+
+#if defined( ATMEGA_USART3 )
+static volatile unsigned char UART3_TxBuf[UART_TX_BUFFER_SIZE];
+static volatile unsigned char UART3_RxBuf[UART_RX_BUFFER_SIZE];
+static volatile unsigned char UART3_TxHead;
+static volatile unsigned char UART3_TxTail;
+static volatile unsigned char UART3_RxHead;
+static volatile unsigned char UART3_RxTail;
+static volatile unsigned char UART3_LastRxError;
+#endif
+
 
 
 
@@ -855,6 +873,210 @@ void uart2_puts_p(const char *progmem_s )
       uart2_putc(c);
 
 }/* uart1_puts_p */
+
+
+#endif
+// ==================================== new uart stuff stop
+
+
+
+
+
+
+
+
+
+
+
+
+#if defined( ATMEGA_USART3 )
+
+ISR(UART3_RECEIVE_INTERRUPT)
+/*************************************************************************
+Function: UART3 Receive Complete interrupt
+Purpose:  called when the UART3 has received a character
+**************************************************************************/
+{
+    unsigned char tmphead;
+
+    unsigned char data;
+    unsigned char usr;
+    unsigned char lastRxError;
+ 
+ 
+    /* read UART status register and UART data register */ 
+    usr  = UART3_STATUS;
+    data = UART3_DATA;
+    
+    /* */
+    lastRxError = (usr & (_BV(FE3)|_BV(DOR3)) );
+        
+    /* calculate buffer index */ 
+    tmphead = ( UART3_RxHead + 1) & UART_RX_BUFFER_MASK;
+    
+    if ( tmphead == UART3_RxTail ) {
+        /* error: receive buffer overflow */
+        lastRxError = UART_BUFFER_OVERFLOW >> 8;
+    }else{
+        /* store new index */
+        UART3_RxHead = tmphead;
+        /* store received data in buffer */
+        UART3_RxBuf[tmphead] = data;
+    }
+    UART3_LastRxError |= lastRxError;   
+}
+
+
+ISR(UART3_TRANSMIT_INTERRUPT)
+/*************************************************************************
+Function: UART3 Data Register Empty interrupt
+
+Purpose:  called when the UART3 is ready to transmit the next byte
+**************************************************************************/
+{
+    unsigned char tmptail;
+
+    
+    if ( UART3_TxHead != UART3_TxTail) {
+        /* calculate and store new buffer index */
+        tmptail = (UART3_TxTail + 1) & UART_TX_BUFFER_MASK;
+        UART3_TxTail = tmptail;
+        /* get one byte from buffer and write it to UART */
+        UART3_DATA = UART3_TxBuf[tmptail];  /* start transmission */
+    }else{
+        /* tx buffer empty, disable UDRE interrupt */
+        UART3_CONTROL &= ~_BV(UART3_UDRIE);
+    }
+}
+
+
+/*************************************************************************
+
+Function: uart3_init()
+Purpose:  initialize UART3 and set baudrate
+Input:    baudrate using macro UART_BAUD_SELECT()
+Returns:  none
+
+**************************************************************************/
+void uart3_init(unsigned int baudrate)
+{
+    UART3_TxHead = 0;
+    UART3_TxTail = 0;
+    UART3_RxHead = 0;
+    UART3_RxTail = 0;
+    
+
+    /* Set baud rate */
+    if ( baudrate & 0x8000 ) 
+    {
+    	UART3_STATUS = (1<<U2X2);  //Enable 2x speed 
+      baudrate &= ~0x8000;
+    }
+    UBRR3H = (unsigned char)(baudrate>>8);
+    UBRR3L = (unsigned char) baudrate;
+
+    /* Enable USART receiver and transmitter and receive complete interrupt */
+    UART3_CONTROL = _BV(RXCIE3)|(1<<RXEN3)|(1<<TXEN3);
+    
+    /* Set frame format: asynchronous, 8data, no parity, 1stop bit */   
+    #ifdef URSEL3
+    UCSR3C = (1<<URSEL3)|(3<<UCSZ30);
+    #else
+    UCSR3C = (3<<UCSZ30);
+    #endif 
+}/* uart_init */
+
+
+/*************************************************************************
+Function: uart3_getc()
+Purpose:  return byte from ringbuffer  
+Returns:  lower byte:  received byte from ringbuffer
+          higher byte: last receive error
+
+**************************************************************************/
+unsigned int uart3_getc(void)
+{    
+    unsigned char tmptail;
+    unsigned char data;
+
+
+    if ( UART3_RxHead == UART3_RxTail ) {
+        return UART_NO_DATA;   /* no data available */
+    }
+    
+    /* calculate /store buffer index */
+    tmptail = (UART3_RxTail + 1) & UART_RX_BUFFER_MASK;
+    UART3_RxTail = tmptail; 
+    
+    /* get data from receive buffer */
+    data = UART3_RxBuf[tmptail];
+    
+    data = (UART3_LastRxError << 8) + data;
+    UART_LastRxError = 0;
+    return data;
+
+}/* uart3_getc */
+
+
+/*************************************************************************
+Function: uart3_putc()
+
+Purpose:  write byte to ringbuffer for transmitting via UART
+Input:    byte to be transmitted
+
+Returns:  none          
+**************************************************************************/
+void uart3_putc(unsigned char data)
+{
+    unsigned char tmphead;
+
+    
+    tmphead  = (UART3_TxHead + 1) & UART_TX_BUFFER_MASK;
+    
+    while ( tmphead == UART3_TxTail ){
+        ;/* wait for free space in buffer */
+    }
+    
+    UART3_TxBuf[tmphead] = data;
+    UART3_TxHead = tmphead;
+
+    /* enable UDRE interrupt */
+    UART3_CONTROL    |= _BV(UART3_UDRIE);
+
+}/* uart3_putc */
+
+
+/*************************************************************************
+Function: uart3_puts()
+Purpose:  transmit string to UART3
+
+Input:    string to be transmitted
+Returns:  none          
+**************************************************************************/
+void uart3_puts(const char *s )
+{
+    while (*s) 
+      uart3_putc(*s++);
+
+}/* uart3_puts */
+
+
+/*************************************************************************
+
+Function: uart3_puts_p()
+Purpose:  transmit string from program memory to UART3
+
+Input:    program memory string to be transmitted
+Returns:  none
+**************************************************************************/
+void uart3_puts_p(const char *progmem_s )
+{
+    register char c;
+    
+    while ( (c = pgm_read_byte(progmem_s++)) ) 
+      uart3_putc(c);
+
+}/* uart3_puts_p */
 // ==================================== new uart stuff stop
 
 #endif
