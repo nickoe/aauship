@@ -3,7 +3,7 @@
 /************************************************************************
 Title:    Interrupt UART library with receive/transmit circular buffers
 Author:   Peter Fleury <pfleury@gmx.ch>   http://jump.to/fleury
-File:     $Id: uart.h,v 1.8.2.1 2007/07/01 11:14:38 peter Exp $
+File:     $Id: uart.h,v 1.11 2012/09/15 14:32:27 peter Exp $
 Software: AVR-GCC 4.1, AVR Libc 1.4
 Hardware: any AVR with built-in UART, tested on AT90S8515 & ATmega8 at 4 Mhz
 License:  GNU General Public License 
@@ -22,43 +22,6 @@ LICENSE:
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     
-************************************************************************/
-
-/************************************************************************
-uart_available, uart_flush, uart1_available, and uart1_flush functions
-were adapted from the Arduino HardwareSerial.h library by Tim Sharpe on 
-11 Jan 2009.  The license info for HardwareSerial.h is as follows:
-
-  HardwareSerial.h - Hardware serial library for Wiring
-  Copyright (c) 2006 Nicholas Zambetti.  All right reserved.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-************************************************************************/
-
-/************************************************************************
-Changelog for modifications made by Tim Sharpe, starting with the current
-  library version on his Web site as of 05/01/2009. 
-
-Date        Description
-=========================================================================
-05/12/2009  Added Arduino-style available() and flush() functions for both
-			supported UARTs.  Really wanted to keep them out of the library, so
-			that it would be as close as possible to Peter Fleury's original
-			library, but has scoping issues accessing internal variables from
-			another program.  Go C!
-
 ************************************************************************/
 
 /** 
@@ -95,16 +58,16 @@ Date        Description
 */
 
 /** @brief  UART Baudrate Expression
- *  @param  xtalcpu  system clock in Mhz, e.g. 4000000L for 4Mhz          
+ *  @param  xtalcpu  system clock in Mhz, e.g. 4000000UL for 4Mhz          
  *  @param  baudrate baudrate in bps, e.g. 1200, 2400, 9600     
  */
-#define UART_BAUD_SELECT(baudRate,xtalCpu) ((xtalCpu)/((baudRate)*16l)-1)
+#define UART_BAUD_SELECT(baudRate,xtalCpu)  (((xtalCpu) + 8UL * (baudRate)) / (16UL * (baudRate)) -1UL)
 
 /** @brief  UART Baudrate Expression for ATmega double speed mode
- *  @param  xtalcpu  system clock in Mhz, e.g. 4000000L for 4Mhz           
+ *  @param  xtalcpu  system clock in Mhz, e.g. 4000000UL for 4Mhz           
  *  @param  baudrate baudrate in bps, e.g. 1200, 2400, 9600     
  */
-#define UART_BAUD_SELECT_DOUBLE_SPEED(baudRate,xtalCpu) (((xtalCpu)/((baudRate)*8l)-1)|0x8000)
+#define UART_BAUD_SELECT_DOUBLE_SPEED(baudRate,xtalCpu) ((((xtalCpu) + 4UL * (baudRate)) / (8UL * (baudRate)) -1UL))|0x8000)
 
 
 /** Size of the circular receive buffer, must be power of 2 */
@@ -124,8 +87,9 @@ Date        Description
 /* 
 ** high byte error return code of uart_getc()
 */
-#define UART_FRAME_ERROR      0x0800              /* Framing Error by UART       */
-#define UART_OVERRUN_ERROR    0x0400              /* Overrun condition by UART   */
+#define UART_FRAME_ERROR      0x1000              /* Framing Error by UART       */
+#define UART_OVERRUN_ERROR    0x0800              /* Overrun condition by UART   */
+#define UART_PARITY_ERROR     0x0400              /* Parity Error by UART        */ 
 #define UART_BUFFER_OVERFLOW  0x0200              /* receive ringbuffer overflow */
 #define UART_NO_DATA          0x0100              /* no receive data available   */
 
@@ -209,19 +173,6 @@ extern void uart_puts_p(const char *s );
  */
 #define uart_puts_P(__s)       uart_puts_p(PSTR(__s))
 
-/**
- *  @brief   Return number of bytes waiting in the receive buffer
- *  @param   none
- *  @return  bytes waiting in the receive buffer
- */
-extern int uart_available(void);
-
-/**
- *  @brief   Flush bytes waiting in receive buffer
- *  @param   none
- *  @return  none
- */
-extern void uart_flush(void);
 
 
 /** @brief  Initialize USART1 (only available on selected ATmegas) @see uart_init */
@@ -236,10 +187,32 @@ extern void uart1_puts(const char *s );
 extern void uart1_puts_p(const char *s );
 /** @brief  Macro to automatically put a string constant into program memory */
 #define uart1_puts_P(__s)       uart1_puts_p(PSTR(__s))
-/** @brief   Return number of bytes waiting in the receive buffer */
-extern int uart1_available(void);
-/** @brief   Flush bytes waiting in receive buffer */
-extern void uart1_flush(void);
+
+/** @brief  Initialize USART2 (only available on selected ATmegas) @see uart_init */
+extern void uart2_init(unsigned int baudrate);
+/** @brief  Get received byte of USART2 from ringbuffer. (only available on selected ATmega) @see uart_getc */
+extern unsigned int uart2_getc(void);
+/** @brief  Put byte to ringbuffer for transmitting via USART2 (only available on selected ATmega) @see uart_putc */
+extern void uart2_putc(unsigned char data);
+/** @brief  Put string to ringbuffer for transmitting via USART2 (only available on selected ATmega) @see uart_puts */
+extern void uart2_puts(const char *s );
+/** @brief  Put string from program memory to ringbuffer for transmitting via USART2 (only available on selected ATmega) @see uart_puts_p */
+extern void uart2_puts_p(const char *s );
+/** @brief  Macro to automatically put a string constant into program memory */
+#define uart2_puts_P(__s)       uart2_puts_p(PSTR(__s))
+
+/** @brief  Initialize USART3 (only available on selected ATmegas) @see uart_init */
+extern void uart3_init(unsigned int baudrate);
+/** @brief  Get received byte of USART3 from ringbuffer. (only available on selected ATmega) @see uart_getc */
+extern unsigned int uart3_getc(void);
+/** @brief  Put byte to ringbuffer for transmitting via USART3 (only available on selected ATmega) @see uart_putc */
+extern void uart3_putc(unsigned char data);
+/** @brief  Put string to ringbuffer for transmitting via USART3 (only available on selected ATmega) @see uart_puts */
+extern void uart3_puts(const char *s );
+/** @brief  Put string from program memory to ringbuffer for transmitting via USART3 (only available on selected ATmega) @see uart_puts_p */
+extern void uart3_puts_p(const char *s );
+/** @brief  Macro to automatically put a string constant into program memory */
+#define uart3_puts_P(__s)       uart3_puts_p(PSTR(__s))
 
 /**@}*/
 
