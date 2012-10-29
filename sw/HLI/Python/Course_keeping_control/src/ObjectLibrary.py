@@ -223,8 +223,6 @@ class O_LocalPath:
         self.PositionedPoly[0] = PP_X;
         self.PositionedPoly[1] = PP_Y;
         
-        plt.plot(PP_Y,PP_X);
-        
         return self.PositionedPoly;
         
     def FitPath(self, definition):
@@ -243,16 +241,19 @@ class O_LocalPath:
         self.PathPoly[1] = Pathline;
         
         return self.PathPoly;
-
-    
+ 
         plt.show();
-        
 
-        
-        
-        
-        
         return self.PositionedPoly;
+    
+    def PlotTurn(self, color = 'k'):
+        
+        plt.plot(self.PositionedPoly[1], self.PositionedPoly[0], color);
+        
+    def get_Range(self):
+        
+        return self.Range;
+    
 '''        
 #############################################
 # Path Waypoints Object
@@ -364,5 +365,53 @@ class O_PosData:
     def get_Pos(self):
         return numpy.array([self.X, self.Y])
 
+
+'''
+#############################################
+# Straight line and Sub-Waypoints object
+#############################################
+''' 
+class O_StraightPath:
+    
+    def __init__(self, N, Np, r, rp):
+        
+        self.v = N.get_Pos() - Np.get_Pos();
+        self.eps = math.atan2(self.v[1], self.v[0]);
+        
+        
+        A = N.get_Pos() - r * numpy.array([math.cos(self.eps), math.sin(self.eps)]);
+        B = Np.get_Pos() + rp * numpy.array([math.cos(self.eps), math.sin(self.eps)]);
+        
+        self.A = O_PosData(A[0], A[1], float('NaN'), float('NaN'));
+        self.B = O_PosData(B[0], B[1], float('NaN'), float('NaN'));
+        
+    def FitLine(self, definition):
+    
+        Ax = self.A.get_Pos_X();
+        Ay = self.A.get_Pos_Y();
+        
+        Bx = self.B.get_Pos_X();
+        By = self.B.get_Pos_Y();
+        
+        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Bx-By])) * definition;
+        
+        if Ax == Bx:
+            self.poly = numpy.polyfit([Ay, By], [Ax, Bx], 1);
+            prange = numpy.linspace(Ay, By, SubWP_No);
+            values = numpy.polyval(self.poly, prange);
+            self.SubWP = numpy.array([prange, values]);
+            
+        else:
+            self.poly = numpy.polyfit([Ax, Bx], [Ay, By], 1);
+            prange = numpy.linspace(Ax, Bx, SubWP_No);
+            values = numpy.polyval(self.poly, prange);
+            self.SubWP = numpy.array([values, prange]);
+        
+        return self.SubWP;
+    
+    def PrintLine(self, color):
+        
+        plt.plot(self.SubWP[0], self.SubWP[1], color = 'k');
+        
 
         

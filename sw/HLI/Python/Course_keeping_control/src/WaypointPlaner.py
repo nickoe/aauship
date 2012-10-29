@@ -40,8 +40,8 @@ Waypoints = OL.O_PathWayPoints(coast, coastlength, decimation, safety);
 data = Waypoints.get_WayPoints();
 
 
-plt.plot(coast)
-plt.plot(data[1], data[0]);
+plt.plot(coast);
+#plt.plot(data[1], data[0]);
 '''
 plt.show();
 '''
@@ -52,8 +52,13 @@ Local pathplanning
 '''
 
 NextWaypointNo = 4;
+PrevRange = 0;
+Range = 0;
 
 while NextWaypointNo<len(data[0])-1:
+    
+    if Range:
+        PrevRange = Range;        
 
     CurPos = OL.O_PosData(0,0, 0,1);
     gamma = 0;
@@ -82,13 +87,23 @@ while NextWaypointNo<len(data[0])-1:
     definition = 20;
     PathPoly = Path.FitPath(definition);
     
-    
-    
     P = Path.PositionPoly(Nm, Nt, Np);
 
     NextWaypointNo = n + 1;
+    
+    '''fitline'''
+    Range = Path.get_Range();
+    Straight = OL.O_StraightPath(Nt, Nm, Range, PrevRange);
+    SubWP = Straight.FitLine(0.1);
+    
+    '''plot paths'''
+    Straight.PrintLine('k');
+    Path.PlotTurn('k');
+    
+    print(NextWaypointNo);
 
 plt.show();
+
 
 '''
 Control Procedure:

@@ -99,5 +99,3 @@ def SimulateCoast(coastlength):
 
 
 
-
-
