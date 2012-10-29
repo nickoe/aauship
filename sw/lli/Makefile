@@ -41,7 +41,7 @@ PROGID = stk500v2 # Default bootloader for arduino mega 2560
 PROGRAM = lli
 
 # Stuff below this line should probably not be edited!
-SOURCES = $(PROGRAM).c uart.c
+SOURCES = $(PROGRAM).c uart.c pwm.c
 ARCH = avr-
 CC = $(ARCH)gcc
 OBJDUMP = $(ARCH)objdump
