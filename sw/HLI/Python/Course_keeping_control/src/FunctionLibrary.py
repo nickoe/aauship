@@ -59,3 +59,45 @@ def fcn_GenerateEuler(length = 2, l_precision = 30, d_precision = 30):
     '''
     Euler-spiral generation complete
     '''
+
+
+def CosLaw(A,B,C):
+    
+    A = A.get_Pos();
+    
+    B = B.get_Pos();
+    
+    C = C.get_Pos();
+    
+    a = numpy.linalg.norm(B-C);
+    b = numpy.linalg.norm(A-C);
+    c = numpy.linalg.norm(A-B);
+    
+    gamma = math.acos((numpy.power(a,2) + numpy.power(c,2) - numpy.power(b,2))/(2 * a * c));    
+    
+    return(gamma);
+
+
+def SimulateCoast(coastlength):
+
+    '''
+    Simulated coast-line:
+    '''
+    i = 0;
+    coast = scipy.randn(coastlength) * 10;
+    initial = 0;
+    
+    while i < coastlength:
+       
+        coast[i] = initial + coast[i];
+        initial = coast[i];
+        i = i + 1;
+
+    return coast;
+
+
+
+
+
+
+

@@ -26,26 +26,44 @@ import FunctionLibrary as FL
 '''
 
 class O_LocalPath:
-    def __init__(self, PathCoords, sigma_max, kappa_max):
+    def __init__(self, gamma, sigma_max, kappa_max):
         
-        #1 degree rotation
-        #Rot_plus = numpy.array([[math.cos(math.pi/180), -math.sin(math.pi/180)][math.sin(math.pi/180), math.cos(math.pi/180]]));
-        #Rot_minus = Rot_plus.T;
         
+        
+        phi = math.pi/2 - gamma/2;
+        self.phi = phi;
         R_min=1/kappa_max;
-        Psi_max=kappa_max^2/2/sigma_max;
-        kappa = 1.
-        sigma = 1.;
-        
-        fi_max = math.pow(kappa,2) / (2*sigma);
-        fi = fi_max*1.5;
-        
+        Psi_max=math.pow(kappa_max,2)/2/sigma_max;
+        kappa = kappa_max
+        sigma = sigma_max;
+
+        phi_max = math.pow(kappa,2) / (2*sigma);
         
         '''
         Calculate parameters in local base
         '''
         
-        if fi > fi_max:
+        if phi == 0:
+            '''
+            If phi <= 0 the path is straight
+            '''
+            self.PathPoly = numpy.zeros(5);
+            self.error = 'StraightPath';
+            self.Range = 0;
+            print('Straight path');
+        
+        elif phi == math.pi/2:
+            '''
+            If phi >= pi/2 the path is a complete turnaround
+            '''
+            self.PathPoly = numpy.zeros(5);
+            self.error = 'TurnAround';
+            self.Range = 0;
+        
+        elif phi > phi_max:
+            '''
+            The steepness of the curve requires a circular path component
+            '''
 
             tlen = 2
             
@@ -58,94 +76,55 @@ class O_LocalPath:
                 b = scipy.special.fresnel(i);
                 ay[j] = b[0];
                 ax[j] = b[1];
-                if j > 2 and math.atan((ay[j-1]-ay[j-2])/(ax[j-1]-ax[j-2])) >= fi_max:
+                if j > 2 and math.atan((ay[j-1]-ay[j-2])/(ax[j-1]-ax[j-2])) >= phi_max:
                     break;
                 j = j+1;
-
-            print(fi_max, math.atan((ay[j-1]-ay[j-2])/(ax[j-1]-ax[j-2])));
-
+            
+            '''
+            Parameters of the Euler-spiral
+            '''
             xd = math.sqrt(math.pi / sigma) * ax[j];
             yd = math.sqrt(math.pi / sigma) * ay[j];
             
-            xd = 1 * ax[j];
-            yd = 1 * ay[j];
-            
-            
             '''
-            XR = R_min * math.sin(fi - fi_max);
-            YR = 2 * R_min * math.pow(math.sin((fi-fi_max)/2), 2);
-            
-            X1 = math.cos(fi-fi_max) * (xd + yd*math.tan(fi-fi_max));
-            Y1 = X1 * math.tan(fi);
-            
-            X2 = XR;
-            Y2 = math.sin(fi) * (xd + yd*math.tan(fi))-yd/math.cos(fi);
+            Calculating key points
             '''
-            
-            XR = R_min * math.sin(fi - fi_max);
-            Px = XR + yd * math.sin(fi);
-            X1 = Px + xd * math.cos(fi);
-            Y1 = X1 * math.tan(fi);
-            Py = Y1 - xd * math.sin(fi);
-            Y2 = Py + yd * math.cos(fi);
-            Oy = R_min * math.cos(fi-fi_max) + Y2;
+            XR = R_min * math.sin(phi - phi_max);
+            Px = XR + yd * math.sin(phi);
+            X1 = Px + xd * math.cos(phi);
+            Y1 = X1 * math.tan(phi);
+            Py = Y1 - xd * math.sin(phi);
+            Y2 = Py + yd * math.cos(phi);
+            Oy = R_min * math.cos(phi-phi_max) + Y2;
             YR = Oy - R_min;
             X2 = XR;
             
             
-            A = numpy.matrix([-X1,Y1]);
-            B = numpy.matrix([-X2,Y2]);
-            C = numpy.matrix([0,YR]);
-            D = numpy.matrix([X2,Y2]);
-            E = numpy.matrix([X1,Y1]);
-            
-            PointStore_Y = numpy.array([Y1,Y2,YR,Y2,Y1]);
-            PointStore_X = numpy.array([-X1,-X2,0,X2,X1]);
-            
-            
-            #PointStore = numpy.matrix([numpy.transpose(A),numpy.transpose(B),numpy.transpose(C),numpy.transpose(D),numpy.transpose(E)])
-            
-            
-            plt.plot(PointStore_X,PointStore_Y);
-            
-            Poly = numpy.polynomial.hermite.hermfit(PointStore_X, PointStore_Y, 4);
-
-            X = numpy.linspace(PointStore_X[0],PointStore_X[4]);
-            Pathline = numpy.polynomial.hermite.hermval(X, Poly);
-            plt.plot(X,Pathline);
+            A = numpy.array([-X1,Y1]);
+            B = numpy.array([-X2,Y2]);
+            C = numpy.array([0,YR]);
+            D = numpy.array([X2,Y2]);
+            E = numpy.array([X1,Y1]);
             
             '''
-            print path
+            Point-structure
             '''
+            self.PointStore_Y = numpy.array([Y1,Y2,YR,Y2,Y1]);
+            self.PointStore_X = numpy.array([-X1,-X2,0,X2,X1]);
             
-            line = numpy.array([-3., 0., 3.]);
-            xline = numpy.array([-2., 0., 2.]);
-            yline = numpy.array([0., 0., 0.]);
+            '''
+            The distance from the waypoint where the Euler path starts 
+            '''
+            self.Range = math.sqrt(math.pow(A[0], 2) + math.pow(A[1], 2));
             
+            self.error = 'None';
+          
             
-            xline[0] = line[0] * math.cos(fi);
-            xline[2] = line[2] * math.cos(fi);
-            
-            yline[0] = abs(line[0]) * math.sin(fi);
-            yline[2] = abs(line[2]) * math.sin(fi);
-            
-            
-            plt.plot(xline,yline);
-            
-            plt.show();
-            
-            
-            
-        else:
-            
-            '''Itt a baj'''
-            
-            tlen = math.sqrt(2/math.pi) * fi;
+        elif phi<=phi_max:
+            '''
+            The steepness of the curve doesn't requires a circular path component
+            '''
             tlen = 2
-            
-            SC = scipy.special.fresnel(tlen);
-            Sf = SC[0];
-            Cf = SC[1];
             
             t = numpy.linspace(0.,tlen, 1000);
             ax = numpy.linspace(0.,tlen, 1000);
@@ -156,143 +135,125 @@ class O_LocalPath:
                 b = scipy.special.fresnel(i);
                 ay[j] = b[0];
                 ax[j] = b[1];
-                if j > 2 and math.atan((ay[j-1]-ay[j-2])/(ax[j-1]-ax[j-2])) >= fi:
+                if j > 2 and math.atan((ay[j-1]-ay[j-2])/(ax[j-1]-ax[j-2])) >= phi:
                     break;
                 j = j+1;
-
-            print(fi, math.atan((ay[j-1]-ay[j-2])/(ax[j-1]-ax[j-2])));
-
+                
+            '''
+            Parameters of the Euler-spiral
+            '''
             xd = math.sqrt(math.pi / sigma) * ax[j];
             yd = math.sqrt(math.pi / sigma) * ay[j];
             
-            
-            print(xd,yd);
-            
-            '''Innen jo'''
-            
-            X1 = xd * math.cos(fi) + yd * math.sin(fi);
-            Y1 = (yd * math.tan(fi) + xd) * math.sin(fi);
-            Y1 = X1 * math.tan(fi);
-            
-            #print(xd, yd)
+            '''
+            Calculating key points
+            '''
+            X1 = xd * math.cos(phi) + yd * math.sin(phi);
+            Y1 = X1 * math.tan(phi);
             
             A = numpy.array([-X1,Y1]);
-            C = numpy.array([0,yd/math.cos(fi)]);
+            C = numpy.array([0,yd/math.cos(phi)]);
             E = numpy.array([X1,Y1]);
-            
-            PointStore_X = numpy.array([A[0],C[0],E[0]]);
-            PointStore_Y = numpy.array([A[1],C[1],E[1]]);
-            
-            
-            plt.plot(PointStore_X,PointStore_Y);
-            
-            Poly = numpy.polynomial.hermite.hermfit(PointStore_X, PointStore_Y, 2);
-
-            X = numpy.linspace(PointStore_X[0],PointStore_X[2]);
-            Pathline = numpy.polynomial.hermite.hermval(X, Poly);
-            plt.plot(X,Pathline);
+            B = C;
+            D = C;
             
             '''
-            print path
+            Point-structure
             '''
+            self.PointStore_X = numpy.array([A[0],B[0],C[0],D[0],E[0]]);
+            self.PointStore_Y = numpy.array([A[1],B[1],C[1],D[1],E[1]]);
             
-            line = numpy.array([-3., 0., 3.]);
-            xline = numpy.array([-2., 0., 2.]);
-            yline = numpy.array([0., 0., 0.]);
+            '''
+            The distance from the waypoint where the Euler path starts 
+            '''
+            self.Range = math.sqrt(math.pow(A[0], 2) + math.pow(A[1], 2));
             
             
-            xline[0] = line[0] * math.cos(fi);
-            xline[2] = line[2] * math.cos(fi);
+            self.error = 'None';
             
-            yline[0] = abs(line[0]) * math.sin(fi);
-            yline[2] = abs(line[2]) * math.sin(fi);
+        else:
+            '''
+            If none of the previous conditions have been met phi has an invalid value
+            '''
+            self.PathPoly = numpy.zeros(5);
+            self.PointStore_X = numpy.zeros(5);
+            self.PointStore_X = numpy.zeros(5);
+            self.error = 'NoValidPath';
+            self.Range = 0;
+            print('No path');
             
-            plt.plot(xline,yline);            
-            plt.show();
+    def get_PathPoly(self):
         
-        
-''' Beautiful but obsolete 
-class O_LocalPath:
-    def __init__(self, PathWayPoints, NextWaypointNo, Spiraldata, PosData):
-        
-        #1: determine the length of the Euler-spiral
-        
-        WP = PathWayPoints.get_WayPoints();
-        
-        # Destination orientation
-        req_Ori_S = WP[0, NextWaypointNo+1] - WP[0, NextWaypointNo];
-        req_Ori_C = WP[1, NextWaypointNo+1] - WP[1, NextWaypointNo];
-        
-        req_Ori_S = -1;
-        req_Ori_C = 0;
-       
-        # Normalized orientation of destination
-        norm_req_Ori_S =  req_Ori_S / math.sqrt(math.pow(req_Ori_S,2) + math.pow(req_Ori_C,2));
-        norm_req_Ori_C =  req_Ori_C / math.sqrt(math.pow(req_Ori_S,2) + math.pow(req_Ori_C,2));
-        
-        # Current orientation
-        PosOri_X = PosData.get_Ori_X();
-        PosOri_Y = PosData.get_Ori_Y();
-        
-        # Scalar product for vector mirroring
-        dotproduct = norm_req_Ori_C * PosOri_X + norm_req_Ori_S * PosOri_Y;
-        
-        #Irany! -0.5 pi-t ne +3/2 pi-vel forduljon...
-        
-        
-        # Vector mirroring
-        diff_v_X = -numpy.abs(PosOri_X - norm_req_Ori_C * dotproduct);
-        diff_v_Y = -numpy.abs(PosOri_Y - norm_req_Ori_S * dotproduct);
-        # Vector mirroring 2: turn vectors
-        Turn_X = PosOri_X - 2 * diff_v_X;
-        Turn_Y = PosOri_Y - 2 * diff_v_Y;
-
-        i = 0;
-        
-
-        Data_X = Spiraldata.get_EulerO_X();
-        Data_Y = Spiraldata.get_EulerO_Y();
-        self.corr = scipy.zeros(scipy.size(Data_X));
-        print(norm_req_Ori_C);
-        while i < int(scipy.size(self.corr)):
-            self.corr[i] = Data_X[i] * Turn_X + Data_Y[i] * Turn_Y;
-            i = i + 1;
-        
-        turn_length = 0;
-        while self.corr[turn_length] != numpy.max(self.corr):
-            turn_length = turn_length+1;
-        
-        turn_length = turn_length+1;
-        
-        #2: determine the size coefficient of the Euler-spiral
-        
-        
-        Dest_X = (WP[1, NextWaypointNo+1] + WP[1, NextWaypointNo]) / 2;
-        Dest_Y = (WP[0, NextWaypointNo+1] + WP[0, NextWaypointNo]) / 2;
-        Pos_X = PosData.get_Pos_X();
-        Pos_Y = PosData.get_Pos_Y();
-        
-        V_X = Dest_X - Pos_X;
-        V_Y = Dest_Y - Pos_Y;
-        
-        E_X = Data_X[turn_length];
-        E_Y = Data_Y[turn_length];
-        
-        k_X = V_X / E_X;
-        k_Y = V_Y / E_Y;
-        
-        turnpath_X = Data_X[0:turn_length];
-        turnpath_Y = Data_Y[0:turn_length];
-        
-        plt.plot(turnpath_X, turnpath_Y);
-        plt.show()
-        '''
-        
-        
+        return(self.PathPoly)
     
+    def get_Range(self):
+        
+        return(self.Range)
+    
+    def PositionPoly(self, p_Nm, p_Nt, p_Np):
+        
+        Nm = p_Nm.get_Pos();
+        Nt = p_Nt.get_Pos();
+        Np = p_Np.get_Pos();
+        
+        v0 = (Nm-Nt) / numpy.linalg.norm(Nt-Nm);
+        v1 = (Np-Nt) / numpy.linalg.norm(Np-Nt);
+        
+        v = v0 + v1;
+        
+        
+        
+        rot = math.atan2(-v[0], v[1]);
+
+        print('Path rotation:');
+        #print(rot/math.pi * 180);
+        print(scipy.sign(v[1]));
+        
+        radius = numpy.sqrt(numpy.power(self.PathPoly[0],2) + numpy.power(self.PathPoly[1], 2));
+
+        angle = numpy.arctan2(self.PathPoly[1], self.PathPoly[0]);
+
+        P_X = radius * numpy.cos(angle + rot);
+        P_Y = radius * numpy.sin(angle + rot);
+        
+        PP_X = P_X + Nt[0];
+        PP_Y = P_Y + Nt[1];
+
+        self.PositionedPoly = numpy.zeros(numpy.shape(self.PathPoly));
+        self.PositionedPoly[0] = PP_X;
+        self.PositionedPoly[1] = PP_Y;
+        
+        plt.plot(PP_Y,PP_X);
+        
+        return self.PositionedPoly;
+        
+    def FitPath(self, definition):
+        
+        Poly_X = self.PointStore_X;
+        Poly_Y = self.PointStore_Y;
+
+        
+        Poly = numpy.polynomial.hermite.hermfit(Poly_X, Poly_Y, 4);
+
+        Path_X = numpy.linspace(Poly_X[0],Poly_X[4], definition);
+        Pathline = numpy.polynomial.hermite.hermval(Path_X, Poly);
+        
+        self.PathPoly = numpy.zeros([2,definition])
+        self.PathPoly[0] = Path_X;
+        self.PathPoly[1] = Pathline;
+        
+        return self.PathPoly;
+
+    
+        plt.show();
         
 
-'''
+        
+        
+        
+        
+        return self.PositionedPoly;
+'''        
 #############################################
 # Path Waypoints Object
 #############################################
@@ -337,6 +298,12 @@ class O_PathWayPoints:
         
     def get_WayPoints(self):
         return self.WayPoints;
+    
+    def get_SingleWayPoint(self, no):
+        
+
+        return O_PosData(self.WayPoints[0, no], self.WayPoints[1, no], float('NaN'), float('NAN'));
+
 
 
 '''
@@ -393,6 +360,9 @@ class O_PosData:
     
     def get_Ori_Y(self):
         return self.O_Y;
+    
+    def get_Pos(self):
+        return numpy.array([self.X, self.Y])
 
 
         

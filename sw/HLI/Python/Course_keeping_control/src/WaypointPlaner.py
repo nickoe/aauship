@@ -20,70 +20,75 @@ import matplotlib.pyplot as plt
 import ObjectLibrary as OL
 import FunctionLibrary as FL
 
-
-
 '''
-Object-oriented control based on pre-calculated controller parametes
-
-Inputs:
-    System states
-    Boat position
-    Path object
-    
-Outputs:
-    Ship handling signals
-'''
-
-'''
-Simulated coast-line:
+Read / Generate coast
 '''
 coastlength = 10000;
-i = 0;
-coast = scipy.randn(coastlength);
-initial = 0;
-
-while i < coastlength:
-   
-    coast[i] = initial + coast[i];
-    initial = coast[i];
-    i = i + 1;
-    
+coast = FL.SimulateCoast(coastlength);
 
 
 '''
-Transformations will be necessary...
+Waypoint planning
 '''
-    
 
-decimation = 200;
+decimation = 50;
 safety = 10;
-coast = coast - numpy.max(coast) - 2* safety;
+coast = coast - numpy.max(coast) - 80* safety;
 
 Waypoints = OL.O_PathWayPoints(coast, coastlength, decimation, safety);
 
 data = Waypoints.get_WayPoints();
-'''
+
+
 plt.plot(coast)
 plt.plot(data[1], data[0]);
+'''
 plt.show();
 '''
 
-Euler = FL.fcn_GenerateEuler(2);
-#Euler.draw_Euler_Spiral();
 
-NextWaypointNo = 63;
-
-PosData = OL.O_PosData(0,0, 0,1);
-
-#P = OL.O_LocalPath(Waypoints, NextWaypointNo, Euler, PosData)
-OL.O_LocalPath(Waypoints, 1,1)
-#corr = P.get_PathPoly();
-
-#Euler.draw_Euler_Spiral();
 '''
-plt.plot(corr)
-plt.show()
+Local pathplanning
 '''
+
+NextWaypointNo = 4;
+
+while NextWaypointNo<len(data[0])-1:
+
+    CurPos = OL.O_PosData(0,0, 0,1);
+    gamma = 0;
+    i = -1;
+    
+    while gamma <= 0 or gamma >= math.pi:
+        
+        i = i + 1;
+        
+        '''Turning waypoint''' 
+        n = NextWaypointNo + i; 
+        
+        '''Nm is to become Position in the embedded system'''
+        Nm = Waypoints.get_SingleWayPoint(n - 1);
+        Nt = Waypoints.get_SingleWayPoint(n);
+        Np = Waypoints.get_SingleWayPoint(n + 1);
+        
+        gamma = FL.CosLaw(Nm, Nt, Np);
+        print("gamma:");
+        print(gamma/math.pi*180);
+    
+    
+    
+    Path = OL.O_LocalPath(gamma, 0.1,0.1);
+    
+    definition = 20;
+    PathPoly = Path.FitPath(definition);
+    
+    
+    
+    P = Path.PositionPoly(Nm, Nt, Np);
+
+    NextWaypointNo = n + 1;
+
+plt.show();
 
 '''
 Control Procedure:
