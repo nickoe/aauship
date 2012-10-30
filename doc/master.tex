@@ -1,4 +1,5 @@
 \input{preamble}
+\usepackage{bytefield}
 
 \hypersetup{
   pdftitle={AAUB\AA D},
@@ -14,26 +15,33 @@
 \begin{document}
 \chapterstyle{nickoe}
 \frontmatter
+\author{Nick Østergaard \and Rasmus Lundgaard Christensen \and Frederik Juul \and Attila Frodor \and Todor Muresan}
+\title{An autonomous marine environment surveying platform}
+\date{\today}
+\maketitle
+\begin{center}
+Worksheet \#1 by group 12gr730
+\end{center}
 
-%\layout
-\includepdf{illustrations/cover}
-%\cleardoublepage
-%\input{formalities/titelbladdk}
+
+
 \cleardoublepage
-\input{formalities/titlepage}
-\input{formalities/preface}
-\input{formalities/terminology}
+%\input{formalities/titlepage}
+%\input{formalities/preface}
+%\input{formalities/terminology}
 
 %%%%%%% Maybe we should have an overview of the system here
 \cleardoublepage
 \tableofcontents
-\input{formalities/acronyms}
+%\input{formalities/acronyms}
 
 \mainmatter
-\descpart{Worksheets}{%
+\input{protocol}
+\input{kalman}
+
 
 \backmatter
-\bibliography{formalities/litterature}
+%\bibliography{formalities/litterature}
 \label{ch:litt}
 
 %\settocdepth{section}

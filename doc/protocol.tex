@@ -1,16 +1,3 @@
-\documentclass{article}
-% Pakker
-\usepackage[utf8]{inputenc} % Så må vi bruge æ, ø og å
-%\usepackage[ansinew]{inputenc}
-%\usepackage[danish]{babel} % Dansk opsætning
-\usepackage[T1]{fontenc} % Hjælper med ordeling ved æ, ø og å. Sætter fontene til at være ps-fonte i stedet for bmp.
-
-\usepackage{array,booktabs} % Til gode tabeller
-\usepackage{acronym} % Smart akronymhåndtering
-\usepackage{minitoc} % Vi kan lave del inholdsfortegnelser forhåbentlig
-\usepackage{bytefield}
-\usepackage[english,final]{varioref} % Vi kan anvende \vref
-\begin{document}
 
 \section{List of acronyms}
 \begin{acronym}[TDMA]
@@ -61,4 +48,4 @@ Little endian...
 \end{table}
 
 The device ID (devid) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example the temperature drift of the two \ac{IMU}s are less important than the \ac{GPS} signals which we should use to navigate after. 
-\end{document}
+
