@@ -1,6 +1,7 @@
 # General stuff
 *~
 *.swp
+*.synctex.gz(busy)
 
 # LaTeX stuff
 doc/*.out
