@@ -39,7 +39,39 @@ The packet bytes are arranged as little endian (MSB frist), and such should the 
 The device ID (devid) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example; auxillaury parameters as temperature measurements are less important in time than navigational informations from the \ac{IMU} which has to be precisely known in time and prefearbly periodically.
 
 \section{Message definitions}
-This is the list of all supported messages for the LLI interface. The messeges is the interface to every thing that could be of interest for the HLI, i.e. sensor measurements and actuator control.
+This is the list of all supported messages for the LLI interface. The messages is the interface to every thing that could be of interest for the HLI, i.e. sensor measurements and actuator control. The list of field descriptions in the following ommits the generic fields, with start character, checksum and end character.
+
+\subsection{Get acknowlegement}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{llll}
+		\toprule
+		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\midrule
+		devid & 1 & uint8 & Device identifier \\
+		msgid & 1 & uint8 & Message identifier \\
+		data & 1--250 & uint8 & Data portion (binary)\\
+		\bottomrule
+	\end{tabular}
+	\caption{Byte field description of an \textit{acknowlegement request}}
+	\label{tab:ack}
+\end{table}
+
+\subsection{Send acknowlegement}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{llll}
+		\toprule
+		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\midrule
+		devid & 1 & uint8 & Device identifier \\
+		msgid & 1 & uint8 & Message identifier \\
+		data & 1--250 & uint8 & Data portion (binary)\\
+		\bottomrule
+	\end{tabular}
+	\caption{Byte field description of an \textit{acknowlegement response}}
+	\label{tab:ack}
+\end{table}
 
 \section{Analysis of data and bandwith}
 \label{sec:lli-bandwith}
