@@ -26,6 +26,12 @@ Read / Generate coast
 coastlength = 10000;
 coast = FL.SimulateCoast(coastlength);
 
+'''
+Init AAUSHIP
+'''
+
+AAUSHIP = OL.O_Ship(OL.O_PosData(0, 0, 0, 1));
+
 
 '''
 Waypoint planning
@@ -33,19 +39,11 @@ Waypoint planning
 
 decimation = 50;
 safety = 10;
-coast = coast - numpy.max(coast) - 80* safety;
+coast = coast - numpy.max(coast) - 10* safety;
 
-Waypoints = OL.O_PathWayPoints(coast, coastlength, decimation, safety);
-
-data = Waypoints.get_WayPoints();
-
+AAUSHIP.Plan_WP(coast, decimation, safety);
 
 plt.plot(coast);
-#plt.plot(data[1], data[0]);
-'''
-plt.show();
-'''
-
 
 '''
 Local pathplanning
@@ -55,55 +53,14 @@ NextWaypointNo = 4;
 PrevRange = 0;
 Range = 0;
 
-while NextWaypointNo<len(data[0])-1:
-    
-    if Range:
-        PrevRange = Range;        
+AAUSHIP.Plan_FullPath('Plot');
+#plt.show();
 
-    CurPos = OL.O_PosData(0,0, 0,1);
-    gamma = 0;
-    i = -1;
-    
-    while gamma <= 0 or gamma >= math.pi:
-        
-        i = i + 1;
-        
-        '''Turning waypoint''' 
-        n = NextWaypointNo + i; 
-        
-        '''Nm is to become Position in the embedded system'''
-        Nm = Waypoints.get_SingleWayPoint(n - 1);
-        Nt = Waypoints.get_SingleWayPoint(n);
-        Np = Waypoints.get_SingleWayPoint(n + 1);
-        
-        gamma = FL.CosLaw(Nm, Nt, Np);
-        print("gamma:");
-        print(gamma/math.pi*180);
-    
-    
-    
-    Path = OL.O_LocalPath(gamma, 0.1,0.1);
-    
-    definition = 20;
-    PathPoly = Path.FitPath(definition);
-    
-    P = Path.PositionPoly(Nm, Nt, Np);
+AAUSHIP.PlotPath('k');
 
-    NextWaypointNo = n + 1;
-    
-    '''fitline'''
-    Range = Path.get_Range();
-    Straight = OL.O_StraightPath(Nt, Nm, Range, PrevRange);
-    SubWP = Straight.FitLine(0.1);
-    
-    '''plot paths'''
-    Straight.PrintLine('k');
-    Path.PlotTurn('k');
-    
-    print(NextWaypointNo);
+#plt.show();
 
-plt.show();
-
+AAUSHIP.get_PathSegment();
 
 '''
 Control Procedure:

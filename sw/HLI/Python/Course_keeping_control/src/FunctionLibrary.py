@@ -95,7 +95,13 @@ def SimulateCoast(coastlength):
 
     return coast;
 
-
+def Distance(A, B):
+    
+    '''
+    Distance between two points
+    '''
+    
+    return(numpy.linalg.norm(A.get_Pos() - B.get_Pos()));
 
 
 

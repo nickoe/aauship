@@ -216,14 +216,14 @@ class O_LocalPath:
         P_X = radius * numpy.cos(angle + rot);
         P_Y = radius * numpy.sin(angle + rot);
         
-        PP_X = P_X + Nt[0];
-        PP_Y = P_Y + Nt[1];
+        PP_Y = P_X + Nt[0];
+        PP_X = P_Y + Nt[1];
 
-        self.PositionedPoly = numpy.zeros(numpy.shape(self.PathPoly));
-        self.PositionedPoly[0] = PP_X;
-        self.PositionedPoly[1] = PP_Y;
+        self.TurnSWP = numpy.zeros(numpy.shape(self.PathPoly));
+        self.TurnSWP[0] = PP_X;
+        self.TurnSWP[1] = PP_Y;
         
-        return self.PositionedPoly;
+        return self.TurnSWP;
         
     def FitPath(self, definition):
         
@@ -244,15 +244,11 @@ class O_LocalPath:
  
         plt.show();
 
-        return self.PositionedPoly;
+        return self.TurnSWP;
     
     def PlotTurn(self, color = 'k'):
         
-        plt.plot(self.PositionedPoly[1], self.PositionedPoly[0], color);
-        
-    def get_Range(self):
-        
-        return self.Range;
+        plt.plot(self.TurnSWP[0], self.TurnSWP[1], color);
     
 '''        
 #############################################
@@ -302,9 +298,9 @@ class O_PathWayPoints:
     
     def get_SingleWayPoint(self, no):
         
-
         return O_PosData(self.WayPoints[0, no], self.WayPoints[1, no], float('NaN'), float('NAN'));
 
+            
 
 
 '''
@@ -364,6 +360,9 @@ class O_PosData:
     
     def get_Pos(self):
         return numpy.array([self.X, self.Y])
+    
+    def Extend(self):
+        return(O_PosData(self.X + self.O_X, self.Y + self.O_Y));
 
 
 '''
@@ -384,6 +383,7 @@ class O_StraightPath:
         
         self.A = O_PosData(A[0], A[1], float('NaN'), float('NaN'));
         self.B = O_PosData(B[0], B[1], float('NaN'), float('NaN'));
+        
         
     def FitLine(self, definition):
     
@@ -409,9 +409,152 @@ class O_StraightPath:
         
         return self.SubWP;
     
-    def PrintLine(self, color):
+    def PlotLine(self, color):
         
         plt.plot(self.SubWP[0], self.SubWP[1], color = 'k');
-        
 
+'''
+#############################################
+# General Ship class
+# Contains all the known information
+#############################################
+'''   
+class O_Ship:
+    def __init__(self, init_position):
+        self.Pos = init_position;
+        self.Speed = 0;
+        self.Sigma_max = 0.1;
+        self.Kappa_max = 0.1;
+        
+        self.LastWP = 3;
+        self.SWP = 0;
+        self.SegmentCoords = 0;
+        self.Current_SWP = 0;
+        
+        self.NextSWP_No = 0;
+        self.NextSWP_validity = 0;
+    
+    def Plan_WP(self, coastline, decimation, safety):
+        
+        self.Waypoints = O_PathWayPoints(coastline, len(coastline), decimation, safety);
+        
+    def Plan_FullPath(self, plotit = 0):
+        
+        PrevRange = 0;
+        i = 0;
+        data = self.Waypoints.get_WayPoints();
+        FullPathLength = len(data[0]) - self.LastWP;
+        self.Lines = numpy.zeros(FullPathLength);
+        self.Turns = numpy.zeros(FullPathLength);
+        
+        while i < FullPathLength:
+            skip = self.Plan_LocalPath(PrevRange);
+            
+            if skip == 'Path ended':
+                print('The coast-information is missing, no further path can be calculated');
+                break;
+            
+            if plotit == 'Plot':
+                self.PlotPath('k');
+        
+            PrevRange = self.Path.Range;
+            i = i + 1;
+            self.LastWP = self.LastWP + skip;
+        
+    def Plan_LocalPath(self, PrevRange):
+        
+        if self.SegmentCoords:
+            self.Current_SWP = self.SegmentCoords;
+            
+        self.NextSWP_No = 0;
+        self.NextSWP_validity = 0;
+        
+        gamma = 0;
+        i = 0;
+        
+        while gamma <= 0 or gamma >= math.pi:
+        
+            i = i + 1;
+            
+            '''Turning waypoint''' 
+            n = self.LastWP + 1 + i; 
+            
+            try:
+                Nm = self.Waypoints.get_SingleWayPoint(n - i);
+                Nt = self.Waypoints.get_SingleWayPoint(n);
+                Np = self.Waypoints.get_SingleWayPoint(n + 1);
+            except IndexError:
+                return('Path ended');
+            
+            
+            
+            gamma = FL.CosLaw(Nm, Nt, Np);
+            
+        print(n);
+        
+        self.Path = O_LocalPath(gamma, self.Sigma_max, self.Kappa_max);
+        
+        definition = 20;
+        self.Path.FitPath(definition);
+        self.Path.PositionPoly(Nm, Nt, Np);
+
+        '''fitline'''
+        Range = self.Path.get_Range();
+        self.Straight = O_StraightPath(Nt, Nm, Range, PrevRange);
+        self.Straight.FitLine(0.1);
+        
+        return i;
+    
+    def get_PathSegment(self):
+        self.SegmentCoords = numpy.append(self.Path.TurnSWP, self.Straight.SubWP, 1);
+        plt.plot(self.SegmentCoords[0], self.SegmentCoords[1], 'r')
+        
+        plt.show();
+        
+    def get_Line(self):
+        return(self.Straight);
+    
+    def get_Turn(self):
+        return(self.Path);
+    
+    def PlotPath(self, color):
+        self.Path.PlotTurn(color);
+        self.Straight.PlotLine(color);
+        
+    def Control_Step(self):
+        
+        
+        while self.NextSWP_validity == 0:
+            
+            try:
+                NextSWP = O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[0, self.NextSWP_No]);
+            except IndexError:
+                '''End of LocalPath'''
+                self.LastWP = self.LastWP + 1;
+                self.Plan_LocalPath(self.Path.Range);
+                
+            delta = FL.CosLaw(self.Pos.Extend, self.Pos, NextSWP);
+            valid = self.CheckReach(delta, NextSWP) and (FL.Distance(self.Pos, NextSWP) > self.FollowDistance);
+            self.NextSWP_No = self.NextSWP_No + 1;
+            
+        '''
+        #############################################
+        # RUN CONTROL ALGORITHM FOR DELTA HERE
+        #############################################
+        '''
+            
+        results = 1; '''Results of the control step'''
+        
+        return results;
+
+    def CheckReach(self, delta, P):
+        
+        beta = math.pi/2 - delta;
+        alpha = 2* delta;
+        dist = FL.Distance(self.Pos, P);
+        R_min = 1/self.Kappa_max;
+        
+        return(dist * math.sin(beta) > R_min * math.sin(alpha));
+            
+        
         

@@ -1,4 +1,6 @@
+###########################################
 23-10-2012
+###########################################
 
 Course keeping control
 
@@ -21,3 +23,21 @@ In order to create the path the algorithm calculates 5 or 3 (depending on the th
 The Fresnel-integrals, which are basically the coordinates of the Euler-spiral are computed based on taylor-polynoms. Pre-computing and storing the results in a lookup-table should be considered.
 
 I will continue with a better waypoint-planer tomorrow and make a raw documentation about it as well.
+
+###########################################
+31-10-2012
+###########################################
+
+For given waypoints, the Pathplaning is almost complete. Some final retouch is required, but the essence is the following(the visual aids are in the folder):
+
+Figure 1 shows the Navigation flowchart. This is the main control loop of the system.
+
+The SWP validity depends on two conditions (Figure 2):
+	- is it possible to reach the SWP?
+	- is the SWP far enough?
+
+	The necessity of skipping an unreachable SWP is trivial. If very important, this mechanism can be turned off. The ship can lower it's speed and approach the SWP perfectly.
+
+	By turning to the next SWP before reaching the current SWP can increase the overall effectivity of the control, if the skip distance is chosen carefully
+	
+Once the system model and the ship control is done a simulator should be made to test the course keeping. Until tht time I will look into the WP placement and map-reading.
