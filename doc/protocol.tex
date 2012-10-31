@@ -1,52 +1,79 @@
-\documentclass{article}
-% Pakker
-\usepackage[utf8]{inputenc} % Så må vi bruge æ, ø og å
-%\usepackage[ansinew]{inputenc}
-%\usepackage[danish]{babel} % Dansk opsætning
-\usepackage[T1]{fontenc} % Hjælper med ordeling ved æ, ø og å. Sætter fontene til at være ps-fonte i stedet for bmp.
-\usepackage[english,final]{varioref} % Vi kan anvende \vref
-\usepackage{array,booktabs} % Til gode tabeller
-\usepackage{acronym} % Smart akronymhåndtering
-\usepackage{minitoc} % Vi kan lave del inholdsfortegnelser forhåbentlig
-\usepackage{bytefield}
-\begin{document}
 
-\section{List of acronyms}
-\begin{acronym}[TDMA]
-  \acro{CRC}{Cyclic Redudancy Check}
-  \acro{GPS}{Global Positioning System}
-  \acro{IMU}{Inertial Measurement Unit}
-  \acro{LLI}{Low Level Interface}
-  \acro{HLI}{High Level Interface}
-\end{acronym}
-
-\section{FAPS LLI interface}
+\chapter{FAPS LLI interface}
 \section{Standard format of messages}
-To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail. For instance, the \ac{IMU} has a lot of different outputs and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwith which could be used for other (and more important) tasks. 
+To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwith which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
 
-As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable, however - there are some fixed elements, thats able to decide upon now. The number of sensors/actuators connected to the \ac{LLI} are by design not to be more than 256 (this makes way for a 1-byte device resolution). As each device might contain several outputs (as seen from the \ac{IMU}) each device is then given an additional byte for message IDs. Lastly, the packet contains a training sequence to make packet detection easier - as well as some \ac{CRC} checksums to verify the contents. Figure \vref{insert figure and reference} depicts the packet structure.
-\begin{bytefield}{15}
-\bitbox{5}{DevID} & \bitbox{5}{MsgID} 
-\bitbox{16}{Data } \quad \raisebox{2ex}{\dots}  \bitbox{4}{CRC16 }
+As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable, however -- there are some fixed elements, thats able to decide upon now. The number of sensors/actuators connected to the \ac{LLI} are by design not to be more than 256 (this makes way for a 1-byte device resolution). As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. Lastly, the packet contains a newline character to make packet detection easier -- as well as some \ac{CRC} checksums to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure.
+
+
+\begin{figure}[h]
+\centering
+\begin{bytefield}{30}
+\begin{rightwordgroup}{Header}
+\bitbox{1}{\texttt{\$}} \bitbox{5}{DevID} \bitbox{5}{MsgID} \raisebox{-1mm}{$\underbrace{\raisebox{1mm} {\bitbox{16}{Data field }}}_\mathrm{Variable\ length}$}\bitbox{4}{CRC16} \bitbox{2}{\texttt{\textbackslash n}  }
 \end{bytefield}
+\caption{Generic message bytefield}
+\label{fig:bytefield}
+\end{figure}
 
-Little endian...
+The packet bytes are arranged as little endian (MSB frist), and such should the numbering og bytes also be, i.e. the start start characther comes first when transmitted and ends with the end character which is the newline character.
 
 \begin{table}[htbp]
 	\centering
-	\begin{tabular}{lll}
+	\begin{tabular}{llll}
 		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Description}\\
+		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
 		\midrule
-		startchar & 1 (uint8) & Start character (\texttt{\$}) \\
-		devid & 1 (uint8) & Device identifier \\
-		msgid & 1 (uint8) & Message identifier \\
-		data & 1--250 (uint8) & Data portion (binary)\\
-		checksum & 2 (uint8) & CRC-16 checksum on data part \\
-		endchar & 1 (uint8) & Newline character (\texttt{\textbackslash n})\\
+		startchar & 1 & uint8 & Start character (\texttt{\$}) \\
+		devid & 1 & uint8 & Device identifier \\
+		msgid & 1 & uint8 & Message identifier \\
+		data & 1--250 & uint8 & Data portion (binary)\\
+		checksum & 2 & uint8 & CRC-16 checksum on data part \\
+		endchar & 1 & uint8 & Newline character (\texttt{\textbackslash n})\\
 		\bottomrule
 	\end{tabular}
 	\caption{General description of the packet format}
+	\label{tab:general}
 \end{table}
-\end{document}
-The device ID (devid) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example the temperature drift of the two \ac{IMU}s are less important than the \ac{GPS} signals which we should use to navigate after. 
+
+The device ID (devid) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example; auxillaury parameters as temperature measurements are less important in time than navigational informations from the \ac{IMU} which has to be precisely known in time and prefearbly periodically.
+
+\section{Message definitions}
+This is the list of all supported messages for the LLI interface. The messages is the interface to every thing that could be of interest for the HLI, i.e. sensor measurements and actuator control. The list of field descriptions in the following ommits the generic fields, with start character, checksum and end character.
+
+\subsection{Get acknowlegement}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{llll}
+		\toprule
+		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\midrule
+		devid & 1 & uint8 & Device identifier \\
+		msgid & 1 & uint8 & Message identifier \\
+		data & 1--250 & uint8 & Data portion (binary)\\
+		\bottomrule
+	\end{tabular}
+	\caption{Byte field description of an \textit{acknowlegement request}}
+	\label{tab:ack}
+\end{table}
+
+\subsection{Send acknowlegement}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{llll}
+		\toprule
+		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\midrule
+		devid & 1 & uint8 & Device identifier \\
+		msgid & 1 & uint8 & Message identifier \\
+		data & 1--250 & uint8 & Data portion (binary)\\
+		\bottomrule
+	\end{tabular}
+	\caption{Byte field description of an \textit{acknowlegement response}}
+	\label{tab:ack}
+\end{table}
+
+\section{Analysis of data and bandwith}
+\label{sec:lli-bandwith}
+To be able to evaluate if there is enough bandwidth on between the serial connections from LLI, HLI and ground station, an analysis is hereby conducted.
+
