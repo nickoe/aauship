@@ -1,62 +1,61 @@
 \section{Position estimation}
 To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a Kalman filter. This filter takes the different measurements as inputs, and uses these to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data. 
 
-To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are quite easy to model, as these to are quite similar (the only difference being the drag coefficient being quite large for sideways motion). However, the heaving motion is complicated. 
+To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
 
-\subsection{Surge and sway motion}
-The state model for the surge and sway motion are quite similar, as the two consist of the same formula, but with different coefficients. The general formula for the position can be written as (in the discrete time domain):
+\subsection{State model}
+The state model is used as a base for computing the influence the different inputs have on the system. The matrix is the same as the $\vec{A}$ matrix used to describe the state space representation of the system. The general state expression is given as:
 \begin{align}
-x(n+1) = x(n) + \dot{x}(n)t_s + \ddot{x}(n)\frac{t_s^2}{2}\\
-\dot{x}(n+1) = \dot{x}(n) + \ddot{x}(n)t_s\\
-\ddot{x}(n+1) = -\dot{x}(n) \cdot \overline{\alpha}_x(n) + \ddot{x}(n)
-\end{align}
-These formulae represent an estimate of the current position, velocity and acceleration given the previous measurements. As seen the above can be written in a matrix, to ease further computations:
-\begin{align}
-\begin{bmatrix}
-x(n+1)\\
-\dot{x}(n+1)\\
-\ddot{x}(n+1)
-\end{bmatrix} = \begin{bmatrix}
-1 & t_s & \frac{t_s^2}{2}\\
-0 & 1 & t_s\\
-0 & -\overline{\alpha}_x(n) & 1
-\end{bmatrix}\begin{bmatrix}
-x(n)\\
-\dot{x}(n)\\
-\ddot{x}(n)
-\end{bmatrix}
-\label{eq:yn}
-\end{align}
-However, as the input to the system is given as an acceleration (the parameter that is controllable, given current inputs and measurements) - this can be taken out of the matrix, and inserted into an input vector:
-\begin{align}
-\vec{u}(n) = \begin{bmatrix}
-0\\
-0\\
-\ddot{x}(n)
-\end{bmatrix}
-\label{eq:un}
-\end{align}
-The above equation \vref{eq:yn} combined with \vref{eq:un} describes the total motion forwards, which can be extended to the sideways case as well. To formulas are the same, the only thing that changes, is the drag coefficient. To model the drag coefficient, the drag coefficient can be estimated by:
-\begin{align}
-F_{drag} = \frac{1}{2}C_D \rho_w A_\text{hull} \dot{x} |\dot{x}|
+\vec{Y}(n) = \vec{A}(n)\vec{Y}(n-1) + \vec{Z}(n)
 \end{align}
 \noindent Where:
 \begin{ffk}
-$C_D$ is a drag coefficient\\
-$rho_w$ is the density of water\\
-$A_hull$ is the cross-sectional area of the hull\\
+$\vec{A}(n)$ is the state matrix\\
+$\vec{Y}(n-1)$ is the last input to the system\\
+$\vec{Z}(n)$ is the driving noise
 \end{ffk}
-This term is however nonlinear so to do further calculations on it, it would need to be linearized. The Taylor series expansion can be used. This is given as:
+In this case, the driving noise $\vec{Z}(n)$ will be the inputs to the system, which can then be used to estimate the different states. The states to be estimated is the velocity $\dot{x}$, the angular velocity $\omega$ and the angle of the vessel in the local frame $\theta$. The driving noise (or input) can be defined as the $\vec{B}$ matrix in the state system, multiplied with the different inputs given to the system, namely $n_1$ and $n_2$. When inserted, the formula for the state model becomes:
 \begin{align}
-f(x) \approx \overbrace{f(x_0) - \frac{\partial}{\partial x}f(x_0)\cdot x_0}^\text{constant} + \overbrace{\frac{\partial}{\partial x}f(x_0) \cdot x}^\text{variable}
+\vec{Y}(n) = \vec{A}(n)\vec{Y}(n-1) + \vec{B}\vec{u}
 \end{align}
-The above represents a first order Taylor expansion and yields a constant and a variable term. The first order expansion of $F_drag$ gives the following expression:
+And when terms are inserted, the formula becomes: 
 \begin{align}
-\overline{\alpha}_x(n) = \mathcal{T}(F_{drag} = \left(\frac{1}{2}C_D \rho_w A_\text{hull} \dot{x}_0^2 \dot{x}_0 - C_D \rho_w A_\text{hull} \dot{x}_0 \right) + (C_D \rho_w A_\text{hull} \dot{x}_0)\dot{x}
+\vec{Y}(n) = \vec{A}(n)\vec{Y}(n-1) + \vec{B}\vec{u}
+\end{align}\todo{insert true formula -lunde}
+
+\subsection{Observation model}
+The observation model, is a model that models the different observations. In this case, the different observations are measured directly, as we can measure both the angular velocity, the angle and the velocity of the craft. The general formula for the observation model is given as:
+\begin{align}
+\vec{X}(n) = \vec{H}(n)\vec{Y}(n) + \vec{W}(n)
+\end{align}
+\noindent Where:
+\begin{ffk}
+$\vec{H}(n)$ is the model linking the measurements to the observations\\
+$\vec{W}(n)$ is the noise from the measurements
+\end{ffk}
+The noise from the measurements is estimated using previous measurements which can be used to estimate the variance and the mean of the measurements. The noise can in general be seen as zero-mean Gaussian white noise processes, which makes for the assumption:
+\begin{align}
+\vec{W}(n) \sim \mathcal{N}(0,\sigma_Z^2)
+\end{align}
+As $\vec{Y}(n)$ is a row vector, $\vec{W}(n)$ is also a row vector with the same dimension. This calls for different variances on the different noise additions, for each of the measurements. As the variance of the noise on the \ac{IMU} is a lot bigger than on the \ac{GPS}. As all the measurements are available directly, the $\vec{H}(n)$ matrix is equal to identity. Giving the final observation model:
+\begin{align}
+\vec{X}(n) = \vec{Y}(n) + \vec{W}(n)
 \end{align}
 
-\subsection{Heave motion}
-The heaving motion of the ship, will not immediatly take effect, as the ship will act as a "spring" when forced to move up, and will oscillate for a while, before it has reached its final position. To map this, a formula describing the forces given by \todo{indsæt kilde -rlc} is used. This formula describes the oscillation taking place when the ship is forced to move upwards. 
+% Wouldn't it be a fair assumption that a GPS doesn't have zero-mean, but has a wandering mean that would wander over time? 
+
+% Text about the vector Kalman filer
+% Text about the covariance matrix of such a system
+\subsection{The Covariance matrix}
+As the Kalman filter is given as a vector Kalman filter, the covariance matrix is to be computed. The definition for a covariance matrix is given as:
 \begin{align}
-\zeta = 2+2
+\mathcal{C} = \text{E}\langle[x(t_1) - \text{E}[x(t_1)]][x(t_2) - \text{E}[x(t_2)]]^\text{T}\rangle
 \end{align}
+% Text about some simulations of the system
+% Text about linearizations / further computation.
+
+\subsection{Position estimation}
+This section will contain the different things we've considered during the miniproject in Kalman filtering, and will be used to give a better estimate of the actual position!
+Inputs from the \ac{GPS} (position x,y) and velocity
+Inputs from the \ac{IMU}
+Basically a description of the miniproject. 
