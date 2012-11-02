@@ -26,3 +26,5 @@ hw/*.dcm
 hw/*.ps
 hw/*.000
 hw/lib/*.bak
+
+doc/master.toc
