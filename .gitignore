@@ -12,6 +12,8 @@ doc/*.mtc
 doc/*.mtc0
 doc/*.pdf
 doc/*.synctex.gz
+doc/*.fdb_latexmk
+doc/*.fls
 
 # Software files
 *.out
