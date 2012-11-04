@@ -44,6 +44,7 @@ coast = coast - numpy.max(coast) - 10* safety;
 AAUSHIP.Plan_WP(coast, decimation, safety);
 
 plt.plot(coast);
+plt.axes().set_aspect('equal');
 
 '''
 Local pathplanning
@@ -58,9 +59,12 @@ AAUSHIP.Plan_FullPath('Plot');
 
 AAUSHIP.PlotPath('k');
 
+
 #plt.show();
 
 AAUSHIP.get_PathSegment();
+
+
 
 '''
 Control Procedure:

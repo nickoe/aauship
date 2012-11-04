@@ -13,7 +13,7 @@ Created on 2012.10.01.
 import math
 import numpy
 import scipy
-import control
+#import control
 
 import ObjectLibrary as OL
 
@@ -103,5 +103,13 @@ def Distance(A, B):
     
     return(numpy.linalg.norm(A.get_Pos() - B.get_Pos()));
 
-
-
+def find_id_index(array, id):
+    i = 0;
+    while i < len(array):
+        if array[i] == id:
+            return i;
+            break;
+        i = i+1;
+    
+    return(-1);
+        

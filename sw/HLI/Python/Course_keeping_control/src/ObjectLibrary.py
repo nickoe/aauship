@@ -242,7 +242,9 @@ class O_LocalPath:
         
         return self.PathPoly;
  
+       
         plt.show();
+        
 
         return self.TurnSWP;
     
