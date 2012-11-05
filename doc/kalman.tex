@@ -1,4 +1,4 @@
-\section{Position estimation}
+\section{Velocity and Angle estimation}
 To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a Kalman filter. This filter takes the different measurements as inputs, and uses these to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data. 
 
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
@@ -52,9 +52,10 @@ As the Kalman filter is given as a vector Kalman filter, the covariance matrix i
 \mathcal{C} = \text{E}\langle[x(t_1) - \text{E}[x(t_1)]][x(t_2) - \text{E}[x(t_2)]]^\text{T}\rangle
 \end{align}
 % Text about some simulations of the system
+\subsection{Simulations of the filter}
 % Text about linearizations / further computation.
 
-\subsection{Position estimation}
+\section{Position estimation}
 This section will contain the different things we've considered during the miniproject in Kalman filtering, and will be used to give a better estimate of the actual position!
 Inputs from the \ac{GPS} (position x,y) and velocity
 Inputs from the \ac{IMU}
