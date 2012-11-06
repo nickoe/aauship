@@ -119,7 +119,8 @@ brian:	$(FIGS_PDF_GEN)
 
 # fx inkscape --export-pdf=target.pdf --export-text-to-path target.svg
 .svg.pdf:
-	inkscape -D -z --export-pdf=$@ --export-latex $<
+#	inkscape -D -z --export-pdf=$@ --export-latex $<
+	inkscape -D -z --export-pdf=$@ $<
 
 # fx epstopdf target.eps
 #.eps.pdf:
