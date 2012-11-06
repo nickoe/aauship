@@ -22,6 +22,8 @@ doc/*.fls
 *.lst
 *.sym
 
+*.pyc
+
 # Hardware files
 hw/*.bak
 hw/*.dcm
