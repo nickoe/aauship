@@ -54,9 +54,14 @@ As the Kalman filter is given as a vector Kalman filter, the covariance matrix i
 % Text about some simulations of the system
 \subsection{Simulations of the filter}
 % Text about linearizations / further computation.
+Simulation of the Kalman filter have proven to provide an accurate estimate, however - the actual variances have to be measured. 
+
+To avoid computational problems the Joseph Form of the Kalman Filter can be used. This ensures that the matrices used in the updating step is non-singular and positive definite. 
+
+A little on the theory of Joseph Form.
 
 \section{Position estimation}
-This section will contain the different things we've considered during the miniproject in Kalman filtering, and will be used to give a better estimate of the actual position!
+This section will contain the different things we've considered during the miniproject in Kalman filtering, and will be used to give a better estimate of the actual position (from the measurements implemented on the ship).
 Inputs from the \ac{GPS} (position x,y) and velocity
 Inputs from the \ac{IMU}
 Basically a description of the miniproject. 
