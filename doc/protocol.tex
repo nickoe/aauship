@@ -19,6 +19,8 @@ As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data f
 
 The packet bytes are arranged as little endian (MSB frist), and such should the numbering og bytes also be, i.e. the start start characther comes first when transmitted and ends with the end character which is the newline character.
 
+\todo{For the same packet length, it woill probably be easier to replace the newline with length information, it will be easier to parse.}
+
 \begin{table}[htbp]
 	\centering
 	\begin{tabular}{llll}
@@ -44,101 +46,64 @@ This is the list of all supported messages for the LLI interface. The messages i
 
 \section{General messages}
 
-\subsection{Send ping}
 \begin{table}[h]
 	\centering
 	\begin{tabular}{llll}
 		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
 		\midrule
-		devid & 1 & uint8 & 1 \\
-		msgid & 1 & uint8 & 1 \\
-		data & 1--250 & uint8 & Empty\\
+		Deadman switch & 0 & Empty & Turn off actuators and wait for manual control \\
+		Status of system & 1 & 250 & Statuses of sensors and actuators \\
+		Ping & 2 & Empty \\
+		Pong & 3& Empty \\
+		ACK & 4 & Empty\\
+		NACK & 5 & Empty\\
+		Build info & 6 & 250 & Commit, target, date\\
+		Surge & 7 & 1 &\\
+		Turn & 8 & 1 &\\
 		\bottomrule
 	\end{tabular}
-	\caption{Byte field description of an \textit{acknowlegement request}}
+	\caption{Byte field description of general messages (devid 0)}
 	\label{tab:ack}
 \end{table}
 
-\subsection{Send pong}
+\todo{Expand each meassege row tith rows of data fields}
+
+\section{Actuator messages}
 \begin{table}[h]
 	\centering
 	\begin{tabular}{llll}
 		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
 		\midrule
-		devid & 1 & uint8 & 1 \\
-		msgid & 1 & uint8 & 2 \\
-		data & 1--250 & uint8 & Empty\\
+		Actuators ON/OFF & 0 & 1 & Bit mask representing which actuators should be of and on\\
+		Set right thruster & 1 & 2 & Speed (main trhuster of only one) \\
+		Set left thruster & 2 & 2 & Speed \\
+		Set bow thruster & 3 & 2 & Speed \\
 		\bottomrule
 	\end{tabular}
-	\caption{Byte field description of an \textit{acknowlegement response}}
+	\caption{Byte field description of actuator messages (devid 1)}
 	\label{tab:ack}
 \end{table}
 
-\subsection{Get acknowlegement}
+\section{Sensor messages}
 \begin{table}[h]
 	\centering
 	\begin{tabular}{llll}
 		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
+		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
 		\midrule
-		devid & 1 & uint8 & Device identifier \\
-		msgid & 1 & uint8 & Message identifier \\
-		data & 1--250 & uint8 & Data portion (binary)\\
+		Acclerometer & 0 & 1 & \\
+		Gyrometer & 1 & 2 & \\
+		Magnetometer & 2 & 2 &  \\
+		GPS & 3 & 2 & GPGGA data \\
 		\bottomrule
 	\end{tabular}
-	\caption{Byte field description of an \textit{acknowlegement request}}
+	\caption{Byte field description of sensor messages (devid 3)}
 	\label{tab:ack}
 \end{table}
 
-\subsection{Send acknowlegement}
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llll}
-		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
-		\midrule
-		devid & 1 & uint8 & Device identifier \\
-		msgid & 1 & uint8 & Message identifier \\
-		data & 1--250 & uint8 & Data portion (binary)\\
-		\bottomrule
-	\end{tabular}
-	\caption{Byte field description of an \textit{acknowlegement response}}
-	\label{tab:ack}
-\end{table}
 
-\subsection{Send no acknowlegement}
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llll}
-		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
-		\midrule
-		devid & 1 & uint8 & Device identifier \\
-		msgid & 1 & uint8 & Message identifier \\
-		data & 1--250 & uint8 & Data portion (binary)\\
-		\bottomrule
-	\end{tabular}
-	\caption{Byte field description of an \textit{acknowlegement response}}
-	\label{tab:ack}
-\end{table}
-
-\subsection{Send build info}
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llll}
-		\toprule
-		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
-		\midrule
-		devid & 1 & uint8 & Device identifier \\
-		msgid & 1 & uint8 & Message identifier \\
-		data & 1--250 & uint8 & commit, target, date\\
-		\bottomrule
-	\end{tabular}
-	\caption{Byte field description of an \textit{acknowlegement response}}
-	\label{tab:ack}
-\end{table}
 
 
 STATUS
