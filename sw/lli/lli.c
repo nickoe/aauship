@@ -39,13 +39,11 @@ int main (void)
    */
   sei();
 
-	uart_puts("String stored in SRAM\n");
 	uart2_puts(__DATE__);
 	uart2_putc(' ');
 	uart2_puts(__TIME__);
 	uart2_putc('\n');
 	uart2_putc('\r');
-	uart3_puts("Printing to GPS\n");
 	pwm_init();
 
   while (1) {
