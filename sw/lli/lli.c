@@ -11,9 +11,11 @@
 int main (void)
 {
 	/* variables for the UART0 (USB connection) */
-	unsigned int c;
-	char buffer[1024];
-	int  num=134;
+	unsigned int c, c2, c3; // Variable for reading UARTS
+	char buffer[MAX_MSG_SIZE];
+	char buffer2[MAX_MSG_SIZE];
+	char buffer3[MAX_MSG_SIZE];
+	int  idx=0;
 	unsigned int i = 0;
 
 
@@ -36,38 +38,39 @@ int main (void)
      uart2_puts("Printing via radio\n");
      uart3_puts("Printing to GPS\n");
 	pwm_init();
-  while (1)
-    {
 
-      OCR1A = 1000; //leave servo at min rotation
-      _delay_ms(1000);
-      OCR1A = 2000; //leave serve at max rotation
-    _delay_ms(1000);
+  while (1) {
+		/* Read each UART serially and check each of them for data, if there is handle it */ 
+		c = uart_getc();
+		c2 = uart2_getc();
+		c3 = uart3_getc();
 
+		if (  1 != (c2 & UART_NO_DATA) ) // Data available
+		{
+			/* 
+			 * send received character back
+			 */	
 
-
-
-        c = uart3_getc();
-        if ( c & UART_NO_DATA )
-        {
-          /* 
-           * no data available from UART 
-           */
-        }
-        else
-        {
-          /* 
-           * send received character back
-           */	
-					if (c == '$') { // Hvorfor skal det være single quote?
-			 			PORTL ^= (1<<LED3);
+			uart2_putc((char) (c2 & 0x00ff));// echo
+			if (c2 == '6') { // We have a possible message comming
+				PORTL ^= (1<<LED4);
+				uart2_putc('r');
+			}
+		}
 
 
-					} 
-          uart2_putc( (unsigned char)c );
-
-        }
-    }
+		if ( 1 != (c3 & UART_NO_DATA) ) // Data available
+		{
+			if (c3 == ',') { // We have a possible message commingq	
+				PORTL ^= (1<<LED3);
+					uart2_putc('k');
+		
+			} 
+			//uart2_puts(buffer);
+			//uart2_putc('\n');
+			//uart2_putc( (unsigned char)c );
+		}
+  }
  
   return 1;
 }

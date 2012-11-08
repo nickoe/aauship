@@ -42,4 +42,7 @@
 #define RCPWM4 PH4 // OC4B
 #define RCPWM5 PH5 // OC4C
 
-
+/**
+ * Message related stuff
+ */
+#define MAX_MSG_SIZE 1024
