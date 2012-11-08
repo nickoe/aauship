@@ -45,13 +45,13 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-		if (  1 != (c2 & UART_NO_DATA) ) // Data available
+		if ( (c2 & UART_NO_DATA) ) {} else // Data available
 		{
 			/* 
 			 * send received character back
 			 */	
-
-			uart2_putc((char) (c2 & 0x00ff));// echo
+			uart2_putc(c2);
+//			uart2_putc((char) (c2 & 0x00ff));// echo
 			if (c2 == '6') { // We have a possible message comming
 				PORTL ^= (1<<LED4);
 				uart2_putc('r');
@@ -61,9 +61,11 @@ int main (void)
 
 		if ( 1 != (c3 & UART_NO_DATA) ) // Data available
 		{
+
 			if (c3 == ',') { // We have a possible message commingq	
+
 				PORTL ^= (1<<LED3);
-					uart2_putc('k');
+					//uart2_putc('k');
 		
 			} 
 			//uart2_puts(buffer);
