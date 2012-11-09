@@ -38,7 +38,7 @@ int main (void)
 // look at  $PSRF100,1,38400,8,1,0*3D<cr><lf>  to set a faster baud rate for GPS
 	
 	/* Set GPS to 115200 baud and update UART speed */
-	uart3_puts("$PMTK251,115200*1f\r\n");
+	uart3_puts("$PMTK251,115200*1F\r\n");
   uart3_init( UART_BAUD_SELECT(115200,F_CPU) );
 
   /*
