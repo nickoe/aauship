@@ -69,16 +69,14 @@ int main (void)
 		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
 
 			if (idx2 == 0) { // We should buffer a packet
-				len2 = c2; // Set length
+				len2 = c2+5; // Set length
 			}
 
 			if ( (idx2 < len2) && (idx2 >= 0)) { // We are buffering
 				buffer2[idx2] = c2;
 				idx2++;
 				if (idx2 == len2) { // We now have a full packet
-				uart2_puts("start");
-				uart2_puts(buffer2);
-				uart2_puts("stop");
+
 					parse(&rfmsg, buffer2);
 					idx2 = -1; // Set flag in new packet mode
 
