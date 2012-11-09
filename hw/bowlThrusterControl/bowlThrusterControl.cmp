@@ -1,0 +1,143 @@
+Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 09-Nov-12 12:23:35 AM
+
+BeginCmp
+TimeStamp = /509C16F7;
+Reference = C1;
+ValeurCmp = CAP-0505;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C16DD;
+Reference = C2;
+ValeurCmp = CAP-0505;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C1105;
+Reference = D1;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10E7;
+Reference = D2;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10DA;
+Reference = D3;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10ED;
+Reference = D4;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10F5;
+Reference = D5;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10F9;
+Reference = D6;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10F1;
+Reference = D7;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C10FE;
+Reference = D8;
+ValeurCmp = DIODE;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /509BFCB0;
+Reference = IC1;
+ValeurCmp = L298;
+IdModule  = sgs-thom-MW-15;
+EndCmp
+
+BeginCmp
+TimeStamp = /509BFE14;
+Reference = P1;
+ValeurCmp = INPUT_1;
+IdModule  = PIN_ARRAY_4x1;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C043C;
+Reference = P2;
+ValeurCmp = INPUT_2;
+IdModule  = PIN_ARRAY_4x1;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C145B;
+Reference = P3;
+ValeurCmp = Battery;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C1393;
+Reference = P4;
+ValeurCmp = OUTPUT_1;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C139F;
+Reference = P5;
+ValeurCmp = OUTPUT_2;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C0107;
+Reference = R1;
+ValeurCmp = 1k;
+IdModule  = R3-5;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C04D6;
+Reference = R2;
+ValeurCmp = 1k;
+IdModule  = R3-5;
+EndCmp
+
+BeginCmp
+TimeStamp = /509BFFE5;
+Reference = T1;
+ValeurCmp = BC547;
+IdModule  = transistor-TO92;
+EndCmp
+
+BeginCmp
+TimeStamp = /509C04D7;
+Reference = T2;
+ValeurCmp = BC547;
+IdModule  = transistor-TO92;
+EndCmp
+
+EndListe

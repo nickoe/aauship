@@ -1,0 +1,229 @@
+# EESchema Netlist Version 1.1 created  09-Nov-12 12:23:41 AM
+(
+ ( /509C16F7 scenix4-0505  C1 CAP-0505 {Lib=CAP-0505}
+  (    1 N-000002 )
+  (    2 N-000014 )
+ )
+ ( /509C16DD scenix4-0505  C2 CAP-0505 {Lib=CAP-0505}
+  (    1 N-000014 )
+  (    2 N-000002 )
+ )
+ ( /509C145B $noname  P3 Battery {Lib=CONN_2}
+  (    1 N-000002 )
+  (    2 N-000014 )
+ )
+ ( /509C139F $noname  P5 OUTPUT_2 {Lib=CONN_2}
+  (    1 N-000018 )
+  (    2 N-000017 )
+ )
+ ( /509C1393 $noname  P4 OUTPUT_1 {Lib=CONN_2}
+  (    1 N-000020 )
+  (    2 N-000019 )
+ )
+ ( /509C1105 $noname  D1 DIODE {Lib=DIODE}
+  (    1 N-000020 )
+  (    2 N-000002 )
+ )
+ ( /509C10FE $noname  D8 DIODE {Lib=DIODE}
+  (    1 N-000014 )
+  (    2 N-000017 )
+ )
+ ( /509C10F9 $noname  D6 DIODE {Lib=DIODE}
+  (    1 N-000014 )
+  (    2 N-000018 )
+ )
+ ( /509C10F5 $noname  D5 DIODE {Lib=DIODE}
+  (    1 N-000018 )
+  (    2 N-000002 )
+ )
+ ( /509C10F1 $noname  D7 DIODE {Lib=DIODE}
+  (    1 N-000017 )
+  (    2 N-000002 )
+ )
+ ( /509C10ED $noname  D4 DIODE {Lib=DIODE}
+  (    1 N-000014 )
+  (    2 N-000019 )
+ )
+ ( /509C10E7 $noname  D2 DIODE {Lib=DIODE}
+  (    1 N-000014 )
+  (    2 N-000020 )
+ )
+ ( /509C10DA $noname  D3 DIODE {Lib=DIODE}
+  (    1 N-000019 )
+  (    2 N-000002 )
+ )
+ ( /509C04D7 transistor-TO92  T2 BC547 {Lib=BC547}
+  (    1 N-000014 )
+  (    2 N-000001 )
+  (    3 N-000005 )
+ )
+ ( /509C04D6 $noname  R2 1k {Lib=R}
+  (    1 N-000021 )
+  (    2 N-000001 )
+ )
+ ( /509C043C $noname  P2 INPUT_2 {Lib=CONN_4}
+  (    1 N-000016 )
+  (    2 N-000021 )
+  (    3 N-000004 )
+  (    4 N-000014 )
+ )
+ ( /509C0107 $noname  R1 1k {Lib=R}
+  (    1 N-000012 )
+  (    2 N-000013 )
+ )
+ ( /509BFFE5 transistor-TO92  T1 BC547 {Lib=BC547}
+  (    1 N-000014 )
+  (    2 N-000013 )
+  (    3 N-000015 )
+ )
+ ( /509BFE14 $noname  P1 INPUT_1 {Lib=CONN_4}
+  (    1 N-000016 )
+  (    2 N-000012 )
+  (    3 N-000003 )
+  (    4 N-000014 )
+ )
+ ( /509BFCB0 sgs-thom-MW-15  IC1 L298 {Lib=L298}
+  (    1 N-000014 )
+  (    2 N-000020 )
+  (    3 N-000019 )
+  (    4 N-000016 )
+  (    5 N-000012 )
+  (    6 N-000003 )
+  (    7 N-000015 )
+  (    8 N-000014 )
+  (    9 N-000002 )
+  (   10 N-000021 )
+  (   11 N-000004 )
+  (   12 N-000005 )
+  (   13 N-000018 )
+  (   14 N-000017 )
+  (   15 N-000014 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component D1
+ D?
+ S*
+$endlist
+$component D8
+ D?
+ S*
+$endlist
+$component D6
+ D?
+ S*
+$endlist
+$component D5
+ D?
+ S*
+$endlist
+$component D7
+ D?
+ S*
+$endlist
+$component D4
+ D?
+ S*
+$endlist
+$component D2
+ D?
+ S*
+$endlist
+$component D3
+ D?
+ S*
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 1 "" ""
+ R2 2
+ T2 2
+Net 2 "" ""
+ D1 2
+ P3 1
+ C2 2
+ C1 1
+ IC1 9
+ D3 2
+ D5 2
+ D7 2
+Net 3 "" ""
+ IC1 6
+ P1 3
+Net 4 "" ""
+ IC1 11
+ P2 3
+Net 5 "" ""
+ IC1 12
+ T2 3
+Net 12 "" ""
+ P1 2
+ R1 1
+ IC1 5
+Net 13 "" ""
+ T1 2
+ R1 2
+Net 14 "" ""
+ C2 1
+ T2 1
+ D2 1
+ D4 1
+ IC1 15
+ D6 1
+ IC1 8
+ P2 4
+ P1 4
+ D8 1
+ T1 1
+ IC1 1
+ P3 2
+ C1 2
+Net 15 "" ""
+ T1 3
+ IC1 7
+Net 16 "" ""
+ IC1 4
+ P1 1
+ P2 1
+Net 17 "" ""
+ D7 1
+ P5 2
+ D8 2
+ IC1 14
+Net 18 "" ""
+ D6 2
+ P5 1
+ IC1 13
+ D5 1
+Net 19 "" ""
+ D3 1
+ P4 2
+ D4 2
+ IC1 3
+Net 20 "" ""
+ D2 2
+ P4 1
+ IC1 2
+ D1 1
+Net 21 "" ""
+ R2 1
+ P2 2
+ IC1 10
+}
+#End
