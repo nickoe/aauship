@@ -34,6 +34,13 @@ int main (void)
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
   uart2_init( UART_BAUD_SELECT(UART2_BAUD_RATE,F_CPU) ); // APC220 radio
   uart3_init( UART_BAUD_SELECT(UART3_BAUD_RATE,F_CPU) ); // UP-501 GPS
+
+// look at  $PSRF100,1,38400,8,1,0*3D<cr><lf>  to set a faster baud rate for GPS
+	
+	/* Set GPS to 115200 baud and update UART speed */
+	uart3_puts("$PMTK251,115200*1f\r\n");
+  uart3_init( UART_BAUD_SELECT(115200,F_CPU) );
+
   /*
    * now enable interrupt, since UART library is interrupt controlled
    */
@@ -94,7 +101,7 @@ int main (void)
 			if (c3 == '$') { // We have a possible message comming
 
 				PORTL ^= (1<<LED3);
-					//uart2_putc('k');
+				uart2_putc(c3);
 		
 			} 
 			//uart2_puts(buffer);
