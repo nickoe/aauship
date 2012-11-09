@@ -48,6 +48,6 @@
 /**
  * Message related stuff
  */
-#define MAX_MSG_SIZE 1024
+#define MAX_MSG_SIZE 10
 
 #endif // CONFIG_H 
