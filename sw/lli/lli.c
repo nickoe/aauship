@@ -2,18 +2,24 @@
 #include <util/delay.h>
 
 #include <stdlib.h>
+
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
-#include "uart.h"
 #include "config.h"
+#include "uart.h"
+#include "faps_parse.h"
+
 
 int main (void)
 {
 	/* variables for the UART0 (USB connection) */
-	unsigned int c;
-	char buffer[1024];
-	int  num=134;
+	unsigned int c, c2, c3; // Variable for reading UARTS
+	char buffer[MAX_MSG_SIZE];
+	char buffer2[MAX_MSG_SIZE];
+	char buffer3[MAX_MSG_SIZE];
+	int  idx = 0, idx2 = -1, idx3 = 0;
+	int	 len2 = 0;
 	unsigned int i = 0;
 
 
@@ -28,46 +34,81 @@ int main (void)
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
   uart2_init( UART_BAUD_SELECT(UART2_BAUD_RATE,F_CPU) ); // APC220 radio
   uart3_init( UART_BAUD_SELECT(UART3_BAUD_RATE,F_CPU) ); // UP-501 GPS
+
+// look at  $PSRF100,1,38400,8,1,0*3D<cr><lf>  to set a faster baud rate for GPS
+	
+	/* Set GPS to 115200 baud and update UART speed */
+	uart3_puts("$PMTK251,115200*1f\r\n");
+  uart3_init( UART_BAUD_SELECT(115200,F_CPU) );
+
   /*
    * now enable interrupt, since UART library is interrupt controlled
    */
   sei();
-     uart_puts("String stored in SRAM\n");
-     uart2_puts("Printing via radio\n");
-     uart3_puts("Printing to GPS\n");
+
+	uart2_puts(__DATE__);
+	uart2_putc(' ');
+	uart2_puts(__TIME__);
+	uart2_putc('\n');
+	uart2_putc('\r');
 	pwm_init();
-  while (1)
-    {
 
-      OCR1A = 1000; //leave servo at min rotation
-      _delay_ms(1000);
-      OCR1A = 2000; //leave serve at max rotation
-    _delay_ms(1000);
+  while (1) {
+		/* Read each UART serially and check each of them for data, if there is handle it */ 
+		c = uart_getc();
+		c2 = uart2_getc();
+		c3 = uart3_getc();
+
+		/* Reading from radio */
+		if ( c2 & UART_NO_DATA ) {} else // Data available
+		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
+
+			if (idx2 == 0) { // We should buffer a packet
+				len2 = c2; // Set length
+			}
+
+			if ( (idx2 < len2) && (idx2 >= 0)) { // We are buffering
+				buffer2[idx2] = c2;
+				idx2++;
+				if (idx2 == len2) { // We now have a full packet
+					parse(buffer2);
+					idx2 = -1; // Set flag in new packet mode
+				
+					#ifdef DEBUG
+					uart2_putc(msg.len);
+					uart2_putc(msg.devid);
+					uart2_putc(msg.msgid);
+					uart2_puts(msg.data);
+					uart2_putc(msg.ckh);
+					uart2_putc(msg.ckl);
+					uart2_putc('\n');
+					#endif
+				}
+			}
+
+			if (c2 == '$') { // We have a possible message comming
+				PORTL ^= (1<<LED4);
+				idx2 = 0; // Set "flag"
+			}
 
 
+		}
 
+		/* Reading from GPS */
+		if ( c3 & UART_NO_DATA ) {} else  // Data available
+		{
 
-        c = uart3_getc();
-        if ( c & UART_NO_DATA )
-        {
-          /* 
-           * no data available from UART 
-           */
-        }
-        else
-        {
-          /* 
-           * send received character back
-           */	
-					if (c == '$') { // Hvorfor skal det være single quote?
-			 			PORTL ^= (1<<LED3);
+			if (c3 == '$') { // We have a possible message comming
 
-
-					} 
-          uart2_putc( (unsigned char)c );
-
-        }
-    }
+				PORTL ^= (1<<LED3);
+				uart2_putc(c3);
+		
+			} 
+			//uart2_puts(buffer);
+			//uart2_putc('\n');
+			//uart2_putc( (unsigned char)c );
+		}
+  }
  
   return 1;
 }

@@ -1,3 +1,5 @@
+#ifndef CONFIG_H
+#define CONFIG_H
 /**
  * @file
  * @author Nick Østergaard
@@ -6,6 +8,7 @@
  * This is the configuration file for the LLI interface for AAUSHIP1
  */
 
+#define DEBUG 
 
 /**
  * Serial rates
@@ -42,4 +45,9 @@
 #define RCPWM4 PH4 // OC4B
 #define RCPWM5 PH5 // OC4C
 
+/**
+ * Message related stuff
+ */
+#define MAX_MSG_SIZE 1024
 
+#endif // CONFIG_H 
