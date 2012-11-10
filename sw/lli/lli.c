@@ -38,8 +38,12 @@ int main (void)
 // look at  $PSRF100,1,38400,8,1,0*3D<cr><lf>  to set a faster baud rate for GPS
 	
 	/* Set GPS to 115200 baud and update UART speed */
-	uart3_puts("$PMTK251,115200*1f\r\n");
-  uart3_init( UART_BAUD_SELECT(115200,F_CPU) );
+	//uart3_puts("$PMTK251,115200*1F");
+	//uart3_puts("$PMTK251,38400*27");
+	//uart3_putc('\r');
+	//uart3_putc('\n');
+	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
+	/* Above GPS uart settings do not currently seem to work */
 
   /*
    * now enable interrupt, since UART library is interrupt controlled
@@ -53,6 +57,7 @@ int main (void)
 	uart2_putc('\r');
 	pwm_init();
 
+
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
 		c = uart_getc();
@@ -64,23 +69,24 @@ int main (void)
 		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
 
 			if (idx2 == 0) { // We should buffer a packet
-				len2 = c2; // Set length
+				len2 = c2+5; // Set length
 			}
 
 			if ( (idx2 < len2) && (idx2 >= 0)) { // We are buffering
 				buffer2[idx2] = c2;
 				idx2++;
 				if (idx2 == len2) { // We now have a full packet
-					parse(buffer2);
+
+					parse(&rfmsg, buffer2);
 					idx2 = -1; // Set flag in new packet mode
-				
+
 					#ifdef DEBUG
-					uart2_putc(msg.len);
-					uart2_putc(msg.devid);
-					uart2_putc(msg.msgid);
-					uart2_puts(msg.data);
-					uart2_putc(msg.ckh);
-					uart2_putc(msg.ckl);
+					uart2_putc(rfmsg.len);
+					uart2_putc(rfmsg.devid);
+					uart2_putc(rfmsg.msgid);
+					uart2_puts(rfmsg.data);
+					uart2_putc(rfmsg.ckh);
+					uart2_putc(rfmsg.ckl);
 					uart2_putc('\n');
 					#endif
 				}
@@ -101,7 +107,7 @@ int main (void)
 			if (c3 == '$') { // We have a possible message comming
 
 				PORTL ^= (1<<LED3);
-				uart2_putc(c3);
+				//uart2_putc(c3);
 		
 			} 
 			//uart2_puts(buffer);
