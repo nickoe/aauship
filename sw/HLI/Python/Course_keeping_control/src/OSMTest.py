@@ -12,6 +12,7 @@ import FunctionLibrary as FL
 
 MapObj = Osm.OsmApi();
 
+
 '''Laeso'''
 #Terkep = MapObj.Map(57.187, 10.826, 57.335, 11.214);
 Terkep = MapObj.Map(11.1668, 57.2774, 11.1824, 57.2842);

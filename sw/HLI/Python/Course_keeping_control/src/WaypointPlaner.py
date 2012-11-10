@@ -30,7 +30,7 @@ coast = FL.SimulateCoast(coastlength);
 Init AAUSHIP
 '''
 
-AAUSHIP = OL.O_Ship(OL.O_PosData(0, 0, 0, 1));
+AAUSHIP = OL.O_Ship(OL.O_PosData(0, 0, 1, 0));
 
 
 '''
@@ -58,13 +58,44 @@ AAUSHIP.Plan_FullPath('Plot');
 #plt.show();
 
 AAUSHIP.PlotPath('k');
-
+plt.show()
 
 #plt.show();
+'''
+AAUSHIP.LastWP = 4;
+AAUSHIP.Plan_LocalPath(0)
+'''
+AAUSHIP.get_PathSegment()
 
-AAUSHIP.get_PathSegment();
+
+AAUSHIP.FlushPath()
+
+AAUSHIP.SetDynamicModel(1, 1, 1, 1, 1)
+i = 0
+
+ni = 10000
+x0 = numpy.zeros(ni)
+x1 = numpy.zeros(ni)
+x2 = numpy.zeros(ni)
 
 
+while i < ni:
+    results = AAUSHIP.Control_Step()
+    
+    
+    x0[i] = results[0]
+    x1[i] = results[1]
+    #x2[i] = results[2]
+    #print(i)
+    i += 1
+    print('i:', i)
+
+plt.plot(x0,x1)
+
+
+#plt.plot(x2)
+#plt.axes().set_aspect('equal');
+plt.show()
 
 '''
 Control Procedure:

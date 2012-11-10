@@ -68,13 +68,24 @@ def CosLaw(A,B,C):
     B = B.get_Pos();
     
     C = C.get_Pos();
+
+    x = B-C
+    a = numpy.sqrt(x.dot(x))
+    x = A-C
+    b = numpy.sqrt(x.dot(x))
+    x = A-B
+    c = numpy.sqrt(x.dot(x))
     
-    a = numpy.linalg.norm(B-C);
-    b = numpy.linalg.norm(A-C);
-    c = numpy.linalg.norm(A-B);
-    
-    gamma = math.acos((numpy.power(a,2) + numpy.power(c,2) - numpy.power(b,2))/(2 * a * c));    
-    
+    '''
+    print(a)
+    print(b)
+    print(c)
+    '''
+    try:
+        gamma = math.acos((numpy.power(a,2) + numpy.power(c,2) - numpy.power(b,2))/(2 * a * c));    
+    except:
+        gamma = math.pi
+        
     return(gamma);
 
 
@@ -100,8 +111,10 @@ def Distance(A, B):
     '''
     Distance between two points
     '''
+    x = A.get_Pos()-B.get_Pos()
+    a = numpy.sqrt(x.dot(x))
     
-    return(numpy.linalg.norm(A.get_Pos() - B.get_Pos()));
+    return(a);
 
 def find_id_index(array, id):
     i = 0;
