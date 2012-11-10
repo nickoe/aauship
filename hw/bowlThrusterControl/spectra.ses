@@ -1,0 +1,322 @@
+
+(session bowlThrusterControl.ses
+  (base_design bowlThrusterControl.dsn)
+  (placement
+    (resolution mil 10)
+    (component "R3-5"
+      (place R1 37500 -13500 front 90)
+      (place R2 35500 -13500 front 90)
+      (place R3 42000 -13500 front 90)
+      (place R4 31000 -14000 front 90)
+    )
+    (component PIN_ARRAY_4x1
+      (place P2 29500 -22500 front 0)
+      (place P1 44000 -22500 front 180)
+    )
+    (component PIN_ARRAY_2X1
+      (place P5 29000 -12000 front 180)
+      (place P4 44000 -12000 front 0)
+      (place P3 36500 -22500 front 0)
+    )
+    (component D4
+      (place D2 45500 -16000 front 180)
+      (place D1 45500 -14000 front 180)
+      (place D8 27500 -20000 front 0)
+      (place D7 27500 -18000 front 0)
+      (place D6 27500 -16000 front 0)
+      (place D5 27500 -14000 front 0)
+      (place D4 45500 -20000 front 180)
+      (place D3 45500 -18000 front 180)
+    )
+    (component "transistor-TO92"
+      (place T1 40000 -14000 front 180)
+      (place T2 33000 -14000 front 180)
+    )
+    (component "sgs-thom-MW-15"
+      (place IC1 36500 -19000 front 180)
+    )
+    (component C2
+      (place C1 31500 -18000 front 90)
+      (place C2 41500 -18000 front 270)
+    )
+  )
+  (was_is
+  )
+  (routes 
+    (resolution mil 10)
+    (parser
+      (host_cad "KiCad's Pcbnew")
+      (host_version "(2012-01-19 BZR 3256)-stable")
+    )
+    (library_out 
+      (padstack "Via[0-1]_35:25_mil"
+        (shape
+          (circle Front 350 0 0)
+        )
+        (shape
+          (circle Back 350 0 0)
+        )
+        (attach off)
+      )
+      (padstack "Via[0-1]_35:0_mil"
+        (shape
+          (circle Front 350 0 0)
+        )
+        (shape
+          (circle Back 350 0 0)
+        )
+        (attach off)
+      )
+    )
+    (network_out 
+      (net "N-000001"
+        (wire
+          (path Back 80
+            36000 -22057
+            36000 -17643
+          )
+        )
+        (wire
+          (path Back 80
+            36000 -17000
+            36000 -17643
+          )
+        )
+        (wire
+          (path Back 80
+            36000 -22500
+            36000 -22057
+          )
+        )
+      )
+      (net "N-000004"
+        (wire
+          (path Back 80
+            37500 -19000
+            37500 -19643
+          )
+        )
+        (wire
+          (path Back 80
+            37500 -19643
+            40643 -19643
+            43500 -22500
+          )
+        )
+      )
+      (net "N-000005"
+        (wire
+          (path Back 80
+            42000 -15250
+            42000 -16472
+            42720 -17192
+            43994 -17192
+            45500 -18698
+            45500 -22500
+          )
+        )
+        (wire
+          (path Back 80
+            28000 -22500
+            28000 -22057
+          )
+        )
+        (wire
+          (path Back 80
+            31000 -15750
+            30009 -16741
+            30009 -20491
+            28443 -22057
+            28000 -22057
+          )
+        )
+      )
+      (net "N-000006"
+        (wire
+          (path Back 80
+            35000 -17000
+            35000 -19310
+            31115 -23195
+            30695 -23195
+            30000 -22500
+          )
+        )
+      )
+      (net "N-000014"
+        (wire
+          (path Front 80
+            25500 -20000
+            25993 -19507
+            25993 -16493
+            25500 -16000
+          )
+        )
+        (wire
+          (path Back 80
+            42500 -22500
+            42945 -22945
+            45864 -22945
+            47500 -21309
+            47500 -20000
+          )
+        )
+        (wire
+          (path Front 80
+            25500 -20000
+            26461 -20961
+            30973 -20961
+          )
+        )
+        (wire
+          (path Back 80
+            40000 -16357
+            40857 -16357
+            41500 -17000
+          )
+        )
+        (wire
+          (path Back 80
+            39500 -14000
+            39500 -15857
+            40000 -16357
+          )
+        )
+        (wire
+          (path Back 80
+            40000 -17000
+            40000 -16357
+          )
+        )
+        (wire
+          (path Back 80
+            37000 -22500
+            42500 -22500
+          )
+        )
+        (wire
+          (path Back 80
+            36500 -19000
+            36500 -22000
+            37000 -22500
+          )
+        )
+        (wire
+          (path Back 80
+            31000 -22500
+            31000 -17500
+            31500 -17000
+          )
+        )
+      )
+      (net "N-000016"
+        (wire
+          (path Back 80
+            25500 -18000
+            27500 -20000
+            29500 -20000
+          )
+        )
+        (wire
+          (path Back 80
+            28500 -12000
+            28500 -15000
+            25500 -18000
+          )
+        )
+      )
+      (net "N-000017"
+        (wire
+          (path Back 80
+            29500 -16000
+            29500 -15507
+          )
+        )
+        (wire
+          (path Back 80
+            29500 -12443
+            29993 -12936
+            29993 -15014
+            29500 -15507
+          )
+        )
+        (wire
+          (path Back 80
+            29500 -12000
+            29500 -12443
+          )
+        )
+      )
+      (net "N-000018"
+        (wire
+          (path Back 80
+            47500 -18000
+            44500 -15000
+            44500 -12000
+          )
+        )
+      )
+      (net "N-000019"
+        (wire
+          (path Back 80
+            43500 -12000
+            43500 -12443
+          )
+        )
+        (wire
+          (path Back 80
+            43500 -16000
+            43500 -15507
+          )
+        )
+        (wire
+          (path Back 80
+            43500 -15507
+            43994 -15013
+            43994 -12937
+            43500 -12443
+          )
+        )
+      )
+      (net "N-000020"
+        (wire
+          (path Back 80
+            38000 -17000
+            38000 -16357
+          )
+        )
+        (wire
+          (path Back 80
+            38000 -16357
+            39391 -16357
+            39412 -16378
+            39412 -17783
+            44129 -22500
+            44500 -22500
+          )
+        )
+      )
+      (net "N-000021"
+        (wire
+          (path Back 80
+            35500 -19000
+            35500 -19643
+          )
+        )
+        (wire
+          (path Back 80
+            35500 -19000
+            35500 -15250
+          )
+        )
+        (wire
+          (path Back 80
+            29000 -22500
+            29954 -23454
+            31689 -23454
+            35500 -19643
+          )
+        )
+      )
+    )
+  )
+)
