@@ -732,7 +732,7 @@ Purpose:  called when the UART2 has received a character
 
 ISR(UART2_TRANSMIT_INTERRUPT)
 /*************************************************************************
-Function: UART1 Data Register Empty interrupt
+Function: UART2 Data Register Empty interrupt
 Purpose:  called when the UART1 is ready to transmit the next byte
 **************************************************************************/
 {
@@ -753,7 +753,7 @@ Purpose:  called when the UART1 is ready to transmit the next byte
 
 
 /*************************************************************************
-Function: uart1_init()
+Function: uart2_init()
 Purpose:  initialize UART1 and set baudrate
 Input:    baudrate using macro UART_BAUD_SELECT()
 Returns:  none
@@ -784,11 +784,11 @@ void uart2_init(unsigned int baudrate)
     #else
     UCSR2C = (3<<UCSZ20);
     #endif 
-}/* uart_init */
+}/* uart2_init */
 
 
 /*************************************************************************
-Function: uart1_getc()
+Function: uart2_getc()
 Purpose:  return byte from ringbuffer  
 Returns:  lower byte:  received byte from ringbuffer
           higher byte: last receive error
@@ -814,11 +814,11 @@ unsigned int uart2_getc(void)
     UART_LastRxError = 0;
     return data;
 
-}/* uart1_getc */
+}/* uart2_getc */
 
 
 /*************************************************************************
-Function: uart1_putc()
+Function: uart2_putc()
 
 Purpose:  write byte to ringbuffer for transmitting via UART
 Input:    byte to be transmitted
@@ -841,11 +841,11 @@ void uart2_putc(unsigned char data)
     /* enable UDRE interrupt */
     UART2_CONTROL    |= _BV(UART2_UDRIE);
 
-}/* uart1_putc */
+}/* uart2_putc */
 
 
 /*************************************************************************
-Function: uart1_puts()
+Function: uart2_puts()
 Purpose:  transmit string to UART1
 Input:    string to be transmitted
 Returns:  none          
@@ -855,12 +855,12 @@ void uart2_puts(const char *s )
     while (*s) 
       uart2_putc(*s++);
 
-}/* uart1_puts */
+}/* uart2_puts */
 
 
 /*************************************************************************
 
-Function: uart1_puts_p()
+Function: uart2_puts_p()
 Purpose:  transmit string from program memory to UART1
 Input:    program memory string to be transmitted
 Returns:  none
@@ -872,7 +872,7 @@ void uart2_puts_p(const char *progmem_s )
     while ( (c = pgm_read_byte(progmem_s++)) ) 
       uart2_putc(c);
 
-}/* uart1_puts_p */
+}/* uart2_puts_p */
 
 #endif
 
@@ -971,7 +971,7 @@ void uart3_init(unsigned int baudrate)
     #else
     UCSR3C = (3<<UCSZ30);
     #endif 
-}/* uart_init */
+}/* uart3_init */
 
 
 /*************************************************************************
