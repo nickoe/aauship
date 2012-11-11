@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 09-Nov-12 12:19:03 PM
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = søn 11 nov 2012 22:16:44 CET
 
 BeginCmp
 TimeStamp = /509C16F7;
@@ -95,21 +95,21 @@ BeginCmp
 TimeStamp = /509C145B;
 Reference = P3;
 ValeurCmp = Battery;
-IdModule  = PIN_ARRAY_2X1;
+IdModule  = bornier2;
 EndCmp
 
 BeginCmp
 TimeStamp = /509C1393;
 Reference = P4;
 ValeurCmp = OUTPUT_1;
-IdModule  = PIN_ARRAY_2X1;
+IdModule  = bornier2;
 EndCmp
 
 BeginCmp
 TimeStamp = /509C139F;
 Reference = P5;
 ValeurCmp = OUTPUT_2;
-IdModule  = PIN_ARRAY_2X1;
+IdModule  = bornier2;
 EndCmp
 
 BeginCmp

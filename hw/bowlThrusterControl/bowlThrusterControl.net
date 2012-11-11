@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  09-Nov-12 12:19:03 PM
+# EESchema Netlist Version 1.1 created  søn 11 nov 2012 22:16:44 CET
 (
  ( /509C16F7 C2 C1 CAP-0505
   ( 1 N-000001 )
@@ -69,15 +69,15 @@
   ( 3 N-000006 )
   ( 4 N-000014 )
  )
- ( /509C145B PIN_ARRAY_2X1 P3 Battery
+ ( /509C145B bornier2 P3 Battery
   ( 1 N-000001 )
   ( 2 N-000014 )
  )
- ( /509C1393 PIN_ARRAY_2X1 P4 OUTPUT_1
+ ( /509C1393 bornier2 P4 OUTPUT_1
   ( 1 N-000019 )
   ( 2 N-000018 )
  )
- ( /509C139F PIN_ARRAY_2X1 P5 OUTPUT_2
+ ( /509C139F bornier2 P5 OUTPUT_2
   ( 1 N-000017 )
   ( 2 N-000016 )
  )
