@@ -1,7 +1,7 @@
 /**
  * @file
  * @defgroup aux PWM
- * @code #include <adis16405.h> @endcode
+ * @code #include <pwm.h> @endcode
  * @author Nick Østergaard nickoe@es.aau.dk
  *
  * @brief This file handles the raw motor and servo control for the
