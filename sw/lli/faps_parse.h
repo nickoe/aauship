@@ -1,5 +1,15 @@
 #ifndef	_FAPS_PARSE_H
 #define	_FAPS_PARSE_H
+/** 
+ *  @defgroup protocol FAPS
+ *  @code #include <faps_parse.h> @endcode
+ * 
+ *  @brief Parse packets, i.e. recieve it and put it in a struct that is accesible
+ *
+ *  @author Nick Østergaard nickoe@es.aau.dk
+ */
+
+/**@{*/
 
 #include	<stdint.h>
 
@@ -16,5 +26,22 @@ msg_t sdmsg;
 msg_t rfmsg;
 msg_t hlimsg;
 
-int parse(msg_t *msg, char s[]);
+
+/**
+	@brief   Put buffered message into message structure
+	@param   pointer of message structure, string array of buffer
+	@return  none
+*/
+void parse(msg_t *msg, char s[]);
+
+
+/**
+	@brief   Send full message packet
+	@param   pointer of message structure
+	@return  none
+*/
+void puts_msg(msg_t *msg);
+
+/**@}*/
+
 #endif	/* _FAPS_PARSE_H */

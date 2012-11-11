@@ -1,14 +1,7 @@
 #include	"faps_parse.h"
 
-/*
- * Parse packets, i.e. recieve it and put it in a struct that is accesible
- */
 
-
-/*
- * Parse packet stings and put it in structure
- */
-int parse(msg_t *msg, char s[])
+void parse(msg_t *msg, char s[])
 {
 	int i;
 	msg->len = s[0];
@@ -19,6 +12,16 @@ int parse(msg_t *msg, char s[])
 		msg->ckh = s[msg->len+3];
 		msg->ckl = s[msg->len+4];
 	}
-
-	return 0;
 }
+
+void puts_msg(msg_t *msg)
+{
+	uart2_putc(rfmsg.len);
+	uart2_putc(rfmsg.devid);
+	uart2_putc(rfmsg.msgid);
+	uart2_puts(rfmsg.data);
+	uart2_putc(rfmsg.ckh);
+	uart2_putc(rfmsg.ckl);
+}
+
+
