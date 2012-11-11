@@ -48,15 +48,15 @@ int main (void)
   uart2_init( UART_BAUD_SELECT(UART2_BAUD_RATE,F_CPU) ); // APC220 radio
   uart3_init( UART_BAUD_SELECT(UART3_BAUD_RATE,F_CPU) ); // UP-501 GPS
 
-// look at  $PSRF100,1,38400,8,1,0*3D<cr><lf>  to set a faster baud rate for GPS
-	
-	/* Set GPS to 115200 baud and update UART speed */
+	/* Set GPS to 38400 baud and update UART speed */
 	//uart3_puts("$PMTK251,115200*1F");
-	//uart3_puts("$PMTK251,38400*27");
-	//uart3_putc('\r');
-	//uart3_putc('\n');
-	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
-	/* Above GPS uart settings do not currently seem to work */
+	uart3_puts("$PMTK251,38400*27");
+	//uart3_puts("$PMTK251,0*28");
+	uart3_putc('\r');
+	uart3_putc('\n');
+	//uart3_init( UART_BAUD_SELECT(115200,F_CPU) );
+	uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
+	/* Above GPS uart settings do not currently seem to work with 115200 */
 
   /*
    * now enable interrupt, since UART library is interrupt controlled
@@ -94,13 +94,7 @@ int main (void)
 					idx2 = -1; // Set flag in new packet mode
 
 					#ifdef DEBUG
-					uart2_putc(rfmsg.len);
-					uart2_putc(rfmsg.devid);
-					uart2_putc(rfmsg.msgid);
-					uart2_puts(rfmsg.data);
-					uart2_putc(rfmsg.ckh);
-					uart2_putc(rfmsg.ckl);
-					uart2_putc('\n');
+					puts_msg(&rfmsg);
 					#endif
 				}
 			}
