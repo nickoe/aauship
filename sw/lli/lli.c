@@ -1,3 +1,16 @@
+/** 
+ *  @defgroup lli LLI
+ *  @code #include <config.h> @endcode
+ * 
+ *  @brief Main files that creates the Low Level Interface to FAPS for AAUSHIP
+ *
+ *  This program is ment to be some generic software that makes it an easy to use interface
+ *  that handles all default behaviour for a vesel. 
+ *
+ *  @author Nick Østergaard nickoe@es.aau.dk
+ */
+
+
 #include <avr/io.h>
 #include <util/delay.h>
 
