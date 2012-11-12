@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 09-Nov-12 1:49:30 AM
+EESchema Schematic File Version 2  date 09-Nov-12 3:10:53 PM
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -854,7 +854,7 @@ LIBS:zilog-z8-encore-v1_2a
 LIBS:Zilog-ZNEO-v1_0
 LIBS:zivapc
 LIBS:zx4125p
-LIBS:noname-cache
+LIBS:bowlThrusterControl-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
@@ -869,6 +869,12 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Connection ~ 4600 2700
+Wire Wire Line
+	4600 2700 4600 2150
+Connection ~ 4400 1550
+Wire Wire Line
+	4400 1650 4400 1550
 Connection ~ 5300 1650
 Connection ~ 6100 1500
 Connection ~ 6700 1500
@@ -985,6 +991,30 @@ Wire Wire Line
 	5550 1650 5550 1750
 Connection ~ 5550 1750
 Connection ~ 6100 1750
+Wire Wire Line
+	4600 1650 4600 1550
+Connection ~ 4600 1550
+Wire Wire Line
+	4400 2500 4400 2150
+Connection ~ 4400 2500
+$Comp
+L R R4
+U 1 1 509CE5FB
+P 4600 1900
+F 0 "R4" V 4680 1900 50  0000 C CNN
+F 1 "100k" V 4600 1900 50  0000 C CNN
+	1    4600 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R3
+U 1 1 509CE5F2
+P 4400 1900
+F 0 "R3" V 4480 1900 50  0000 C CNN
+F 1 "100k" V 4400 1900 50  0000 C CNN
+	1    4400 1900
+	1    0    0    -1  
+$EndComp
 $Comp
 L CAP-0505 C1
 U 1 1 509C16F7
