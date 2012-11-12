@@ -48,6 +48,6 @@
 /**
  * Message related stuff
  */
-#define MAX_MSG_SIZE 1024
+#define MAX_MSG_SIZE 1024  // This should probably be 250 + len + devid + msgid + checksum
 
 #endif // CONFIG_H 

@@ -7,6 +7,8 @@ Created on 2012.09.25.
 '''
 #############################################
 # Object Library for ASV HLI
+#
+# Contains all of the lesser Objects
 #############################################
 '''
 
@@ -15,6 +17,9 @@ import numpy
 import scipy
 import control
 import matplotlib.pyplot as plt
+
+
+import OsmApi as Osm
 
 import FunctionLibrary as FL
 
@@ -28,12 +33,18 @@ import FunctionLibrary as FL
 class O_LocalPath:
     def __init__(self, gamma, sigma_max, kappa_max):
         
+        '''
+        Initializes the Object with the required path parameters, like
+        R_min := minimum turning radius
+        Kappa := Path curvature
+        Sigma = Beta/v^2 := Curve proportional size, max change of angular velocity / velocity^2
         
+        phi_max := maximum turning angle with Euler spirals only
+        '''
         
         phi = math.pi/2 - gamma/2;
         self.phi = phi;
         R_min=1/kappa_max;
-        Psi_max=math.pow(kappa_max,2)/2/sigma_max;
         kappa = kappa_max
         sigma = sigma_max;
 
@@ -183,31 +194,37 @@ class O_LocalPath:
             print('No path');
             
     def get_PathPoly(self):
-        
+        '''
+        Returns the calculated Path Polynom
+        '''
         return(self.PathPoly)
     
     def get_Range(self):
-        
+        '''
+        Returns the Range of the turn
+        The Range is the distance from the turning waypoint,
+        where the path must begin to bend 
+        '''
         return(self.Range)
     
     def PositionPoly(self, p_Nm, p_Nt, p_Np):
-        
+        '''
+        Based on the coordinates of Start, Turn and End points,
+        the method rotates and shifts of the turn-path coordinates
+        to their correct positions
+        '''
         Nm = p_Nm.get_Pos();
         Nt = p_Nt.get_Pos();
         Np = p_Np.get_Pos();
-        
+        '''
+        Calculating the required angle of the path
+        '''
         v0 = (Nm-Nt) / numpy.linalg.norm(Nt-Nm);
         v1 = (Np-Nt) / numpy.linalg.norm(Np-Nt);
         
         v = v0 + v1;
         
-        
-        
         rot = math.atan2(-v[0], v[1]);
-
-        print('Path rotation:');
-        #print(rot/math.pi * 180);
-        print(scipy.sign(v[1]));
         
         radius = numpy.sqrt(numpy.power(self.PathPoly[0],2) + numpy.power(self.PathPoly[1], 2));
 
@@ -222,10 +239,23 @@ class O_LocalPath:
         self.TurnSWP = numpy.zeros(numpy.shape(self.PathPoly));
         self.TurnSWP[0] = PP_X;
         self.TurnSWP[1] = PP_Y;
-        
+        '''
+        Returns the modified points
+        '''
         return self.TurnSWP;
         
     def FitPath(self, definition):
+        '''
+        Fits a Hermite-polynom to the
+        3 or 5 key-points of the initial path.
+        This step is required, because the Spiral-Arc-Spiral
+        path can not be described in a closed formula.
+        The method populates the line with a predefined
+        (definition) number of points along the path.
+        
+        Returns a list of points, which will be passed to
+        the PositionPoly function later.
+        '''
         
         Poly_X = self.PointStore_X;
         Poly_Y = self.PointStore_Y;
@@ -241,15 +271,12 @@ class O_LocalPath:
         self.PathPoly[1] = Pathline;
         
         return self.PathPoly;
- 
-       
-        plt.show();
-        
-
-        return self.TurnSWP;
     
     def PlotTurn(self, color = 'k'):
-        
+        '''
+        Plots the points of the turn.
+        Should not be used under normal circumstances.
+        '''        
         plt.plot(self.TurnSWP[0], self.TurnSWP[1], color);
     
 '''        
@@ -258,8 +285,17 @@ class O_LocalPath:
 #############################################
 '''        
 class O_PathWayPoints:
-    def __init__(self, coast, coastlength, decimation, safety):
+    def __init__(self):
+        self.WayPoints = 0
         
+    def AddWP(self, WPC):
+        
+        self.WayPoints = WPC
+    
+    def PlanWP(self, coast, coastlength, decimation, safety):
+        '''
+        Plans the waypoints based on a known coastline
+        '''
         i = 0;
         j = 2;
         self.LowerWayPoints = scipy.zeros((2, scipy.ceil(coastlength/decimation)))
@@ -311,6 +347,11 @@ class O_PathWayPoints:
 #############################################
 ''' 
 class O_EulerSpiral:
+    '''
+    An implementation of the Euler-spiral generation, but numpy has
+    a better function for it.
+    This class is not used anymore
+    ''' 
     def __init__(self, S, C, O_X, O_Y):
         self.S = S;
         self.C = C;
@@ -342,6 +383,11 @@ class O_EulerSpiral:
 #############################################
 '''    
 class O_PosData:
+    '''
+    Contains a position and an orientation (optional)
+    The purpose is to have all the points in an object type
+    so methods that expect Positions will not accept anything else
+    '''
     def __init__(self, X, Y, O_X, O_Y):
         self.X = X;
         self.Y = Y;
@@ -362,9 +408,16 @@ class O_PosData:
     
     def get_Pos(self):
         return numpy.array([self.X, self.Y])
-    
+    '''
+    The Extend function returns a point further in the direction of the orientation
+    '''
     def Extend(self):
-        return(O_PosData(self.X + self.O_X, self.Y + self.O_Y));
+        return(O_PosData(self.X + 100 * self.O_X, self.Y + 100 * self.O_Y, float('NaN'), float('NaN')));
+    '''
+    The Extend_Zero function returns a point further in the direction of the Y axis
+    '''
+    def Extend_Zero(self):
+        return(O_PosData(self.X , self.Y + 5, float('NaN'), float('NaN')));
 
 
 '''
@@ -375,19 +428,27 @@ class O_PosData:
 class O_StraightPath:
     
     def __init__(self, N, Np, r, rp):
-        
+        '''
+        This init method calculates the straight path
+        start and end point between two turns
+        '''
         self.v = N.get_Pos() - Np.get_Pos();
         self.eps = math.atan2(self.v[1], self.v[0]);
-        
-        
+               
         A = N.get_Pos() - r * numpy.array([math.cos(self.eps), math.sin(self.eps)]);
         B = Np.get_Pos() + rp * numpy.array([math.cos(self.eps), math.sin(self.eps)]);
-        
+
         self.A = O_PosData(A[0], A[1], float('NaN'), float('NaN'));
         self.B = O_PosData(B[0], B[1], float('NaN'), float('NaN'));
         
         
     def FitLine(self, definition):
+        '''
+        Fits a 1st order polynom (line) to the
+        start and end points of a straight path,
+        then populates the line with equally spaced
+        points, and returns the list of points
+        '''
     
         Ax = self.A.get_Pos_X();
         Ay = self.A.get_Pos_Y();
@@ -395,168 +456,143 @@ class O_StraightPath:
         Bx = self.B.get_Pos_X();
         By = self.B.get_Pos_Y();
         
-        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Bx-By])) * definition;
-        
-        if Ax == Bx:
-            self.poly = numpy.polyfit([Ay, By], [Ax, Bx], 1);
-            prange = numpy.linspace(Ay, By, SubWP_No);
-            values = numpy.polyval(self.poly, prange);
-            self.SubWP = numpy.array([prange, values]);
-            
-        else:
+        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Ay-By])) * definition;
+        '''
+        If the path is vertical, the X and Y axes must be swapped before the
+        polynom fitting and populating, then switched back to return the
+        proper point coordinates
+        ''' 
+        if Ay - By < 0.001:
             self.poly = numpy.polyfit([Ax, Bx], [Ay, By], 1);
             prange = numpy.linspace(Ax, Bx, SubWP_No);
             values = numpy.polyval(self.poly, prange);
             self.SubWP = numpy.array([values, prange]);
-        
-        return self.SubWP;
+            
+        else:
+            self.poly = numpy.polyfit([Ay, By], [Ax, Bx], 1);
+            prange = numpy.linspace(Ay, By, SubWP_No*2);
+            values = numpy.polyval(self.poly, prange);
+            self.SubWP = numpy.array([prange, values]);
     
     def PlotLine(self, color):
-        
+        '''
+        Plots the points of the straight path.
+        Should not be used under normal circumstances.
+        '''  
         plt.plot(self.SubWP[0], self.SubWP[1], color = 'k');
+
+
 
 '''
 #############################################
-# General Ship class
-# Contains all the known information
+# OSM Way Object
+# Contains a collection of points, Way ID, point coordinates
 #############################################
-'''   
-class O_Ship:
-    def __init__(self, init_position):
-        self.Pos = init_position;
-        self.Speed = 0;
-        self.Sigma_max = 0.1;
-        self.Kappa_max = 0.1;
+'''  
+class O_OSM_Way_Object:
+    def __init__(self, node_ids, ID):
+        self.node_ids = list(numpy.zeros(numpy.shape(node_ids)))
+        for i in range(len(node_ids)):
+            self.node_ids[i] = node_ids[i]
+        self.Api = Osm.OsmApi();
+        self.longitudes = numpy.zeros(numpy.shape(node_ids))
+        self.latitudes = numpy.zeros(numpy.shape(node_ids))
+        self.ID = ID
         
-        self.LastWP = 3;
-        self.SWP = 0;
-        self.SegmentCoords = 0;
-        self.Current_SWP = 0;
+    def download_nodes(self):
         
-        self.NextSWP_No = 0;
-        self.NextSWP_validity = 0;
-    
-    def Plan_WP(self, coastline, decimation, safety):
         
-        self.Waypoints = O_PathWayPoints(coastline, len(coastline), decimation, safety);
         
-    def Plan_FullPath(self, plotit = 0):
-        
-        PrevRange = 0;
-        i = 0;
-        data = self.Waypoints.get_WayPoints();
-        FullPathLength = len(data[0]) - self.LastWP;
-        self.Lines = numpy.zeros(FullPathLength);
-        self.Turns = numpy.zeros(FullPathLength);
-        
-        while i < FullPathLength:
-            skip = self.Plan_LocalPath(PrevRange);
+        try:
             
-            if skip == 'Path ended':
-                print('The coast-information is missing, no further path can be calculated');
-                break;
+            self.nodes = list(numpy.zeros(numpy.shape(self.node_ids)))
+            self.nodes = self.Api.NodesGet(self.node_ids)  
             
-            if plotit == 'Plot':
-                self.PlotPath('k');
-        
-            PrevRange = self.Path.Range;
-            i = i + 1;
-            self.LastWP = self.LastWP + skip;
-        
-    def Plan_LocalPath(self, PrevRange):
-        
-        if self.SegmentCoords:
-            self.Current_SWP = self.SegmentCoords;
-            
-        self.NextSWP_No = 0;
-        self.NextSWP_validity = 0;
-        
-        gamma = 0;
-        i = 0;
-        
-        while gamma <= 0 or gamma >= math.pi:
-        
-            i = i + 1;
-            
-            '''Turning waypoint''' 
-            n = self.LastWP + 1 + i; 
-            
-            try:
-                Nm = self.Waypoints.get_SingleWayPoint(n - i);
-                Nt = self.Waypoints.get_SingleWayPoint(n);
-                Np = self.Waypoints.get_SingleWayPoint(n + 1);
-            except IndexError:
-                return('Path ended');
-            
-            
-            
-            gamma = FL.CosLaw(Nm, Nt, Np);
-            
-        print(n);
-        
-        self.Path = O_LocalPath(gamma, self.Sigma_max, self.Kappa_max);
-        
-        definition = 20;
-        self.Path.FitPath(definition);
-        self.Path.PositionPoly(Nm, Nt, Np);
-
-        '''fitline'''
-        Range = self.Path.get_Range();
-        self.Straight = O_StraightPath(Nt, Nm, Range, PrevRange);
-        self.Straight.FitLine(0.1);
-        
-        return i;
-    
-    def get_PathSegment(self):
-        self.SegmentCoords = numpy.append(self.Path.TurnSWP, self.Straight.SubWP, 1);
-        plt.plot(self.SegmentCoords[0], self.SegmentCoords[1], 'r')
-        
-        plt.show();
-        
-    def get_Line(self):
-        return(self.Straight);
-    
-    def get_Turn(self):
-        return(self.Path);
-    
-    def PlotPath(self, color):
-        self.Path.PlotTurn(color);
-        self.Straight.PlotLine(color);
-        
-    def Control_Step(self):
-        
-        
-        while self.NextSWP_validity == 0:
-            
-            try:
-                NextSWP = O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[0, self.NextSWP_No]);
-            except IndexError:
-                '''End of LocalPath'''
-                self.LastWP = self.LastWP + 1;
-                self.Plan_LocalPath(self.Path.Range);
+            i = 0
+            for n in range(len(self.node_ids)):
+                self.longitudes[i] = self.nodes[self.node_ids[n]]['lon']
+                self.latitudes[i] = self.nodes[self.node_ids[n]]['lat']
+                i = i+1;
                 
-            delta = FL.CosLaw(self.Pos.Extend, self.Pos, NextSWP);
-            valid = self.CheckReach(delta, NextSWP) and (FL.Distance(self.Pos, NextSWP) > self.FollowDistance);
-            self.NextSWP_No = self.NextSWP_No + 1;
-            
-        '''
-        #############################################
-        # RUN CONTROL ALGORITHM FOR DELTA HERE
-        #############################################
-        '''
-            
-        results = 1; '''Results of the control step'''
         
-        return results;
+            print('Collection download')
+            
+        except:
+            
+            self.nodes = list(numpy.zeros(numpy.shape(self.node_ids)))
+            i = 0
+            for n in self.node_ids:
+                a = self.Api.NodeGet(self.node_ids[i])
+                
+                self.nodes[i] = a;
+                i = i+1
+        
+            i = 0
+            while i < len(self.nodes):
+                self.longitudes[i] = self.nodes[i]['lon']
+                self.latitudes[i] = self.nodes[i]['lat']
+                i = i+1;
+                
+        plt.plot(self.longitudes, self.latitudes, 'k')
+        
+    def get_longitudes(self):
+        return self.longitudes
+    
+    def get_latitudes(self):
+        return self.latitudes
+    
+    def get_ID(self):
+        return self.ID;
+    
+    def get_NodeIDs(self):
+        return(self.node_ids)
+            
+            
+'''
+#############################################
+# Way breaker class
+# Breaks up the OSM-defined ways to an appropriately
+# sized and ordered collection of node IDs
 
-    def CheckReach(self, delta, P):
+# Returns a list of O_OSM_Way_Object Objects
+#############################################
+''' 
+class O_WayBreaker:
+    def __init__(self, length):
+        self.waylength = length
+        self.buffer = list();
         
-        beta = math.pi/2 - delta;
-        alpha = 2* delta;
-        dist = FL.Distance(self.Pos, P);
-        R_min = 1/self.Kappa_max;
+    def LoadBuffer(self, NextWay):
         
-        return(dist * math.sin(beta) > R_min * math.sin(alpha));
+        self.buffer = list()
+        IDs = NextWay.nodes
+        self.buffer = numpy.append(self.buffer, IDs)
+        self.WayID = NextWay.id
+        
+        return(1)
+         
+    def ReturnWays(self):
+        
+        self.Ways = list()
+
+        if len(self.buffer) < self.waylength:
             
+            self.Ways = numpy.append(self.Ways, O_OSM_Way_Object(self.buffer, self.WayID))
+            print(self.Ways)
+            return(self.Ways)
         
-        
+        else:
+            
+            i = 0;
+            while i < numpy.floor(len(self.buffer)/self.waylength):
+                slice_from = i * self.waylength
+                slice_to = (i+1) * self.waylength - 1
+                self.Ways = numpy.append(self.Ways, O_OSM_Way_Object(self.buffer[slice_from:slice_to:1], self.WayID))
+
+                i += 1
+            
+            self.buffer = list()
+            
+            print(self.Ways)
+            
+            return(self.Ways)

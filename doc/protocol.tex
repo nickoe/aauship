@@ -1,25 +1,23 @@
-
 \chapter{FAPS LLI interface}
+\head{Documentation for the LLI part of the system.}
 \section{Standard format of messages}
 To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwith which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
 
-As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable, however -- there are some fixed elements, thats able to decide upon now. The number of sensors/actuators connected to the \ac{LLI} are by design not to be more than 256 (this makes way for a 1-byte device resolution). As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. Lastly, the packet contains a newline character to make packet detection easier -- as well as some \ac{CRC} checksums to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure. Everything other than the data field is fixed length as described in table~\vref{tab:general}.
+As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable, however -- there are some fixed elements, thats able to decide upon now. The number of sensors/actuators connected to the \ac{LLI} are by design not to be more than 256 (this makes way for a 1-byte device resolution). As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. In addition to this header a length bute is contained to describe the length of the data field, to make it easier to parse because of known length. Lastly a \ac{CRC} checksum is added on the end to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure. Everything other than the data field is fixed length as described in table~\vref{tab:general}.
 
 
 \begin{figure}[h]
 \centering
 \begin{bytefield}{30}
 \begin{rightwordgroup}{Header}
-\raisebox{-1mm}{$\underbrace{\raisebox{1mm} {\bitbox{1}{\texttt{\$}} \bitbox{5}{DevID} \bitbox{5}{MsgID}}}_\mathrm{Header}$}%
-\raisebox{-1mm}{$\underbrace{\raisebox{1mm} {\bitbox{16}{Data field }}}_\mathrm{Variable\ length}$}\bitbox{4}{CRC16} \bitbox{2}{\texttt{\textbackslash n}  }
+\raisebox{-1mm}{$\underbrace{\raisebox{1mm} {\bitbox{1}{\texttt{\$}}  \bitbox{5}{Length}   \bitbox{5}{DevID} \bitbox{5}{MsgID}}}_\mathrm{Header}$}%
+\raisebox{-1mm}{$\underbrace{\raisebox{1mm} {\bitbox{16}{Data field }}}_\mathrm{Variable\ length}$}\bitbox{4}{CRC16} 
 \end{bytefield}
 \caption{Generic message bytefield}
 \label{fig:bytefield}
 \end{figure}
 
 The packet bytes are arranged as little endian (MSB frist), and such should the numbering og bytes also be, i.e. the start start characther comes first when transmitted and ends with the end character which is the newline character.
-
-\todo{For the same packet length, it woill probably be easier to replace the newline with length information, it will be easier to parse.}
 
 \begin{table}[htbp]
 	\centering
@@ -28,11 +26,12 @@ The packet bytes are arranged as little endian (MSB frist), and such should the 
 		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
 		\midrule
 		startchar & 1 & uint8 & Start character (\texttt{\$}) \\
+		length & 1 & uint8 & Length of data field in the range 0--250\\
 		devid & 1 & uint8 & Device identifier \\
 		msgid & 1 & uint8 & Message identifier \\
 		data & 1--250 & uint8 & Data portion (binary)\\
 		checksum & 2 & uint8 & CRC-16 checksum on data part \\
-		endchar & 1 & uint8 & Newline character (\texttt{\textbackslash n})\\
+
 		\bottomrule
 	\end{tabular}
 	\caption{General description of the packet format}

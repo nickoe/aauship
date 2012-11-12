@@ -6,6 +6,8 @@ Arduino type board.
 
 Use 'make' to compile and 'make install' to upload it onto the AVR. Use 'make test' to compile a helloworld example that just blinks with a led. (Not implemented yet)
 
+You can also generate Doxygen documentaiton with 'make doc'.
+
 Some other random notes
 -----------------------
 Compile a source file:
