@@ -1,23 +1,23 @@
-# EESchema Netlist Version 1.1 created  man 12 nov 2012 11:33:26 CET
+# EESchema Netlist Version 1.1 created  12-Nov-12 8:32:49 PM
 (
  ( /509CE5FB $noname  R4 100k {Lib=R}
-  (    1 N-000008 )
+  (    1 N-000003 )
   (    2 N-000020 )
  )
  ( /509CE5F2 $noname  R3 100k {Lib=R}
-  (    1 N-000008 )
+  (    1 N-000003 )
   (    2 N-000015 )
  )
  ( /509C16F7 scenix4-0505  C1 CAP-0505 {Lib=CAP-0505}
-  (    1 N-000003 )
-  (    2 GND )
- )
- ( /509C16DD scenix4-0505  C2 CAP-0505 {Lib=CAP-0505}
   (    1 GND )
   (    2 N-000003 )
  )
+ ( /509C16DD scenix4-0505  C2 CAP-0505 {Lib=CAP-0505}
+  (    1 GND )
+  (    2 N-000004 )
+ )
  ( /509C145B $noname  P3 Battery {Lib=CONN_2}
-  (    1 N-000003 )
+  (    1 N-000004 )
   (    2 GND )
  )
  ( /509C139F $noname  P5 OUTPUT_2 {Lib=CONN_2}
@@ -30,7 +30,7 @@
  )
  ( /509C1105 $noname  D1 DIODE {Lib=DIODE}
   (    1 N-000016 )
-  (    2 N-000003 )
+  (    2 N-000004 )
  )
  ( /509C10FE $noname  D8 DIODE {Lib=DIODE}
   (    1 GND )
@@ -42,11 +42,11 @@
  )
  ( /509C10F5 $noname  D5 DIODE {Lib=DIODE}
   (    1 N-000018 )
-  (    2 N-000003 )
+  (    2 N-000004 )
  )
  ( /509C10F1 $noname  D7 DIODE {Lib=DIODE}
   (    1 N-000019 )
-  (    2 N-000003 )
+  (    2 N-000004 )
  )
  ( /509C10ED $noname  D4 DIODE {Lib=DIODE}
   (    1 GND )
@@ -58,50 +58,50 @@
  )
  ( /509C10DA $noname  D3 DIODE {Lib=DIODE}
   (    1 N-000017 )
-  (    2 N-000003 )
+  (    2 N-000004 )
  )
  ( /509C04D7 transistor-TO92  T2 BC547 {Lib=BC547}
-  (    1 N-000020 )
-  (    2 N-000001 )
-  (    3 GND )
+  (    1 GND )
+  (    2 N-000009 )
+  (    3 N-000020 )
  )
  ( /509C04D6 $noname  R2 1k {Lib=R}
-  (    1 N-000007 )
-  (    2 N-000001 )
+  (    1 N-000008 )
+  (    2 N-000009 )
  )
  ( /509C043C $noname  P2 INPUT_2 {Lib=CONN_4}
-  (    1 N-000008 )
-  (    2 N-000007 )
-  (    3 N-000009 )
+  (    1 N-000003 )
+  (    2 N-000008 )
+  (    3 N-000010 )
   (    4 GND )
  )
  ( /509C0107 $noname  R1 1k {Lib=R}
-  (    1 N-000002 )
-  (    2 N-000014 )
+  (    1 N-000001 )
+  (    2 N-000002 )
  )
  ( /509BFFE5 transistor-TO92  T1 BC547 {Lib=BC547}
-  (    1 N-000015 )
-  (    2 N-000014 )
-  (    3 GND )
+  (    1 GND )
+  (    2 N-000002 )
+  (    3 N-000015 )
  )
  ( /509BFE14 $noname  P1 INPUT_1 {Lib=CONN_4}
-  (    1 N-000008 )
-  (    2 N-000002 )
-  (    3 N-000004 )
+  (    1 N-000003 )
+  (    2 N-000001 )
+  (    3 N-000005 )
   (    4 GND )
  )
  ( /509BFCB0 sgs-thom-MW-15  IC1 L298 {Lib=L298}
   (    1 GND )
   (    2 N-000016 )
   (    3 N-000017 )
-  (    4 N-000008 )
-  (    5 N-000002 )
-  (    6 N-000004 )
+  (    4 N-000003 )
+  (    5 N-000001 )
+  (    6 N-000005 )
   (    7 N-000015 )
   (    8 GND )
-  (    9 N-000003 )
-  (   10 N-000007 )
-  (   11 N-000009 )
+  (    9 N-000004 )
+  (   10 N-000008 )
+  (   11 N-000010 )
   (   12 N-000020 )
   (   13 N-000018 )
   (   14 N-000019 )
@@ -156,9 +156,6 @@ $component D3
  D?
  S*
 $endlist
-$component T2
- TO92*
-$endlist
 $component R2
  R?
  SM0603
@@ -173,76 +170,73 @@ $component R1
  R?-*
  SM1206
 $endlist
-$component T1
- TO92*
-$endlist
 $endfootprintlist
 }
 { Pin List by Nets
 Net 1 "" ""
- R2 2
- T2 2
-Net 2 "" ""
+ P1 2
  IC1 5
  R1 1
- P1 2
+Net 2 "" ""
+ T1 2
+ R1 2
 Net 3 "" ""
- D3 2
- C2 2
- P3 1
- C1 1
- D1 2
- D5 2
- D7 2
- IC1 9
-Net 4 "" ""
- IC1 6
- P1 3
-Net 5 "GND" "GND"
- IC1 8
- IC1 15
- P2 4
- IC1 1
- T1 3
- D8 1
- D6 1
- D4 1
- D2 1
- P1 4
- P3 2
- C2 1
- C1 2
- T2 3
-Net 7 "" ""
- IC1 10
- P2 2
- R2 1
-Net 8 "" ""
  P2 1
+ R4 1
  IC1 4
  P1 1
  R3 1
- R4 1
-Net 9 "" ""
- P2 3
- IC1 11
-Net 14 "" ""
- T1 2
- R1 2
-Net 15 "" ""
- IC1 7
+ C1 2
+Net 4 "" ""
+ C2 2
+ P3 1
+ IC1 9
+ D3 2
+ D5 2
+ D1 2
+ D7 2
+Net 5 "" ""
+ P1 3
+ IC1 6
+Net 6 "GND" "GND"
+ D4 1
  T1 1
+ C2 1
+ D8 1
+ D6 1
+ T2 1
+ C1 1
+ P3 2
+ P1 4
+ IC1 1
+ IC1 8
+ IC1 15
+ D2 1
+ P2 4
+Net 8 "" ""
+ IC1 10
+ R2 1
+ P2 2
+Net 9 "" ""
+ R2 2
+ T2 2
+Net 10 "" ""
+ IC1 11
+ P2 3
+Net 15 "" ""
  R3 2
+ T1 3
+ IC1 7
 Net 16 "" ""
  P4 1
- D2 2
- D1 1
  IC1 2
+ D1 1
+ D2 2
 Net 17 "" ""
- D3 1
  IC1 3
  D4 2
  P4 2
+ D3 1
 Net 18 "" ""
  P5 1
  IC1 13
@@ -251,11 +245,11 @@ Net 18 "" ""
 Net 19 "" ""
  D7 1
  D8 2
- IC1 14
  P5 2
+ IC1 14
 Net 20 "" ""
- IC1 12
- T2 1
  R4 2
+ T2 3
+ IC1 12
 }
 #End
