@@ -1,0 +1,10 @@
+<osm-script timeout="900" element-limit="1073741824">
+  <query type="way">
+    <has-kv k="natural" v="coastline"/>
+    <bbox-query e="16.96" n="58.43" s="54.02" w="7.32"/>
+  </query>
+  <print mode="meta"/>
+</osm-script>
+
+
+http://www.overpass-api.de/query_form.html

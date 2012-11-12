@@ -62,6 +62,9 @@ def fcn_GenerateEuler(length = 2, l_precision = 30, d_precision = 30):
 
 
 def CosLaw(A,B,C):
+    '''
+    Returns the angle at point B, if A, B and C are the points of a triangle
+    '''  
     
     A = A.get_Pos();
     
@@ -77,52 +80,25 @@ def CosLaw(A,B,C):
     c = numpy.sqrt(x.dot(x))
     
     '''
-    print(a)
-    print(b)
-    print(c)
-    '''
-    try:
+    If the angle approaches pi, the calculated side-lengths might not conflict with the
+    triangle-law (a + b > c for any variation of sides)
+    In this case we return pi (straight path)
+    '''  
+    if (abs(numpy.power(a,2) + numpy.power(c,2) - numpy.power(b,2))/(2 * a * c)) < 1:
         gamma = math.acos((numpy.power(a,2) + numpy.power(c,2) - numpy.power(b,2))/(2 * a * c));    
-    except:
+    else:
         gamma = math.pi
         
     return(gamma);
 
-
-def SimulateCoast(coastlength):
-
-    '''
-    Simulated coast-line:
-    '''
-    i = 0;
-    coast = scipy.randn(coastlength) * 10;
-    initial = 0;
-    
-    while i < coastlength:
-       
-        coast[i] = initial + coast[i];
-        initial = coast[i];
-        i = i + 1;
-
-    return coast;
-
 def Distance(A, B):
     
     '''
-    Distance between two points
+    Euclidean distance between two points
     '''
     x = A.get_Pos()-B.get_Pos()
-    a = numpy.sqrt(x.dot(x))
+    #a = numpy.sqrt(x.dot(x))
+    a = numpy.linalg.norm(x)
     
     return(a);
 
-def find_id_index(array, id):
-    i = 0;
-    while i < len(array):
-        if array[i] == id:
-            return i;
-            break;
-        i = i+1;
-    
-    return(-1);
-        

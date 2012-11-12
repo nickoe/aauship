@@ -1,0 +1,4 @@
+http://osm.org/go/0Su~F94J--?layers=Q
+http://osm.org/go/eXlQa9?layers=Q
+
+http://www.overpass-api.de/api/xapi?way[bbox=7.32,54.02,16.96,58.43][natural=coastline][@meta] % Denmark
