@@ -1,6 +1,8 @@
 '''import serial'''
 import threading
 import time
+import datetime
+import Queue
 
 running = True;
 
@@ -24,9 +26,11 @@ class Serialdummy:
 
 class packetHandler(threading.Thread):
 	
-	def __init__(self,serialport,speed):
+	def __init__(self,serialport,speed,queue):
 		self.connection = Serialdummy.Serial(serialport,speed)
-		self.newdata = []
+		self.myNewdata = []
+		self.q = queue
+		threading.Thread.__init__(self)
 		
 	def run(self):
 		while self.connection.isOpen():
@@ -36,32 +40,9 @@ class packetHandler(threading.Thread):
 				res = self.parser(length)
 				if(res[0]):
 					self.parsePacket(res[1])
-			'''
-				length = self.connection.read(1)
-				DevID = self.connection.read(1)
-				MsgID = self.connection.read(1)
-				data=[]
-				for i in range(length):
-					Data.append(self.connection.read(1))
-				CKH = self.connection.read(1)
-				CKL = self.connection.read(1)
-				packet = {'Length': length, 'DevID': DevID, 'MsgID': MsgID, 'Data': Data,'CKH':CKH,'CKL':CKL }
-				if(self.checksum(packet)):
-					self.parsePacket(packet)
-					
-					newdata.append([devID,MsgID,Data]);
-					
-				else:
-				
-					
-		print ''	
-		print '--------'
-		print 'Final Result:'
-		print self.newdata
-		print '--------'
-		'''
 		running = False
-		print 'done'
+		print '\\------------------------------------------------------/'
+		
 	def close(self):
 		self.connection.close()
 				
@@ -90,9 +71,9 @@ class packetHandler(threading.Thread):
 					return True
 		return False
 	
-	def freshdata(self):
+	def newdata(self):
 		try:
-			return len(self.newdata)
+			return len(self.myNewdata)
 		except:
 			return 0	
 			
@@ -111,9 +92,11 @@ class packetHandler(threading.Thread):
 		Data = []
 		for i in range(length):
 			Data.append(packet[3+i])
-		self.newdata.append({'DevID':DevID, 'MsgID': MsgID,'Data': Data})
+		newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data}
+		self.myNewdata.append(newpacket)
+		self.q.put(newpacket)
 		#print 'success'
-		print self.newdata[len(self.newdata)-1]
+		#print self.myNewdata[len(self.myNewdata)-1]
 		#print '-------------'
 		
 		
@@ -148,9 +131,16 @@ class packetHandler(threading.Thread):
 			except:
 				return [False,0]
 
-print '/---------------------------------------\\'
-receiver = packetHandler(1,2)
-receiver.run()
-
+print '/------------------------------------------------------\\'
+qu = Queue.Queue()
+receiver = packetHandler(1,2,qu)
+receiver.start()
+print qu.get()
+print qu.get()
+print qu.get()
+try:
+	print qu.get(False)
+except:
+	print "damn"
 	
 	
