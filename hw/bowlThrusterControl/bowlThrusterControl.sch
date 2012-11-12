@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date man 12 nov 2012 15:05:27 CET
+EESchema Schematic File Version 2  date man 12 nov 2012 20:13:02 CET
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -46,6 +46,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text Notes 5050 1300 0    60   ~ 0
+VCC and VSS is swapped
 Wire Wire Line
 	3500 3400 3500 3050
 Wire Wire Line
