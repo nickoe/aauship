@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 import FunctionLibrary as FL
 import ObjectLibrary as OL
+import CommUnit as CU
 
 '''
 #############################################
@@ -316,3 +317,8 @@ class O_Ship:
         '''
         delta = math.atan2(math.sin(delta), math.cos(delta))
         return delta
+    
+    def SendData(self, data):
+        
+        Stream = CU.Streamer()
+        
