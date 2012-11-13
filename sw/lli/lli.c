@@ -40,6 +40,8 @@ int main (void)
 	PORTL = 0xff; // Turn off LEDS
   DDRL = (1<<LED3) | (1<<LED4); // Set pins for LED as output
 
+	pwm_init();
+
 	/* initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
   uart2_init( UART_BAUD_SELECT(UART2_BAUD_RATE,F_CPU) ); // APC220 radio
@@ -61,15 +63,11 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
-
-
 	uart2_puts(__DATE__);
 	uart2_putc(' ');
 	uart2_puts(__TIME__);
 	uart2_putc('\n');
 	uart2_putc('\r');
-	pwm_init();
-
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
@@ -91,10 +89,11 @@ int main (void)
 				if (idx2 == len2) { // We now have a full packet
 
 					parse(&rfmsg, buffer2);
+					process(&rfmsg);
 					idx2 = -1; // Set flag in new packet mode
 
 					#ifdef DEBUG
-					puts_msg(&rfmsg);
+					//puts_msg(&rfmsg);
 					#endif
 				}
 			}
@@ -110,7 +109,7 @@ int main (void)
 		/* Reading from GPS */
 		if ( c3 & UART_NO_DATA ) {} else  // Data available
 		{
-				uart2_putc(c3);
+				//uart2_putc(c3);
 			if (c3 == '$') { // We have a possible message comming
 
 				PORTL ^= (1<<LED3);

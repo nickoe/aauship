@@ -64,7 +64,7 @@ void pwm_init(void) {
   ICR4 = 20000; // Period time 20 ms, 50 Hz
 }
 
-void pwm_set(uint8_t channel, int value) {
+void pwm_set(uint8_t channel, uint16_t value) {
 	switch (channel) {
 		case DC1: // OC3B
 			OCR3B = value;
@@ -93,12 +93,27 @@ void pwm_set(uint8_t channel, int value) {
 	}
 }
 
-void pwm_set_duty(uint8_t channel, int value) { 
+/*
+ * The int16_t value ensures that a number larger than 8 bits can be fed
+ * to pwm_set(), and the (value & 0x00FF) ensures that the value it is called
+ * with is okay.
+ */
+void pwm_set_duty(uint8_t channel, int16_t value) {
 	if ( (channel > 0) && (channel <= 3 ) ) { // Full range duty cycle, as for ordinary PWM (+0% to +100%)
-		value = value * (DCPERIOD/100);
+		if(value < -100){
+			value=-100;
+		} else if (value > 100){
+			value=100;
+		};
+		value = (value & 0x00FF) * (DCPERIOD/100);
 	}
 	else if ( (channel >= 4) && (channel <= 8) ) { // Small range duty cycle, as for RC PWM (-100% to +100%)
-		value = value * 5 + 1500;
+		if(value < 0){
+			value=0;
+		} else if (value > 100){
+			value=100;
+		};
+		value = (value & 0x00FF) * 5 + 1500;
 	}
 	pwm_set(channel, value);
 }

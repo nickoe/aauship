@@ -41,7 +41,7 @@ void pwm_init(void);
 	@param   Channel define name, value
 	@return  none
 */
-void pwm_set(uint8_t channel, int value);
+void pwm_set(uint8_t channel, uint16_t value);
 
 // value is: 100 = 100% , 0 = 0%
 
@@ -55,7 +55,7 @@ void pwm_set(uint8_t channel, int value);
 	@param   Channel define name, value dependent on RCx or DCx type
 	@return  none
 */
-void pwm_set_duty(uint8_t channel, int value);
+void pwm_set_duty(uint8_t channel, int16_t value);
 
 /**@}*/
 
