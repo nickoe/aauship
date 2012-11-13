@@ -77,8 +77,6 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-		pwm_set_duty(RC5, 20000);
-
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
 		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse

@@ -106,6 +106,7 @@ void pwm_set_duty(uint8_t channel, int value) {
 		value = value * (DCPERIOD/100);
 	}
 	else if ( (channel >= 4) && (channel <= 8) ) { // Small range duty cycle, as for RC PWM (-100% to +100%)
+		value = value * 5 + 1500;
 	}
 	pwm_set(channel, value);
 }
