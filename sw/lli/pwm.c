@@ -11,6 +11,7 @@
 
 #include <avr/io.h>
 #include "config.h"
+#include "pwm.h"
 
 /*
 
@@ -26,54 +27,89 @@ void pwm_init(void) {
 
 
 // DCPWM1
-  OCR3B = 1000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR3B = 0; // Initialize at zero
   TCCR3A |= (1<<COM3B1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // DCPWM2
-  OCR3C = 1000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR3C = 0; // Initialize at zero
   TCCR3A |= (1<<COM3C1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // DCPWM3
-  OCR3A=1000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR3A = 0; // Initialize at zero
   TCCR3A |= (1<<COM3A1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR3B |= (1<<WGM33) | (1<<CS31);// Phase and Freq correct ICR1=Top   //Mode 8: Phase and Freq. Correct PWM top=ICR1
-  ICR3=20000; // Period time
+  ICR3 = DCPERIOD; // Period time 2 ms, 500 Hz
 
 
 
 // RCPWM1
-  OCR1A=5000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR1A = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR1A |= (1<<COM1A1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // RCPWM2
-  OCR1B=5000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR1B = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR1A |= (1<<COM1B1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // RCPWM3
-  OCR1C=5000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR1C = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR1A |= (1<<COM1C1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR1B |= (1<<WGM13) | (1<<CS11);// Phase and Freq correct ICR1=Top
-  ICR1=20000; // Period time
+  ICR1 = 20000; // Period time 20 ms, 50 Hz
 
 
 
 // RCPWM4
-  OCR4B=10000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR4B = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR4A |= (1<<COM4B1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // RCPWM5
-  OCR4C=10000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR4C = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR4A |= (1<<COM4C1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR4B |= (1<<WGM43) | (1<<CS41);// Phase and Freq correct ICR1=Top
-  ICR4=20000; // Period time
+  ICR4 = 20000; // Period time 20 ms, 50 Hz
 }
 
-void pwm_set(int channel, int value) {
-// @TODO implement this as a switch case
+void pwm_set(uint8_t channel, int value) {
+	switch (channel) {
+		case DC1: // OC3B
+			OCR3B = value;
+			break;
+		case DC2: // OC3C
+			OCR3C = value;
+			break;
+		case DC3: // OC3A
+			OCR3A = value;
+			break;
+		case RC1: // OC1A
+			OCR1A = value;
+			break;
+		case RC2: // OC1B
+			OCR1B = value;
+			break;
+		case RC3: // OC1C
+			OCR1C = value;
+			break;
+		case RC4: // OC4B
+			OCR4B = value;
+			break;
+		case RC5: // OC4C
+			OCR4C = value;
+			break;
+	}
+}
+
+void pwm_set_duty(uint8_t channel, int value) { 
+	if ( (channel > 0) && (channel <= 3 ) ) { // Full range duty cycle, as for ordinary PWM (+0% to +100%)
+		value = value * (DCPERIOD/100);
+	}
+	else if ( (channel >= 4) && (channel <= 8) ) { // Small range duty cycle, as for RC PWM (-100% to +100%)
+		value = value * 5 + 1500;
+	}
+	pwm_set(channel, value);
+}
 
 // @TODO make a nice illustration that illustrates sub-d connector connections and board to board connector
-}
 

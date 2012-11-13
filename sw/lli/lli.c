@@ -22,6 +22,7 @@
 #include "config.h"
 #include "uart.h"
 #include "faps_parse.h"
+#include "pwm.h"
 
 
 int main (void)

@@ -1,6 +1,9 @@
-'''import serial'''
+#import serial
 import threading
 import time
+import datetime
+import Queue
+from math import pow
 
 running = True;
 
@@ -8,7 +11,7 @@ class Serialdummy:
 
 	class Serial:
 		def __init__(self,serialport,speed):
-			self.array = [0x24,3,3,3,3,3,3,4,5,0x24,2,2,2,2,2,2,3,0x24,2,2,2,1,2,4,5,4,5,4,5,2,3,0x24,1,2,0x24,6,3,4,1,2,1,2,1,2,4,5,0,4,3]
+			self.array = [0x24,3,0,1,49,50,51,4,5,0x24,2,1,1,2,2,2,3,0x24,2,1,1,1,2,4,5,4,5,4,5,2,3,0x24,1,2,0x24,6,0,2	,48,49,50,51,52,53,4,5,0,4,3]
 			self.open = True;
 		def Read(self,numbers):
 			'''print self.array[0]'''
@@ -24,9 +27,11 @@ class Serialdummy:
 
 class packetHandler(threading.Thread):
 	
-	def __init__(self,serialport,speed):
+	def __init__(self,serialport,speed,queue):
 		self.connection = Serialdummy.Serial(serialport,speed)
-		self.newdata = []
+		self.myNewdata = []
+		self.q = queue
+		threading.Thread.__init__(self)
 		
 	def run(self):
 		while self.connection.isOpen():
@@ -35,33 +40,10 @@ class packetHandler(threading.Thread):
 				length=self.connection.Read(1)
 				res = self.parser(length)
 				if(res[0]):
-					self.parsePacket(res[1])
-			'''
-				length = self.connection.read(1)
-				DevID = self.connection.read(1)
-				MsgID = self.connection.read(1)
-				data=[]
-				for i in range(length):
-					Data.append(self.connection.read(1))
-				CKH = self.connection.read(1)
-				CKL = self.connection.read(1)
-				packet = {'Length': length, 'DevID': DevID, 'MsgID': MsgID, 'Data': Data,'CKH':CKH,'CKL':CKL }
-				if(self.checksum(packet)):
-					self.parsePacket(packet)
-					
-					newdata.append([devID,MsgID,Data]);
-					
-				else:
-				
-					
-		print ''	
-		print '--------'
-		print 'Final Result:'
-		print self.newdata
-		print '--------'
-		'''
+					self.preparePacket(res[1])
 		running = False
-		print 'done'
+		#print '\\------------------------------------------------------/'
+		
 	def close(self):
 		self.connection.close()
 				
@@ -90,9 +72,9 @@ class packetHandler(threading.Thread):
 					return True
 		return False
 	
-	def freshdata(self):
+	def newdata(self):
 		try:
-			return len(self.newdata)
+			return len(self.myNewdata)
 		except:
 			return 0	
 			
@@ -102,7 +84,7 @@ class packetHandler(threading.Thread):
 		except:
 			return 0
 			
-	def parsePacket(self,packet):
+	def preparePacket(self,packet):
 		#print 'Parsing:'
 		#print packet
 		length = packet[0]
@@ -111,9 +93,11 @@ class packetHandler(threading.Thread):
 		Data = []
 		for i in range(length):
 			Data.append(packet[3+i])
-		self.newdata.append({'DevID':DevID, 'MsgID': MsgID,'Data': Data})
+		newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data}
+		self.myNewdata.append(newpacket)
+		self.q.put(newpacket)
 		#print 'success'
-		print self.newdata[len(self.newdata)-1]
+		#print self.myNewdata[len(self.myNewdata)-1]
 		#print '-------------'
 		
 		
@@ -147,10 +131,77 @@ class packetHandler(threading.Thread):
 				return self.parser(packet)
 			except:
 				return [False,0]
-
-print '/---------------------------------------\\'
-receiver = packetHandler(1,2)
-receiver.run()
-
 	
+class packetParser():
+	def __init__(self):
+		pass
+			
+	def parsePacket(self,packet):
+		print "----------"
+		print "parsing:"
+		'''
+		List of DevIDS:
+		GPS: 0
+		IMU: 1
+		
+		'''
+		print packet
+		if (packet['DevID'] == 0):		#GPS
+			print "GPS!"
+			'''
+			List of MsgIDs:
+			Latitude: 0
+			Longtitude: 1
+			Velocity: 2
+			'''
+			if(packet['MsgID'] == 0): 	#Latitude
+				print "Latitude!"
+				value = []
+				for i in range(len(packet['Data'])):
+					value.append(chr(packet['Data'][i]))
+				print value
+				print "done"
+			elif(packet['MsgID'] == 1): 	#Longtitude
+				print "Longtitude!"
+				value = []
+				for i in range(len(packet['Data'])):
+					value.append(chr(packet['Data'][i]))
+				print value
+				print "done"
+			elif(packet['MsgID'] == 2): 	#Velocity
+				
+				print "Velocity!"
+				value = []
+				for i in range(len(packet['Data'])):
+					value.append(chr(packet['Data'][i]))
+				print value
+				print "done"
+		elif(packet['DevID'] == 1): 		#IMU
+			print "IMU!"
+			'''
+			List of MsgIDs:
+			AccelX : 0
+			AccelY : 1
+			AccelZ : 2
+			GyroX  : 3
+			GyroY  : 4
+			GyroZ  : 5
+			'''
+			if(packet['MsgID'] == 0):		#AccelX
+				pass
+			elif(packet['MsgID'] == 1):	#AccelY
+				print "AccelY!"
+				value = 0
+				for i in range(len(packet['Data'])):
+					value = value + packet['Data'][i]*pow(2,8*(len(packet['Data'])-1-i))
+				print value
+			elif(packet['MsgID'] == 2):	#AccelZ
+				pass
+			elif(packet['MsgID'] == 3):	#GyroX
+				pass
+			elif(packet['MsgID'] == 4):	#GyroY
+				pass
+			elif(packet['MsgID'] == 5):	#GyroZ
+				pass
+
 	
