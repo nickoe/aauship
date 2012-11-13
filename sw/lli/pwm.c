@@ -26,49 +26,49 @@ void pwm_init(void) {
 
 
 // DCPWM1
-  OCR3B = 1000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR3B = 0; // Initialize at zero
   TCCR3A |= (1<<COM3B1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // DCPWM2
-  OCR3C = 1000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR3C = 0; // Initialize at zero
   TCCR3A |= (1<<COM3C1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // DCPWM3
-  OCR3A=1000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR3A = 0; // Initialize at zero
   TCCR3A |= (1<<COM3A1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR3B |= (1<<WGM33) | (1<<CS31);// Phase and Freq correct ICR1=Top   //Mode 8: Phase and Freq. Correct PWM top=ICR1
-  ICR3=20000; // Period time
+  ICR3 = 2000; // Period time 2 ms, 500 Hz
 
 
 
 // RCPWM1
-  OCR1A=5000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR1A = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR1A |= (1<<COM1A1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // RCPWM2
-  OCR1B=5000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR1B = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR1A |= (1<<COM1B1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // RCPWM3
-  OCR1C=5000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR1C = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR1A |= (1<<COM1C1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR1B |= (1<<WGM13) | (1<<CS11);// Phase and Freq correct ICR1=Top
-  ICR1=20000; // Period time
+  ICR1 = 20000; // Period time 20 ms, 50 Hz
 
 
 
 // RCPWM4
-  OCR4B=10000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR4B = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR4A |= (1<<COM4B1);//COM1A1 Clear OCnA when match counting up,Set on 
 
 // RCPWM5
-  OCR4C=10000; //set 1ms pulse  1000=1ms  2000=2ms
+  OCR4C = 1500; //set 1.5ms pulse  1000=1ms  2000=2ms
   TCCR4A |= (1<<COM4C1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR4B |= (1<<WGM43) | (1<<CS41);// Phase and Freq correct ICR1=Top
-  ICR4=20000; // Period time
+  ICR4 = 20000; // Period time 20 ms, 50 Hz
 }
 
 void pwm_set(int channel, int value) {
