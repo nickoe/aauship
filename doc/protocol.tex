@@ -1,10 +1,12 @@
 \chapter{FAPS LLI interface}
 \head{Documentation for the LLI part of the system.}
 \section{Standard format of messages}
-To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwith which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
+%To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwidth which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
 
-As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable, however -- there are some fixed elements, thats able to decide upon now. The number of sensors/actuators connected to the \ac{LLI} are by design not to be more than 256 (this makes way for a 1-byte device resolution). As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. In addition to this header a length bute is contained to describe the length of the data field, to make it easier to parse because of known length. Lastly a \ac{CRC} checksum is added on the end to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure. Everything other than the data field is fixed length as described in table~\vref{tab:general}.
+To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section ~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has several different outputs, which needs to be processed independent of each other. Because of this, they are broken into separate packages, each with their own ID and checksum. This simplifies parsing and allows the protocol to easily be expanded to other sensors and actuators which was not in the original design. A short, single state packet limits the effect of a flipped bit, since only a single state has been lost, compared to a packet containing all information.
 
+As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable. However, there are some fixed elements, which is possible to decide now. The number of sensors/actuators connected to the \ac{LLI} can by design not be more than 256, which makes way for a 1-byte device resolution. As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. In addition to this header a length byte is contained to describe the length of the data field, to make it easier to parse. Lastly a \ac{CRC} checksum is added on the end to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure. Everything other than the data field is fixed length as described in table~\vref{tab:general}. 
+The data field can be either binary or ASCII, depending on the source. It is desired to limit the amount of calculations necessary at the LLI, seeing as the power of the HLI is many times greater, as well as the implementation being simpler.
 
 \begin{figure}[h]
 \centering
@@ -17,20 +19,22 @@ As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data f
 \label{fig:bytefield}
 \end{figure}
 
-The packet bytes are arranged as little endian (MSB frist), and such should the numbering og bytes also be, i.e. the start start characther comes first when transmitted and ends with the end character which is the newline character.
+%The packet bytes are arranged as little endian (MSB first), and such should the numbering og bytes also be, i.e. the start start characther comes first when transmitted and ends with the end character which is the newline character.
 
-\begin{table}[htbp]
+The packet bytes are little endian (MSB first), which is consistent throughout the packet. The data field is arranged as always being a full number of bytes, to simplify transmission and receiving. This conforms to the RS232 standard.
+
+\begin{table}[htbp],
 	\centering
 	\begin{tabular}{llll}
 		\toprule
 		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
 		\midrule
-		startchar & 1 & uint8 & Start character (\texttt{\$}) \\
-		length & 1 & uint8 & Length of data field in the range 0--250\\
-		devid & 1 & uint8 & Device identifier \\
-		msgid & 1 & uint8 & Message identifier \\
-		data & 1--250 & uint8 & Data portion (binary)\\
-		checksum & 2 & uint8 & CRC-16 checksum on data part \\
+		Startchar & 1 & uint8 & Start character (\texttt{\$}) \\
+		Length & 1 & uint8 & Length of data field in the range 0--250\\
+		DevID & 1 & uint8 & Device identifier \\
+		MsgID & 1 & uint8 & Message identifier \\
+		Data & 1--250 & uint8 & Data portion (binary or ASCII )\\
+		Checksum & 2 & uint8 & CRC-16 checksum on data part \\
 
 		\bottomrule
 	\end{tabular}
@@ -38,7 +42,7 @@ The packet bytes are arranged as little endian (MSB frist), and such should the 
 	\label{tab:general}
 \end{table}
 
-The device ID (devid) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example; auxillaury parameters as temperature measurements are less important in time than navigational informations from the \ac{IMU} which has to be precisely known in time and prefearbly periodically.
+The device ID (DevID) also serves as the priority of the packets, enabling more important packages to be sent prior to less important ones. For example; auxillaury parameters as temperature measurements are less important in time than navigational informations from the \ac{IMU} which has to be precisely known in time and prefearbly periodically.
 
 \section{Message definitions}
 This is the list of all supported messages for the LLI interface. The messages is the interface to every thing that could be of interest for the HLI, i.e. sensor measurements and actuator control. The list of field descriptions in the following ommits the generic fields, with start character, checksum and end character.
@@ -66,7 +70,7 @@ This is the list of all supported messages for the LLI interface. The messages i
 	\label{tab:ack}
 \end{table}
 
-\todo{Expand each meassege row tith rows of data fields}
+\todo{Expand each message row with rows of data fields}
 
 \section{Actuator messages}
 \begin{table}[h]
