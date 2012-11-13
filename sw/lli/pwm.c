@@ -11,6 +11,7 @@
 
 #include <avr/io.h>
 #include "config.h"
+#include "pwm.h"
 
 /*
 
@@ -38,7 +39,7 @@ void pwm_init(void) {
   TCCR3A |= (1<<COM3A1);//COM1A1 Clear OCnA when match counting up,Set on 
 
   TCCR3B |= (1<<WGM33) | (1<<CS31);// Phase and Freq correct ICR1=Top   //Mode 8: Phase and Freq. Correct PWM top=ICR1
-  ICR3 = 2000; // Period time 2 ms, 500 Hz
+  ICR3 = DCPERIOD; // Period time 2 ms, 500 Hz
 
 
 
@@ -71,34 +72,43 @@ void pwm_init(void) {
   ICR4 = 20000; // Period time 20 ms, 50 Hz
 }
 
-void pwm_set(int channel, int value) {
+void pwm_set(uint8_t channel, int value) {
 	switch (channel) {
-		case DC1 1: // OC3B
+		case DC1: // OC3B
 			OCR3B = value;
 			break;
-		case DC2 2: // OC3C
+		case DC2: // OC3C
 			OCR3C = value;
 			break;
-		case DC3 3: // OC3A
+		case DC3: // OC3A
 			OCR3A = value;
 			break;
-		case RC1 4: // OC1A
+		case RC1: // OC1A
 			OCR1A = value;
 			break;
-		case RC2 5: // OC1B
+		case RC2: // OC1B
 			OCR1B = value;
 			break;
-		case RC3 6: // OC1C
+		case RC3: // OC1C
 			OCR1C = value;
 			break;
-		case RC4 7: // OC4B
+		case RC4: // OC4B
 			OCR4B = value;
 			break;
-		case RC5 8: // OC4C
+		case RC5: // OC4C
 			OCR4C = value;
 			break;
+	}
+}
+
+void pwm_set_duty(uint8_t channel, int value) { 
+	if ( (channel > 0) && (channel <= 3 ) ) { // Full range duty cycle, as for ordinary PWM (+0% to +100%)
+		value = value * (DCPERIOD/100);
+	}
+	else if ( (channel >= 4) && (channel <= 8) ) { // Small range duty cycle, as for RC PWM (-100% to +100%)
+	}
+	pwm_set(channel, value);
 }
 
 // @TODO make a nice illustration that illustrates sub-d connector connections and board to board connector
-}
 

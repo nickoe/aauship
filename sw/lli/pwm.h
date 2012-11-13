@@ -1,6 +1,8 @@
 #ifndef PWM_H
 #define PWM_H
 
+#define DCPERIOD 2000 // Period time 2 ms, 500 Hz
+
 /**
  * PWM outputs
  */ 
@@ -16,7 +18,11 @@
 #define RC4 7 // OC4B
 #define RC5 8 // OC4C
 
+
 void pwm_init(void);
-void pwm_set(int channel, int duty);
+void pwm_set(uint8_t channel, int value);
+
+// value is: 100 = 100% , 0 = 0%
+void pwm_set_duty(uint8_t channel, int value);
 
 #endif // PWM_H 

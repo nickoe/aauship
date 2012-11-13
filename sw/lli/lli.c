@@ -22,6 +22,7 @@
 #include "config.h"
 #include "uart.h"
 #include "faps_parse.h"
+#include "pwm.h"
 
 
 int main (void)
@@ -75,6 +76,8 @@ int main (void)
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
+
+		pwm_set_duty(RC5, 20000);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
