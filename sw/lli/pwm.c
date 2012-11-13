@@ -72,7 +72,32 @@ void pwm_init(void) {
 }
 
 void pwm_set(int channel, int value) {
-// @TODO implement this as a switch case
+	switch (channel) {
+		case DC1 1: // OC3B
+			OCR3B = value;
+			break;
+		case DC2 2: // OC3C
+			OCR3C = value;
+			break;
+		case DC3 3: // OC3A
+			OCR3A = value;
+			break;
+		case RC1 4: // OC1A
+			OCR1A = value;
+			break;
+		case RC2 5: // OC1B
+			OCR1B = value;
+			break;
+		case RC3 6: // OC1C
+			OCR1C = value;
+			break;
+		case RC4 7: // OC4B
+			OCR4B = value;
+			break;
+		case RC5 8: // OC4C
+			OCR4C = value;
+			break;
+}
 
 // @TODO make a nice illustration that illustrates sub-d connector connections and board to board connector
 }
