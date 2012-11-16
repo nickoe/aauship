@@ -45,7 +45,8 @@ SOURCES = $(PROGRAM).c \
 uart.c \
 pwm.c \
 faps_parse.c \
-faps_process.c
+faps_process.c \
+spi.c
 ARCH = avr-
 CC = $(ARCH)gcc
 OBJDUMP = $(ARCH)objdump

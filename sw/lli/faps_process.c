@@ -1,6 +1,8 @@
 #include "faps_parse.h"
 #include "faps_process.h"
 #include "pwm.h"
+#include <avr/io.h>
+#include "config.h"
 
 /*
  * Decide what to do with a given command
@@ -31,5 +33,9 @@ int process(msg_t *msg)
 			break;
 		case 107: 
 			pwm_set_duty(RC5, msg->data[0]);
+			break;
+		case 108: 
+			PORTL ^= (1<<LED4);
+			break;
 	}
 }

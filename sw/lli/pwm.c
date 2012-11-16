@@ -118,5 +118,5 @@ void pwm_set_duty(uint8_t channel, int16_t value) {
 	pwm_set(channel, value);
 }
 
-// @TODO make a nice illustration that illustrates sub-d connector connections and board to board connector
+
 

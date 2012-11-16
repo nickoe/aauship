@@ -23,6 +23,7 @@
 #include "uart.h"
 #include "faps_parse.h"
 #include "pwm.h"
+#include "spi.h"
 
 
 int main (void)
@@ -41,6 +42,7 @@ int main (void)
   DDRL = (1<<LED3) | (1<<LED4); // Set pins for LED as output
 
 	pwm_init();
+	spiInit();
 
 	/* initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
@@ -63,9 +65,11 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
-	uart2_puts(__DATE__);
+	char date[] = __DATE__;
+	char time[] = __TIME__;
+	uart2_puts(date);
 	uart2_putc(' ');
-	uart2_puts(__TIME__);
+	uart2_puts(time);
 	uart2_putc('\n');
 	uart2_putc('\r');
 
@@ -74,6 +78,10 @@ int main (void)
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
+
+		spiTransferWord(0x3E00);
+//		spiTransferWord(0x1337);
+		_delay_ms(1);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
