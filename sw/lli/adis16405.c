@@ -1,31 +1,13 @@
-/**
- * @file
- * @defgroup adis ADIS16405
- * @code #include <adis16405.h> @endcode
- * @author Nick Østergaard nickoe@es.aau.dk
- * @author Simon Als Nielsen
- *
- * @brief This file provides functions to grab data from the IMU.
- *
- */
-
 /* Systems header files */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* FreeRTOS header files */
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-
 /* Other header files */
 #include "spi.h"
 #include "adis16405.h"
-#include "led.h"
-//#include "adis_decode_14bit_raw.h"
 
 #define ADIS_CS 0x00 // This is just a dummy value so far
-
 
 //--------------datacollecter values------
 int dc_counter = 0;
@@ -348,11 +330,4 @@ float data_read(int data_type){
 	printf("Wrong data read parameter");
 	return 0;
 }
-
-
-
-
-
-
-
 
