@@ -80,6 +80,9 @@ int main (void)
 		c3 = uart3_getc();
 
 		spiTransferWord(0x3E00);
+		for (i = 0;i<12;i++) {
+		spiTransferWord(0x0000);
+		}
 //		spiTransferWord(0x1337);
 		_delay_ms(1);
 
