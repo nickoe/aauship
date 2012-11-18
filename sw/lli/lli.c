@@ -24,6 +24,7 @@
 #include "faps_parse.h"
 #include "pwm.h"
 #include "spi.h"
+#include "adis16405.h"
 
 
 int main (void)
@@ -81,8 +82,12 @@ int main (void)
 
 		//spiTransferWord(0x3E00);
 		//for (i = 0;i<12;i++) { spiTransferWord(0x0000);}
-		spiTransferWord(PRODUCT_ID);
-		spiTransferWord(0x0000);
+		spiTransferWord(0x5600);
+		if (spiTransferWord(0x0000) == 0x4015) {
+			while(1) {
+				uart2_puts("!!");
+			}
+		}
 		_delay_ms(1);
 
 		/* Reading from radio */
