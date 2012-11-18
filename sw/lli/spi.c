@@ -142,13 +142,14 @@ uint8_t spiTransferByte(uint8_t data)
 uint16_t spiTransferWord(uint16_t data)
 {
 	uint16_t rxData = 0;
-PORTB &= ~(1<<0);
-
+PORTB &= ~(1<<0); // CS low
+_delay_us(15);
 	// send MS byte of given data
 	rxData = (spiTransferByte((data>>8) & 0x00FF))<<8;
 	// send LS byte of given data
 	rxData |= (spiTransferByte(data & 0x00FF));
-PORTB |= (1<<0);
+PORTB |= (1<<0); // CS high
+_delay_us(15);
 	// return the received data
 	return rxData;
 }
