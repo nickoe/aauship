@@ -76,18 +76,21 @@ int main (void)
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
-		c = uart_getc();
-		c2 = uart2_getc();
-		c3 = uart3_getc();
+	//	c = uart_getc();
+	//	c2 = uart2_getc();
+	//	c3 = uart3_getc();
+/*
+		spiTransferWord(0x3E00);
+		for (i = 0;i<12;i++) { spiTransferWord(0x0000);}
+*/
 
-		//spiTransferWord(0x3E00);
-		//for (i = 0;i<12;i++) { spiTransferWord(0x0000);}
 		spiTransferWord(0x5600);
 		if (spiTransferWord(0x0000) == 0x4015) {
 			while(1) {
 				uart2_puts("!!");
 			}
 		}
+
 		_delay_ms(1);
 
 		/* Reading from radio */

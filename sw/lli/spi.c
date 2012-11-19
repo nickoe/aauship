@@ -22,6 +22,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include <util/delay.h>
+
 #include "spi.h"
 
 // Define the SPI_USEINT key if you want SPI bus operation to be
@@ -77,9 +79,13 @@ void spiInit()
 	// clock = f/4
 //	SPCR &= ~(1<<SPR0);
 //	SPCR &= ~(1<<SPR1);
+	// clock = f/8
+	SPCR |= (1<<SPR0);
+	SPCR &= ~(1<<SPR1);
+	SPCR |= (1<<SPI2X);
 	// clock = f/16
-	SPCR &= ~(1<<SPR0);
-	SPCR |= (1<<SPR1);
+//	SPCR &= ~(1<<SPR0);
+//	SPCR |= (1<<SPR1);
 	// clock polarity, select clock phase positive-going in middle of data
 	SPCR |= (1<<CPOL);
 	// Data order MSB first
@@ -143,13 +149,14 @@ uint16_t spiTransferWord(uint16_t data)
 {
 	uint16_t rxData = 0;
 PORTB &= ~(1<<0); // CS low
-_delay_us(15);
 	// send MS byte of given data
 	rxData = (spiTransferByte((data>>8) & 0x00FF))<<8;
+
 	// send LS byte of given data
 	rxData |= (spiTransferByte(data & 0x00FF));
+
 PORTB |= (1<<0); // CS high
-_delay_us(15);
+_delay_us(7);
 	// return the received data
 	return rxData;
 }
