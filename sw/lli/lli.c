@@ -37,6 +37,7 @@ int main (void)
 	int  idx = 0, idx2 = -1, idx3 = 0;
 	int	 len2 = 0;
 	unsigned int i = 0;
+	char s[64];
 
   /* set outputs */
 	PORTL = 0xff; // Turn off LEDS
@@ -74,24 +75,44 @@ int main (void)
 	uart2_putc('\n');
 	uart2_putc('\r');
 
+
+//	for (i = 0x1fff; i < 0x3fff; i++) {
+	for (i=8192; i<16383; i++) {
+		uart2_puts(itoa(adis_decode_14bit_raw(i,3330),s,10));
+		uart2_putc('\n');
+
+		_delay_ms(10);
+}
+	adis_reset_factory();
+
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
-	//	c = uart_getc();
-	//	c2 = uart2_getc();
-	//	c3 = uart3_getc();
-/*
-		spiTransferWord(0x3E00);
+		c = uart_getc();
+		c2 = uart2_getc();
+		c3 = uart3_getc();
+
+
+
+	/*	spiTransferWord(0x3E00);
 		for (i = 0;i<12;i++) { spiTransferWord(0x0000);}
 */
 
+/*
 		spiTransferWord(0x5600);
 		if (spiTransferWord(0x0000) == 0x4015) {
 			while(1) {
 				uart2_puts("!!");
 			}
 		}
+*/
 
-		_delay_ms(1);
+/*
+		uart2_puts(itoa(adis_get_xacc(),s,10));
+		uart2_putc('\r');
+		uart2_putc('\n');
+*/
+
+		_delay_ms(100);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available

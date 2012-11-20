@@ -46,7 +46,8 @@ uart.c \
 pwm.c \
 faps_parse.c \
 faps_process.c \
-spi.c
+spi.c \
+adis16405.c
 ARCH = avr-
 CC = $(ARCH)gcc
 OBJDUMP = $(ARCH)objdump

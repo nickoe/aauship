@@ -67,14 +67,36 @@
 #define ADIS_CSV    2
 #define ADIS_BIN    3
 
+
+typedef struct  {
+	uint16_t supply;
+	uint16_t xgyro;
+	uint16_t ygyro;
+	uint16_t zgyro;
+	uint16_t xaccl;
+	uint16_t yaccl;
+	uint16_t zaccl;
+	uint16_t xmagn;
+	uint16_t ymagn;
+	uint16_t zmagn;
+	uint16_t temp;
+	uint16_t adc;
+
+} adis_t;
+
+adis_t adis_data;
+
 /* Function prototypes */
 void adis_self_test( void );
 void adis_burst_read(void * pvParameters);
-void adis_get_temp( void );
+float adis_get_temp( void );
+int32_t adis_get_xacc( void );
 void adis_reset_factory( void );
 void adis_recalibrate_gyros( void );
 void adis_output( unsigned char );
 float data_read(int data_type);
+
+void adis_reset_factory(void);
 
 /**@}*/
 
