@@ -15,7 +15,8 @@ while bla == True:
 		parser.parsePacket(packet)
 	except Exception as inst:
 		if timeout > 5:
-			print "Quitting"
+			p = receiver.constructPacket(2000,2,3)
+			receiver.sendPacket(p)
 			bla = False
 		timeout = timeout + 1
 		
