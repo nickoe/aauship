@@ -30,7 +30,7 @@ The packet bytes are little endian (MSB first), which is consistent throughout t
 		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
 		\midrule
 		Startchar & 1 & uint8 & Start character (\texttt{\$}) \\
-		Length & 1 & uint8 & Length of data field in the range 0--250\\
+		Length & 1 & uint8 & Length of data field in the range 1--250\\
 		DevID & 1 & uint8 & Device identifier \\
 		MsgID & 1 & uint8 & Message identifier \\
 		Data & 1--250 & uint8 & Data portion (binary or ASCII )\\
