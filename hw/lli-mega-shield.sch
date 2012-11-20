@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date tir 09 okt 2012 11:29:43 CEST
+EESchema Schematic File Version 2  date fre 16 nov 2012 21:09:53 CET
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -38,7 +38,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Low Level Interface"
-Date "9 oct 2012"
+Date "16 nov 2012"
 Rev "1"
 Comp "Aalborg University"
 Comment1 "Nick Østergaard"
@@ -1575,7 +1575,7 @@ L C C4
 U 1 1 504EF348
 P 3800 5800
 F 0 "C4" H 3850 5900 50  0000 L CNN
-F 1 "C42" H 3850 5700 50  0000 L CNN
+F 1 "100nF" H 3850 5700 50  0000 L CNN
 	1    3800 5800
 	1    0    0    -1  
 $EndComp
