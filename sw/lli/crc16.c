@@ -64,7 +64,7 @@ unsigned short calculateCRC16(unsigned short crc,
  * Function to generate CRC-16 checksum of a byte array.
  */                     
 uint16_t crc16_ccitt_calc(char *pD, int l){
-	uint16_t val, crc, value, i;
+	uint16_t crc, value, i;
 	
 	crc = 0xFFFF;
 	for(i = 0; i<l; i++){
