@@ -93,3 +93,15 @@ int32_t adis_get_xacc( void ) {
 void adis_reset_factory( void ) {
 	spiTransferWord(0xBE02);
 }
+
+/**
+ * Testing for device number, base 10 value is the model number
+ */
+uint8_t is_adis16405( void ) {
+	spiTransferWord(0x5600);
+	if (spiTransferWord(0x0000) == 0x4015) {
+		return 1; // The devide is a ADIS16405
+	} else {
+		return 0; // Device not connected or is not a ADIS16405
+	}
+}
