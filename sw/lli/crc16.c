@@ -4,12 +4,10 @@
 #include "crc16.h"
 
 /*
- * Function to generate CRC-16 checksum of a byte array.
+ * CRC table for loopup for the CRC16-CCITT
  */
- int length;
- 
- static const unsigned short crc_itu16_table[256] = {
-    0x0000, 0x1189, 0x2312, 0x329B, 0x4624, 0x57AD, 0x6536, 0x74BF,
+static const unsigned short crc_itu16_table[256] = {
+  0x0000, 0x1189, 0x2312, 0x329B, 0x4624, 0x57AD, 0x6536, 0x74BF,
 	0x8C48, 0x9DC1, 0xAF5A, 0xBED3, 0xCA6C, 0xDBE5, 0xE97E, 0xF8F7,
 	0x1081, 0x0108, 0x3393, 0x221A, 0x56A5, 0x472C, 0x75B7, 0x643E,
 	0x9CC9, 0x8D40, 0xBFDB, 0xAE52, 0xDAED, 0xCB64, 0xF9FF, 0xE876,
@@ -61,7 +59,10 @@ unsigned short calculateCRC16(unsigned short crc,
     return crc & 0xffff;
 }*/
 
-                            
+       
+/*
+ * Function to generate CRC-16 checksum of a byte array.
+ */                     
 uint16_t crc16_ccitt_calc(char *pD, int l){
 	uint16_t val, crc, value, i;
 	
@@ -74,8 +75,12 @@ uint16_t crc16_ccitt_calc(char *pD, int l){
 }
  
 
+/*
+ * Example to test the function
+ */
+/*
 int main(void){
-	uint8_t str[6];// = "8623687632";// "lol"; // {0x02,0x02,0x03,0x07,0xd0};
+	uint8_t str[6];
 	str[0] = 0x02;
 	str[1] = 0x02;
 	str[2] = 0x03;
@@ -83,17 +88,10 @@ int main(void){
 	str[4] = 0xd0;
 	str[5] = 0x00;
 	
-	uint8_t t[2];
-	t[0] = 1;
-	t[1] = 0;
-	uint8_t te[8] = "1234567";
-	//#define CRC16 0x8005
-	//#define CRC16 0x1021
-	//#define CRC16 0x31C3
-	
 	uint16_t result = 0;
 	result = crc16_ccitt_calc(str,5);
 	printf("CRC16: %#x\n",result); 
 	// Should return 
-	// CRC16: 0xbb3d
+	// CRC16: 0x6b97
 }
+*/
