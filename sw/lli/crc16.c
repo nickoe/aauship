@@ -5,12 +5,10 @@
 
 /*
  * Function to generate CRC-16 checksum of a byte array.
- * Code is taken from http://stackoverflow.com/questions/10564491/function-to-calculate-a-crc16-checksum
  */
- int check;
  int length;
  
- static const unsigned short CRC16_TABLE[256] = {
+ static const unsigned short crc_itu16_table[256] = {
     0x0000, 0x1189, 0x2312, 0x329B, 0x4624, 0x57AD, 0x6536, 0x74BF,
 	0x8C48, 0x9DC1, 0xAF5A, 0xBED3, 0xCA6C, 0xDBE5, 0xE97E, 0xF8F7,
 	0x1081, 0x0108, 0x3393, 0x221A, 0x56A5, 0x472C, 0x75B7, 0x643E,
@@ -64,70 +62,18 @@ unsigned short calculateCRC16(unsigned short crc,
 }*/
 
                             
-uint16_t calcCRC16(char *pD, int l){
+uint16_t crc16_ccitt_calc(char *pD, int l){
 	uint16_t val, crc, value, i;
 	
 	crc = 0xFFFF;
 	for(i = 0; i<l; i++){
 		value = (crc ^ pD[i]) & 0xFF;
-		crc = (crc >> 8) ^ CRC16_TABLE[value];
+		crc = (crc >> 8) ^ crc_itu16_table[value];
 	}
 	return crc;
 }
  
- 
- 
-/*
-uint16_t gen_crc16(const uint8_t *data, uint16_t size, uint16_t CRC16)
-{
-    uint16_t out = 0;
-    int bits_read = 0, bit_flag;
 
-    /* Sanity check: *
-
-    while(size > 0)
-    {
-        bit_flag = out >> 15;
-
-        /* Get next bit: *
-        out <<= 1;
-        out |= (*data >> bits_read) & 1; // item a) work from the least significant bits
-
-        /* Increment bit counter: *
-        bits_read++;
-        if(bits_read > 7)
-        {
-            bits_read = 0;
-            data++;
-            size--;
-        }
-
-        /* Cycle check: *
-        if(bit_flag)
-            out ^= CRC16;
-
-    }
-
-    // item b) "push out" the last 16 bits
-    int i;
-    for (i = 0; i < 16; ++i) {
-        bit_flag = out >> 15;
-        out <<= 1;
-        if(bit_flag)
-            out ^= CRC16;
-    }
-
-    // item c) reverse the bits
-    uint16_t crc = 0;
-    i = 0x8000;
-    int j = 0x0001;
-    for (; i != 0; i >>=1, j <<= 1) {
-        if (i & out) crc |= j;
-    }
-
-    return crc;
-}
-*/
 int main(void){
 	uint8_t str[6];// = "8623687632";// "lol"; // {0x02,0x02,0x03,0x07,0xd0};
 	str[0] = 0x02;
@@ -145,18 +91,9 @@ int main(void){
 	//#define CRC16 0x1021
 	//#define CRC16 0x31C3
 	
-	uint16_t j = 0x8005;
 	uint16_t result = 0;
-	/*for(; j < 0xFFFF; j++){
-			printf("CRC16: %#x\t",gen_crc16(te,8,j));
-			printf("Polynom: %#x\n", j);
-		if(gen_crc16(te,8,j) == 0x9015){
-			result = j;
-			}
-	}//*/
-	result = calcCRC16(str,5);
-	printf("done: %#x\n",result);
-	//printf("CRC16: %#x\n",result); 
+	result = crc16_ccitt_calc(str,5);
+	printf("CRC16: %#x\n",result); 
 	// Should return 
 	// CRC16: 0xbb3d
 }
