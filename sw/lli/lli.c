@@ -37,6 +37,8 @@ int main (void)
 	int  idx = 0, idx2 = -1, idx3 = 0;
 	int	 len2 = 0;
 	unsigned int i = 0;
+	char s[64];
+	char *ptr;
 
   /* set outputs */
 	PORTL = 0xff; // Turn off LEDS
@@ -66,6 +68,7 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
+/*
 	char date[] = __DATE__;
 	char time[] = __TIME__;
 	uart2_puts(date);
@@ -73,25 +76,51 @@ int main (void)
 	uart2_puts(time);
 	uart2_putc('\n');
 	uart2_putc('\r');
+*/
+
+	adis_reset_factory();
+	
+
+	uint8_t str[2];
+
+	str[0] = 0x07;
+	str[1] = 0xd0;
+	
+	ptr = package(0x02, 0x03, str);
+	for (i=0; i<2+6; i++) {
+		uart2_putc(*(ptr+i));
+	}
+
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
-	//	c = uart_getc();
-	//	c2 = uart2_getc();
-	//	c3 = uart3_getc();
 /*
-		spiTransferWord(0x3E00);
+		c = uart_getc();
+		c2 = uart2_getc();
+		c3 = uart3_getc();
+*/
+
+
+	/*	spiTransferWord(0x3E00);
 		for (i = 0;i<12;i++) { spiTransferWord(0x0000);}
 */
 
+/*
 		spiTransferWord(0x5600);
 		if (spiTransferWord(0x0000) == 0x4015) {
 			while(1) {
 				uart2_puts("!!");
 			}
 		}
+*/
 
-		_delay_ms(1);
+/*
+		uart2_puts(itoa(adis_get_xacc(),s,10));
+		uart2_putc('\r');
+		uart2_putc('\n');
+*/
+
+		_delay_ms(100);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available

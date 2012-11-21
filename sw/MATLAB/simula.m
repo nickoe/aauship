@@ -50,8 +50,8 @@ varWN = [sqrt(varPOSX) sqrt(varVELX) sqrt(varACCX) sqrt(varPOSY) sqrt(varVELY) s
 % The below generates a function where the ship applies equal revolutions to the
 % ship for the first 500 samples, then increases revolutions on one
 % propeller, and then back again. 
-n1 = [100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N)]'; % Engine one is set to constantly apply 500 revolutions.
-n2 = [100*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 100*ones(1,0.1*N)]'; % Engine two applies 500 revolutions, then changes to 700 then back to 500 again. 
+n1 = [100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 95*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 95*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N)]'; % Engine one is set to constantly apply 500 revolutions.
+n2 = [100*ones(1,0.1*N) 95*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 95*ones(1,0.1*N) 100*ones(1,0.1*N) 105*ones(1,0.1*N) 100*ones(1,0.1*N) 95*ones(1,0.1*N)]'; % Engine two applies 500 revolutions, then changes to 700 then back to 500 again. 
 U = [n1 n2]';
 
 %% Kalman Filtering
@@ -511,3 +511,11 @@ ylabel('Revolutions [rps]');
 ylim([95 110])
 grid on
 print(h13,'-depsc2','-painters','revol.eps')
+
+
+
+%% Controller Computation - NOT DONE YET!
+A = Hn;
+B = [Zn(:,N-1) Zn(:,N)];
+Qopt = diag([1/((100)^2) 1/(5^2) 1/(10^2) 1/((100)^2) 1/(5^2) 1/(10^2) 1/((2*pi)^2) 1/(5^2) 1/(10^2)])
+Ropt = diag([0 0 1/(4^2) 0 0 0 1/(1^2) 0 0 0])

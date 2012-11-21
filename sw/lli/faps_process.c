@@ -3,6 +3,7 @@
 #include "pwm.h"
 #include <avr/io.h>
 #include "config.h"
+#include "crc16.h"
 
 /*
  * Decide what to do with a given command
@@ -39,3 +40,29 @@ int process(msg_t *msg)
 			break;
 	}
 }
+
+/*
+ * Send messages
+ */
+char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
+	uint8_t i = 0;
+	uint16_t crc = 0x0000;
+	uint8_t len = sizeof(data)/sizeof(uint8_t);
+		
+	pack[0] = '$';
+	pack[1] = len;
+	pack[2] = devid;
+	pack[3] = msgid;
+	for (i = 0; i < len; i++) {
+		pack[i+4] = data[i];
+	}
+	
+	crc = crc16_ccitt_calc(pack+1,len+3);
+	
+	pack[i+4] = (crc >> 8) & 0x00FF;
+	pack[i+5] = crc & 0x00FF;
+
+	return pack;
+}
+
+
