@@ -1,0 +1,21 @@
+\chapter{Hardware considerations}
+
+Because of the practical nature of the project, there are some things that have to be taken care of from a hardware point of view.
+
+\section{Lithium Polymer batteries}
+
+Lithium Polymer batteries have been chosen for powering the boat motors as well as for all the electronics because they offer a very high specific energy and energy density and can be charged in a very short period of time. 
+
+\subsection{Energy calculations}
+
+Each battery is composed of 4 series connected cells with a nominal voltage of $ 3.7V $, making a total of $ 14.8V $. There will be 6 such batteries, each storing $ 3200mAh $ worth of charge. That yields a total of $ 6 \cdot 14.8V \cdot 3.2Ah = 284.16Wh $ or around $ 1MJ $ of energy.
+
+There are two separate electrical circuits: a power circuit for the motors for which there are 5 dedicated batteries connected in parallel and the electronics circuit which is separated in order to avoid noise in the digital circuitry. These two are alloted 236.8Wh and 47.36Wh respectively.
+
+\subsection{Battery care and charge meters}
+
+Due to the delicate nature of Li-Po batteries, it is absolutely required to never over-charge or over-discharge them because there is a high risk of permanent damage to the batteries. If the temperatures continue to raies, there is even a risk of fire and/or explosion. In order to prevent this, we are using a dedicated Li-Po charger with an included balancer, which ensures that none of the cells in the batteries go above the absolute maximum of 4.2V while charging.
+
+The problem of over-discharge is solved in the power circuit due to the fact that the brushless motor controller has a safety switch which does not allow any cell to drop below 3V, which would cause permanent damage to the batteries, as they cannot recover after being over-discharged. 
+
+This is not the case, though, with the electronic circuit, which can drain the batteries more than the maximum limit. In order to prevent this from happening, we should eventually implement a couple of battery level monitors which should be integrated in the \ac{LLI} module and which can compute the battery levels and allow the user to retrieve the boat in order to charge it. They should also include a master kill switch which has the purpose of protecting the batteries.
