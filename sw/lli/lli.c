@@ -86,7 +86,7 @@ int main (void)
 	str[0] = 0x07;
 	str[1] = 0xd0;
 	
-	ptr = package(0x02, 0x03, str);
+	ptr = (char *)package(0x02, 0x03, str);
 	for (i=0; i<2+6; i++) {
 		uart2_putc(*(ptr+i));
 	}
