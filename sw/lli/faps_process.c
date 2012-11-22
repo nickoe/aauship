@@ -10,7 +10,17 @@
  */
 int process(msg_t *msg) 
 {
+	char buildtime[] =  __DATE__ " " __TIME__;
+
 	switch (msg->devid) {
+		case 0:
+			switch (msg->msgid) {
+				case 9:
+					grs_send(package(sizeof(buildtime), 0x00, 0x09, buildtime),sizeof(buildtime));
+					break;
+			}
+
+
 		case 100: 
 			pwm_set_duty(DC1, msg->data[0]);
 			break;

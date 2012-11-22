@@ -70,28 +70,6 @@ int main (void)
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
 
-	char date[11] = __DATE__;
-	char time[8] = __TIME__;
-	char buildtime[] ;
-	buildtime[sizeof(buildtime)-1] = 0;
-	memcpy(buildtime,date,sizeof(date));
-	memcpy(&buildtime[sizeof(date)+1],time,sizeof(time));
-	buildtime[sizeof(buildtime)] = ' ';
-	uart2_putc('\n');
-	uart2_puts(buildtime);
-
-
-/*
-	uart2_puts(date);
-	uart2_putc(' ');
-	uart2_puts(time);
-	uart2_putc('\n');
-	uart2_putc('\r');
-*/
-
-
-
-
 
 	adis_reset_factory();
 	
@@ -110,13 +88,15 @@ int main (void)
 	//grs_send(package(4, 0x02, 0x03, str),4);
 
 
+
+
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
-/*
+
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
-*/
+
 
 
 	/*	spiTransferWord(0x3E00);
@@ -138,7 +118,7 @@ int main (void)
 		uart2_putc('\n');
 */
 
-		_delay_ms(100);
+		//_delay_ms(100);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
