@@ -44,11 +44,10 @@ int process(msg_t *msg)
 /*
  * Prepare messages
  */
-char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
+char *package(uint8_t len, uint8_t devid, uint8_t msgid, uint8_t data[]) {
 	uint8_t i = 0;
 	uint16_t crc = 0x0000;
-	uint8_t len = sizeof(data)/sizeof(uint8_t);
-		
+	uart2_putc(len);
 	pack[0] = '$';
 	pack[1] = len;
 	pack[2] = devid;
@@ -68,9 +67,10 @@ char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
 /*
  * Send to HLI
  */
-int hli_send(char ptr[]) {
+void hli_send(uint8_t ptr[], uint8_t len) {
 	int i;
-	for (i=0; i<2+6; i++) {
+
+	for (i=0; i<len+6; i++) {
 		uart_putc(*(ptr+i));
 	}
 }
@@ -78,9 +78,10 @@ int hli_send(char ptr[]) {
 /*
  * Send to GRS
  */
-int grs_send(char ptr[]) {
+void grs_send(uint8_t ptr[], uint8_t len) {
 	int i;
-	for (i=0; i<2+6; i++) {
+
+	for (i=0; i<len+6; i++) {
 		uart2_putc(*(ptr+i));
 	}
 }

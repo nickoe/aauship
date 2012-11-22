@@ -81,16 +81,18 @@ int main (void)
 	adis_reset_factory();
 	
 
-	uint8_t str[2];
+	uint8_t str[4];
 
-	str[0] = 0x07;
-	str[1] = 0xd0;
+	str[0] = 0xDE;
+	str[1] = 0xAD;
+	str[2] = 0xBE;
+	str[3] = 0xEF;
 	
-	ptr = (char *)package(0x02, 0x03, str);
+	ptr = (char *)package(4, 0x02, 0x03, str);
 /*	for (i=0; i<2+6; i++) {
 		uart2_putc(*(ptr+i));
 	}*/
-	grs_send(ptr);
+	grs_send(ptr,4);
 
 
   while (1) {
