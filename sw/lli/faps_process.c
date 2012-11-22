@@ -68,7 +68,12 @@ char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
 /*
  * Send to HLI
  */
-
+int hli_send(char ptr[]) {
+	int i;
+	for (i=0; i<2+6; i++) {
+		uart_putc(*(ptr+i));
+	}
+}
 
 /*
  * Send to GRS
