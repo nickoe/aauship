@@ -47,7 +47,7 @@ int process(msg_t *msg)
 char *package(uint8_t len, uint8_t devid, uint8_t msgid, uint8_t data[]) {
 	uint8_t i = 0;
 	uint16_t crc = 0x0000;
-	uart2_putc(len);
+
 	pack[0] = '$';
 	pack[1] = len;
 	pack[2] = devid;

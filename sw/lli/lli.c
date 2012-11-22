@@ -15,6 +15,7 @@
 #include <util/delay.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
@@ -68,15 +69,29 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
+
+	char date[11] = __DATE__;
+	char time[8] = __TIME__;
+	char buildtime[] =  __DATE__ " " __TIME__;
+	buildtime[sizeof(buildtime)-1] = 0;
+	memcpy(buildtime,date,sizeof(date));
+	memcpy(&buildtime[sizeof(date)+1],time,sizeof(time));
+	buildtime[sizeof(buildtime)] = ' ';
+	uart2_putc('\n');
+	uart2_puts(buildtime);
+
+
 /*
-	char date[] = __DATE__;
-	char time[] = __TIME__;
 	uart2_puts(date);
 	uart2_putc(' ');
 	uart2_puts(time);
 	uart2_putc('\n');
 	uart2_putc('\r');
 */
+
+
+
+
 
 	adis_reset_factory();
 	
@@ -92,7 +107,7 @@ int main (void)
 /*	for (i=0; i<2+6; i++) {
 		uart2_putc(*(ptr+i));
 	}*/
-	grs_send(ptr,4);
+	//grs_send(package(4, 0x02, 0x03, str),4);
 
 
   while (1) {
