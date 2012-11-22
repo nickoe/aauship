@@ -16,7 +16,7 @@ class Serialdummy:
 		def __init__(self,serialport,speed):
 			self.array = [0x24,3,0,1,49,50,51,0x42,0xCE,0x24,2,1,1,2,2,2,3,0x24,2,1,1,1,2,0x5a,0xad,4,5,4,5,2,3,0x24,1,2,0x24,6,0,2	,48,49,50,51,52,53,0x6e,0x5b,0,4,3]
 			self.open = True;
-		def Read(self,numbers):
+		def read(self,numbers):
 			'''print self.array[0]'''
 			return self.array.pop(0)
 			
@@ -75,9 +75,9 @@ class packetHandler(threading.Thread):
 		
 	def run(self):
 		while self.connection.isOpen():	
-			checkchar = self.connection.Read(1)	
+			checkchar = self.connection.read(1)	
 			if checkchar == 0x24:	#Read char until start char is found
-				length=self.connection.Read(1)	#The next char after start byte is the length
+				length=self.connection.read(1)	#The next char after start byte is the length
 				res = self.parser(length)	#Input the length into the parser function
 				if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
 					self.preparePacket(res[1])
@@ -187,7 +187,7 @@ class packetHandler(threading.Thread):
 			packet.append(array)
 			extrabits = 4
 		for i in range((packet[0]-length+5)):
-			packet.append(self.connection.Read(1))
+			packet.append(self.connection.read(1))
 		check = self.packetCheck(packet)
 		if(check):
 			#print "EEEEEEEENS!"
@@ -196,7 +196,7 @@ class packetHandler(threading.Thread):
 			try:
 				index = packet.index(0x24)
 				if index == len(packet)-1:
-					packet.append(self.connection.Read(1))
+					packet.append(self.connection.read(1))
 				del packet[0:index+1]
 				return self.parser(packet)
 			except:
