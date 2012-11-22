@@ -54,7 +54,8 @@ CC = $(ARCH)gcc
 OBJDUMP = $(ARCH)objdump
 OBJCOPY = $(ARCH)objcopy
 
-CFLAGS=-I. $(INC) -g -DF_CPU=$(F_CPU) -mmcu=$(MCU_TARGET) -Os		
+GITCOMMIT= -D'__GIT_COMMIT__="$(shell git rev-parse HEAD)"'
+CFLAGS=$(GITCOMMIT) -I. $(INC) -g -DF_CPU=$(F_CPU) -mmcu=$(MCU_TARGET) -Os		
 LDFLAGS = -Wl,--as-needed -Wl,--gc-sections
 LIBS = -lm
 
