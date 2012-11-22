@@ -72,7 +72,7 @@ int main (void)
 
 	char date[11] = __DATE__;
 	char time[8] = __TIME__;
-	char buildtime[] =  __DATE__ " " __TIME__;
+	char buildtime[] ;
 	buildtime[sizeof(buildtime)-1] = 0;
 	memcpy(buildtime,date,sizeof(date));
 	memcpy(&buildtime[sizeof(date)+1],time,sizeof(time));
