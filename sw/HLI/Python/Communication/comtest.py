@@ -9,7 +9,7 @@ parser = packetparser.packetParser()
 bla = True
 timeout = 0
 p = receiver.constructPacket(0,0,9)
-receiver.sendpacket(p)
+receiver.sendPacket(p)
 while bla == True:
 	try:
 		packet = qu.get(False)
