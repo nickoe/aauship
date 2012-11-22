@@ -42,7 +42,7 @@ int process(msg_t *msg)
 }
 
 /*
- * Send messages
+ * Prepare messages
  */
 char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
 	uint8_t i = 0;
@@ -65,4 +65,18 @@ char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
 	return pack;
 }
 
+/*
+ * Send to HLI
+ */
+
+
+/*
+ * Send to GRS
+ */
+int grs_send(char ptr[]) {
+	int i;
+	for (i=0; i<2+6; i++) {
+		uart2_putc(*(ptr+i));
+	}
+}
 

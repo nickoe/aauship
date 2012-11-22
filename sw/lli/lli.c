@@ -87,9 +87,10 @@ int main (void)
 	str[1] = 0xd0;
 	
 	ptr = (char *)package(0x02, 0x03, str);
-	for (i=0; i<2+6; i++) {
+/*	for (i=0; i<2+6; i++) {
 		uart2_putc(*(ptr+i));
-	}
+	}*/
+	grs_send(ptr);
 
 
   while (1) {
