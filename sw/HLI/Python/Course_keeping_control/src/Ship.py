@@ -7,12 +7,12 @@ Created on 2012.11.12.
 import math
 import numpy
 import scipy
-import control
+#import control
 import matplotlib.pyplot as plt
 
 import FunctionLibrary as FL
 import ObjectLibrary as OL
-import CommUnit as CU
+#import CommUnit as CU
 
 '''
 #############################################

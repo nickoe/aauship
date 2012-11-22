@@ -76,7 +76,7 @@ while i < ni:
     #x2[i] = results[2]
     #print(i)
     i += 1
-    print('i:', i)
+    #print('i:', i)
     AAUSHIP.ReadStates(numpy.sum(states[0]), numpy.sum(states[1]), numpy.sum(states[2]), pos)
     
 plt.plot(x0,x1)
