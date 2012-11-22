@@ -66,7 +66,7 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
  
 \begin{table}[h]
 \centering
-	\begin{tabular}{lllll}
+	\begin{tabular}{llrrl}
 	\toprule
 	& \textbf{Message Name} & \textbf{MsgID} & \textbf{Data Size} & \textbf{Contains}\\
 	\midrule
@@ -90,12 +90,22 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
 	& Set options & 1 & Up to 255 & Option bytes\\
 	& Read Options & 2 & Up to 255 & Option bytes\\
-	& Set thruster & 3 & 2 & Desired Speed\\
-	& Read thruster & 4 & 2 & Set Speed \\
-	& Set left thruster & 5 & 2 & Desired Speed\\
-	& Read thruster & 6 & 2 & Set Speed\\
-	& Set bow thruster & 7 & 2 & Desired Speed\\
-	& Read bow thruster & 8 & 2 & Set Speed\\ 
+	& Set PWM actuator 1  & 3 & 2 & Engine 1, starboard side (default)\\
+	& Read PWM actuator 1 & 4 & 2 & Engine 1, starboard side (default)\\
+	& Set PWM actuator 2 & 5 & 2 & Engine 2, port side\\
+	& Read PWM actuator 2 & 6 & 2 & Engine 2, port side\\
+	& Set PWM actuator 3 & 7 & 2 & Engine 3 (auxiliary)\\
+	& Read PWM actuator 3 & 8 & 2 & Engine 3 (auxiliary)\\ 
+	& Set PWM actuator 4 & 9 & 2 & Rudder\\
+	& Read PWM actuator 4 & 10 & 2 & Rudder\\ 
+	& Set PWM actuator 5 & 11 & 2 & Auxiliary\\
+	& Read PWM actuator 5 & 12 & 2 & Auxiliary\\ 
+	& Set PWM output 1 & 13 & 2 & Bow thruster\\
+	& Read PWM output 1 & 14 & 2 & Bow thruster\\ 
+	& Set PWM output 2 & 15 & 2 & Auxiliary\\
+	& Read PWM output 2 & 16 & 2 & Auxiliary\\ 
+	& Set PWM output 3 & 17 & 2 & Auxiliary\\
+	& Read PWM output 3 & 18 & 2 & Auxiliary\\ 
 	\midrule
 	\multicolumn{5}{l}{\textbf{20: IMU}}\\
 	\midrule
