@@ -23,6 +23,7 @@ while bla == True:
 		except:
 			print "Oh well"
 		parser.parsePacket(packet)
+		print "Parsed"
 	except Exception as inst:
 		if timeout > 5:
 			#p = receiver.constructPacket(2000,2,3)

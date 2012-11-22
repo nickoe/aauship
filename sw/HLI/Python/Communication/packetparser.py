@@ -9,6 +9,10 @@ class packetParser():
 		pass
 			
 	def parsePacket(self,packet):
+		print packet
+		print "started parsing"
+		print "Parsing: "
+		print "What"
 		#print "----------"
 		#print "parsing:"
 		'''
@@ -19,7 +23,8 @@ class packetParser():
 		'''
 		value = ""
 		packetinfo = ""
-		if (packet['DevID'] == 0):		#GPS
+		if (ord(packet['DevID']) == 0):		#GPS
+			print "General"
 		
 			'''
 			List of MsgIDs:
@@ -27,14 +32,15 @@ class packetParser():
 			Longtitude: 1
 			Velocity: 2
 			'''
-			if(packet['MsgID'] == 0): 		#Latitude
+			if(ord(packet['MsgID']) == 0): 		#Latitude
 				value = self.Ascii(packet['Data'])
-			elif(packet['MsgID'] == 1): 	#Longtitude
+			elif(ord(packet['MsgID']) == 1): 	#Longtitude
 				value = self.Ascii(packet['Data'])
-			elif(packet['MsgID'] == 2): 	#Velocity
-				value = self.Ascii(packet['Data'])
+			elif(ord(packet['MsgID']) == 9): 	#Velocity
+				print "".join(packet['Data'])
 			else:
-				print "MsgID [" + packet['MsgId'] + "] not recognized"
+				print "fejl"
+				print "MsgID [" + str(ord(packet['MsgId'])) + "] not recognized"
 		elif(packet['DevID'] == 1): 		#IMU
 			'''
 			List of MsgIDs:
