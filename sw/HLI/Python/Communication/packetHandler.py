@@ -1,4 +1,4 @@
-#import serial
+import serial
 import threading
 import time
 import datetime
@@ -34,7 +34,7 @@ class Serialdummy:
 class packetHandler(threading.Thread):
 	
 	def __init__(self,serialport,speed,queue):
-		self.connection = Serialdummy.Serial(serialport,speed)	#Serial Connection
+		self.connection = serial.Serial(serialport,speed)	#Serial Connection
 		self.myNewdata = []				#Array for storing new packets
 		self.q = queue					#Queue to share data between threads
 		 
