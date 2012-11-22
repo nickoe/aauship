@@ -15,6 +15,7 @@
 #include <util/delay.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
@@ -68,37 +69,34 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
-/*
-	char date[] = __DATE__;
-	char time[] = __TIME__;
-	uart2_puts(date);
-	uart2_putc(' ');
-	uart2_puts(time);
-	uart2_putc('\n');
-	uart2_putc('\r');
-*/
+
 
 	adis_reset_factory();
 	
 
-	uint8_t str[2];
+	uint8_t str[4];
 
-	str[0] = 0x07;
-	str[1] = 0xd0;
+	str[0] = 0xDE;
+	str[1] = 0xAD;
+	str[2] = 0xBE;
+	str[3] = 0xEF;
 	
-	ptr = (char *)package(0x02, 0x03, str);
-	for (i=0; i<2+6; i++) {
+	ptr = (char *)package(4, 0x02, 0x03, str);
+/*	for (i=0; i<2+6; i++) {
 		uart2_putc(*(ptr+i));
-	}
+	}*/
+	//grs_send(package(4, 0x02, 0x03, str),4);
+
+
 
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
-/*
+
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
-*/
+
 
 
 	/*	spiTransferWord(0x3E00);
@@ -120,7 +118,7 @@ int main (void)
 		uart2_putc('\n');
 */
 
-		_delay_ms(100);
+		//_delay_ms(100);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
