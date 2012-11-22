@@ -30,10 +30,10 @@ The packet bytes are little endian (MSB first), which is consistent throughout t
 		\textbf{Field name} & \textbf{Size [bytes]} & \textbf{Type} & \textbf{Description}\\
 		\midrule
 		Startchar & 1 & uint8 & Start character (\texttt{\$}) \\
-		Length & 1 & uint8 & Length of data field in the range 1--250\\
+		Length & 1 & uint8 & Length of data field in the range 1--255\\
 		DevID & 1 & uint8 & Device identifier \\
 		MsgID & 1 & uint8 & Message identifier \\
-		Data & 1--250 & uint8 & Data portion (binary or ASCII )\\
+		Data & 1--255 & uint8 & Data portion (binary or ASCII )\\
 		Checksum & 2 & uint8 & CRC-16 checksum on data part \\
 
 		\bottomrule
@@ -46,9 +46,9 @@ The device ID (DevID) also serves as the priority of the packets, enabling more 
 
 \section{Message definitions}
 %This is the list of all supported messages for the LLI interface. The messages is the interface to every thing that could be of interest for the HLI, i.e. sensor measurements and actuator control. The list of field descriptions in the following ommits the generic fields, with start character and checksum.
-The initial list of supported devices and message IDs is given in table TODO. The initial devices are distributed evenly with 10 IDs between each device to allow for other new devices to be implemented with with lower, higher priority, IDs. The general functions of the LLI are implemented with the highest available priority, since it has the deadman switch implemented but a very low amount of regular activity.
+The initial list of supported devices and message IDs is given in table \ref{Tablesofcommands}. The initial devices are distributed evenly with 10 IDs between each device to allow for other new devices to be implemented with with lower, higher priority, IDs. The general functions of the LLI are implemented with the highest available priority, since it has the deadman switch implemented but a very low amount of regular activity.
 From the definition of the DevID and MsgID each packet can be identified as having to do with a given part of the system. This is the same throughout the system. For some parts of the system, such as the motors, it is not possible to see whether the packet is a set or a get command, from the initial data structure. To mediate this, a "Read thruster" command is implemented, and should be implemented for all future actuators or other devices which are not just passively feeding back data. This would be achieved by sending a "Read thruster" packet to the LLI from the HLI. The LLI will neglect the data part of this message, as it unnecessary to understand the intention of the package. It will then respond with the MsgID and  DevID, but with the data is has read from the MotorSpeed register.
-To facilitate the Plug and Play nature of the system, the first 3 available MsgIDs are defined to have a set meaning. These are given in table TODO.
+To facilitate the Plug and Play nature of the system, the first 3 available MsgIDs are defined to have a set meaning. These are given in table \ref{firstmsgids}.
 \begin{table}[h]
 \centering
 \begin{tabular}{ll}
@@ -59,63 +59,103 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 1 & Set options for device\\
 2 & Read options from device\\
 \bottomrule
+\label{firstmsgids}
 \end{tabular}
 \end{table}
  If a packet with MsgID 0 is sent to a device, the device will respond with a list of all available MsgIDs, along with their definition. If a packet with MsgID 0 is sent to DevID 0, the General LLI, it will respond with a list of available devices. If these device definitions adhere to a strict protocol, it will be possible to automatically configure an LLI and HLI implementing this protocol. This protocol will not be defined in this project, but the feature will useful in checking and validating the configuration.
+ 
 \begin{table}[h]
 \centering
-	\begin{tabular}{lllll}
+	\begin{tabular}{llrrl}
 	\toprule
 	& \textbf{Message Name} & \textbf{MsgID} & \textbf{Data Size} & \textbf{Contains}\\
 	\midrule
 	\multicolumn{5}{l}{\textbf{0: General}}\\
 	\midrule
-	& Deadman Switch & 0 & 1 & On or off signal for actuators \\
-	& Status & 1 & 250 & Statuses of sensors and actuators \\
-	& Ping & 2 & 0 & Empty \\
-	& Pong & 3 & 0 & Empty \\
-	& ACK & 4 & 0 & Empty \\
-	& NACK & 5 & 0 & Empty \\
-	& Build Info & 6 & 250 & Commit, target, date\\
-	& Surge & 7 & 1 & Speed\\
-	& Turn & 8 & 1 & Turning velocity\\
+	& List available devices & 0 & Up to 255 & Return a message for every available device\\
+	& Set options & 1 & Up to 255 & Option bytes\\
+	& Read Options & 2 & Up to 255 & Option bytes\\
+	& Deadman Switch & 3 & 1 & On or off signal for actuators \\
+	& Status & 4 & Up to 255 & Statuses of sensors and actuators \\
+	& Ping & 5 & 0 & Empty \\
+	& Pong & 6 & 0 & Empty \\
+	& ACK & 7 & 0 & Empty \\
+	& NACK & 8 & 0 & Empty \\
+	& Build Info & 9 & Up to 255 & Commit, target, date\\
+	& Surge & 10 & 1 & Speed\\
+	& Turn & 11 & 1 & Turning velocity\\
 	\midrule
 	\multicolumn{5}{l}{\textbf{10: Actuators}}\\
 	\midrule
-	& Set thruster & 0 & 2 & Desired Speed\\
-	& Read thruster & 1 & 2 & Set Speed \\
-	& Set left thruster & 2 & 2 & Desired Speed\\
-	& Read thruster & 3 & 2 & Set Speed\\
-	& Set bow thruster & 4 & 2 & Desired Speed\\
-	& Read bow thruster & 5 & 2 & Set Speed\\ 
+	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
+	& Set options & 1 & Up to 255 & Option bytes\\
+	& Read Options & 2 & Up to 255 & Option bytes\\
+	& Set PWM actuator 1  & 3 & 2 & Engine 1, starboard side (default)\\
+	& Read PWM actuator 1 & 4 & 2 & Engine 1, starboard side (default)\\
+	& Set PWM actuator 2 & 5 & 2 & Engine 2, port side\\
+	& Read PWM actuator 2 & 6 & 2 & Engine 2, port side\\
+	& Set PWM actuator 3 & 7 & 2 & Engine 3 (auxiliary)\\
+	& Read PWM actuator 3 & 8 & 2 & Engine 3 (auxiliary)\\ 
+	& Set PWM actuator 4 & 9 & 2 & Rudder\\
+	& Read PWM actuator 4 & 10 & 2 & Rudder\\ 
+	& Set PWM actuator 5 & 11 & 2 & Auxiliary\\
+	& Read PWM actuator 5 & 12 & 2 & Auxiliary\\ 
+	& Set PWM output 1 & 13 & 2 & Bow thruster\\
+	& Read PWM output 1 & 14 & 2 & Bow thruster\\ 
+	& Set PWM output 2 & 15 & 2 & Auxiliary\\
+	& Read PWM output 2 & 16 & 2 & Auxiliary\\ 
+	& Set PWM output 3 & 17 & 2 & Auxiliary\\
+	& Read PWM output 3 & 18 & 2 & Auxiliary\\ 
 	\midrule
 	\multicolumn{5}{l}{\textbf{20: IMU}}\\
 	\midrule
-	& X-Acceleration & 0 & 2 & Acceleration in X-direction\\
-	& Y-Acceleration & 1 & 2 & Acceleration in Y-direction\\
-	& Z-Acceleration & 2 & 2 & Acceleration in Z-direction\\
-	& X-Gyro & 3 & 2 & Gyroscope in X-direction\\
-	& Y-Gyro & 4 & 2 & Gyroscope in Y-direction\\
-	& Z-Gyro & 5 & 2 & Gyroscope in Z-direction\\
-	& X-Mag & 6 & 2 & Magnetometer in X-direction\\
-	& Y-Mag & 7 & 2 & Magnetometer in Y-direction\\
-	& Z-Mag & 8 & 2 & Magnetometer in Z-direction\\
-	& Temp & 9 & 2 & Temperature in IMU\\
+	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
+	& Set options & 1 & Up to 255 & Option bytes\\
+	& Read Options & 2 & Up to 255 & Option bytes\\
+	& X-Acceleration & 3 & 2 & Acceleration in X-direction\\
+	& Y-Acceleration & 4 & 2 & Acceleration in Y-direction\\
+	& Z-Acceleration & 5 & 2 & Acceleration in Z-direction\\
+	& X-Gyro & 6 & 2 & Gyroscope in X-direction\\
+	& Y-Gyro & 7 & 2 & Gyroscope in Y-direction\\
+	& Z-Gyro & 8 & 2 & Gyroscope in Z-direction\\
+	& X-Mag & 9 & 2 & Magnetometer in X-direction\\
+	& Y-Mag & 10 & 2 & Magnetometer in Y-direction\\
+	& Z-Mag & 11 & 2 & Magnetometer in Z-direction\\
+	& Temp & 12 & 2 & Temperature in IMU\\
 	\midrule
 	\multicolumn{5}{l}{\textbf{30: GPS}}\\
 	\midrule
-	& Velocity & 0 & 2 & Velocity\\
-	& Latitude & 1 & 4 & Latitude\\
-	& Longitude & 2 & 4 & Longitude\\
+	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
+	& Set options & 1 & Up to 255 & Option bytes\\
+	& Read Options & 2 & Up to 255 & Option bytes\\
+	& Velocity & 3 & 2 & Velocity\\
+	& Latitude & 4 & 4 & Latitude\\
+	& Longitude & 5 & 4 & Longitude\\
+	\label{Tablesofcommands}
+	\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+	\begin{tabular}{lllll}
+	\toprule
+	& \textbf{Message Name} & \textbf{MsgID} & \textbf{Data Size} & \textbf{Contains}\\
 	\midrule
 	\multicolumn{5}{l}{\textbf{40: Temperature}}\\
 	\midrule
-	& Temp 0 & 0 & 2 & Temperature \\
-	& Temp 1 & 1 & 2 & Temperature \\
-	& Temp 2 & 2 & 2 & Temperature \\
+	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
+	& Set options & 1 & Up to 255 & Option bytes\\
+	& Read Options & 2 & Up to 255 & Option bytes\\
+	& Temp 0 & 3 & 2 & Temperature \\
+	& Temp 1 & 4 & 2 & Temperature \\
+	& Temp 2 & 5 & 2 & Temperature \\
 	\midrule
 	\multicolumn{5}{l}{\textbf{50: Voltage}}\\
 	\midrule
+	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
+	& Set options & 1 & Up to 255 & Option bytes\\
+	& Read Options & 2 & Up to 255 & Option bytes\\
+	& Voltage & 3 & Up to 255 & Voltage\\
 	\bottomrule
 	\end{tabular}
 \end{table}
@@ -129,13 +169,13 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
 		\midrule
 		Deadman switch & 0 & 1 & Turn on or off actuators and wait for manual control \\
-		Status of system & 1 & 250 & Statuses of sensors and actuators \\
+		Status of system & 1 & Up to 255 & Statuses of sensors and actuators \\
 		Ping & 2 & Empty \\
 		Pong & 3& Empty \\
 		ACK & 4 & Empty\\
 		NACK & 5 & Empty\\
-		Build info & 6 & 250 & Commit, target, date\\
-		Surge & 7 & 1 &\\
+		Build info & 6 & Up to 255 & Commit, target, date\\
+		Surge & 7 & 1 & Speed\\
 		Turn & 8 & 1 &\\
 		\bottomrule
 	\end{tabular}

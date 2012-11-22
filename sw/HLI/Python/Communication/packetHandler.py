@@ -1,4 +1,4 @@
-#import serial
+import serial
 import threading
 import time
 import datetime
@@ -16,7 +16,7 @@ class Serialdummy:
 		def __init__(self,serialport,speed):
 			self.array = [0x24,3,0,1,49,50,51,0x42,0xCE,0x24,2,1,1,2,2,2,3,0x24,2,1,1,1,2,0x5a,0xad,4,5,4,5,2,3,0x24,1,2,0x24,6,0,2	,48,49,50,51,52,53,0x6e,0x5b,0,4,3]
 			self.open = True;
-		def Read(self,numbers):
+		def read(self,numbers):
 			'''print self.array[0]'''
 			return self.array.pop(0)
 			
@@ -34,7 +34,8 @@ class Serialdummy:
 class packetHandler(threading.Thread):
 	
 	def __init__(self,serialport,speed,queue):
-		self.connection = Serialdummy.Serial(serialport,speed)	#Serial Connection
+		self.connection = serial.Serial(serialport,speed)	#Serial Connection
+		print self.connection
 		self.myNewdata = []				#Array for storing new packets
 		self.q = queue					#Queue to share data between threads
 		 
@@ -74,10 +75,16 @@ class packetHandler(threading.Thread):
 		threading.Thread.__init__(self) #Initialize Thread
 		
 	def run(self):
+		print "running thread"
+		print self.connection.isOpen() 
 		while self.connection.isOpen():	
-			checkchar = self.connection.Read(1)	
-			if checkchar == 0x24:	#Read char until start char is found
-				length=self.connection.Read(1)	#The next char after start byte is the length
+			print "Reading"
+			checkchar = self.connection.read(1)
+			print "successfull Read!"
+			print checkchar	
+			if checkchar == chr(STARTCHAR):	#Read char until start char is found
+				print "Checkchar is correct!"
+				length=self.connection.read(1)	#The next char after start byte is the length
 				res = self.parser(length)	#Input the length into the parser function
 				if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
 					self.preparePacket(res[1])
@@ -95,7 +102,7 @@ class packetHandler(threading.Thread):
 			except:
 				value = (crc ^ ord(i)) & 0xFF	#if the value of 'i' is a chr
 			crc = (crc >> 8) ^self.table[value]	
-		result = [(crc>>8)&0xFF,crc&0xFF] 		#Format checksum correctly
+		result = [chr((crc>>8)&0xFF),chr(crc&0xFF)] 		#Format checksum correctly
 		
 		return result
 		
@@ -125,10 +132,12 @@ class packetHandler(threading.Thread):
 		Checksum = self.CheckSum(packet)	#First, the checksum of the packet is generated
 		packet.append(Checksum[0])	#The checksum is appropriately appended
 		packet.append(Checksum[1])
-		self.connection.write(STARTCHAR) #The startChar is written
+		self.connection.write(chr(STARTCHAR)) #The startChar is written
 		for i in range(len(packet)):	#The byte are then written individually
-			self.connection.write(packet[i])
-		
+			try:
+				self.connection.write(chr(packet[i]))
+			except:
+				self.connection.write(packet[i])
 		
 	def isOpen(self):
 		return self.connection.isOpen()
@@ -152,7 +161,7 @@ class packetHandler(threading.Thread):
 		DevID = packet[1]
 		MsgID = packet[2]
 		Data = []
-		for i in range(length):
+		for i in range(ord(length)):
 			Data.append(packet[3+i])
 		newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data}
 		#print newpacket
@@ -164,11 +173,17 @@ class packetHandler(threading.Thread):
 		
 	def packetCheck(self,packet):
 		p = packet[:] #Copy packet to p
+
 		incCheck=[p.pop(),p.pop()] #remove the two checksum bytes
+		incCheck.reverse()
 		check = self.CheckSum(p) #get the checksum of the bit.
-		#print "check: " + str(check)
-		#print "incCheck: " + str(incCheck)
+		print "check: " + str(check)
+		print "incCheck: " + str(incCheck)
+		
+		print type(incCheck[1])
+		print ord(incCheck[0])
 		if incCheck == check:
+			print "Godkendt"
 			return True
 		else:
 			return False
@@ -186,8 +201,9 @@ class packetHandler(threading.Thread):
 		except:
 			packet.append(array)
 			extrabits = 4
-		for i in range((packet[0]-length+5)):
-			packet.append(self.connection.Read(1))
+		for i in range((ord(packet[0])-length+5)):
+			packet.append(self.connection.read(1))
+			print packet
 		check = self.packetCheck(packet)
 		if(check):
 			#print "EEEEEEEENS!"
@@ -196,7 +212,7 @@ class packetHandler(threading.Thread):
 			try:
 				index = packet.index(0x24)
 				if index == len(packet)-1:
-					packet.append(self.connection.Read(1))
+					packet.append(self.connection.read(1))
 				del packet[0:index+1]
 				return self.parser(packet)
 			except:

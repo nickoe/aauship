@@ -10,7 +10,17 @@
  */
 int process(msg_t *msg) 
 {
+	char buildtime[] =  __DATE__ " " __TIME__;
+
 	switch (msg->devid) {
+		case 0:
+			switch (msg->msgid) {
+				case 9:
+					grs_send(package(sizeof(buildtime), 0x00, 0x09, buildtime),sizeof(buildtime));
+					break;
+			}
+
+
 		case 100: 
 			pwm_set_duty(DC1, msg->data[0]);
 			break;
@@ -42,13 +52,12 @@ int process(msg_t *msg)
 }
 
 /*
- * Send messages
+ * Prepare messages
  */
-char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
+char *package(uint8_t len, uint8_t devid, uint8_t msgid, uint8_t data[]) {
 	uint8_t i = 0;
 	uint16_t crc = 0x0000;
-	uint8_t len = sizeof(data)/sizeof(uint8_t);
-		
+
 	pack[0] = '$';
 	pack[1] = len;
 	pack[2] = devid;
@@ -65,4 +74,25 @@ char *package(uint8_t devid, uint8_t msgid, uint8_t data[]) {
 	return pack;
 }
 
+/*
+ * Send to HLI
+ */
+void hli_send(uint8_t ptr[], uint8_t len) {
+	int i;
+
+	for (i=0; i<len+6; i++) {
+		uart_putc(*(ptr+i));
+	}
+}
+
+/*
+ * Send to GRS
+ */
+void grs_send(uint8_t ptr[], uint8_t len) {
+	int i;
+
+	for (i=0; i<len+6; i++) {
+		uart2_putc(*(ptr+i));
+	}
+}
 
