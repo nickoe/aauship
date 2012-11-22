@@ -74,7 +74,7 @@ class packetParser():
 		
 		else:
 			print "DevID [" + packet['DevID'] + "] not recognized"
-
+		print packet
 		print self.DevID[packet['DevID']] + "\t" + self.MsgID[packet['DevID']][packet['MsgID']] + "\t" + str(value)
 				
 	def binary(self,data):
