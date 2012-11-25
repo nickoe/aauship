@@ -1,3 +1,4 @@
+%% Discrete version.
 %% State space system simulation:
 % Rasmus Christensen
 % Discrete - Ship Control Simulator - 20/11/2012
@@ -5,7 +6,7 @@
 
 clc; clear all; close all;
 
-K = 1000;
+K = 10000;
 ts = 0.01;
 
 % System parameters:
@@ -36,27 +37,42 @@ phi = pi/16;
 inp_sort = [0.5 0.5;
             0.5 -0.5];
 
-A = zeros(5,5,K);
-B = zeros(5,2,K);
-C = zeros(2,5,K);
+A = zeros(3,3,K);
+B = zeros(3,2,K);
+C = zeros(2,3,K);
 
 betaX = zeros(1,K);
 betaW = zeros(1,K);
 
-F = zeros(2,5,K);
+F = zeros(2,3,K);
 N = zeros(2,2,K);
 
 rot = zeros(2,2,K);
 rot(:,:,1) = eye(2);
-x = zeros(5,K);
+x = zeros(3,K);
 y = zeros(2,K);
 u = zeros(2,K);
-u(:,1) = [1;1]; % Cannot start from zero
         
 % Generation of reference signals:
 r = [ones(1,K);
-     zeros(1,0.2*K) -pi*ones(1,0.8*K)];% -pi*ones(1,0.02*K) zeros(1,0.36*K) zeros(1,0.4*K)];
+     zeros(1,K)];% -pi*ones(1,0.02*K) zeros(1,0.36*K) zeros(1,0.4*K)];
 r_boat = zeros(2,K);
+
+          A = [-5.8/m 0 0;...
+               0 0 1;...
+               0 0 -2];
+
+          B = [0.62/m 0.62/m;...
+               0 0;...
+               0.0305/I -0.0305/I];
+           
+          C = [1 0 0;...
+               0 1 0];
+           
+        sys = ss(A,B,C,0);
+       sysD = c2d(sys,ts)
+       
+       
 
 for n = 2:K % thrust computation    
          k1 = rho*(D^4)*Kt*abs(u(1));
@@ -67,47 +83,39 @@ for n = 2:K % thrust computation
  betaW(:,n) = 1/8*Cd*rho*depth*(rf^4+rr^4)*abs(x(3,n-1));     
       
       % System Matrices are defined below: 
-   A(:,:,n) = [1 ts 0 0 0;... % Velocity
-               -5.8 0 0 0 0;... % Acceleration
-               0 0 1 ts ((ts^2)/2);... % Angle
-               0 0 0 1 ts;... % Angular Velocity
-               0 0 0 -10.7326 0]; % Angular Acceleration
+   A(:,:,n) = sysD.a;
 
-   B(:,:,n) = [0 0;...
-               10/m 10/m;... % acceleration input, sum of propellers
-               0 0;...
-               0 0;...
-               60/I -60/I]; % angular acceleration input, difference between them
+   B(:,:,n) = sysD.b;
 
-   C(:,:,n) = [1 0 0 0 0;... % velocity output
-               0 0 1 0 0]; % angle output
+   C(:,:,n) = sysD.c;
            
        % Feedback poles are computed below:
-          %Q = diag([1/(20^2) 1/(10^2) 1/((2*pi)^2) 1/(2^2) 1/(2^2)]);
-          %R = diag([1/(50^2) 1/(120^2)]);
-   F(:,:,n) = lqr(A(:,:,n),B(:,:,n),0.01*ts*C(:,:,n)'*C(:,:,n),eye(2));
+          Q = diag([1/25 1/(20*pi) 1/200]); %1/max velocity^2, 1/max angle^2, 1/max ang. vel.^2
+          R = diag([1/100 1/100]);
+   F(:,:,n) = lqr(sysD,Q,R);
+   %F(:,:,n) = lqr(sysD,ts*C(:,:,n)'*C(:,:,n),eye(2));
           
        % Reference gains are compute below:          
        A_nf =[A(:,:,n) B(:,:,n);C(:,:,n) zeros(2,2)];
-       B_nf = [zeros(5,2);eye(2)];
+       B_nf = [zeros(3,2);eye(2)];
         N_f = A_nf\B_nf;
-        Nxf = N_f(1:5,:);
-        Nuf = N_f(6:7,:);
+        Nxf = N_f(1:3,:);
+        Nuf = N_f(4:5,:);
    N(:,:,n) = Nuf + F(:,:,n)*Nxf;
-   
+
        % Conversion of reference signal to boatframe:
- rot(:,:,n) = [cos(x(3,n)) -sin(x(3,n));sin(x(3,n)) cos(x(3,n))];
+ rot(:,:,n) = [cos(x(2,n-1)) -sin(x(2,n-1));sin(x(2,n-1)) cos(x(2,n-1))];
 r_boat(:,n) = rot(:,:,n)\r(:,n);
 
        % Update of the system:
-     u(:,n) = (inp_sort*(-F(:,:,n)*x(:,n-1)) + N(:,:,n)*r_boat(:,n)); % Input to the system - check if ts should be in this one.
-     x(:,n) = bsxfun(@plus,A(:,:,n)*x(:,n-1),B(:,:,n)*u(:,n-1)); % Computation of state values
-     y(:,n) = C(:,:,n)*x(:,n); % System output!
+     x(:,n) = bsxfun(@plus,(A(:,:,n)-(B(:,:,n)*F(:,:,n)))*x(:,n-1),B(:,:,n)*N(:,:,n)*r(:,n)); % Computation of state values
+     u(:,n) = (-(F(:,:,n)*x(:,n-1)) + N(:,:,n)*r(:,n)); % Input to the system - check if ts should be in this one.
+     y(:,n) = (C(:,:,n)*x(:,n)); % System output!
 end
 
 h1 = figure(1);
 plot(x')
-legend('Velocity','Acceleration','Angle','Angular Velocity','Angular Acceleration')
+legend('Velocity','Angle','Angular Velocity')
 grid on
 % print(h1,'-depsc2','-painters','mass_plot.eps')
 
