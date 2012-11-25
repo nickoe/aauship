@@ -15,7 +15,8 @@ Created on 2012.09.25.
 import math
 import numpy
 import scipy
-import control
+import scipy.special
+#import control
 import matplotlib.pyplot as plt
 
 
