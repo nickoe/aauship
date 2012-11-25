@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  tir 09 okt 2012 11:29:46 CEST
+# EESchema Netlist Version 1.1 created  søn 25 nov 2012 23:39:25 CET
 (
  ( /5073CEE4 $noname  C5 22uF {Lib=C}
   (    1 +5VP )
@@ -180,7 +180,7 @@
   (    1 /T3 )
   (    2 N-000080 )
  )
- ( /504EF348 $noname  C4 C42 {Lib=C}
+ ( /504EF348 $noname  C4 100nF {Lib=C}
   (    1 +5V )
   (    2 GND )
  )
@@ -220,9 +220,9 @@
   (    2 N-000073 )
  )
  ( /504A39B9 $noname  U2 LM35 {Lib=LM35}
-  (    1 /T1 )
-  (    2 GND )
-  (    3 +5V )
+  (    1 +5V )
+  (    2 /T1 )
+  (    3 GND )
  )
  ( /504A2942 $noname  R1 1K {Lib=R}
   (    1 N-000075 )
@@ -419,10 +419,10 @@ Net 29 "+BATT" "+BATT"
 Net 30 "GND" "GND"
  C3 2
  U6 GND
- U2 2
+ C1 2
  Q1 3
  U1 1
- C1 2
+ U2 3
  C4 2
  R6 2
  SHIELD1 GND1
@@ -534,12 +534,12 @@ Net 71 "/RF_EN" "RF_EN"
  SHIELD1 AD12
  U1 7
 Net 72 "/T1" "T1"
- R2 1
- U2 1
  SHIELD1 AD5
+ R2 1
+ U2 2
 Net 73 "" ""
- C1 1
  R2 2
+ C1 1
 Net 74 "/SCLK" "SCLK"
  U5 3
  SHIELD1 52
@@ -550,14 +550,14 @@ Net 76 "/GPS_TX" "GPS_TX"
  U7 2
  SHIELD1 15
 Net 77 "/GPS_RX" "GPS_RX"
- U7 1
  SHIELD1 14
+ U7 1
 Net 78 "" ""
- R5 1
  P1 2
+ R5 1
 Net 79 "/~CS" "~CS"
- U5 6
  SHIELD1 53
+ U5 6
 Net 80 "" ""
  R4 2
  C3 1
@@ -568,18 +568,18 @@ Net 82 "" ""
  R7 1
  D2 2
 Net 84 "+5V" "+5V"
- D2 1
- U1 2
+ D3 1
  SHIELD1 5V_4
- C4 1
  SHIELD1 5V_5
+ U1 2
  D5 1
+ D2 1
+ U5 12
  SHIELD1 5V
  U5 11
- D3 1
- U5 12
- U2 3
  D4 1
+ C4 1
+ U2 1
  U5 10
 Net 85 "+5VP" "+5VP"
  C5 1
