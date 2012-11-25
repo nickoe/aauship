@@ -82,15 +82,30 @@ typedef struct  {
 	uint16_t temp;
 	uint16_t adc;
 
-} adis_t;
+} adis16_t;
 
-adis_t adis_data;
+typedef struct  {
+	uint8_t supply[2];
+	uint8_t xgyro[2];
+	uint8_t ygyro[2];
+	uint8_t zgyro[2];
+	uint8_t xaccl[2];
+	uint8_t yaccl[2];
+	uint8_t zaccl[2];
+	uint8_t xmagn[2];
+	uint8_t ymagn[2];
+	uint8_t zmagn[2];
+	uint8_t temp[2];
+	uint8_t adc[2];
+
+} adis8_t;
+
+adis16_t adis_data_raw;
+adis8_t adis_data_decoded;
 
 /* Function prototypes */
 void adis_self_test( void );
-void adis_burst_read(void * pvParameters);
 float adis_get_temp( void );
-int32_t adis_get_xacc( void );
 void adis_reset_factory( void );
 void adis_recalibrate_gyros( void );
 void adis_output( unsigned char );
@@ -98,6 +113,9 @@ float data_read(int data_type);
 
 void adis_reset_factory(void);
 uint8_t is_adis16405( void );
+int adis_burst_read( adis16_t *data );
+int32_t adis_get_xacc( void );
+void w2bptr(int16_t word, uint8_t array[2]);
 
 /**@}*/
 

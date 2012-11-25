@@ -7,7 +7,7 @@
 
 uint8_t pack[256];
 
-char *package(uint8_t len, uint8_t devid, uint8_t msgid, uint8_t data[250]);
+char *package(uint8_t len, uint8_t devid, uint8_t msgid, int8_t data[250]);
 void hli_send(uint8_t ptr[], uint8_t len);
 void grs_send(uint8_t ptr[], uint8_t len);
 #endif	/* _FAPS_PROCESS_H */

@@ -22,7 +22,7 @@ void adis_self_test( void ) {
  * This decodes the 14 bit raw data from the ADIS16405 sesor
  */
 
-int32_t adis_decode_14bit_raw(int16_t sensor, int32_t scale){
+int32_t adis_decode_14bit_raw(int16_t sensor, uint32_t scale){
 	int32_t out;
 
 	// Makes sure that we only copy the 14-bit data we are interrested in and that
@@ -32,7 +32,6 @@ int32_t adis_decode_14bit_raw(int16_t sensor, int32_t scale){
 	// Handle negative values
 	if(out>=0x2000)
 		out = 0xffffc000 | out; 
-
 	out = out * scale;
 
 	return out;
@@ -42,12 +41,17 @@ int32_t adis_decode_14bit_raw(int16_t sensor, int32_t scale){
  * This decodes the 12 bit raw data from the ADIS16405 sesor
  */
 int32_t adis_decode_12bit_raw(uint16_t sensor, uint32_t scale){
-	//uint32_t sensor = 0;
-	//sensor = (uint32_t)((SENSOR_OUT[0] << 8) | SENSOR_OUT[1]) &0xfff;
-	if(sensor>=0x800) 
-		sensor = 0xfffff000 | sensor;
-	sensor = sensor * scale;
-	return sensor;
+	int32_t out;
+
+	// Makes sure that we only copy the 12-bit data we are interrested in and that
+	// the new variables is 32-bit
+	out = (int32_t) (0x00000fff & sensor);
+
+	if(out>=0x800) 
+		out = 0xfffff000 | sensor;
+//	out = out * scale;
+	
+	return out;
 }
 
 
@@ -81,7 +85,7 @@ int32_t adis_get_xacc( void ) {
 
 	spiTransferWord(0x0A00);
 	temp = spiTransferWord(0x0000);
-	temperature =	adis_decode_14bit_raw(temp,3330);
+	temperature =	adis_decode_14bit_raw(temp,1);
 
 	return temperature;
 }
@@ -100,8 +104,67 @@ void adis_reset_factory( void ) {
 uint8_t is_adis16405( void ) {
 	spiTransferWord(0x5600);
 	if (spiTransferWord(0x0000) == 0x4015) {
-		return 1; // The devide is a ADIS16405
+		return 1; // The device is a ADIS16405
 	} else {
 		return 0; // Device not connected or is not a ADIS16405
 	}
+}
+
+
+/**
+ * Raw burst read
+ */
+int adis_burst_read( adis16_t *data ) {
+	/* Initiate burst read */
+	spiTransferWord(0x3E00);
+
+	/* Read all data from the burst read at put in struct */
+	data->supply = spiTransferWord(0x0000);
+	data->xgyro  = spiTransferWord(0x0000);
+	data->ygyro  = spiTransferWord(0x0000);
+	data->zgyro  = spiTransferWord(0x0000);
+	data->xaccl  = spiTransferWord(0x0000);
+	data->yaccl  = spiTransferWord(0x0000);
+	data->zaccl  = spiTransferWord(0x0000);
+	data->xmagn  = spiTransferWord(0x0000);
+	data->ymagn  = spiTransferWord(0x0000);
+	data->zmagn  = spiTransferWord(0x0000);
+	data->temp   = spiTransferWord(0x0000);
+	data->adc    = spiTransferWord(0x0000);
+
+	return 1;
+}
+/*
+
+		adis_burst_read(&adis_data);
+		xacc = adis_decode_14bit_raw(adis_data.xaccl,1);
+		w2bptr(adis_decode_14bit_raw(adis_data.xaccl,1);, xacca);
+		grs_send(package(2, 0x14, 0x03, &xacca), 2);
+*/
+/**
+ * Decode and pack the burst readed data
+ */
+int adis_decode_burst_read_pack(uint8_t data[sizeof(adis8_t)]) {
+	adis_burst_read(&adis_data_raw); // Collect raw measurements
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.supply,1), adis_data_decoded.supply);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.xgyro,1), adis_data_decoded.xgyro);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.ygyro,1), adis_data_decoded.ygyro);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.zgyro,1), adis_data_decoded.zgyro);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.xaccl,1), adis_data_decoded.xaccl);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.yaccl,1), adis_data_decoded.yaccl);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.zaccl,1), adis_data_decoded.zaccl);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.xmagn,1), adis_data_decoded.xmagn);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.ymagn,1), adis_data_decoded.ymagn);
+	w2bptr(adis_decode_14bit_raw(adis_data_raw.zmagn,1), adis_data_decoded.zmagn);
+	w2bptr(adis_decode_12bit_raw(adis_data_raw.temp,1), adis_data_decoded.temp);
+	w2bptr(adis_decode_12bit_raw(adis_data_raw.adc,1), adis_data_decoded.adc);
+}
+
+/**
+ * Word to byte-array pointer
+ * Converts a 16-bit word to a 2 elements 8-bit byte array
+ */
+void w2bptr(int16_t word, uint8_t array[2]) {
+	array[0] = (word >> 8) & 0x00FF;
+	array[1] = word & 0x00FF;
 }

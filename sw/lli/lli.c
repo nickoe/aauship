@@ -40,6 +40,8 @@ int main (void)
 	unsigned int i = 0;
 	char s[64];
 	char *ptr;
+	uint16_t xacc = 0;
+	uint8_t xacca[2];
 
   /* set outputs */
 	PORTL = 0xff; // Turn off LEDS
@@ -98,27 +100,29 @@ int main (void)
 		c3 = uart3_getc();
 
 
+		adis_decode_burst_read_pack(&adis_data_decoded);
+		grs_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
 
-	/*	spiTransferWord(0x3E00);
-		for (i = 0;i<12;i++) { spiTransferWord(0x0000);}
-*/
-
-/*
-		spiTransferWord(0x5600);
-		if (spiTransferWord(0x0000) == 0x4015) {
-			while(1) {
-				uart2_puts("!!");
-			}
-		}
-*/
+		PORTL ^= (1<<LED4);
+		//xacc = adis_get_xacc();
+		//grs_send(package(2, 0x14, 0x03, xacc), 2);
 
 /*
-		uart2_puts(itoa(adis_get_xacc(),s,10));
-		uart2_putc('\r');
-		uart2_putc('\n');
+		adis_burst_read(&adis_data_raw);
+		xacc = adis_decode_14bit_raw(adis_data_raw.xaccl,1);
+		w2bptr(xacc, xacca);
+		grs_send(package(2, 0x14, 0x03, &xacca), 2);
 */
 
-		//_delay_ms(100);
+//sizeof(adis_data.xaccl)
+
+/*
+     uart2_puts(itoa(adis_decode_14bit_raw(adis_data.xaccl,1),s,10));
+     uart2_putc('\r');
+     uart2_putc('\n');
+*/
+
+		_delay_ms(100);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
