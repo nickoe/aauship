@@ -28,7 +28,7 @@ sysD = c2d(sys,ts);
 disc_poles = pole(sysD)
  
 % Optimal poles, continous case
-Q = diag([1/2 1/(2*pi*2*pi) 1/20]); %1/max velocity^2, 1/max angle^2, 1/max ang. vel.^2
+Q = diag([1/2 1/(2*pi*2*pi) 1/10000]); %1/max velocity^2, 1/max angle^2, 1/max ang. vel.^2
 R = diag([1/1000 1/250]);
 F = lqr(A,B,Q,R);
 %F = lqr(A,B,80*C'*C,eye(2));
@@ -91,9 +91,6 @@ y = zeros(2,numel(eng1));
  end
  
 %% Same as above, but discrete.
-sysD = c2d(sys,ts);
-disc_poles = pole(sysD)
-
 sysD_F = lqr(sysD,Q,R);
 
 A_nfd =[sysD.a sysD.b;sysD.c sysD.d];
@@ -115,19 +112,33 @@ title('Velocity and Angle plot - Discrete')
 xlabel('Sample [n]')
 ylabel('Velocity [m/s] and Angle [rad]')
 
-h5 = figure(5);
-for n = 1:numel(outputD(:,1)');
-    revD(:,n) = L\inputD(n,:)';
-    syD(:,n) =[sign(revD(1,n))*sqrt(abs(revD(1,n)));sign(revD(2,n))*sqrt(abs(revD(2,n)))];
+for nDn = 1:numel(outputD(:,1)');
+    revDn(:,nDn) = L\inputD_non(nDn,:)';
+    syDn(:,nDn) =[sign(revDn(1,nDn))*sqrt(abs(revDn(1,nDn)));sign(revDn(2,nDn))*sqrt(abs(revDn(2,nDn)))];
 end
-eng1D = smooth(syD(1,:),5);
-eng2D = smooth(syD(2,:),5);
 
+h4 = figure(5);
+subplot(2,1,1)
+plot(syDn(1,:)); hold on
+plot(syDn(2,:),'r'); 
+hold off
+grid on
+title('Engine Input - Discrete - Non Filtered');
+legend('Engine 1','Engine 2');
+%xlabel('Sample [n]');
+ylabel('Revolutions [rps]');
+
+for nD = 1:numel(outputD(:,1)');
+    revD(:,nD) = L\inputD(nD,:)';
+    syD(:,nD) =[sign(revD(1,nD))*sqrt(abs(revD(1,nD)));sign(revD(2,nD))*sqrt(abs(revD(2,nD)))];
+end
+
+subplot(2,1,2)
 plot(syD(1,:)); hold on
 plot(syD(2,:),'r'); 
 hold off
 grid on
-title('Engine Input - Discrete');
+title('Engine Input - Discrete - Filtered');
 legend('Engine 1','Engine 2');
 xlabel('Sample [n]');
 ylabel('Revolutions [rps]');
@@ -147,3 +158,9 @@ title('Position in Local Frame')
 xlabel('X Position [m]')
 ylabel('Y Posiiton [m]')
 legend('Sailed track')
+
+%% FFT:
+h7 = figure(7)
+Sxx_filt = ((abs(fftshift(fft(syDn)))).^2)./numel(outputD(:,1));
+plot(fft(Sxx_filt)')
+grid on

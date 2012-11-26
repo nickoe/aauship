@@ -47,11 +47,11 @@ coast = coast - numpy.max(coast) - 10* safety
 
 AAUSHIP.Plan_WP(coast, decimation, safety)
 
-X = scipy.rand(100)*100
-Y = scipy.rand(100)*100
-WPC = numpy.array([X,Y])
+#X = scipy.rand(100)*100
+#Y = scipy.rand(100)*100
+#WPC = numpy.array([X,Y])
 
-AAUSHIP.SetWaypoints(WPC)
+#AAUSHIP.SetWaypoints(WPC)
 
 plt.plot(coast)
 plt.axes().set_aspect('equal')

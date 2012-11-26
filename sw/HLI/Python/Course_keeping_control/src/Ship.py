@@ -78,7 +78,8 @@ class O_Ship:
     def Plan_FullPath(self, plotit = 0):
         
         '''
-        # Plans and plots all of the Sub-WayPoints of the system. Should not be used under normal circumstances
+        # Plans and plots all of the Sub-WayPoints of the system.
+        # Should not be used under normal circumstances
         '''
         
         PrevRange = 0;
