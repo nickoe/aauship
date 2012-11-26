@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.2"
+    ComputedModelVersion    "1.4"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -27,9 +27,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Nov 24 20:05:47 2012"
-  RTWModifiedTimeStamp	  275683695
-  ModelVersionFormat	  "1.%<AutoIncrement:2>"
+  LastModifiedDate	  "Mon Nov 26 19:03:40 2012"
+  RTWModifiedTimeStamp	  275854505
+  ModelVersionFormat	  "1.%<AutoIncrement:4>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -67,8 +67,7 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "discsim"
-    signals_		    []
-    overrideMode_	    [0U]
+    overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
@@ -614,7 +613,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 280, 135, 1160, 765 ] 
+      ConfigPrmDlgPosition     [ 501, 152, 1400, 951 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -801,7 +800,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [161, 233, 1354, 726]
+    Location		    [1692, 207, 2885, 700]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -813,9 +812,9 @@ Model {
     TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "129"
+    ZoomFactor		    "103"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "39"
+    SIDHighWatermark	    "43"
     Block {
       BlockType		      Gain
       Name		      "A"
@@ -845,7 +844,7 @@ Model {
       BlockType		      Gain
       Name		      "B"
       SID		      "3"
-      Position		      [460, 100, 490, 130]
+      Position		      [485, 100, 515, 130]
       ZOrder		      -8
       Gain		      "sysD.b"
       Multiplication	      "Matrix(K*u)"
@@ -858,13 +857,13 @@ Model {
       Name		      "Band-Limited\nWhite Noise"
       SID		      "4"
       Ports		      [0, 1]
-      Position		      [735, 165, 765, 195]
+      Position		      [730, 165, 760, 195]
       ZOrder		      -2
       BlockMirror	      on
       LibraryVersion	      "1.260"
       SourceBlock	      "simulink/Sources/Band-Limited\nWhite Noise"
       SourceType	      "Band-Limited White Noise."
-      Cov		      "[0.0000001]"
+      Cov		      "[0.00001]"
       Ts		      "ts"
       seed		      "[23341]"
       VectorParams1D	      on
@@ -942,7 +941,7 @@ Model {
       Name		      "Smoothing\nProcess"
       SID		      "21"
       Ports		      [1, 1]
-      Position		      [385, 91, 430, 139]
+      Position		      [390, 91, 435, 139]
       ZOrder		      -17
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -953,8 +952,8 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"Smoothing\nProcess"
-	Location		[539, 235, 1142, 541]
-	Open			on
+	Location		[1493, 671, 2096, 977]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1205,9 +1204,20 @@ Model {
       Name		      "System Input"
       SID		      "14"
       Ports		      [1]
-      Position		      [430, 40, 490, 70]
+      Position		      [495, 45, 555, 75]
       ZOrder		      -7
       VariableName	      "inputD"
+      MaxDataPoints	      "inf"
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      ToWorkspace
+      Name		      "System Input1"
+      SID		      "43"
+      Ports		      [1]
+      Position		      [380, 20, 440, 50]
+      ZOrder		      -7
+      VariableName	      "inputD_non"
       MaxDataPoints	      "inf"
       SampleTime	      "-1"
     }
@@ -1284,23 +1294,16 @@ Model {
     Line {
       SrcBlock		      "Sum1"
       SrcPort		      1
-      Points		      [15, 0]
-      Branch {
-	Points			[0, -60]
-	DstBlock		"System Input"
-	DstPort			1
-      }
+      Points		      [10, 0]
       Branch {
 	DstBlock		"Smoothing\nProcess"
 	DstPort			1
       }
-    }
-    Line {
-      SrcBlock		      "F"
-      SrcPort		      1
-      Points		      [-265, -1]
-      DstBlock		      "Sum1"
-      DstPort		      2
+      Branch {
+	Points			[0, -80]
+	DstBlock		"System Input1"
+	DstPort			1
+      }
     }
     Line {
       SrcBlock		      "N"
@@ -1355,12 +1358,6 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Smoothing\nProcess"
-      SrcPort		      1
-      DstBlock		      "B"
-      DstPort		      1
-    }
-    Line {
       SrcBlock		      "Add"
       SrcPort		      1
       DstBlock		      "Mux"
@@ -1389,6 +1386,27 @@ Model {
       SrcPort		      1
       DstBlock		      "Add"
       DstPort		      3
+    }
+    Line {
+      SrcBlock		      "F"
+      SrcPort		      1
+      Points		      [-265, 0]
+      DstBlock		      "Sum1"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Smoothing\nProcess"
+      SrcPort		      1
+      Points		      [10, 0]
+      Branch {
+	DstBlock		"B"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -55]
+	DstBlock		"System Input"
+	DstPort			1
+      }
     }
     Line {
       SrcBlock		      "Band-Limited\nWhite Noise"
