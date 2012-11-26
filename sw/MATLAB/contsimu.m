@@ -101,7 +101,7 @@ Nufd = N_f(4:5,:);
 sysD_N = Nufd + sysD_F*Nxfd;
 sim('discsim')
 
-h4 = figure(4)
+h4 = figure(4);
 plot(outputD(:,1)); hold on
 plot(outputD(:,2),'g');
 plot(referenceD(:,1),'k--')
@@ -160,7 +160,7 @@ ylabel('Y Posiiton [m]')
 legend('Sailed track')
 
 %% FFT:
-h7 = figure(7)
+h7 = figure(7);
 Sxx_filt = ((abs(fftshift(fft(syDn)))).^2)./numel(outputD(:,1));
 plot(fft(Sxx_filt)')
 grid on
