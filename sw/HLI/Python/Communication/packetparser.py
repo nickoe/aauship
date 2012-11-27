@@ -1,18 +1,22 @@
+import struct
+import csv
 class packetParser():
-	def __init__(self):
+	def __init__(self,file):
 		self.GPS = {0: 'Latitude', 1: 'Longtitude', 2: 'Velocity'}
 		self.IMU = {0: 'Acceleration X', 1: 'Acceleration Y', 2: 'Acceleration Z', 3: 'Gyroscope X', 4: 'Gyroscope Y', 5: 'GyroscopeZ', 6: 'MagnetometerX', 7: 'MagnetometerY', 8: 'MagnetometerZ', 9: 'Temperature'}
 		self.MsgID = {0: self.GPS, 1: self.IMU}
 		self.DevID = {0: 'GPS', 1: 'IMU'}
-		
+		self.accelburst = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+		self.log = file
+		self.writer = csv.writer(self.log)
 		#print "Stdsqewarted!"
 		pass
 			
 	def parsePacket(self,packet):
-		print packet
-		print "started parsing"
-		print "Parsing: "
-		print "What"
+		#print packet
+		#print "started parsing"
+		#print "Parsing: "
+		#print "What"
 		#print "----------"
 		#print "parsing:"
 		'''
@@ -41,7 +45,7 @@ class packetParser():
 			else:
 				print "fejl"
 				print "MsgID [" + str(ord(packet['MsgId'])) + "] not recognized"
-		elif(packet['DevID'] == 1): 		#IMU
+		elif(ord(packet['DevID']) == 1): 		#IMU
 			'''
 			List of MsgIDs:
 			AccelX 	: 0
@@ -76,12 +80,47 @@ class packetParser():
 			elif(packet['MsgID'] == 9):	#Temp
 				value = self.binary(packet['Data'])
 			else:
-				print "MsgID [" + packet['MsgID'] + "] not recognized"
-		
+				print "MsgID [" + ord(packet['MsgID']) + "] not recognized"
+		elif(ord(packet['DevID']) == 20):
+			#print "------------------------IMU!-----------------------"
+			if(ord(packet['MsgID']) == 13):
+				accelnr = 0
+				#print "Recognized msg"
+				#print packet['Data']
+				isInt = False
+				
+			
+				for i in range(len(packet['Data'])):
+					#print packet['Data'][i] +"\t (" + str(ord(packet['Data'][i])) + ")\t [" + hex(ord(packet['Data'][i])) + "]"
+
+					#print str(packet['Data'][i-1:i+1])
+					if ((i & 1) == 1):
+						tempval = packet['Data'][i-1:i+1]
+						tempval.reverse()
+						#print str("".join(tempval))
+						val = 0
+						try:
+							val = struct.unpack('h', "".join(tempval))
+						except:
+							pass
+						#val = struct.unpack('h', "".join(packet['Data'][i-1:i+1]))
+						self.accelburst[accelnr] = val[0]
+						accelnr = accelnr + 1
+						#print str(val[0])
+				self.accelburst[accelnr] = packet['Time']
+				if(self.accelburst[accelnr-1] == 256):
+					print packet
+					print self.accelburst
+				#print self.accelburst
+				else:
+					self.writer.writerow(self.accelburst)
+				#print "successfull write"
+				#print str(packet['Data'])
+			#print str(ord(packet['MsgID']))
 		else:
-			print "DevID [" + packet['DevID'] + "] not recognized"
-		print packet
-		print self.DevID[packet['DevID']] + "\t" + self.MsgID[packet['DevID']][packet['MsgID']] + "\t" + str(value)
+			print "DevID [" + (packet['DevID']) + "] not recognized"
+		#print packet
+		#print self.DevID[packet['DevID']] + "\t" + self.MsgID[packet['DevID']][packet['MsgID']] + "\t" + str(value)
 				
 	def binary(self,data):
 		value = 0

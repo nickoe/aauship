@@ -2,11 +2,12 @@ import packetHandler
 import packetparser
 import Queue
 import time
-
+import csv
+f = open("data.csv", 'w')
 qu = Queue.Queue()
-receiver = packetHandler.packetHandler("/dev/ttyUSB0",38400,qu)
+receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,qu)
 receiver.start()
-parser = packetparser.packetParser()
+parser = packetparser.packetParser(f)
 bla = True
 timeout = 0
 p = receiver.constructPacket(0,0,9)
@@ -14,25 +15,46 @@ print "Packet:"
 print p
 receiver.sendPacket(p)
 time.sleep(2)
+stopping = False
 print "message sent"
 while bla == True:
 	try:
+		#time.sleep(0.1)
 		packet = qu.get(False)
 		try:
-			print packet
+			pass
+		#	print packet
 		except:
 			print "Oh well"
 		parser.parsePacket(packet)
-		print "Parsed"
+		#print "Parsed"
 	except Exception as inst:
-		if timeout > 5:
-			#p = receiver.constructPacket(2000,2,3)
-			#receiver.sendPacket(p)
-			bla = False
-		timeout = timeout + 1
+		try:
+			if stopping:
+				break
+			else:
+				#print "Get Exception"
+				time.sleep(0.001)
+				#if timeout > 50:
+					#p = receiver.constructPacket(2000,2,3)
+					#receiver.sendPacket(p)
+					#bla = False
+				#timeout = timeout + 1
+		except KeyboardInterrupt:
+				receiver.close()
+				if stopping:
+					break
+				stopping = True
+	except KeyboardInterrupt:
 		
-print "done"
+		receiver.close()
+		if stopping:
+			break
+		stopping = True
+
+	
 #receiver.close()
 #receiver.join()
-
-quit()
+f.close()
+print "done"
+quit()	

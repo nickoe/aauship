@@ -78,16 +78,20 @@ class packetHandler(threading.Thread):
 		print "running thread"
 		print self.connection.isOpen() 
 		while self.connection.isOpen():	
-			print "Reading"
-			checkchar = self.connection.read(1)
-			print "successfull Read!"
-			print checkchar	
-			if checkchar == chr(STARTCHAR):	#Read char until start char is found
-				print "Checkchar is correct!"
-				length=self.connection.read(1)	#The next char after start byte is the length
-				res = self.parser(length)	#Input the length into the parser function
-				if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
-					self.preparePacket(res[1])
+			#print "Reading"
+			try:
+				checkchar = self.connection.read(1)
+				#print "successfull Read!"
+				#print checkchar	
+				if checkchar == chr(STARTCHAR):	#Read char until start char is found
+					#print "Checkchar is correct!"
+					length=self.connection.read(1)	#The next char after start byte is the length
+					res = self.parser(length)	#Input the length into the parser function
+					if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
+						#print "Valid packet"
+						self.preparePacket(res[1])
+			except:
+				pass
 		running = False
 			
 	def close(self):
@@ -163,7 +167,7 @@ class packetHandler(threading.Thread):
 		Data = []
 		for i in range(ord(length)):
 			Data.append(packet[3+i])
-		newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data}
+		newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data, 'Time': time.time()}
 		#print newpacket
 		self.myNewdata.append(newpacket)
 		self.q.put(newpacket)
@@ -177,13 +181,13 @@ class packetHandler(threading.Thread):
 		incCheck=[p.pop(),p.pop()] #remove the two checksum bytes
 		incCheck.reverse()
 		check = self.CheckSum(p) #get the checksum of the bit.
-		print "check: " + str(check)
-		print "incCheck: " + str(incCheck)
+	#	print "check: " + str(check)
+	#	print "incCheck: " + str(incCheck)
 		
-		print type(incCheck[1])
-		print ord(incCheck[0])
+		#print type(incCheck[1])
+		#print ord(incCheck[0])
 		if incCheck == check:
-			print "Godkendt"
+			#print "Godkendt"
 			return True
 		else:
 			return False
@@ -203,7 +207,7 @@ class packetHandler(threading.Thread):
 			extrabits = 4
 		for i in range((ord(packet[0])-length+5)):
 			packet.append(self.connection.read(1))
-			print packet
+			#print packet
 		check = self.packetCheck(packet)
 		if(check):
 			#print "EEEEEEEENS!"
