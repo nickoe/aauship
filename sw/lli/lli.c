@@ -122,7 +122,7 @@ int main (void)
      uart2_putc('\n');
 */
 
-		_delay_ms(100);
+		_delay_ms(20);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available

@@ -36,7 +36,7 @@ void parse(msg_t *msg, char s[]);
 
 
 /**
-	@brief   Send full message packet
+	@brief   Send full message packet (used for binary debugging of packets)
 	@param   pointer of message structure
 	@return  none
 */

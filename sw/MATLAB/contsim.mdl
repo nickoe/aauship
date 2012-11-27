@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.11"
+    ComputedModelVersion    "1.13"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -27,9 +27,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Nov 24 21:50:42 2012"
-  RTWModifiedTimeStamp	  275683051
-  ModelVersionFormat	  "1.%<AutoIncrement:11>"
+  LastModifiedDate	  "Mon Nov 26 19:03:36 2012"
+  RTWModifiedTimeStamp	  275856053
+  ModelVersionFormat	  "1.%<AutoIncrement:13>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -67,6 +67,7 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "contsim"
+    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -134,7 +135,7 @@ Model {
 	  StartTime		  "0.0"
 	  StopTime		  "100"
 	  AbsTol		  "auto"
-	  FixedStep		  "auto"
+	  FixedStep		  "0.1"
 	  InitialStep		  "auto"
 	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
@@ -613,7 +614,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 261, 89, 1160, 711 ] 
+      ConfigPrmDlgPosition     [ 501, 152, 1400, 951 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -706,6 +707,15 @@ Model {
       NonVirtualBus	      off
     }
     Block {
+      BlockType		      SignalGenerator
+      WaveForm		      "sine"
+      TimeSource	      "Use simulation time"
+      Amplitude		      "1"
+      Frequency		      "1"
+      Units		      "Hertz"
+      VectorParams1D	      on
+    }
+    Block {
       BlockType		      Step
       Time		      "1"
       Before		      "0"
@@ -743,7 +753,7 @@ Model {
   }
   System {
     Name		    "contsim"
-    Location		    [121, 172, 1309, 747]
+    Location		    [1937, 412, 3125, 987]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -757,12 +767,12 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "134"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "57"
+    SIDHighWatermark	    "60"
     Block {
       BlockType		      Gain
       Name		      "A"
       SID		      "4"
-      Position		      [535, 145, 565, 175]
+      Position		      [550, 145, 580, 175]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "A"
@@ -787,29 +797,13 @@ Model {
       BlockType		      Gain
       Name		      "B"
       SID		      "1"
-      Position		      [390, 80, 420, 110]
+      Position		      [370, 80, 400, 110]
       ZOrder		      -8
       Gain		      "B"
       Multiplication	      "Matrix(K*u)"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Band-Limited\nWhite Noise"
-      SID		      "16"
-      Ports		      [0, 1]
-      Position		      [675, 145, 705, 175]
-      ZOrder		      -2
-      BlockMirror	      on
-      LibraryVersion	      "1.260"
-      SourceBlock	      "simulink/Sources/Band-Limited\nWhite Noise"
-      SourceType	      "Band-Limited White Noise."
-      Cov		      "[0.001]"
-      Ts		      "1"
-      seed		      "[23341]"
-      VectorParams1D	      on
     }
     Block {
       BlockType		      Gain
@@ -827,7 +821,7 @@ Model {
       BlockType		      Gain
       Name		      "F"
       SID		      "7"
-      Position		      [535, 200, 565, 230]
+      Position		      [550, 200, 580, 230]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "F"
@@ -877,6 +871,18 @@ Model {
       VariableName	      "reference"
       MaxDataPoints	      "inf"
       SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      SignalGenerator
+      Name		      "Signal\nGenerator"
+      SID		      "60"
+      Ports		      [0, 1]
+      Position		      [715, 145, 745, 175]
+      ZOrder		      -19
+      BlockMirror	      on
+      WaveForm		      "random"
+      Amplitude		      "0.1"
+      Frequency		      "0.1"
     }
     Block {
       BlockType		      Step
@@ -1006,7 +1012,7 @@ Model {
     Line {
       SrcBlock		      "A"
       SrcPort		      1
-      Points		      [-45, 0]
+      Points		      [-60, 0]
       DstBlock		      "Sum"
       DstPort		      2
     }
@@ -1039,7 +1045,7 @@ Model {
     Line {
       SrcBlock		      "F"
       SrcPort		      1
-      Points		      [-264, 0; 0, -95]
+      Points		      [-279, 0; 0, -95]
       DstBlock		      "Sum1"
       DstPort		      2
     }
@@ -1090,12 +1096,6 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Band-Limited\nWhite Noise"
-      SrcPort		      1
-      DstBlock		      "Sum2"
-      DstPort		      2
-    }
-    Line {
       SrcBlock		      "Step1"
       SrcPort		      1
       DstBlock		      "Add"
@@ -1125,6 +1125,12 @@ Model {
       SrcPort		      1
       DstBlock		      "Add"
       DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Signal\nGenerator"
+      SrcPort		      1
+      DstBlock		      "Sum2"
+      DstPort		      2
     }
   }
 }
