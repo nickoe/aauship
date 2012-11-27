@@ -35,8 +35,9 @@ int main (void)
 	char buffer[MAX_MSG_SIZE];
 	char buffer2[MAX_MSG_SIZE];
 	char buffer3[MAX_MSG_SIZE];
-	int  idx = 0, idx2 = -1, idx3 = 0;
+	int  idx = 0, idx2 = -1, idx3 = -1;
 	int	 len2 = 0;
+	int	 len3 = 0;
 	unsigned int i = 0;
 	char s[64];
 	char *ptr;
@@ -100,8 +101,8 @@ int main (void)
 		c3 = uart3_getc();
 
 
-		adis_decode_burst_read_pack(&adis_data_decoded);
-		grs_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+	//	adis_decode_burst_read_pack(&adis_data_decoded);
+		///grs_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
 
 		PORTL ^= (1<<LED4);
 		//xacc = adis_get_xacc();
@@ -122,7 +123,6 @@ int main (void)
      uart2_putc('\n');
 */
 
-		_delay_ms(20);
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
@@ -158,16 +158,24 @@ int main (void)
 		/* Reading from GPS */
 		if ( c3 & UART_NO_DATA ) {} else  // Data available
 		{
-				//uart2_putc(c3);
+			//uart_putc(c3); // Forward every byte from GSP to uart directly
+
+			/* Transmitting NMEA GPS sentences to the HLI */
 			if (c3 == '$') { // We have a possible message comming
-
 				PORTL ^= (1<<LED3);
+				len3 = 0; // Set "flag"
+			}
 
-		
-			} 
-			//uart2_puts(buffer);
-			//uart2_putc('\n');
-			//uart2_putc( (unsigned char)c );
+			if (len3 >= 0) { // We are buffering
+				buffer3[len3] = c3;
+				len3++;
+				if (c3 == '\n') { // We now have a full packet
+
+					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+					len3 = -1; // Set flag in new packet mode
+
+				}
+			}
 		}
   }
  
