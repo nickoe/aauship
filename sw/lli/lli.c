@@ -171,7 +171,7 @@ int main (void)
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
 
-					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+					grs_send(package(len3, 0x1E, 0x06, buffer3), len3);
 					len3 = -1; // Set flag in new packet mode
 
 				}
