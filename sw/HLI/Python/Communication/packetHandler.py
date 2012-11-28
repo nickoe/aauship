@@ -93,6 +93,7 @@ class packetHandler(threading.Thread):
 			except:
 				pass
 		running = False
+		return
 			
 	def close(self):
 		self.connection.close()	#Close connection

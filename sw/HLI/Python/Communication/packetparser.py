@@ -1,17 +1,61 @@
 import struct
 import csv
+from pynmea import nmea
 class packetParser():
-	def __init__(self,file):
+	def __init__(self,accelfile,gpsfile):
 		self.GPS = {0: 'Latitude', 1: 'Longtitude', 2: 'Velocity'}
 		self.IMU = {0: 'Acceleration X', 1: 'Acceleration Y', 2: 'Acceleration Z', 3: 'Gyroscope X', 4: 'Gyroscope Y', 5: 'GyroscopeZ', 6: 'MagnetometerX', 7: 'MagnetometerY', 8: 'MagnetometerZ', 9: 'Temperature'}
 		self.MsgID = {0: self.GPS, 1: self.IMU}
 		self.DevID = {0: 'GPS', 1: 'IMU'}
 		self.accelburst = [0,0,0,0,0,0,0,0,0,0,0,0,0]
-		self.log = file
-		self.writer = csv.writer(self.log)
+		self.accellog = accelfile
+		self.accelwriter = csv.writer(self.accellog)
+		
+		self.gpsdata = [0,0,0,0,0,0,0,0]
+		#Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
+		self.gpslog = gpsfile
+		#self.gpswriter = csv.writer(self.gpslog)
 		#print "Stdsqewarted!"
 		pass
 			
+	def parse(self,packet):
+		if(ord(packet['DevID']) == 20):
+			if(ord(packet['MsgID']) == 13):
+				pass
+	
+		elif (ord(packet['DevID']) == 30):
+			if(ord(packet['MsgID']) == 6):
+				print "".join(packet['Data']),
+				self.gpslog.write("".join(packet['Data']))
+				#self.gpswriter.writerow("".join(packet['Data']))
+				
+				if("".join(packet['Data'][1:6]) == "GPGGA"):
+					gpgga = nmea.GPGGA()
+					tempstr = "".join(packet['Data'])
+					gpgga.parse(tempstr)
+					gpsd = [gpgga.timestamp, gpgga.latitude, gpgga. gpgga.longitude, packet['Time']]
+					#self.gpswriter.writerow(gpsd)
+					print gpgga.longitude
+				
+				elif("".join(packet['Data'][1:6]) == "GPRMC"):
+					
+					gprmc = nmea.GPRMC()
+					tempstr = "".join(packet['Data'])
+					gprmc.parse(tempstr)
+					print gprmc.lon
+					self.gpsdata[0] = gprmc.timestamp
+					self.gpsdata[1] = gprmc.lat
+					self.gpsdata[2] = gprmc.lon
+					self.gpsdata[3] = gprmc.spd_over_grnd
+					#self.gpsdata[4] = gprmc.true_course
+					#self.gpsdata[5] = gprmc.datestamp
+					#self.gpsdata[6] = gprmc.mag_variation
+					self.gpsdata[7] = packet['Time']
+					print self.gpsdata
+					#self.gpswriter.writerow(self.gpsdata)
+					
+					
+						
 	def parsePacket(self,packet):
 		#print packet
 		#print "started parsing"
@@ -132,3 +176,25 @@ class packetParser():
 		value = "".join(map(chr,data))
 		return value
 		
+	
+		'''
+		
+	
+
+ ('Timestamp', 'timestamp'),
+            ('Latitude', 'latitude'),
+            ('Latitude Direction', 'lat_direction'),
+            ('Longitude', 'longitude'),
+            ('Longitude Direction', 'lon_direction'),
+            ('GPS Quality Indicator', 'gps_qual'),
+            ('Number of Satellites in use', 'num_sats'),
+            ('Horizontal Dilution of Precision', 'horizontal_dil'),
+            ('Antenna Alt above sea level (mean)', 'antenna_altitude'),
+            ('Units of altitude (meters)', 'altitude_units'),
+            ('Geoidal Separation', 'geo_sep'),
+            ('Units of Geoidal Separation (meters)', 'geo_sep_units'),
+            ('Age of Differential GPS Data (secs)', 'age_gps_data'),
+            ('Differential Reference Station ID', 'ref_station_id'))
+            #('Checksum', 'checksum'))
+
+'''

@@ -3,11 +3,12 @@ import packetparser
 import Queue
 import time
 import csv
-f = open("data.csv", 'w')
+accf = open("accdata.csv", 'w')
+gpsf = open("gpsdata.txt", 'a')
 qu = Queue.Queue()
 receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,qu)
 receiver.start()
-parser = packetparser.packetParser(f)
+parser = packetparser.packetParser(accf,gpsf)
 bla = True
 timeout = 0
 p = receiver.constructPacket(0,0,9)
@@ -26,7 +27,7 @@ while bla == True:
 		#	print packet
 		except:
 			print "Oh well"
-		parser.parsePacket(packet)
+		parser.parse(packet)
 		#print "Parsed"
 	except Exception as inst:
 		try:
@@ -55,6 +56,7 @@ while bla == True:
 	
 #receiver.close()
 #receiver.join()
-f.close()
+accf.close()
+gpsf.close()
 print "done"
 quit()	
