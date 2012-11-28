@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = tir 09 okt 2012 10:43:10 CEST
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = ons 28 nov 2012 18:51:06 CET
 
 BeginCmp
 TimeStamp = /504A39C7;
@@ -24,7 +24,7 @@ EndCmp
 BeginCmp
 TimeStamp = /504EF348;
 Reference = C4;
-ValeurCmp = C42;
+ValeurCmp = 100nF;
 IdModule  = SM0805;
 EndCmp
 
@@ -180,6 +180,13 @@ TimeStamp = /504A39B9;
 Reference = U2;
 ValeurCmp = LM35;
 IdModule  = PIN_ARRAY_3X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /50B64EC2;
+Reference = U3;
+ValeurCmp = OPENLOG;
+IdModule  = OpenLog;
 EndCmp
 
 BeginCmp
