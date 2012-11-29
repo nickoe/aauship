@@ -168,3 +168,8 @@ void w2bptr(int16_t word, uint8_t array[2]) {
 	array[0] = (word >> 8) & 0x00FF;
 	array[1] = word & 0x00FF;
 }
+
+void adis_set_sample_rate(void) {
+	spiTransferWord(0xB601); // spiTransferWord(0xB601); i.e. 20 Hz does not work properly!
+	spiTransferWord(0xB700);
+}

@@ -75,9 +75,7 @@ spiTransferWord(0xBE80);
 
 
 	adis_reset_factory();
-//	adis_set_sample_rate();
-spiTransferWord(0xB601);
-spiTransferWord(0xB700);
+	adis_set_sample_rate();
 
 
   while (1) {
