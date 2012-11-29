@@ -59,7 +59,6 @@ int main (void)
   /* now enable interrupt, since UART library is interrupt controlled */
   sei();
 
-
 	_delay_ms(500);
 	/* Set GPS to a faster baud and update UART speed */
 	//uart3_puts("$PMTK251,115200*1F");
@@ -72,12 +71,8 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
-
-
 	adis_reset_factory();
 	adis_set_sample_rate();
-
-
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
@@ -86,18 +81,10 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-
 		adis_decode_burst_read_pack(&adis_data_decoded);
 		hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-_delay_ms(100);
+		_delay_ms(100);	
 		PORTL ^= (1<<LED4);
-	
-/*
-     uart2_puts(itoa(adis_decode_14bit_raw(adis_data.xaccl,1),s,10));
-     uart2_putc('\r');
-     uart2_putc('\n');
-*/
-
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
@@ -145,10 +132,8 @@ _delay_ms(100);
 				buffer3[len3] = c3;
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
-
 					grs_send(package(len3, 0x1E, 0x06, buffer3), len3);
 					len3 = -1; // Set flag in new packet mode
-
 				}
 			}
 		}
