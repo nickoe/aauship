@@ -170,6 +170,6 @@ void w2bptr(int16_t word, uint8_t array[2]) {
 }
 
 void 	adis_set_sample_rate(void) {
-	spiTransferWord(0xB601);
+	spiTransferWord(0xB651);
 	spiTransferWord(0xB700);
 }
