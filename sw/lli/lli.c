@@ -75,9 +75,8 @@ int main (void)
 
 
 	adis_reset_factory();
-//	adis_set_sample_rate();
-spiTransferWord(0xB601);
-spiTransferWord(0xB700);
+	adis_set_sample_rate();
+
 
 
   while (1) {
@@ -89,7 +88,7 @@ spiTransferWord(0xB700);
 
 
 		adis_decode_burst_read_pack(&adis_data_decoded);
-		grs_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+		hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
 _delay_ms(100);
 		PORTL ^= (1<<LED4);
 	
