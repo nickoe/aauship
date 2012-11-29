@@ -59,7 +59,7 @@ int main (void)
   /* now enable interrupt, since UART library is interrupt controlled */
   sei();
 
-
+spiTransferWord(0xBE80);
 	_delay_ms(500);
 	/* Set GPS to a faster baud and update UART speed */
 	//uart3_puts("$PMTK251,115200*1F");
