@@ -75,22 +75,9 @@ int main (void)
 
 
 	adis_reset_factory();
-	
-
-	uint8_t str[4];
-
-	str[0] = 0xDE;
-	str[1] = 0xAD;
-	str[2] = 0xBE;
-	str[3] = 0xEF;
-	
-	ptr = (char *)package(4, 0x02, 0x03, str);
-/*	for (i=0; i<2+6; i++) {
-		uart2_putc(*(ptr+i));
-	}*/
-	//grs_send(package(4, 0x02, 0x03, str),4);
-
-
+//	adis_set_sample_rate();
+spiTransferWord(0xB601);
+spiTransferWord(0xB700);
 
 
   while (1) {
@@ -101,22 +88,11 @@ int main (void)
 		c3 = uart3_getc();
 
 
-	//	adis_decode_burst_read_pack(&adis_data_decoded);
-		///grs_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-
+		adis_decode_burst_read_pack(&adis_data_decoded);
+		grs_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+_delay_ms(100);
 		PORTL ^= (1<<LED4);
-		//xacc = adis_get_xacc();
-		//grs_send(package(2, 0x14, 0x03, xacc), 2);
-
-/*
-		adis_burst_read(&adis_data_raw);
-		xacc = adis_decode_14bit_raw(adis_data_raw.xaccl,1);
-		w2bptr(xacc, xacca);
-		grs_send(package(2, 0x14, 0x03, &xacca), 2);
-*/
-
-//sizeof(adis_data.xaccl)
-
+	
 /*
      uart2_puts(itoa(adis_decode_14bit_raw(adis_data.xaccl,1),s,10));
      uart2_putc('\r');
