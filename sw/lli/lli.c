@@ -27,11 +27,17 @@
 #include "spi.h"
 #include "adis16405.h"
 
+volatile int adis_ready_counter=0;
+
+
+ISR(PCINT2_vect) {
+	adis_ready_counter++;
+}
 
 int main (void)
 {	
 	/* variables for the UART0 (USB connection) */
-	unsigned int c, c2, c3; // Variable for reading UARTS
+	unsigned int c = 0, c2 = 0, c3 = 0; // Variable for reading UARTS
 	char buffer[MAX_MSG_SIZE];
 	char buffer2[MAX_MSG_SIZE];
 	char buffer3[MAX_MSG_SIZE];
@@ -43,6 +49,7 @@ int main (void)
 	char *ptr;
 	uint16_t xacc = 0;
 	uint8_t xacca[2];
+
 
   /* set outputs */
 	PORTL = 0xff; // Turn off LEDS
@@ -56,9 +63,14 @@ int main (void)
   uart2_init( UART_BAUD_SELECT(UART2_BAUD_RATE,F_CPU) ); // APC220 radio
   uart3_init( UART_BAUD_SELECT(UART3_BAUD_RATE,F_CPU) ); // UP-501 GPS
 
+	/* Interrupt stuff for ADIS */
+	PCICR |= 1<<PCIE2; // Enable interrupt PORTK
+	PCMSK2 |= (1<<PCINT23); // interrupt in PCINT23
+
   /* now enable interrupt, since UART library is interrupt controlled */
   sei();
 
+	spiTransferWord(0xBE80); // ADSI software reset
 	_delay_ms(500);
 	/* Set GPS to a faster baud and update UART speed */
 	//uart3_puts("$PMTK251,115200*1F");
@@ -81,10 +93,12 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-		adis_decode_burst_read_pack(&adis_data_decoded);
-		hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-		_delay_ms(100);	
-		PORTL ^= (1<<LED4);
+		if (adis_ready_counter >= 82) {
+			adis_decode_burst_read_pack(&adis_data_decoded);
+			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+			adis_ready_counter -= 82;
+			PORTL ^= (1<<LED4);
+		}
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
@@ -113,8 +127,6 @@ int main (void)
 				PORTL ^= (1<<LED4);
 				idx2 = 0; // Set "flag"
 			}
-
-
 		}
 
 		/* Reading from GPS */
@@ -132,7 +144,7 @@ int main (void)
 				buffer3[len3] = c3;
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
-					grs_send(package(len3, 0x1E, 0x06, buffer3), len3);
+					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
 					len3 = -1; // Set flag in new packet mode
 				}
 			}
