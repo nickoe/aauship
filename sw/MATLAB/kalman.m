@@ -35,15 +35,16 @@ close all;
 % matrix):
 
 %% Number of Samples:
-N = 1000000;
+ts = 0.05; % Sampling time
+N = 10000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
 I = (1/12)*m*(0.25*0.25+1.05*1.05); % The ships inertia
-ts = 0.1; % Sampling time
+
 betaX = 0.4462;
-betaY = 0.0784;
-betaW = 1.3;
+betaY = 0.8;
+betaW = 0.0784;
 GPS_freq = 20;
 
 %% System Definition:
@@ -82,15 +83,15 @@ end
 % white gaussian noise, with zero mean (for most cases) and with a
 % variance, that are estimated in Appendix #XX. 
 varXpos = 0.979;
-varXvel = 0.02;
+varXvel = 0.00262;
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
 varYpos = 1.12;
-varYvel = 0.00000000001;
+varYvel = 0.0001;
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
-varWpos = 8;
-varWvel = 0.01;
+varWpos = 0.2;
+varWvel = 0.0001;
 varWacc = 2.3559e-5; % m/s^2 or 2.4035*10^-6 G
 
 varYWacc = 2.4496*10^-6; % rad/s^2
@@ -570,8 +571,9 @@ for n = 2:N;
    XpredK(:,n) = An*YpredK(:,n);
  RpredK(:,:,n) = Hn*RupdateK(:,:,n-1)*Hn'+Qz(:,:,n);
      BK(:,:,n) = (RpredK(:,:,n)*An')/(An*RpredK(:,:,n)*An'+Qw(:,:,n));
-             if sK == GPS_freq;
-                   BK(:,:,n) = BK(:,:,n);
+             if sK == GPS_freq; % GPS_freq is the slow frequency of the GPS
+                   BK(1,:,n) = BK(1,:,n);
+                   BK(4,:,n) = BK(4,:,n);
                           sK = 0;
              else
                    BK(1,:,n) = BK(1,:,n-1);
