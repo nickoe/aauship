@@ -37,7 +37,7 @@ ISR(PCINT2_vect) {
 int main (void)
 {	
 	/* variables for the UART0 (USB connection) */
-	unsigned int c, c2, c3; // Variable for reading UARTS
+	unsigned int c = 0, c2 = 0, c3 = 0; // Variable for reading UARTS
 	char buffer[MAX_MSG_SIZE];
 	char buffer2[MAX_MSG_SIZE];
 	char buffer3[MAX_MSG_SIZE];
@@ -83,10 +83,8 @@ int main (void)
 	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
 	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
-
 	adis_reset_factory();
 	adis_set_sample_rate();
-
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
@@ -95,10 +93,10 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-		if (adis_ready_counter >= 41) {
+		if (adis_ready_counter >= 82) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
 			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-			adis_ready_counter -= 100;
+			adis_ready_counter -= 82;
 			PORTL ^= (1<<LED4);
 		}
 
