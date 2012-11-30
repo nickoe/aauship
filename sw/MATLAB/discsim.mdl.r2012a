@@ -1,12 +1,12 @@
 Model {
   Name			  "discsim"
-  Version		  8.0
+  Version		  7.9
   MdlSubVersion		  0
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.13"
+    ComputedModelVersion    "1.4"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -21,54 +21,15 @@ Model {
   MinMaxOverflowArchiveMode "Overwrite"
   FPTRunName		  "Run 1"
   MaxMDLFileLineLength	  120
-  Object {
-    $PropName		    "BdWindowsInfo"
-    $ObjectID		    1
-    $ClassName		    "Simulink.BDWindowsInfo"
-    Object {
-      $PropName		      "WindowsInfo"
-      $ObjectID		      2
-      $ClassName	      "Simulink.WindowInfo"
-      IsActive		      [1]
-      Location		      [166.0, 441.0, 1433.0, 797.0]
-      Object {
-	$PropName		"ModelBrowserInfo"
-	$ObjectID		3
-	$ClassName		"Simulink.ModelBrowserInfo"
-	Visible			[1]
-	DockPosition		"Left"
-	Width			[50]
-	Height			[50]
-	Filter			[9]
-      }
-      Object {
-	$PropName		"ExplorerBarInfo"
-	$ObjectID		4
-	$ClassName		"Simulink.ExplorerBarInfo"
-	Visible			[1]
-      }
-      Object {
-	$PropName		"EditorsInfo"
-	$ObjectID		5
-	$ClassName		"Simulink.EditorInfo"
-	IsActive		[1]
-	ViewObjType		"SimulinkTopLevel"
-	LoadSaveID		"0"
-	Extents			[1209.0, 623.0]
-	ZoomFactor		[1.03]
-	Offset			[-40.634100876965817, 0.0]
-      }
-    }
-  }
   Created		  "Sat Nov 24 18:43:26 2012"
   Creator		  "Lunde"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Nov 30 10:54:33 2012"
-  RTWModifiedTimeStamp	  276173622
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Mon Nov 26 19:03:40 2012"
+  RTWModifiedTimeStamp	  275854505
+  ModelVersionFormat	  "1.%<AutoIncrement:4>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -103,7 +64,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    6
+    $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "discsim"
     overrideMode_	    [0.0]
@@ -162,16 +123,16 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      7
-      Version		      "1.12.1"
+      $ObjectID		      2
+      Version		      "1.12.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  8
-	  Version		  "1.12.1"
+	  $ObjectID		  3
+	  Version		  "1.12.0"
 	  StartTime		  "0.0"
-	  StopTime		  "1000"
+	  StopTime		  "100"
 	  AbsTol		  "auto"
 	  FixedStep		  "ts"
 	  InitialStep		  "auto"
@@ -203,8 +164,8 @@ Model {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  9
-	  Version		  "1.12.1"
+	  $ObjectID		  4
+	  Version		  "1.12.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -235,8 +196,8 @@ Model {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  10
-	  Version		  "1.12.1"
+	  $ObjectID		  5
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    8
@@ -291,8 +252,8 @@ Model {
 	  ParallelExecutionInRapidAccelerator on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  11
-	  Version		  "1.12.1"
+	  $ObjectID		  6
+	  Version		  "1.12.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -341,7 +302,7 @@ Model {
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
 	  InvalidFcnCallConnMsg	  "error"
-	  FcnCallInpInsideContextMsg "EnableAllAsWarning"
+	  FcnCallInpInsideContextMsg "Enable All"
 	  SignalLabelMismatchMsg  "none"
 	  UnconnectedInputMsg	  "warning"
 	  UnconnectedOutputMsg	  "warning"
@@ -377,12 +338,10 @@ Model {
 	  SFNoUnconditionalDefaultTransitionDiag "warning"
 	  SFTransitionOutsideNaturalParentDiag "warning"
 	  SFUnconditionalTransitionShadowingDiag "warning"
-	  SFUndirectedBroadcastEventsDiag "warning"
-	  SFTransitionActionBeforeConditionDiag	"warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  12
-	  Version		  "1.12.1"
+	  $ObjectID		  7
+	  Version		  "1.12.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -418,8 +377,8 @@ Model {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  13
-	  Version		  "1.12.1"
+	  $ObjectID		  8
+	  Version		  "1.12.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  EnableParallelModelReferenceBuilds off
@@ -433,8 +392,8 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  14
-	  Version		  "1.12.1"
+	  $ObjectID		  9
+	  Version		  "1.12.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -448,8 +407,8 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  15
-	  Version		  "1.12.1"
+	  $ObjectID		  10
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    9
@@ -468,7 +427,6 @@ Model {
 	  GenCodeOnly		  off
 	  MakeCommand		  "make_rtw"
 	  GenerateMakefile	  on
-	  PackageGeneratedCodeAndArtifacts off
 	  TemplateMakefile	  "grt_default_tmf"
 	  GenerateReport	  off
 	  SaveLog		  off
@@ -485,13 +443,6 @@ Model {
 	  RTWUseSimCustomCode	  off
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
-	  PortableWordSizes	  off
-	  GenerateErtSFunction	  off
-	  CreateSILPILBlock	  "None"
-	  CodeExecutionProfiling  off
-	  CodeExecutionProfileVariable "executionProfile"
-	  CodeProfilingSaveOptions "SummaryOnly"
-	  CodeProfilingInstrumentation off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
 	  IncludeERTFirstTime	  off
@@ -511,8 +462,8 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      16
-	      Version		      "1.12.1"
+	      $ObjectID		      11
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		21
@@ -548,7 +499,6 @@ Model {
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
-	      OperatorAnnotations     off
 	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
@@ -571,15 +521,14 @@ Model {
 	      SimulinkBlockComments   on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
-	      InternalIdentifier      "Classic"
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
 	      UseSimReservedNames     off
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      17
-	      Version		      "1.12.1"
+	      $ObjectID		      12
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		16
@@ -607,6 +556,7 @@ Model {
 	      CodeReplacementLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
+	      CodeExecutionProfiling  off
 	      ERTMultiwordLength      256
 	      MultiwordLength	      2048
 	      GenerateFullHeader      on
@@ -637,6 +587,7 @@ Model {
 	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
+	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
@@ -668,17 +619,7 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    7
-  }
-  Object {
-    $PropName		    "DataTransfer"
-    $ObjectID		    18
-    $ClassName		    "Simulink.GlobalDataTransfer"
-    DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
-    DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
-    DefaultTransitionBetweenContTasks "Ensure deterministic transfer (minimum delay)"
-    DefaultExtrapolationMethodBetweenContTasks "None"
-    AutoInsertRateTranBlk   [0]
+    $ObjectID		    2
   }
   ExplicitPartitioning	  off
   BlockDefaults {
@@ -711,25 +652,6 @@ Model {
     FontSize		    9
     FontWeight		    "normal"
     FontAngle		    "normal"
-  }
-  MaskDefaults {
-    SelfModifiable	    "off"
-    IconFrame		    "on"
-    IconOpaque		    "on"
-    RunInitForIconRedraw    "off"
-    IconRotate		    "none"
-    PortRotate		    "default"
-    IconUnits		    "autoscale"
-  }
-  MaskParameterDefaults {
-    Evaluate		    "on"
-    Tunable		    "on"
-    NeverSave		    "off"
-    Internal		    "off"
-    ReadOnly		    "off"
-    Enabled		    "on"
-    Visible		    "on"
-    ToolTip		    "on"
   }
   BlockParameterDefaults {
     Block {
@@ -809,15 +731,6 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
-      BlockType		      SignalGenerator
-      WaveForm		      "sine"
-      TimeSource	      "Use simulation time"
-      Amplitude		      "1"
-      Frequency		      "1"
-      Units		      "Hertz"
-      VectorParams1D	      on
-    }
-    Block {
       BlockType		      Step
       Time		      "1"
       Before		      "0"
@@ -877,19 +790,19 @@ Model {
     }
     Block {
       BlockType		      UnitDelay
-      InitialCondition	      "0"
+      X0		      "0"
       InputProcessing	      "Inherited"
       SampleTime	      "1"
       StateMustResolveToSignalObject off
-      CodeGenStateStorageClass "Auto"
+      RTWStateStorageClass    "Auto"
       HasFrameUpgradeWarning  on
     }
   }
   System {
     Name		    "discsim"
-    Location		    [166, 441, 1599, 1238]
+    Location		    [1692, 207, 2885, 700]
     Open		    on
-    ModelBrowserVisibility  on
+    ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
     PaperOrientation	    "landscape"
@@ -901,12 +814,12 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "103"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "45"
+    SIDHighWatermark	    "43"
     Block {
       BlockType		      Gain
       Name		      "A"
       SID		      "1"
-      Position		      [595, 205, 625, 235]
+      Position		      [595, 165, 625, 195]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "sysD.a"
@@ -920,7 +833,7 @@ Model {
       Name		      "Add"
       SID		      "31"
       Ports		      [4, 1]
-      Position		      [575, 347, 590, 538]
+      Position		      [95, 127, 110, 318]
       ZOrder		      -2
       Inputs		      "++++"
       InputSameDT	      off
@@ -944,10 +857,10 @@ Model {
       Name		      "Band-Limited\nWhite Noise"
       SID		      "4"
       Ports		      [0, 1]
-      Position		      [835, 205, 865, 235]
+      Position		      [730, 165, 760, 195]
       ZOrder		      -2
       BlockMirror	      on
-      LibraryVersion	      "1.281"
+      LibraryVersion	      "1.260"
       SourceBlock	      "simulink/Sources/Band-Limited\nWhite Noise"
       SourceType	      "Band-Limited White Noise."
       Cov		      "[0.00001]"
@@ -959,7 +872,7 @@ Model {
       BlockType		      Gain
       Name		      "C"
       SID		      "5"
-      Position		      [835, 100, 865, 130]
+      Position		      [730, 100, 760, 130]
       ZOrder		      -8
       Gain		      "sysD.c"
       Multiplication	      "Matrix(K*u)"
@@ -979,7 +892,7 @@ Model {
       BlockType		      Gain
       Name		      "F"
       SID		      "6"
-      Position		      [595, 300, 625, 330]
+      Position		      [595, 220, 625, 250]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "sysD_F"
@@ -993,7 +906,7 @@ Model {
       Name		      "Mux"
       SID		      "8"
       Ports		      [2, 1]
-      Position		      [110, 68, 115, 277]
+      Position		      [190, 68, 195, 277]
       ZOrder		      -12
       ShowName		      off
       Inputs		      "2"
@@ -1024,21 +937,11 @@ Model {
       SampleTime	      "ts"
     }
     Block {
-      BlockType		      SignalGenerator
-      Name		      "Signal Generator"
-      SID		      "44"
-      Ports		      [0, 1]
-      Position		      [45, 210, 75, 240]
-      ZOrder		      1
-      Amplitude		      "0.2"
-      Frequency		      "0.01"
-    }
-    Block {
       BlockType		      SubSystem
       Name		      "Smoothing\nProcess"
       SID		      "21"
       Ports		      [1, 1]
-      Position		      [305, 351, 350, 399]
+      Position		      [390, 91, 435, 139]
       ZOrder		      -17
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -1049,9 +952,9 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"Smoothing\nProcess"
-	Location		[325, 35, 1758, 832]
+	Location		[1493, 671, 2096, 977]
 	Open			off
-	ModelBrowserVisibility	on
+	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
@@ -1217,7 +1120,7 @@ Model {
       BlockType		      Step
       Name		      "Step"
       SID		      "35"
-      Position		      [495, 360, 525, 390]
+      Position		      [15, 140, 45, 170]
       ZOrder		      -22
       Time		      "0"
       After		      "3.14"
@@ -1227,7 +1130,7 @@ Model {
       BlockType		      Step
       Name		      "Step1"
       SID		      "36"
-      Position		      [520, 405, 550, 435]
+      Position		      [40, 185, 70, 215]
       ZOrder		      -22
       Time		      "20"
       After		      "-3.14"
@@ -1237,7 +1140,7 @@ Model {
       BlockType		      Step
       Name		      "Step2"
       SID		      "37"
-      Position		      [495, 450, 525, 480]
+      Position		      [15, 230, 45, 260]
       ZOrder		      -22
       Time		      "40"
       After		      "-3.14/2"
@@ -1247,7 +1150,7 @@ Model {
       BlockType		      Step
       Name		      "Step3"
       SID		      "38"
-      Position		      [520, 495, 550, 525]
+      Position		      [40, 275, 70, 305]
       ZOrder		      -22
       Time		      "60"
       After		      "3.14/2"
@@ -1282,6 +1185,21 @@ Model {
       SaturateOnIntegerOverflow	off
     }
     Block {
+      BlockType		      Sum
+      Name		      "Sum2"
+      SID		      "13"
+      Ports		      [2, 1]
+      Position		      [680, 170, 700, 190]
+      ZOrder		      -18
+      BlockMirror	      on
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "++|"
+      InputSameDT	      off
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
       BlockType		      ToWorkspace
       Name		      "System Input"
       SID		      "14"
@@ -1308,7 +1226,7 @@ Model {
       Name		      "System output"
       SID		      "15"
       Ports		      [1]
-      Position		      [920, 100, 980, 130]
+      Position		      [805, 100, 865, 130]
       ZOrder		      -7
       VariableName	      "outputD"
       MaxDataPoints	      "inf"
@@ -1338,8 +1256,21 @@ Model {
       BlockType		      Constant
       Name		      "Velocity"
       SID		      "16"
-      Position		      [30, 105, 60, 135]
+      Position		      [130, 105, 160, 135]
       ZOrder		      -5
+    }
+    Line {
+      SrcBlock		      "Unit Delay"
+      SrcPort		      1
+      Points		      [45, 0]
+      Branch {
+	DstBlock		"C"
+	DstPort			1
+      }
+      Branch {
+	DstBlock		"Sum2"
+	DstPort			1
+      }
     }
     Line {
       SrcBlock		      "A"
@@ -1365,16 +1296,8 @@ Model {
       SrcPort		      1
       Points		      [10, 0]
       Branch {
-	Points			[104, 0]
-	Branch {
-	  Points		  [0, -55]
-	  DstBlock		  "System Input"
-	  DstPort		  1
-	}
-	Branch {
-	  DstBlock		  "B"
-	  DstPort		  1
-	}
+	DstBlock		"Smoothing\nProcess"
+	DstPort			1
       }
       Branch {
 	Points			[0, -80]
@@ -1389,6 +1312,20 @@ Model {
       DstPort		      1
     }
     Line {
+      SrcBlock		      "Mux"
+      SrcPort		      1
+      Points		      [0, -60; 20, 0]
+      Branch {
+	DstBlock		"N"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -55]
+	DstBlock		"Reference signal"
+	DstPort			1
+      }
+    }
+    Line {
       SrcBlock		      "Velocity"
       SrcPort		      1
       DstBlock		      "Mux"
@@ -1401,10 +1338,30 @@ Model {
       DstPort		      1
     }
     Line {
+      SrcBlock		      "Sum2"
+      SrcPort		      1
+      Points		      [-15, 0]
+      Branch {
+	DstBlock		"A"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 55]
+	DstBlock		"F"
+	DstPort			1
+      }
+    }
+    Line {
       SrcBlock		      "Clock"
       SrcPort		      1
       DstBlock		      "To Workspace"
       DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Add"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      2
     }
     Line {
       SrcBlock		      "Step1"
@@ -1438,45 +1395,24 @@ Model {
       DstPort		      2
     }
     Line {
-      SrcBlock		      "Signal Generator"
+      SrcBlock		      "Smoothing\nProcess"
       SrcPort		      1
-      DstBlock		      "Mux"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Mux"
-      SrcPort		      1
-      Points		      [70, 0; 0, -60; 39, 0]
+      Points		      [10, 0]
+      Branch {
+	DstBlock		"B"
+	DstPort			1
+      }
       Branch {
 	Points			[0, -55]
-	DstBlock		"Reference signal"
-	DstPort			1
-      }
-      Branch {
-	DstBlock		"N"
+	DstBlock		"System Input"
 	DstPort			1
       }
     }
     Line {
-      SrcBlock		      "Unit Delay"
+      SrcBlock		      "Band-Limited\nWhite Noise"
       SrcPort		      1
-      Points		      [85, 0]
-      Branch {
-	Points			[0, 105]
-	Branch {
-	  DstBlock		  "A"
-	  DstPort		  1
-	}
-	Branch {
-	  Points		  [0, 95]
-	  DstBlock		  "F"
-	  DstPort		  1
-	}
-      }
-      Branch {
-	DstBlock		"C"
-	DstPort			1
-      }
+      DstBlock		      "Sum2"
+      DstPort		      2
     }
   }
 }

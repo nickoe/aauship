@@ -3,6 +3,8 @@ clc; clear all; clf;
 
 ts = 0.1;
 
+
+
 betaX = 0.4462;
 betaW = 0.0784;
 m = 12;
@@ -164,3 +166,6 @@ h7 = figure(7);
 Sxx_filt = ((abs(fftshift(fft(syDn)))).^2)./numel(outputD(:,1));
 plot(fft(Sxx_filt)')
 grid on
+
+%% Save file:
+save('inputD', 'inputD')

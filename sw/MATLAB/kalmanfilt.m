@@ -138,11 +138,11 @@ for n = 2:1:N
 %Rupdate(:,:,n) = (eye(6)-B(:,:,n)*An)*Rpred(:,:,n);
 Rupdate(:,:,n) = (eye(6) - B(:,:,n)*An)*Rpred(:,:,n)*(eye(6) - B(:,:,n)*An)'+(B(:,:,n)*Qw*B(:,:,n)'); % Joseph Form
     k_rot(:,n) = [cos(Yupdate(6,n)) sin(Yupdate(6,n))];
- k_newpos(:,n) = Yupdate(1,n).*k_rot(:,n) + (k_rot(:,n).*Yupdate(5,n).*ts);
+ k_newpos(:,n) = Yupdate(1,n) + (k_rot(:,n).*Yupdate(2,n).*ts);
     y_rot(:,n) = [cos(Y(6,n)) sin(Y(6,n))];
- y_newpos(:,n) = Y(1,n).*y_rot(:,n) + (y_rot(:,n).*Y(5,n).*ts);
+ y_newpos(:,n) = Y(1,n) + (y_rot(:,n).*Y(2,n).*ts);
     x_rot(:,n) = [cos(X(6,n)) sin(X(6,n))];
- x_newpos(:,n) = X(1,n).*x_rot(:,n) + (x_rot(:,n).*X(5,n).*ts);
+ x_newpos(:,n) = X(1,n) + (x_rot(:,n).*X(2,n).*ts);
 end
 
 Y_kal_vel_X = Yupdate(2,:)'; % Updated Y - x position

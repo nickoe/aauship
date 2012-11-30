@@ -116,6 +116,7 @@ uint8_t is_adis16405( void );
 int adis_burst_read( adis16_t *data );
 int32_t adis_get_xacc( void );
 void w2bptr(int16_t word, uint8_t array[2]);
+void adis_set_sample_rate(void);
 
 /**@}*/
 
