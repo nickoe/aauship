@@ -23,8 +23,13 @@ doc/*.bbl
 *.hex
 *.lst
 *.sym
+*.o
 
 *.pyc
+
+sw/MATLAB/html/*
+sw/MATLAB/*.eps
+sw/MATLAB/*.mat
 
 # Hardware files
 hw/*.bak
@@ -32,5 +37,6 @@ hw/*.dcm
 hw/*.ps
 hw/*.000
 hw/lib/*.bak
+hw/lib/*.bck
 
 doc/master.toc

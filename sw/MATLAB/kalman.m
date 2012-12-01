@@ -35,8 +35,8 @@ close all;
 % matrix):
 
 %% Number of Samples:
-ts = 0.05; % Sampling time
-N = 10000; % Then it fits with the Simulink Simulation!
+ts = 0.1; % Sampling time
+N = 1000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -45,7 +45,7 @@ I = (1/12)*m*(0.25*0.25+1.05*1.05); % The ships inertia
 betaX = 0.4462;
 betaY = 0.8;
 betaW = 0.0784;
-GPS_freq = 20;
+GPS_freq = 10;
 
 %% System Definition:
 Hn = [1 ts (ts^2)/2 0 0 0 0 0 0;... % The X position
@@ -87,11 +87,11 @@ varXvel = 0.00262;
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
 varYpos = 1.12;
-varYvel = 0.0001;
+varYvel = 0.00001;
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 0.2;
-varWvel = 0.0001;
+varWvel = 0.000001;
 varWacc = 2.3559e-5; % m/s^2 or 2.4035*10^-6 G
 
 varYWacc = 2.4496*10^-6; % rad/s^2
@@ -136,7 +136,7 @@ x_rot = zeros(2,2,N);
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        Wn(:,n) = randn(9,1).*SqM';
-     Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
+     Qz(:,:,n) = xcov(Z(:,n-1));     
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
         Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
         X(:,n) = An*Y(:,n)+Wn(:,n);
@@ -341,7 +341,7 @@ k_rotD = zeros(2,2,N);
 y_rotD = zeros(2,2,N);
 x_rotD = zeros(2,2,N);
 
-sC = 0; % Sample counter - used to only include the 10th GPS sample. 
+sC = 1; % Sample counter - used to only include the 10th GPS sample. 
 
 for n = 2:N;
             %sC = isinteger(n/10) % Sensor Count, used to zero out unsampled system inputs. 
@@ -559,7 +559,7 @@ k_rotK = zeros(2,2,N);
 y_rotK = zeros(2,2,N);
 x_rotK = zeros(2,2,N);
 
-sK = 0; % Sample counter - used to only include the 10th GPS sample. 
+sK = 1; % Sample counter - used to only include the 10th GPS sample. 
 
 for n = 2:N;
       % Wn(:,n) = randn(9,1).*SqM';
@@ -581,7 +581,7 @@ for n = 2:N;
              end
  YupdateK(:,n) = YpredK(:,n)+BK(:,:,n)*(XK(:,n)-XpredK(:,n));
 RupdateK(:,:,n) = (eye(9)-BK(:,:,n)*An)*RpredK(:,:,n);
-            sK = sK + 1;
+            sK = sK + 1
 % Below - rotation udpate, so the route can be plotted:
   k_rotK(:,:,n) = [cos(YupdateK(7,n-1)) -sin(YupdateK(7,n-1));sin(YupdateK(7,n-1)) cos(YupdateK(7,n-1))];
  k_newposK(:,n) = k_newposK(:,n-1) + k_rotK(:,:,n)*[YupdateK(2,n-1);YupdateK(5,n-1)].*ts; % k_newposD(:,n-1)
@@ -794,6 +794,11 @@ diffW_acc = Y(9,:)' - Y_kal_acc_W;
 diffW_accD = YD(9,:)' - Y_kal_acc_WD;
 diffW_accK = YK(9,:)' - Y_kal_acc_WK;
 
+% The difference in absolute position:
+diff_pos = y_newpos' - k_newpos';
+diff_posD = y_newposD' - k_newposD';
+diff_posK = y_newposK' - k_newposK';
+
 %% Plot of the error between monorate and multirate:
 % Position
 h13 = figure(13);
@@ -881,6 +886,24 @@ legend('Multirate','Monorate','Multirate NI')
 ylabel('Error [m/s^2]');
 xlabel('Sample [n]');
 hold off
+grid on
+
+%Absolute position:
+h16 = figure(16);
+subplot(2,1,1)
+plot(diff_pos(:,1),'b'); hold on
+plot(diff_posD(:,1),'r');
+plot(diff_posK(:,1),'g'); hold off
+title('Error in X-Position');
+legend('Monorate','Multirate','Multirate NI')
+grid on
+subplot(2,1,2)
+plot(diff_pos(:,2),'b'); hold on
+plot(diff_posD(:,2),'r');
+plot(diff_posK(:,2),'g'); hold off
+title('Error in Y-Position');
+
+legend('Monorate','Multirate','Multirate NI')
 grid on
 
 %% Estiamting a Wind Bias:

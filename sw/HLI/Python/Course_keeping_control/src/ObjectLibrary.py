@@ -312,7 +312,7 @@ class O_PathWayPoints:
             self.LowerWayPoints[1, i+1] = (i+1) * decimation;
             j = i+2;
         
-        self.UpperWayPoints = self.LowerWayPoints;
+        self.UpperWayPoints = self.LowerWayPoints
         #self.UpperWayPoints[0,:] = numpy.zeros(scipy.ceil(coastlength/decimation));
         self.UpperWayPoints[1,:] = self.LowerWayPoints[1, :]
         
@@ -457,23 +457,27 @@ class O_StraightPath:
         Bx = self.B.get_Pos_X();
         By = self.B.get_Pos_Y();
         
-        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Ay-By])) * definition;
+        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Ay-By])) * definition * 10;
         '''
         If the path is vertical, the X and Y axes must be swapped before the
         polynom fitting and populating, then switched back to return the
         proper point coordinates
         ''' 
-        if Ay - By < 0.001:
+        if abs(Ax - Bx) < 1:
+            print(Ay, By, Ax, Bx)
+            self.poly = numpy.polyfit([Ay, By], [Ax, Bx], 1);
+            prange = numpy.linspace(Ay, By, SubWP_No);
+            print(prange)
+            values = numpy.polyval(self.poly, prange);
+            self.SubWP = numpy.array([prange, values]);
+            
+        else:
+            print('nem fuggo')
+            
             self.poly = numpy.polyfit([Ax, Bx], [Ay, By], 1);
             prange = numpy.linspace(Ax, Bx, SubWP_No);
             values = numpy.polyval(self.poly, prange);
             self.SubWP = numpy.array([values, prange]);
-            
-        else:
-            self.poly = numpy.polyfit([Ay, By], [Ax, Bx], 1);
-            prange = numpy.linspace(Ay, By, SubWP_No*2);
-            values = numpy.polyval(self.poly, prange);
-            self.SubWP = numpy.array([prange, values]);
     
     def PlotLine(self, color):
         '''

@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.9"
+    ComputedModelVersion    "1.14"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [184.0, 153.0, 1433.0, 797.0]
+      Location		      [64.0, 407.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Nov 29 09:05:06 2012"
-  RTWModifiedTimeStamp	  276080040
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  LastModifiedDate	  "Fri Nov 30 12:50:57 2012"
+  RTWModifiedTimeStamp	  276173622
+  ModelVersionFormat	  "1.%<AutoIncrement:14>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -887,8 +887,8 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [184, 153, 1617, 950]
-    Open		    off
+    Location		    [64, 407, 1497, 1204]
+    Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -901,12 +901,12 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "103"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "44"
+    SIDHighWatermark	    "45"
     Block {
       BlockType		      Gain
       Name		      "A"
       SID		      "1"
-      Position		      [595, 165, 625, 195]
+      Position		      [595, 205, 625, 235]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "sysD.a"
@@ -944,7 +944,7 @@ Model {
       Name		      "Band-Limited\nWhite Noise"
       SID		      "4"
       Ports		      [0, 1]
-      Position		      [730, 165, 760, 195]
+      Position		      [835, 205, 865, 235]
       ZOrder		      -2
       BlockMirror	      on
       LibraryVersion	      "1.281"
@@ -959,7 +959,7 @@ Model {
       BlockType		      Gain
       Name		      "C"
       SID		      "5"
-      Position		      [730, 100, 760, 130]
+      Position		      [835, 100, 865, 130]
       ZOrder		      -8
       Gain		      "sysD.c"
       Multiplication	      "Matrix(K*u)"
@@ -979,7 +979,7 @@ Model {
       BlockType		      Gain
       Name		      "F"
       SID		      "6"
-      Position		      [595, 220, 625, 250]
+      Position		      [595, 300, 625, 330]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "sysD_F"
@@ -1031,7 +1031,7 @@ Model {
       Position		      [45, 210, 75, 240]
       ZOrder		      1
       Amplitude		      "0.2"
-      Frequency		      "0.1"
+      Frequency		      "0.01"
     }
     Block {
       BlockType		      SubSystem
@@ -1049,7 +1049,7 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"Smoothing\nProcess"
-	Location		[1455, 551, 2098, 1035]
+	Location		[325, 35, 1758, 832]
 	Open			off
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
@@ -1282,21 +1282,6 @@ Model {
       SaturateOnIntegerOverflow	off
     }
     Block {
-      BlockType		      Sum
-      Name		      "Sum2"
-      SID		      "13"
-      Ports		      [2, 1]
-      Position		      [680, 170, 700, 190]
-      ZOrder		      -18
-      BlockMirror	      on
-      ShowName		      off
-      IconShape		      "round"
-      Inputs		      "++|"
-      InputSameDT	      off
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
-    }
-    Block {
       BlockType		      ToWorkspace
       Name		      "System Input"
       SID		      "14"
@@ -1323,7 +1308,7 @@ Model {
       Name		      "System output"
       SID		      "15"
       Ports		      [1]
-      Position		      [805, 100, 865, 130]
+      Position		      [920, 100, 980, 130]
       ZOrder		      -7
       VariableName	      "outputD"
       MaxDataPoints	      "inf"
@@ -1355,19 +1340,6 @@ Model {
       SID		      "16"
       Position		      [30, 105, 60, 135]
       ZOrder		      -5
-    }
-    Line {
-      SrcBlock		      "Unit Delay"
-      SrcPort		      1
-      Points		      [45, 0]
-      Branch {
-	DstBlock		"C"
-	DstPort			1
-      }
-      Branch {
-	DstBlock		"Sum2"
-	DstPort			1
-      }
     }
     Line {
       SrcBlock		      "A"
@@ -1429,20 +1401,6 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Sum2"
-      SrcPort		      1
-      Points		      [-15, 0]
-      Branch {
-	DstBlock		"A"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, 55]
-	DstBlock		"F"
-	DstPort			1
-      }
-    }
-    Line {
       SrcBlock		      "Clock"
       SrcPort		      1
       DstBlock		      "To Workspace"
@@ -1496,6 +1454,27 @@ Model {
       }
       Branch {
 	DstBlock		"N"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Unit Delay"
+      SrcPort		      1
+      Points		      [85, 0]
+      Branch {
+	Points			[0, 105]
+	Branch {
+	  DstBlock		  "A"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [0, 95]
+	  DstBlock		  "F"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	DstBlock		"C"
 	DstPort			1
       }
     }
