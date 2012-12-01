@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 13-Nov-12 12:24:48 AM
+EESchema Schematic File Version 2  date 01-Dec-12 1:37:54 PM
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -854,16 +854,16 @@ LIBS:zilog-z8-encore-v1_2a
 LIBS:Zilog-ZNEO-v1_0
 LIBS:zivapc
 LIBS:zx4125p
-LIBS:bowlThrusterControl-cache
+LIBS:bowThrusterControl-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
-Title ""
+Title "Bow thruster"
 Date "12 nov 2012"
-Rev ""
-Comp ""
+Rev "1.2"
+Comp "AAUSHIP"
 Comment1 ""
 Comment2 ""
 Comment3 ""
