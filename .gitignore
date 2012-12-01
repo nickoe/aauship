@@ -24,6 +24,10 @@ doc/*.fls
 
 *.pyc
 
+sw/MATLAB/html/*
+sw/MATLAB/*.eps
+sw/MATLAB/*.mat
+
 # Hardware files
 hw/*.bak
 hw/*.dcm
