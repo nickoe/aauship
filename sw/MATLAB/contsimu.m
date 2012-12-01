@@ -169,3 +169,17 @@ grid on
 
 %% Save file:
 save('inputD', 'inputD')
+
+%% Save Discrete Control Matrices
+saveAname = 1;
+saveA = sysD.a;
+saveBname = 2;
+saveB = sysD.b;
+saveCname = 3;
+saveC = sysD.c;
+saveNname = 4;
+saveN = sysD_N;
+saveFname = 5;
+saveF = sysD_F;
+save('Sys_ABCNF', 'saveAname', 'saveA', 'saveBname', 'saveB', 'saveCname', 'saveC', 'saveNname', 'saveN', 'saveFname', 'saveF','-ascii', '-tabs');
+clear save*

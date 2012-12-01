@@ -418,7 +418,7 @@ class O_PosData:
     The Extend_Zero function returns a point further in the direction of the Y axis
     '''
     def Extend_Zero(self):
-        return(O_PosData(self.X , self.Y + 5, float('NaN'), float('NaN')));
+        return(O_PosData(self.X + 0 , self.Y + 1, float('NaN'), float('NaN')));
 
 
 '''
@@ -464,16 +464,14 @@ class O_StraightPath:
         proper point coordinates
         ''' 
         if abs(Ax - Bx) < 1:
-            print(Ay, By, Ax, Bx)
+
             self.poly = numpy.polyfit([Ay, By], [Ax, Bx], 1);
             prange = numpy.linspace(Ay, By, SubWP_No);
-            print(prange)
+
             values = numpy.polyval(self.poly, prange);
             self.SubWP = numpy.array([prange, values]);
             
-        else:
-            print('nem fuggo')
-            
+        else:            
             self.poly = numpy.polyfit([Ax, Bx], [Ay, By], 1);
             prange = numpy.linspace(Ax, Bx, SubWP_No);
             values = numpy.polyval(self.poly, prange);
