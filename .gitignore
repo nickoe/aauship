@@ -31,10 +31,10 @@ sw/MATLAB/*.mat
 
 # Hardware files
 hw/*.bak
-hw/*.bck
 hw/*.dcm
 hw/*.ps
 hw/*.000
 hw/lib/*.bak
+hw/lib/*.bck
 
 doc/master.toc
