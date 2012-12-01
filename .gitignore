@@ -21,6 +21,7 @@ doc/*.fls
 *.hex
 *.lst
 *.sym
+*.o
 
 *.pyc
 
@@ -30,6 +31,7 @@ sw/MATLAB/*.mat
 
 # Hardware files
 hw/*.bak
+hw/*.bck
 hw/*.dcm
 hw/*.ps
 hw/*.000
