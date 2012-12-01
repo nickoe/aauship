@@ -1,4 +1,4 @@
-update=14-Nov-12 2:18:59 PM
+update=01-Dec-12 1:37:46 PM
 last_client=eeschema
 [pcbnew]
 version=1

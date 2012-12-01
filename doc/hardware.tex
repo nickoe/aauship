@@ -19,3 +19,15 @@ Due to the delicate nature of Li-Po batteries, it is absolutely required to neve
 The problem of over-discharge is solved in the power circuit due to the fact that the brushless motor controller has a safety switch which does not allow any cell to drop below 3V, which would cause permanent damage to the batteries, as they cannot recover after being over-discharged. 
 
 This is not the case, though, with the electronic circuit, which can drain the batteries more than the maximum limit. In order to prevent this from happening, we should eventually implement a couple of battery level monitors which should be integrated in the \ac{LLI} module and which can compute the battery levels and allow the user to retrieve the boat in order to charge it. They should also include a master kill switch which has the purpose of protecting the batteries.
+
+\section{Electronics design}
+
+\subsection{Bow thruster controller}
+\label{subsec:bow thruster controller}
+
+The bow thruster controller is a circuit whose function is to provide power to the bow thruster, under the control of the \ac{LLI}. This usees a L298 "H bridge" connected to a logic gate, so that it can be driven with just two signals: direction and \ac{PWM}.
+
+Another use of this circuit is to provide a lossless voltage level conversion from the batteries' nominal 14.8V to the motor's 7.2V rated voltage. That means that the maximum theoretical duty cycle of the PWM bow thruster control signal is $ 14.8 / 7.2 = 48 \% $. This, however, is not the actual value that will be used, due to the fall time of the L298 chip, which is pretty big at the 1kHz PWM frequency. By using an oscilloscope to measure the True RMS value of the electronic circuit's output, it was empirically determined that the maximum pulse width value is \colorbox{yellow}{What was this value?}. 
+The motor used to drive the bow thruster also has a minimum starting voltage. The PWM minimum duty cycle was empirically determined to be \colorbox{yellow}{What was it??}.
+
+The schematic of this electronic circuit is attached here \ref{appendices:bow thruster schematic}
