@@ -33,8 +33,8 @@ class O_Ship:
         self.NextSWP = self.Pos
         
         self.Speed = 0;
-        self.Sigma_max = 0.1;
-        self.Kappa_max = 0.1;
+        self.Sigma_max = 0.05;
+        self.Kappa_max = 0.05;
         
         self.counter1 = 0;
         
@@ -46,7 +46,7 @@ class O_Ship:
         self.NextSWP_No = 0;
         self.NextSWP_validity = 0;
         
-        self.FollowDistance = 6
+        self.FollowDistance = 10
         
         self.v = 0
         self.omega = 0
