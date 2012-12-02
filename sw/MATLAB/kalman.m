@@ -136,8 +136,10 @@ x_rot = zeros(2,2,N);
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        Wn(:,n) = randn(9,1).*SqM';
-     Qz(:,:,n) = xcov(Z(:,n-1));     
-     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+     Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)'); %
+   covari(n,:) = autocorr(Z(:,n));
+     Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
+     %Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
         Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
         X(:,n) = An*Y(:,n)+Wn(:,n);
     Ypred(:,n) = Hn*Yupdate(:,n-1);
@@ -905,6 +907,53 @@ title('Error in Y-Position');
 
 legend('Monorate','Multirate','Multirate NI')
 grid on
+
+%% Changing the Covariance Matrices and inputs:
+% As the inputs to the system is seen to vary a lot, the system is is now
+% computed where the inputs are considered a normal distribution of
+% numbers, thus giving the following two distributions: 
+
+% Distribution of the force:
+% The force can be seen as a normal distribution where the mean can be
+% considered to be the force the ship needs to apply to maintain a velocity
+% of 1 m/s. Through simulations, this have proven to be 5.3544 Newtons, and
+% as this value can increase or decrease from small numbers to large
+% numbers, the variance is set to 50. This gives the following
+% distribution:
+% Force ~ N(5.3544,50^2)
+my_force = 5.3544;
+si_force = 50;
+
+% Distribution of the torque:
+% The torque can be distributed in the same manner, however the torque is
+% with a zero mean, as the ship normally sails straight ahead. The angle 
+% the ship can turn can be seen as pi degrees to either side, as this gives
+% the value of 
+% This gives the following distribution for the torque function:
+% Torque ~ N(0,pi^2)
+my_torqe = 0;
+si_torqe = pi;
+
+% As Force and Torque are given in the same vector, the distribution
+% function will be joint, and the probability that both values occur, will
+% be a multiplication of the two probabilities. Thus stating: 
+% P(xa,xb) = P(xa)P(xb). Thus giving the expected value of the input as: 
+% E[P([xa,xb] = vector(K)] = K * P(xa)*P(xb) - which makes way for
+% computing the autocovariance function as:
+% C = E[(X1 - my1)(X2 - my2)] -> E[X1X2] - my1my2
+
+
+% These inputs are then insered into a matrix:
+
+
+for j = 2:N
+    prop_force = normpdf(Z(3,n),my_force,si_force);
+    prop_torqe = normpdf(Z(9,n),my_torqe,si_torqe);
+    inputP = [zeros(2,N+1);prop_force;zeros(5,N+1);prop_torqe];
+    mean_forc = (mean_forc + Z(3,n))/n;
+    mean_torq = (mean_torq + Z(9,n))/n;
+    covQw = bsxfun(@minus,Z(:,n-1)*Z(:,n)'*(inputP(:,n-1)*inputP(:,n)'),[zeros(2,1);mean_forc;zeros(5,1);mean_torq]);
+end
 
 %% Estiamting a Wind Bias:
 % As Wind might push the ship out of course (constantly in the same
