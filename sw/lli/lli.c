@@ -95,7 +95,7 @@ int main (void)
 
 		if (adis_ready_counter >= 82) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
-			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+//			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
 			adis_ready_counter -= 82;
 			PORTL ^= (1<<LED4);
 		}
@@ -124,7 +124,7 @@ int main (void)
 			}
 
 			if (c2 == '$') { // We have a possible message comming
-				PORTL ^= (1<<LED4);
+//				PORTL ^= (1<<LED4);
 				idx2 = 0; // Set "flag"
 			}
 		}
@@ -144,7 +144,7 @@ int main (void)
 				buffer3[len3] = c3;
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
-					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+//					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
 					len3 = -1; // Set flag in new packet mode
 				}
 			}

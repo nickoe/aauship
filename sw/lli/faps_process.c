@@ -11,7 +11,8 @@
 int process(msg_t *msg) 
 {
 	char buildtime[] =  __DATE__ " " __TIME__;
-	uint16_t duty = 0;
+	int16_t duty = 0;
+		char s[64];
 
 	switch (msg->devid) {
 		case 0:
@@ -60,7 +61,12 @@ int process(msg_t *msg)
 					break;
 				case 10:
 				case 11:
-					pwm_set_duty(RC5, msg->data[0]);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[1])&0xFF));
+					//uart2_putc((msg->data[0]));uart2_putc(msg->data[1]);
+					//uart2_putc((char)((duty >> 8) & 0x00FF));uart2_putc((char)((duty) & 0x00FF));
+					pwm_set_duty(RC5, duty );
 					break;
 				case 12:
 				case 13:

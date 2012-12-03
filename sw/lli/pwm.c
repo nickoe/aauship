@@ -113,7 +113,8 @@ void pwm_set_duty(uint8_t channel, int16_t value) {
 		} else if (value > 500){
 			value=500;
 		};
-		value = (value & 0x00FF) + 1500;
+		value = value + 1500;
+
 	}
 	pwm_set(channel, value);
 }
