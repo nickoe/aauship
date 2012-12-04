@@ -16,6 +16,7 @@ doc/*.fdb_latexmk
 doc/*.fls
 doc/*.blg
 doc/*.bbl
+doc/*.toc
 
 # Software files
 *.out
@@ -31,6 +32,9 @@ sw/MATLAB/html/*
 sw/MATLAB/*.eps
 sw/MATLAB/*.mat
 
+# LLI stuff
+sw/lli/doc
+
 # Hardware files
 hw/*.bak
 hw/*.dcm
@@ -39,4 +43,3 @@ hw/*.000
 hw/lib/*.bak
 hw/lib/*.bck
 
-doc/master.toc
