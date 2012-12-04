@@ -124,7 +124,7 @@ int main (void)
 			}
 
 			if (c2 == '$') { // We have a possible message comming
-				PORTL ^= (1<<LED4);
+//				PORTL ^= (1<<LED4);
 				idx2 = 0; // Set "flag"
 			}
 		}

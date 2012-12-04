@@ -14,6 +14,9 @@ doc/*.pdf
 doc/*.synctex.gz
 doc/*.fdb_latexmk
 doc/*.fls
+doc/*.blg
+doc/*.bbl
+doc/*.toc
 
 # Software files
 *.out
@@ -21,8 +24,16 @@ doc/*.fls
 *.hex
 *.lst
 *.sym
+*.o
 
 *.pyc
+
+sw/MATLAB/html/*
+sw/MATLAB/*.eps
+sw/MATLAB/*.mat
+
+# LLI stuff
+sw/lli/doc
 
 # Hardware files
 hw/*.bak
@@ -30,5 +41,5 @@ hw/*.dcm
 hw/*.ps
 hw/*.000
 hw/lib/*.bak
+hw/lib/*.bck
 
-doc/master.toc

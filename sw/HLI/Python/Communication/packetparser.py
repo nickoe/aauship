@@ -10,22 +10,65 @@ class packetParser():
 		self.accelburst = [0,0,0,0,0,0,0,0,0,0,0,0,0]
 		self.accellog = accelfile
 		self.accelwriter = csv.writer(self.accellog)
+		self.prevtime = 0
+		
+		#self.accelburst = 0
+		self.gpspacket = 0
 		
 		self.gpsdata = [0,0,0,0,0,0,0,0]
 		#Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
 		self.gpslog = gpsfile
+		self.writer = csv.writer(self.accellog)
 		#self.gpswriter = csv.writer(self.gpslog)
 		#print "Stdsqewarted!"
 		pass
 			
 	def parse(self,packet):
+		print packet
 		if(ord(packet['DevID']) == 20):
 			if(ord(packet['MsgID']) == 13):
+				#self.accelburst = self.accelburst + 1
+				print "IMU: " + str(self.accelburst)
+				
+				
+				accelnr = 0
+				try:
+					for i in range(len(packet['Data'])):
+						#print packet['Data'][i] +"\t (" + str(ord(packet['Data'][i])) + ")\t [" + hex(ord(packet['Data'][i])) + "]"
+	
+						#print str(packet['Data'][i-1:i+1])
+						if ((i & 1) == 1):
+							tempval = packet['Data'][i-1:i+1]
+							tempval.reverse()
+							#print str("".join(tempval))
+							val = 0
+							try:
+								val = struct.unpack('h', "".join(tempval))
+							except:
+								pass
+							#val = struct.unpack('h', "".join(packet['Data'][i-1:i+1]))
+							self.accelburst[accelnr] = val[0]
+							accelnr = accelnr + 1
+							#print str(val[0])
+					self.accelburst[accelnr] = packet['Time']
+					if(abs(self.accelburst[accelnr-2]) > 1000):
+						print packet
+						print self.accelburst
+					#print self.accelburst
+					else:
+						self.writer.writerow(self.accelburst)
+				except Exception as e:
+					print e
+				
+				
+				#print "IMU BURST!"
 				pass
 	
 		elif (ord(packet['DevID']) == 30):
 			if(ord(packet['MsgID']) == 6):
-				print "".join(packet['Data']),
+				self.gpspacket += 1
+				print "GPS: " + str(self.gpspacket)
+				#print "".join(packet['Data']),
 				self.gpslog.write("".join(packet['Data']))
 				#self.gpswriter.writerow("".join(packet['Data']))
 				
@@ -33,16 +76,22 @@ class packetParser():
 					gpgga = nmea.GPGGA()
 					tempstr = "".join(packet['Data'])
 					gpgga.parse(tempstr)
+					#print "Timestamp:" + gpgga.timestamp
+					'''try:
+						deltat = int(float(gpgga.timestamp))-self.prevtime
+						print deltat
+						self.prevtime = int(float(gpgga.timestamp))
+					except Exception as e:
+						print e'''
 					gpsd = [gpgga.timestamp, gpgga.latitude, gpgga. gpgga.longitude, packet['Time']]
 					#self.gpswriter.writerow(gpsd)
-					print gpgga.longitude
 				
 				elif("".join(packet['Data'][1:6]) == "GPRMC"):
 					
 					gprmc = nmea.GPRMC()
 					tempstr = "".join(packet['Data'])
 					gprmc.parse(tempstr)
-					print gprmc.lon
+					
 					self.gpsdata[0] = gprmc.timestamp
 					self.gpsdata[1] = gprmc.lat
 					self.gpsdata[2] = gprmc.lon
@@ -51,7 +100,8 @@ class packetParser():
 					#self.gpsdata[5] = gprmc.datestamp
 					#self.gpsdata[6] = gprmc.mag_variation
 					self.gpsdata[7] = packet['Time']
-					print self.gpsdata
+				#	print self.gpsdata
+					#print self.gpsdata
 					#self.gpswriter.writerow(self.gpsdata)
 					
 					
@@ -128,11 +178,11 @@ class packetParser():
 		elif(ord(packet['DevID']) == 20):
 			#print "------------------------IMU!-----------------------"
 			if(ord(packet['MsgID']) == 13):
-				accelnr = 0
+				
 				#print "Recognized msg"
 				#print packet['Data']
 				isInt = False
-				
+				accelnr = 0
 			
 				for i in range(len(packet['Data'])):
 					#print packet['Data'][i] +"\t (" + str(ord(packet['Data'][i])) + ")\t [" + hex(ord(packet['Data'][i])) + "]"
@@ -152,7 +202,7 @@ class packetParser():
 						accelnr = accelnr + 1
 						#print str(val[0])
 				self.accelburst[accelnr] = packet['Time']
-				if(self.accelburst[accelnr-1] == 256):
+				if(abs(self.accelburst[accelnr-2]) > 1000):
 					print packet
 					print self.accelburst
 				#print self.accelburst

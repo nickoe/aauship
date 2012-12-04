@@ -7,12 +7,9 @@ Created on 2012.11.12.
 import math
 import numpy
 import scipy
-#import control
 import matplotlib.pyplot as plt
-
 import FunctionLibrary as FL
 import ObjectLibrary as OL
-#import CommUnit as CU
 
 '''
 #############################################
@@ -33,8 +30,8 @@ class O_Ship:
         self.NextSWP = self.Pos
         
         self.Speed = 0;
-        self.Sigma_max = 0.1;
-        self.Kappa_max = 0.1;
+        self.Sigma_max = 0.3;
+        self.Kappa_max = 0.3;
         
         self.counter1 = 0;
         
@@ -46,13 +43,21 @@ class O_Ship:
         self.NextSWP_No = 0;
         self.NextSWP_validity = 0;
         
-        self.FollowDistance = 6
+        self.FollowDistance = 2
         
         self.v = 0
         self.omega = 0
         self.Theta = 0
         
         self.mark = 0;
+        
+        '''
+        The control matrices
+        '''
+        
+        self.N = numpy.matrix([[2.1366547e+001, 1.5569542e-016], [ 8.3542070e-016, 2.2764131]])
+        
+        self.F = numpy.matrix([[1.6012147e+001, 1.5569542e-016, 3.3824418e-016], [8.3542070e-016, 2.2764131e+000, 2.2219859e+000]])
         
     def SetWaypoints(self, WPC):
         '''
@@ -142,7 +147,7 @@ class O_Ship:
         self.Path = OL.O_LocalPath(gamma, self.Sigma_max, self.Kappa_max);
         
         definition = 20;
-        self.Path.FitPath(definition);
+        self.Path.FitPath(definition/4);
         self.Path.PositionPoly(Nm, Nt, Np);
 
         '''fitline'''
@@ -255,15 +260,13 @@ class O_Ship:
         #############################################
         # RUN CONTROL ALGORITHM FOR DELTA HERE
         '''
-        if delta < 0:
-            N = numpy.matrix([[abs(delta)*10 + 8],[-abs(delta)*10 + 8]])
-            #print('R')
-        elif delta > 0:
-            N = numpy.matrix([[-abs(delta)*10 + 8],[abs(delta)*10 + 8]])
-            #print('L')
-        else:
-            N = numpy.matrix([[5],[5]])
-            #print('S')
+       
+        Ref = numpy.matrix([[2], [self.x[1]-delta]])
+
+        
+        N = -self.F * self.x + self.N * Ref
+
+        
         '''
         #############################################
         '''
@@ -275,17 +278,17 @@ class O_Ship:
         
         return N;
     
-    def ReadStates(self, v, omega, theta, Pos):
+    def ReadStates(self, v, theta, omega, Pos):
         
         '''
-        Reads systems states from sensors (processed data already)
+        Reads systems states from sensors (processed data)
         '''
         
         self.v = v
         self.omega = omega
-        
-        self.Theta = theta
+        self.Theta = math.atan2(math.sin(theta), math.cos(theta))
         self.Pos = OL.O_PosData(Pos[0], Pos[1], math.cos(theta), math.sin(theta))
+        self.x = numpy.matrix([[v],[self.Theta],[omega]])
     
     def get_Thera_r(self):
         

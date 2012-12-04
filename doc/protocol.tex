@@ -1,5 +1,5 @@
 \chapter{FAPS LLI interface}
-\head{Documentation for the LLI part of the system.}
+\head{Documentation for the \ac{LLI} part of the system. This describes the packet format and defines all commands.}
 \section{Standard format of messages}
 %To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwidth which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
 
@@ -64,7 +64,8 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 \end{table}
 If a packet with MsgID 0 is sent to a device, the device will respond with a list of all available MsgIDs, along with their definition. If a packet with MsgID 0 is sent to DevID 0, the General LLI, it will respond with a list of available devices. If these device definitions adhere to a strict protocol, it will be possible to automatically configure an LLI and HLI implementing this protocol. This protocol will not be defined in this project, but the feature will useful in checking and validating the configuration.
 
- 
+An x in the first column indicates that funcitonality is implemented on \ac{LLI}.
+
 \begin{table}[h]
 \centering
 	\begin{tabular}{llrrl}
@@ -78,28 +79,28 @@ If a packet with MsgID 0 is sent to a device, the device will respond with a lis
 	& Read Options & 2 & Up to 255 & Option bytes\\
 	& Deadman Switch & 3 & 1 & On or off signal for actuators \\
 	& Status & 4 & Up to 255 & Statuses of sensors and actuators \\
-	& Ping & 5 & 0 & Empty \\
-	& Pong & 6 & 0 & Empty \\
+	x& Ping & 5 & 0 & Empty \\
+	x& Pong & 6 & 0 & Empty \\
 	& ACK & 7 & 0 & Empty \\
 	& NACK & 8 & 0 & Empty \\
 	& Build Info & 9 & Up to 255 & Commit, target, date\\
 	& Surge & 10 & 1 & Speed\\
 	& Turn & 11 & 1 & Turning velocity\\
-	\midrule
+	\bottomrule
 	\multicolumn{5}{l}{\textbf{10: Actuators}}\\
 	\midrule
 	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
 	& Set options & 1 & Up to 255 & Option bytes\\
 	& Read Options & 2 & Up to 255 & Option bytes\\
-	& Set PWM actuator 1  & 3 & 2 & Engine 1, starboard side (default)\\
+	x& Set PWM actuator 1  & 3 & 2 & Engine 1, starboard side (default)\\
 	& Read PWM actuator 1 & 4 & 2 & Engine 1, starboard side (default)\\
-	& Set PWM actuator 2 & 5 & 2 & Engine 2, port side\\
+	x& Set PWM actuator 2 & 5 & 2 & Engine 2, port side\\
 	& Read PWM actuator 2 & 6 & 2 & Engine 2, port side\\
-	& Set PWM actuator 3 & 7 & 2 & Engine 3 (auxiliary)\\
+	x& Set PWM actuator 3 & 7 & 2 & Engine 3 (auxiliary)\\
 	& Read PWM actuator 3 & 8 & 2 & Engine 3 (auxiliary)\\ 
-	& Set PWM actuator 4 & 9 & 2 & Rudder\\
+	x& Set PWM actuator 4 & 9 & 2 & Rudder\\
 	& Read PWM actuator 4 & 10 & 2 & Rudder\\ 
-	& Set PWM actuator 5 & 11 & 2 & Auxiliary\\
+	x& Set PWM actuator 5 & 11 & 2 & Auxiliary\\
 	& Read PWM actuator 5 & 12 & 2 & Auxiliary\\ 
 	& Set PWM output 1 & 13 & 2 & Bow thruster\\
 	& Read PWM output 1 & 14 & 2 & Bow thruster\\ 
@@ -108,6 +109,15 @@ If a packet with MsgID 0 is sent to a device, the device will respond with a lis
 	& Set PWM output 3 & 17 & 2 & Auxiliary\\
 	& Read PWM output 3 & 18 & 2 & Auxiliary\\ 
 	\midrule
+	\label{tab:commands}
+	\end{tabular}
+\end{table}
+\newpage
+
+\begin{table}[h]
+\centering
+	\begin{tabular}{llrrl}
+	\toprule
 	\multicolumn{5}{l}{\textbf{20: IMU}}\\
 	\midrule
 	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
@@ -123,6 +133,7 @@ If a packet with MsgID 0 is sent to a device, the device will respond with a lis
 	& Y-Mag & 10 & 2 & Magnetometer in Y-direction\\
 	& Z-Mag & 11 & 2 & Magnetometer in Z-direction\\
 	& Temp & 12 & 2 & Temperature in IMU\\
+	x& Burst read & 13 & 24 & Reading with all sensor data\\
 	\midrule
 	\label{tab:commands}
 	\end{tabular}

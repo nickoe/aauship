@@ -10,23 +10,46 @@ import struct
 running = True;
 STARTCHAR = ord('$')
 
-class Serialdummy:
+class seriald:
 
 	class Serial:
 		def __init__(self,serialport,speed):
-			self.array = [0x24,3,0,1,49,50,51,0x42,0xCE,0x24,2,1,1,2,2,2,3,0x24,2,1,1,1,2,0x5a,0xad,4,5,4,5,2,3,0x24,1,2,0x24,6,0,2	,48,49,50,51,52,53,0x6e,0x5b,0,4,3]
+			self.f = open("LOG00141.txt",'r')
+			self.l = 0;
+			#self.array = []
+			#l = 0
+			#len(self.f)
+			#while True:
+			#	c = self.f.read(1)
+			#	if not c:
+			#		open = false;
+			#	self.array.append(c)
+				#l = l + 1
+				#print l
+			#self.f.close()
+			#print self.array
+			#self.array = [0x24,3,0,1,49,50,51,0x42,0xCE,0x24,2,1,1,2,2,2,3,0x24,2,1,1,1,2,0x5a,0xad,4,5,4,5,2,3,0x24,1,2,0x24,6,0,2	,48,49,50,51,52,53,0x6e,0x5b,0,4,3]
 			self.open = True;
-		def read(self,numbers):
-			'''print self.array[0]'''
-			return self.array.pop(0)
 			
-		def isOpen(self):
-			if len(self.array) > 0:		
-				return open
-			return False
+		def read(self,numbers):
+			self.l += 1
+			#print self.l
+			'''print self.array[0]'''
+			c = self.f.read(1)
+			#print c
+			if not c:
+				self.f.close()
+				self.open = False;
+			return c
+			#return self.array.pop(0)
+			
+			
+		def isOpen(self):	
+			return self.open
 			
 		def write(self,byte):
-			print str(byte)  + "\t [" + str(hex(byte)) + "]"
+			pass
+			#print str(byte)  + "\t [" + str(hex(byte)) + "]"
 		
 		def close(self):
 			self.open = False;
@@ -34,7 +57,7 @@ class Serialdummy:
 class packetHandler(threading.Thread):
 	
 	def __init__(self,serialport,speed,queue):
-		self.connection = serial.Serial(serialport,speed)	#Serial Connection
+		self.connection = seriald.Serial(serialport,speed)	#Serial Connection
 		print self.connection
 		self.myNewdata = []				#Array for storing new packets
 		self.q = queue					#Queue to share data between threads
@@ -191,6 +214,13 @@ class packetHandler(threading.Thread):
 			#print "Godkendt"
 			return True
 		else:
+			
+			#print "Errorlog written!"
+			#time.sleep(0.5)
+			errorlog = open('errorlog.log', 'a')
+			errorlog.write("[" + str(ord(incCheck[0])) + " " + str(ord(incCheck[1])) + "] - [" + str(ord(check[0])) + " " + str(ord(check[1])) + "]\n")
+			errorlog.close()
+			#print "written"
 			return False
 		
 		

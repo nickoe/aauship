@@ -99,21 +99,22 @@ void pwm_set(uint8_t channel, uint16_t value) {
  * with is okay.
  */
 void pwm_set_duty(uint8_t channel, int16_t value) {
-	if ( (channel > 0) && (channel <= 3 ) ) { // Full range duty cycle, as for ordinary PWM (+0% to +100%)
+	if ( (channel >= DC1) && (channel <= DC3 ) ) { // Full range duty cycle, as for ordinary PWM (+0% to +100%)
 		if(value < -100){
 			value=-100;
 		} else if (value > 100){
 			value=100;
 		};
-		value = (value & 0x00FF) * (DCPERIOD/100);
+		value = value * (DCPERIOD/100);
 	}
-	else if ( (channel >= 4) && (channel <= 8) ) { // Small range duty cycle, as for RC PWM (-100% = -500 to +100% = 500)
+	else if ( (channel >= RC1) && (channel <= RC5) ) { // Small range duty cycle, as for RC PWM (-100% = -500 to +100% = 500)
 		if(value < -500){
 			value=-500;
 		} else if (value > 500){
 			value=500;
 		};
-		value = (value & 0x00FF) + 1500;
+		value = value + 1500;
+
 	}
 	pwm_set(channel, value);
 }

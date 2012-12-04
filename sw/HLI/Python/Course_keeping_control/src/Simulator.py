@@ -39,7 +39,10 @@ class Simulator:
         '''
         Sets the dynamic model and initial conditions of the system.
         '''
-        
+        '''
+        Old
+        '''
+        '''
         self.A = A
         self.B = B
         self.C = C
@@ -62,13 +65,48 @@ class Simulator:
         
         self.A = numpy.matrix([[self.Ts * -alpha_v + 1., 0., 0.],[0., self.Ts * -alpha_w + 1., 0.],[0., self.Ts, 1.]])
         self.B = numpy.matrix([[K1, K2],[K3, -K4],[0., 0.]])
+        '''
         
-    def UpdateStates(self, N):
+        self.A = numpy.matrix([[9.5636083e-001, 0, 0], [0, 1, 9.9609022e-002], [0, 0, 9.9219065e-001]])
+        
+        self.B = numpy.matrix([[8.1501513e-003, 0], [0, 4.2806514e-003], [0, 8.5501307e-002]])
+        
+        self.C = numpy.matrix([[1, 0, 0], [0, 1, 0]])
+        
+        '''
+        self.A = A
+        self.B = B
+        self.C = C
+        self.D = D
+        self.x = x
+        '''
+        self.Pos = P
+        
+        self.x = numpy.matrix([[0.],[0.],[0.]])
+        
+        self.Ts = 0.1
+        
+        '''
+        alpha_v = 1
+        alpha_w = 10
+        
+        
+        
+        K1 = 1 * self.Ts
+        K2 = 1 * self.Ts
+        K3 = 1 * self.Ts
+        K4 = 1 * self.Ts
+        
+        self.A = numpy.matrix([[self.Ts * -alpha_v + 1., 0., 0.],[0., self.Ts * -alpha_w + 1., 0.],[0., self.Ts, 1.]])
+        self.B = numpy.matrix([[K1, K2],[K3, -K4],[0., 0.]])
+        '''
+    def UpdateStates(self, controlsignal):
         '''
         Updates the system states, based on the
         system input and previous states (motor speeds)
         '''
-        self.x = self.A * self.x + self.B * N
+        self.x = self.A * self.x + self.B * controlsignal
+
         '''
         Returns the current system states
         '''
@@ -80,9 +118,9 @@ class Simulator:
         and the current system states (speed and heading)
         '''
         curpos = self.Pos.get_Pos()
-        x_next = numpy.sum(self.Ts * states[0] * math.sin(states[2]) + curpos[0])
-        y_next = numpy.sum(self.Ts * states[0] * math.cos(states[2]) + curpos[1])
-        self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[2]), math.sin(self.x[2]))
+        x_next = numpy.sum(self.Ts * states[0] * math.sin(states[1]) + curpos[0])
+        y_next = numpy.sum(self.Ts * states[0] * math.cos(states[1]) + curpos[1])
+        self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         '''
         Returns the current ship position
         '''
