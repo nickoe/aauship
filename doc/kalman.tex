@@ -54,8 +54,8 @@ F \sim \mathcal{N}(5.3544,55)\\
 \end{align}
 The covariance of these inputs, are then multiplied with $\vec{B}$ to give the input to the system $\vec{w}(k)$. As the two inputs are independent, the covariance matrix collapses to a matrix with diagonal entries, which gives the following matrix:
 \begin{align}
-Cov(\vec{X},\vec{X})_{3,3} = \sigma_{F}\\
-Cov(\vec{X},\vec{X})_{9,9} = \sigma_{\tau}
+Cov(\vec{X},\vec{X})_{3,3} = \sigma_{F}^2\\
+Cov(\vec{X},\vec{X})_{9,9} = \sigma_{\tau}^2
 \end{align}
 When the system is simulated it gives the following response for estimating the position.
 \begin{figure}[htbp]
@@ -64,7 +64,7 @@ When the system is simulated it gives the following response for estimating the 
 	\caption{Test to see if the Kalman filter estimates the position}
 	\label{fig:kalmanA}
 \end{figure}
-\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The Kalman filter must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 	
+Figure\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The Kalman filter must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 	
 
 \begin{align}
 \vec{x}(n+1) = \vec{\Phi}\cdot\vec{x}(n) = \begin{bmatrix}
@@ -90,11 +90,8 @@ y(n)\\
 \end{bmatrix}
 \label{eq:matr}
 \end{align}
-In \vref{eq:matr} the system matrix is seen to be 3 individual systems. The inputs to the Kalman filter is seen as 
-\todo{fix -rlc}
+In \vref{eq:matr} the system matrix is seen to be 3 individual systems. The inputs to the \ac{KF} is the desired force (computed by the controller) and the measurements given by the sensors mounted about the ship. The desired inputs to the system are put through the $\vec{B}$ matrix, which converts these to an acceleration and an angular acceleration respectively. These are then used as a basis for computing the estimating the output of the system. 
 
-
- will be a desired revolution speed of the two propellers. This generates a thrust forward, which will result in a velocity and if there is a difference between the two, then this will result in a torque, making the ship turn. The inputs can thus be given as:
 \begin{align}
 \vec{Z} = \begin{bmatrix}
 0 & 0\\
@@ -112,6 +109,8 @@ F\\
 \end{bmatrix}
 \end{align}
 
+
+
 On \vref{fig:revol} a test input to the system is plotted. The sequence is an alternating angle reference sequence, the angle is a sine curve. 
 \begin{figure}[htbp]
 	\centering
@@ -127,12 +126,13 @@ SETTING THE MEASUREMENT TO ZERO IF THERE IS NO SAMPLE to ensure that you still g
 Foreslag til Paper: Hvor langt ned kan man gå i sampling på GPS'en for at spare båndbredde, uden at miste præcision!
 
 \subsection{Simulations of the filter}
-% Text about linearizations / further computation.
 Simulation of the Kalman filter have proven to provide an accurate estimate, however - the actual variances have to be measured. 
 
 To avoid computational problems the Joseph Form of the Kalman Filter can be used. This ensures that the matrices used in the updating step is non-singular and positive definite. 
 
-A little on the theory of Joseph Form.
+If the filter is simulated, the following results are produced. 
+
+
 
 \section{Position estimation}
 During the development of the Kalman filter a lot or problems were discovered. One is to estimate the variances of the different measurement devies. The GPS delivers a position in latitude longitude format - which is converted into an x and y coordinate by rotating the entire system and shifting the local frame of the ship as a surface tangent to the earth. This will of course only be an estimate, but as the curvature of the earth is relatively small. The distance to the horizon can be estimated by $d \approx 3.57\sqrt{h}$ which on the ground, equals that the distance to the horizon is approximately 3.57 kilometers. As the areas to be measured are defined by a local bounding box - this area will to be defined to be smaller than 3.5 kilometers.

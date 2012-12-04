@@ -91,7 +91,7 @@ varYvel = 0.0001;
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
-varWvel = 0.00002;
+varWvel = 0.000002;
 varWacc = 2.3559e-5; % m/s^2 or 2.4035*10^-6 G
 
 varYWacc = 2.4496*10^-6; % rad/s^2
@@ -970,3 +970,24 @@ grid on
 % Below is a simulation of a walk around the parking lot, with the IMU and
 % the GPS used as reference for the ship (no bias, as the ship doesn't
 % drift when running on wheels!). 
+
+%% Figure export:
+print(h1,'-depsc2','-painters','KF_pos_monorate.eps');
+print(h2,'-depsc2','-painters','KF_vel_monorate.eps');
+print(h3,'-depsc2','-painters','KF_acc_monorate.eps');
+print(h4,'-depsc2','-painters','KF_xy_monorate.eps');
+
+print(h5,'-depsc2','-painters','KF_pos_multirate.eps');
+print(h6,'-depsc2','-painters','KF_vel_multirate.eps');
+print(h7,'-depsc2','-painters','KF_acc_multirate.eps');
+print(h8,'-depsc2','-painters','KF_xy_multirate.eps');
+
+print(h9,'-depsc2','-painters','KF_pos_mnirate.eps');
+print(h10,'-depsc2','-painters','KF_vel_mnirate.eps');
+print(h11,'-depsc2','-painters','KF_acc_mnirate.eps');
+print(h12,'-depsc2','-painters','KF_xy_mnirate.eps');
+
+print(h13,'-depsc2','-painters','poserror.eps');
+print(h14,'-depsc2','-painters','velerror.eps');
+print(h15,'-depsc2','-painters','accerror.eps');
+print(h16,'-depsc2','-painters','xyerror.eps');
