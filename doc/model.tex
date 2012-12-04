@@ -17,25 +17,25 @@ F_y\\
  =
  \left[
 \begin{matrix}
-cos(\phi - \theta)\\
-sin(\phi - \theta)\\
-sin(\theta) \cdot r
+\cos(\phi - \theta)\\
+\sin(\phi - \theta)\\
+\sin(\theta) \cdot r
 \end{matrix}
 \right]
 \cdot F_R
 +
  \left[
 \begin{matrix}
-cos(\phi - \theta)\\
-sin(\phi - \theta)\\
--sin(\theta) \cdot r
+\cos(\phi - \theta)\\
+\sin(\phi - \theta)\\
+-\sin(\theta) \cdot r
 \end{matrix}
 \right]
 \cdot
 F_L
 \label{Forceequation}
 \end{equation}
-We observe that the motors will deliver force parallel to the x-axis, we can further set $\theta = \phi$. If this is the case $sin(\theta - \phi)=0$, which nullifies the $F_Y$ term, and $cos(\theta-\phi) = 1 \Longrightarrow F_X = F_L+F_R$ . The forces can then be modelled as equation \eqref{shortformforces}.
+We observe that the motors will deliver force parallel to the x-axis, we can further set $\theta = \phi$. If this is the case $\sin(\theta - \phi)=0$, which nullifies the $F_Y$ term, and $\cos(\theta-\phi) = 1 \Longrightarrow F_X = F_L+F_R$ . The forces can then be modelled as equation \eqref{shortformforces}.
 \begin{equation}
 \left[\begin{matrix}
 F_X\\
@@ -46,7 +46,7 @@ F_X\\
 \left[
 \begin{matrix}
 1\\
-sin(\theta)\cdot r
+\sin(\theta)\cdot r
 \end{matrix}
 \right]
 \cdot F_R
@@ -54,7 +54,7 @@ sin(\theta)\cdot r
 \left[
 \begin{matrix}
 1\\
--sin(\theta)\cdot r
+-\sin(\theta)\cdot r
 \end{matrix}
 \right]
 \cdot F_L
