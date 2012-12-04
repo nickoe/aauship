@@ -6,56 +6,52 @@ To develop such a filter, the model of the ship is to be computed, as well as a 
 \subsection{State model}
 The state model is used as a base for computing the influence the different inputs have on the system. The matrix is the same as the $\vec{A}$ matrix used to describe the state space representation of the system. The general state expression is given as:
 \begin{align}
-\vec{Y}(n) = \vec{A}(n)\vec{Y}(n-1) + \vec{Z}(n)
+\vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)
 \end{align}
 \noindent Where:
 \begin{ffk}
-$\vec{A}(n)$ is the state matrix\\
-$\vec{Y}(n-1)$ is the last input to the system\\
-$\vec{Z}(n)$ is the driving noise
+$\vec{\Phi}(k)$ is the state matrix\\
+$\vec{x}(k-1)$ is the last input to the system\\
+$\vec{w}(k)$ is the driving noise (the system input)
 \end{ffk}
-In this case, the driving noise $\vec{Z}(n)$ will be the inputs to the system, which can then be used to estimate the different states. The states to be estimated is the velocity $\dot{x}$, the angular velocity $\omega$ and the angle of the vessel in the local frame $\theta$. The driving noise (or input) can be defined as the $\vec{B}$ matrix in the state system, multiplied with the different inputs given to the system, namely $n_1$ and $n_2$. When inserted, the formula for the state model becomes:
+In this case, the driving noise $\vec{w}(n)$ will be the inputs to the system, which can then be used to estimate the different states. The states to be estimated is the velocity $\dot{x}$, the angular velocity $\omega$ and the angle of the vessel in the local frame $\theta$. The driving noise (or input) can be defined as the $\vec{B}$ matrix in the state system, multiplied with the different inputs given to the system, namely $n_1$ and $n_2$. When inserted, the formula for the state model becomes:
 \begin{align}
-\vec{Y}(n) = \vec{A}(n)\vec{Y}(n-1) + \vec{B}\vec{u}
-\end{align}
-And when terms are inserted, the formula becomes: 
-\begin{align}
-\vec{Y}(n) = \vec{A}(n)\vec{Y}(n-1) + \vec{B}\vec{u}
+\vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{B}\cdot\vec{u}
 \end{align}
 
 \subsection{Observation model}
 The observation model, is a model that models the different observations. In this case, the different observations are measured directly, as we can measure both the angular velocity, the angle and the velocity of the craft. The general formula for the observation model is given as:
 \begin{align}
-\vec{X}(n) = \vec{H}(n)\vec{Y}(n) + \vec{W}(n)
+\vec{z}(k) = \vec{H}(k)\vec{x}(k) + \vec{v}(k)
 \end{align}
 \noindent Where:
 \begin{ffk}
 $\vec{H}(n)$ is the model linking the measurements to the observations\\
-$\vec{W}(n)$ is the noise from the measurements
+$\vec{v}(n)$ is the measurement noise on the sensors
 \end{ffk}
 The noise from the measurements is estimated using previous measurements which can be used to estimate the variance and the mean of the measurements. The noise can in general be seen as zero-mean Gaussian white noise processes, which makes for the assumption:
 \begin{align}
-\vec{W}(n) \sim \mathcal{N}(0,\sigma_Z^2)
+\vec{w}(n) \sim \mathcal{N}(0,\sigma_Z^2)
 \end{align}
-As $\vec{Y}(n)$ is a row vector, $\vec{W}(n)$ is also a row vector with the same dimension. This calls for different variances on the different noise additions, for each of the measurements. As the variance of the noise on the \ac{IMU} is a lot bigger than on the \ac{GPS}. As all the measurements are available directly, the $\vec{H}(n)$ matrix is equal to identity. Giving the final observation model:
+As $\vec{x}(n)$ is a row vector, $\vec{w}(n)$ is also a row vector with the same dimension. This calls for different variances on the different noise additions, for each of the measurements. As the variance of the noise on the \ac{IMU} is a lot bigger than on the \ac{GPS}. As all the measurements are available directly, the $\vec{H}(n)$ matrix is equal to identity. Giving the final observation model:
 \begin{align}
-\vec{X}(n) = \vec{Y}(n) + \vec{W}(n)
+\vec{z}(n) = \vec{x}(n) + \vec{v}(n)
 \end{align}
 
 % Wouldn't it be a fair assumption that a GPS doesn't have zero-mean, but has a wandering mean that would wander over time? 
 
 % Text about the vector Kalman filer
 % Text about the covariance matrix of such a system
-\subsection{The Covariance matrix}
-As the Kalman filter is given as a vector Kalman filter, the covariance matrix is to be computed. The definition for a covariance matrix is given as:
+\subsection{The Covariance matrices}
+As the Kalman filter is given as a vector Kalman filter, the covariance matrices is to be computed. The definition for a covariance matrix is given as:
 \begin{align}
-\mathcal{C} = \text{E}\langle[x(t_1) - \text{E}[x(t_1)]][x(t_2) - \text{E}[x(t_2)]]^\text{T}\rangle
+Cov(\vec{X},\vec{X}) = \text{E}\langle[\vec{X} - \mu_X][\vec{X} - \mu_X]^\text{T}\rangle
 \end{align}
-The covariance matrix is used to tune the Kalman filter, and weighs the different inputs according to the noise they experience. As this matrix is not constant, the covariance will vary with every given input. For the vector Kalman filter there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered to the the input to the system. This can be seen as the revolutions applied to the ship - as this both generates a forward motion, and a difference between them generates a torque. 
+The covariance matrix is used to tune the Kalman filter, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector Kalman filter there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \todo{insert reference to worksheet once its done -rlc} the distributions of the input signal can be seen as:
 
 As a continous Kalman filter is unfeasible to implement, it is looked at how to implement one digitally. This of course changes the state equations to become. For the 3 degrees of freedom model of the ship, the state equation becomes: 
 \begin{align}
-\vec{x}(n+1) = \vec{A}\vec{x}(n) = \begin{bmatrix}
+\vec{x}(n+1) = \vec{\Phi}\cdot\vec{x}(n) = \begin{bmatrix}
 1 & t_s & \frac{t_s^2}{2} & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 1 & t_s & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & -\beta_X & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -81,23 +77,23 @@ y(n)\\
 In \vref{eq:matr} the system matrix is seen to be 3 different systems, but for the 
 The inputs to the system is the output of the controller, which aboard the ship will be a desired revolution speed of the two propellers. This generates a thrust forward, which will result in a velocity and if there is a difference between the two, then this will result in a torque, making the ship turn. The inputs can thus be given as:
 \begin{align}
-\vec{u} = \begin{bmatrix}
+\vec{Z} = \begin{bmatrix}
 0 & 0\\
 0 & 0\\
-\frac{k_1}{m} & \frac{k_1}{m}\\
+\frac{1}{m} & 0\\
 0 & 0\\
 0 & 0\\
 0 & 0\\
 0 & 0\\
 0 & 0\\
-\frac{k_3}{I} & -\frac{k_4}{I}\\
+\frac{1}{I} & 0\\
 \end{bmatrix}\begin{bmatrix}
-n_1\\
-n_2
+F\\
+\tau
 \end{bmatrix}
 \end{align}
 
-On \vref{fig:revol} a test input to the system is plotted. The sequence is an alternating sequence, changing the input to the engines individually, and then changes them back again. The below is simulated using \MATLAB which gives the following plot, when used as an input to the system.  
+On \vref{fig:revol} a test input to the system is plotted. The sequence is an alternating angle reference sequence, the angle is a sine curve. 
 \begin{figure}[htbp]
 	\centering
 %	\includegraphics[width=\textwidth]{img/revol}
