@@ -10,3 +10,23 @@ This is an overview of the information flow for control in regard to the rest of
 \end{figure}
 
 \todo{Illustrate on figure~\vref{fig:vessel-block-overview} where RF comms is or maybe that should be on the block overvieww diagram without regard to contorl abstraction}
+
+\section{Designing the State Space Model}
+
+\subsection{Choosing the right states}
+
+\todo{Why we chose a lot of states in the beginning, and then were left with just a few, talk about that}
+
+\subsection{Linearizing the outputs}
+
+Using Newton's second law of motion for forward  and rotational movement (F = m * A; T = I * W'), we can easily see that the inputs to our system will be F and T representing the forward force and the torque produced by the motors. It is worth mentioning that, since there are two propellers rotating in opposite directions, a torque that would induce a rotation around Z axis passing through the boat's center of mass only if the two propellers are rotating at different speeds.
+
+These two rotational speeds N1 and N2 were initially included in the state space model as inputs to the system, as they could be controlled directly via a PWM pulse. This though proved to complicate matters because the relationship between the speeds of the propellers N1 and N2 and the force F and torque T generating accelerations is not a linear one. Because of this, our system would not be linear and would be beyond the scope of this project. 
+
+\todo{insert formulas for this transformation here}
+
+In order to prevent this from happening, the state space model was updated to only calculate the force T and torque T necessary for driving and turning the ship, and this would keep our system linear. in order to transform from [T, F] to [N1, N2], another module was introduced in the system which would implement this non-linear function. 
+
+This is a better solution anyway because if the state space model only outputs T and F, then it could be used for some other ship configurations, without modifications to the model, only to the module that translates the force and torque to N1 and N2. This, for example, can allow us to change the size of the propellers or their positions.
+
+
