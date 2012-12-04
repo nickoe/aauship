@@ -1,0 +1,18 @@
+\chapter{Measurement Journal: IMU Variance}
+The intention of this journal is to measure the variance of the output of the ADIS16405 IMU.
+\section{Equipment}
+\begin{itemize}
+\item ADIS16405
+\item Macbook Pro 2010 15 inch 2.53 GhZ Intel Core i5, 4Gb Ram
+\item APC220 Wireless communication Module
+\end{itemize}
+
+\section{Method}
+A python script was implemented which logged the data which was accepted according to the specifications in the protocol section \todo{ref to protocol section}. The board on which the IMU is mounted is reading the data with a set delay between reads, and then bursting the data as soon as it has read. The data is timestamped when it is received by the python script. The script will keep running, receiving data, until it is cancelled. As it is very easy to gather samples, a large amount of samples has been gathered, by allowing the system to run overnight.\\
+From an early trial run of the system it was discovered that the IMU would sporadically deliver measurements which were clearly wrong. Luckily all of the measurements were affected by this. Therefore it was possible to filter this by attaching the ADC of the IMU to ground, and then discarding the measurement when the ADC reads a high value.\\
+The measurements are then input in Matlab and the variances of the measurements are estimated, using the 'var()' function.
+\section{Measurements}
+The measurements can be found in the file accdata.csv. The different values from the IMU are comma separated with each new measurement on a new line. The output follows the format: Voltage, X-,Y-,Z-Gyro, X-,Y-Z-Accelerometer,X-,Y-,Z-Magnetometer, Temperature, ADC.
+\section{Results}
+The resulting variance of the accelerometer measurements were found to be 5.05, 4.98, 5.96 $\mu$G for the X, Y and Z direction. 
+For the Gyrometer the variances were found to be 2.28, 2.45 and 2.40 $\mu$degrees per second.
