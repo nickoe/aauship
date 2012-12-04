@@ -36,7 +36,7 @@ close all;
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 1000; % Then it fits with the Simulink Simulation!
+N = 10000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -87,11 +87,11 @@ varXvel = 0.00262;
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
 varYpos = 1.12;
-varYvel = 0.00001;
+varYvel = 0.0001;
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
-varWpos = 0.2;
-varWvel = 0.000001;
+varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
+varWvel = 0.00002;
 varWacc = 2.3559e-5; % m/s^2 or 2.4035*10^-6 G
 
 varYWacc = 2.4496*10^-6; % rad/s^2
@@ -112,6 +112,10 @@ SqM = sqrt([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varW
 % and this can then be considered to be a diagonal matrix with the elements
 % squared, hence there is no need for the square root, as this just gives
 % the variance it self. 
+
+% As the input signals are independent (eg. if a large force is needed,
+% that doesn't mean that a large torque is needed, and vice versa), the
+% covariance matrix is 
 
 %% System initiation:
 % The system is initialized, the parameters are: 
@@ -136,10 +140,10 @@ x_rot = zeros(2,2,N);
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        Wn(:,n) = randn(9,1).*SqM';
-     Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)'); %
-   covari(n,:) = autocorr(Z(:,n));
-     Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
-     %Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+     Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
+   %covari(n,:) = autocorr(Z(:,n));
+     %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
+     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
         Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
         X(:,n) = An*Y(:,n)+Wn(:,n);
     Ypred(:,n) = Hn*Yupdate(:,n-1);
@@ -147,7 +151,8 @@ for n = 2:N;
   Rpred(:,:,n) = Hn*Rupdate(:,:,n-1)*Hn'+Qz(:,:,n);
       B(:,:,n) = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
-Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);
+Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  
+     
 % Below - rotation udpate, so the route can be plotted:
   k_rot(:,:,n) = [cos(Yupdate(7,n-1)) -sin(Yupdate(7,n-1));sin(Yupdate(7,n-1)) cos(Yupdate(7,n-1))];
  k_newpos(:,n) = k_newpos(:,n-1) + k_rot(:,:,n)*[Yupdate(2,n-1);Yupdate(5,n-1)].*ts; % k_newposD(:,n-1)
@@ -348,7 +353,7 @@ sC = 1; % Sample counter - used to only include the 10th GPS sample.
 for n = 2:N;
             %sC = isinteger(n/10) % Sensor Count, used to zero out unsampled system inputs. 
       % Wn(:,n) = randn(9,1).*SqM';
-     Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
+     %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
        YD(:,n) = Hn*YD(:,n-1)+Z(:,n);
        XD(:,n) = An*YD(:,n)+Wn(:,n);
@@ -565,7 +570,7 @@ sK = 1; % Sample counter - used to only include the 10th GPS sample.
 
 for n = 2:N;
       % Wn(:,n) = randn(9,1).*SqM';
-     Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
+     %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
        YK(:,n) = Hn*YK(:,n-1)+Z(:,n);
        XK(:,n) = An*YK(:,n)+Wn(:,n);
@@ -583,7 +588,7 @@ for n = 2:N;
              end
  YupdateK(:,n) = YpredK(:,n)+BK(:,:,n)*(XK(:,n)-XpredK(:,n));
 RupdateK(:,:,n) = (eye(9)-BK(:,:,n)*An)*RpredK(:,:,n);
-            sK = sK + 1
+            sK = sK + 1;
 % Below - rotation udpate, so the route can be plotted:
   k_rotK(:,:,n) = [cos(YupdateK(7,n-1)) -sin(YupdateK(7,n-1));sin(YupdateK(7,n-1)) cos(YupdateK(7,n-1))];
  k_newposK(:,n) = k_newposK(:,n-1) + k_rotK(:,:,n)*[YupdateK(2,n-1);YupdateK(5,n-1)].*ts; % k_newposD(:,n-1)
@@ -918,42 +923,42 @@ grid on
 % considered to be the force the ship needs to apply to maintain a velocity
 % of 1 m/s. Through simulations, this have proven to be 5.3544 Newtons, and
 % as this value can increase or decrease from small numbers to large
-% numbers, the variance is set to 50. This gives the following
-% distribution:
-% Force ~ N(5.3544,50^2)
-my_force = 5.3544;
-si_force = 50;
-
-% Distribution of the torque:
-% The torque can be distributed in the same manner, however the torque is
-% with a zero mean, as the ship normally sails straight ahead. The angle 
-% the ship can turn can be seen as pi degrees to either side, as this gives
-% the value of 
-% This gives the following distribution for the torque function:
-% Torque ~ N(0,pi^2)
-my_torqe = 0;
-si_torqe = pi;
-
-% As Force and Torque are given in the same vector, the distribution
-% function will be joint, and the probability that both values occur, will
-% be a multiplication of the two probabilities. Thus stating: 
-% P(xa,xb) = P(xa)P(xb). Thus giving the expected value of the input as: 
-% E[P([xa,xb] = vector(K)] = K * P(xa)*P(xb) - which makes way for
-% computing the autocovariance function as:
-% C = E[(X1 - my1)(X2 - my2)] -> E[X1X2] - my1my2
-
-
-% These inputs are then insered into a matrix:
-
-
-for j = 2:N
-    prop_force = normpdf(Z(3,n),my_force,si_force);
-    prop_torqe = normpdf(Z(9,n),my_torqe,si_torqe);
-    inputP = [zeros(2,N+1);prop_force;zeros(5,N+1);prop_torqe];
-    mean_forc = (mean_forc + Z(3,n))/n;
-    mean_torq = (mean_torq + Z(9,n))/n;
-    covQw = bsxfun(@minus,Z(:,n-1)*Z(:,n)'*(inputP(:,n-1)*inputP(:,n)'),[zeros(2,1);mean_forc;zeros(5,1);mean_torq]);
-end
+% % numbers, the variance is set to 50. This gives the following
+% % distribution:
+% % Force ~ N(5.3544,50^2)
+% my_force = 5.3544;
+% si_force = 50;
+% 
+% % Distribution of the torque:
+% % The torque can be distributed in the same manner, however the torque is
+% % with a zero mean, as the ship normally sails straight ahead. The angle 
+% % the ship can turn can be seen as pi degrees to either side, as this gives
+% % the value of 
+% % This gives the following distribution for the torque function:
+% % Torque ~ N(0,pi^2)
+% my_torqe = 0;
+% si_torqe = pi;
+% 
+% % As Force and Torque are given in the same vector, the distribution
+% % function will be joint, and the probability that both values occur, will
+% % be a multiplication of the two probabilities. Thus stating: 
+% % P(xa,xb) = P(xa)P(xb). Thus giving the expected value of the input as: 
+% % E[P([xa,xb] = vector(K)] = K * P(xa)*P(xb) - which makes way for
+% % computing the autocovariance function as:
+% % C = E[(X1 - my1)(X2 - my2)] -> E[X1X2] - my1my2
+% 
+% 
+% % These inputs are then insered into a matrix:
+% 
+% 
+% for j = 2:N
+%     prop_force = normpdf(Z(3,n),my_force,si_force);
+%     prop_torqe = normpdf(Z(9,n),my_torqe,si_torqe);
+%     inputP = [zeros(2,N+1);prop_force;zeros(5,N+1);prop_torqe];
+%     mean_forc = (mean_forc + Z(3,n))/n;
+%     mean_torq = (mean_torq + Z(9,n))/n;
+%     covQw = bsxfun(@minus,Z(:,n-1)*Z(:,n)'*(inputP(:,n-1)*inputP(:,n)'),[zeros(2,1);mean_forc;zeros(5,1);mean_torq]);
+% end
 
 %% Estiamting a Wind Bias:
 % As Wind might push the ship out of course (constantly in the same
