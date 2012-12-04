@@ -64,7 +64,7 @@ When the system is simulated it gives the following response for estimating the 
 	\caption{Test to see if the Kalman filter estimates the position}
 	\label{fig:kalmanA}
 \end{figure}
-\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The Kalman filter must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 
+\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The Kalman filter must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 	
 
 \begin{align}
 \vec{x}(n+1) = \vec{\Phi}\cdot\vec{x}(n) = \begin{bmatrix}
@@ -90,8 +90,11 @@ y(n)\\
 \end{bmatrix}
 \label{eq:matr}
 \end{align}
-In \vref{eq:matr} the system matrix is seen to be 3 different systems, but for the 
-The inputs to the system is the output of the controller, which aboard the ship will be a desired revolution speed of the two propellers. This generates a thrust forward, which will result in a velocity and if there is a difference between the two, then this will result in a torque, making the ship turn. The inputs can thus be given as:
+In \vref{eq:matr} the system matrix is seen to be 3 individual systems. The inputs to the Kalman filter is seen as 
+\todo{fix -rlc}
+
+
+ will be a desired revolution speed of the two propellers. This generates a thrust forward, which will result in a velocity and if there is a difference between the two, then this will result in a torque, making the ship turn. The inputs can thus be given as:
 \begin{align}
 \vec{Z} = \begin{bmatrix}
 0 & 0\\
@@ -102,7 +105,7 @@ The inputs to the system is the output of the controller, which aboard the ship 
 0 & 0\\
 0 & 0\\
 0 & 0\\
-\frac{1}{I} & 0\\
+0 & \frac{1}{I}\\
 \end{bmatrix}\begin{bmatrix}
 F\\
 \tau
