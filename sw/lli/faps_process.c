@@ -4,6 +4,7 @@
 #include <avr/io.h>
 #include "config.h"
 #include "crc16.h"
+#include <string.h>
 
 /*
  * Decide what to do with a given command
@@ -11,8 +12,11 @@
 int process(msg_t *msg) 
 {
 	char buildtime[] =  __DATE__ " " __TIME__;
+#define GITCOMMIT "hej"
+	char gitcommit[sizeof(GITCOMMIT)] = GITCOMMIT;
+	char buildinfo[sizeof(buildtime)+40+2];
 	int16_t duty = 0;
-		char s[64];
+	int i = 0;
 
 	switch (msg->devid) {
 		case 0:
@@ -25,9 +29,19 @@ int process(msg_t *msg)
 					break;
 				case 2:
 					grs_send(package(0, 0x00, 0x08, 0),0); // NACK
+					break;			
+				case 5:
+					grs_send(package(0, 0x00, 0x05, 0),0); // PING
+					break;		
+				case 6:
+					grs_send(package(0, 0x00, 0x06, 0),0); // PONG
 					break;
 				case 9:
-					grs_send(package(sizeof(buildtime), 0x00, 0x09, buildtime),sizeof(buildtime));
+					memcpy(buildinfo,buildtime,sizeof(buildtime));
+					for (i = sizeof(buildtime); i < sizeof(buildinfo); i++) {
+						buildinfo[i] = gitcommit[i];
+					}
+					grs_send(package(sizeof(buildinfo), 0x00, 0x09, buildtime),sizeof(buildinfo));
 					break;
 			}
 
@@ -44,28 +58,37 @@ int process(msg_t *msg)
 					grs_send(package(0, 0x00, 0x08, 0),0); // NACK
 					break;
 				case 3:
-					duty = (msg->data[0] << 8) & 0xFF00 | msg->data[1];
-					pwm_set_duty(RC1, duty);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(RC1, duty );
 					break;
 				case 4:
 				case 5:
-					pwm_set_duty(RC2, msg->data[0]);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(RC2, duty );
 					break;
 				case 6:
 				case 7:
-					pwm_set_duty(RC3, msg->data[0]);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(RC3, duty );
 					break;
 				case 8:
 				case 9:
-					pwm_set_duty(RC4, msg->data[0]);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(RC4, duty );
 					break;
 				case 10:
 				case 11:
 					duty = (int16_t) (msg->data[0]);
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[1])&0xFF));
-					//uart2_putc((msg->data[0]));uart2_putc(msg->data[1]);
-					//uart2_putc((char)((duty >> 8) & 0x00FF));uart2_putc((char)((duty) & 0x00FF));
 					pwm_set_duty(RC5, duty );
 					break;
 				case 12:
