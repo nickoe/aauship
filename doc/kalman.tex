@@ -1,5 +1,5 @@
 \chapter{Velocity and Angle estimation}
-To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a Kalman filter. This filter takes the different measurements as inputs, and uses these to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data. 
+To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs, and uses these to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data. 
 
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
 
@@ -43,11 +43,11 @@ As $\vec{x}(n)$ is a row vector, $\vec{w}(n)$ is also a row vector with the same
 % Text about the vector Kalman filer
 % Text about the covariance matrix of such a system
 \subsection{The Covariance matrices}
-As the Kalman filter is given as a vector Kalman filter, the covariance matrices is to be computed. The definition for a covariance matrix is given as:
+As the \ac{KF} is given as a vector \ac{KF}, the covariance matrices is to be computed. The definition for a covariance matrix is given as:
 \begin{align}
 Cov(\vec{X},\vec{X}) = \text{E}\langle[\vec{X} - \vec{\mu}_X][\vec{X} - \vec{\mu}_X]^\text{T}\rangle
 \end{align}
-The covariance matrix is used to tune the Kalman filter, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector Kalman filter there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \todo{insert reference to worksheet once its done -rlc} the distributions of the input signal $\vec{u}(k)$ can be seen as:
+The covariance matrix is used to tune the \ac{KF}, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector \ac{KF} there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \todo{insert reference to worksheet once its done -rlc} the distributions of the input signal $\vec{u}(k)$ can be seen as:
 \begin{align}
 F \sim \mathcal{N}(5.3544,55)\\
 \tau \sim \mathcal{N}(0,20)
@@ -61,10 +61,10 @@ When the system is simulated it gives the following response for estimating the 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{img/kalmana}
-	\caption{Test to see if the Kalman filter estimates the position}
+	\caption{Test to see if the \ac{KF} estimates the position}
 	\label{fig:kalmanA}
 \end{figure}
-Figure\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The Kalman filter must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 	
+Figure\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The \ac{KF} must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain \todo{insert name of matrix -rlc} to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 	
 
 \begin{align}
 \vec{x}(n+1) = \vec{\Phi}\cdot\vec{x}(n) = \begin{bmatrix}
@@ -126,18 +126,18 @@ SETTING THE MEASUREMENT TO ZERO IF THERE IS NO SAMPLE to ensure that you still g
 Foreslag til Paper: Hvor langt ned kan man gå i sampling på GPS'en for at spare båndbredde, uden at miste præcision!
 
 \subsection{Simulations of the filter}
-Simulation of the Kalman filter have proven to provide an accurate estimate, however - the actual variances have to be measured. 
+Simulation of the \ac{KF} have proven to provide an accurate estimate, however - the actual variances have to be measured. 
 
-To avoid computational problems the Joseph Form of the Kalman Filter can be used. This ensures that the matrices used in the updating step is non-singular and positive definite. 
+To avoid computational problems the Joseph Form of the \ac{KF} can be used. This ensures that the matrices used in the updating step is non-singular and positive definite. 
 
 If the filter is simulated, the following results are produced. 
 
 
 
 \section{Position estimation}
-During the development of the Kalman filter a lot or problems were discovered. One is to estimate the variances of the different measurement devies. The GPS delivers a position in latitude longitude format - which is converted into an x and y coordinate by rotating the entire system and shifting the local frame of the ship as a surface tangent to the earth. This will of course only be an estimate, but as the curvature of the earth is relatively small. The distance to the horizon can be estimated by $d \approx 3.57\sqrt{h}$ which on the ground, equals that the distance to the horizon is approximately 3.57 kilometers. As the areas to be measured are defined by a local bounding box - this area will to be defined to be smaller than 3.5 kilometers.
+During the development of the \ac{KF} a lot or problems were discovered. One is to estimate the variances of the different measurement devies. The GPS delivers a position in latitude longitude format - which is converted into an x and y coordinate by rotating the entire system and shifting the local frame of the ship as a surface tangent to the earth. This will of course only be an estimate, but as the curvature of the earth is relatively small. The distance to the horizon can be estimated by $d \approx 3.57\sqrt{h}$ which on the ground, equals that the distance to the horizon is approximately 3.57 kilometers. As the areas to be measured are defined by a local bounding box - this area will to be defined to be smaller than 3.5 kilometers.
 
-This section will contain the different things we've considered during the miniproject in Kalman filtering, and will be used to give a better estimate of the actual position (from the measurements implemented on the ship).
+This section will contain the different things we've considered during the miniproject in \ac{KF}ing, and will be used to give a better estimate of the actual position (from the measurements implemented on the ship).
 
 Below is a description of the measurable inputs to the system. These are obtained from a \ac{GPS} and a \ac{IMU} mounted on the ship.
 Position and velocity from the \ac{GPS}: rotated coordinates (from LatLon to Local frame)
@@ -145,7 +145,7 @@ Linear acceleration from the \ac{IMU}: accelerometer
 Angular acceleration from the \ac{IMU}: gyrometer
 Angle from the \ac{IMU}: magnetometer (compass)
 
-Estimating the bias of added wind and water current. As the wind and current shifts the ship around, and changes the torque to allow for a bias. This can be dealt with by extending the Kalman filter, to include these as measurements, and then subtracting these in the end result. This results in a filter that does not deal with the bias directly, but instead estimates without looking in to this. 
+Estimating the bias of added wind and water current. As the wind and current shifts the ship around, and changes the torque to allow for a bias. This can be dealt with by extending the \ac{KF}, to include these as measurements, and then subtracting these in the end result. This results in a filter that does not deal with the bias directly, but instead estimates without looking in to this. 
 
 \begin{align}
 \vec{A}_{ext} = \begin{bmatrix}
