@@ -45,11 +45,27 @@ As $\vec{x}(n)$ is a row vector, $\vec{w}(n)$ is also a row vector with the same
 \subsection{The Covariance matrices}
 As the Kalman filter is given as a vector Kalman filter, the covariance matrices is to be computed. The definition for a covariance matrix is given as:
 \begin{align}
-Cov(\vec{X},\vec{X}) = \text{E}\langle[\vec{X} - \mu_X][\vec{X} - \mu_X]^\text{T}\rangle
+Cov(\vec{X},\vec{X}) = \text{E}\langle[\vec{X} - \vec{\mu}_X][\vec{X} - \vec{\mu}_X]^\text{T}\rangle
 \end{align}
-The covariance matrix is used to tune the Kalman filter, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector Kalman filter there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \todo{insert reference to worksheet once its done -rlc} the distributions of the input signal can be seen as:
+The covariance matrix is used to tune the Kalman filter, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector Kalman filter there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \todo{insert reference to worksheet once its done -rlc} the distributions of the input signal $\vec{u}(k)$ can be seen as:
+\begin{align}
+F \sim \mathcal{N}(5.3544,55)\\
+\tau \sim \mathcal{N}(0,20)
+\end{align}
+The covariance of these inputs, are then multiplied with $\vec{B}$ to give the input to the system $\vec{w}(k)$. As the two inputs are independent, the covariance matrix collapses to a matrix with diagonal entries, which gives the following matrix:
+\begin{align}
+Cov(\vec{X},\vec{X})_{3,3} = \sigma_{F}\\
+Cov(\vec{X},\vec{X})_{9,9} = \sigma_{\tau}
+\end{align}
+When the system is simulated it gives the following response for estimating the position.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/kalmana}
+	\caption{Test to see if the Kalman filter estimates the position}
+	\label{fig:kalmanA}
+\end{figure}
+\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The Kalman filter must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 
 
-As a continous Kalman filter is unfeasible to implement, it is looked at how to implement one digitally. This of course changes the state equations to become. For the 3 degrees of freedom model of the ship, the state equation becomes: 
 \begin{align}
 \vec{x}(n+1) = \vec{\Phi}\cdot\vec{x}(n) = \begin{bmatrix}
 1 & t_s & \frac{t_s^2}{2} & 0 & 0 & 0 & 0 & 0 & 0\\
