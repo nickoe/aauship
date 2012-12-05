@@ -1,13 +1,13 @@
 %% Kalman Filter Implementation for AAUSHIP1:
 % Rasmus Christensen 26/11/2012 - 12gr730 - AAUSHIP Kalaman Filter (c) 
-clc; clear all; close all;
+clc; clear all; close all; clear java;
 % for lunde = 1:15
 %     clf(lunde)
 % end
-run('contsimu.m');
+%run('contsimu.m');
 load inputD.mat; % Loads system input file from contsimu.m
 inputD = inputD';
-close all;
+%close all;
 
 % To reduce the amount of noise on the measurements which are fed to the
 % system, and to enhance the precision of these, the data is run through a
@@ -36,7 +36,7 @@ close all;
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 10000; % Then it fits with the Simulink Simulation!
+N = 1000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -82,17 +82,17 @@ end
 % W is the measurement noise on the system, this can be estimated to be
 % white gaussian noise, with zero mean (for most cases) and with a
 % variance, that are estimated in Appendix #XX. 
-varXpos = 0.979;
-varXvel = 0.00262;
+varXpos = 0.979; % m
+varXvel = 0.00262; % m/s
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
-varYpos = 1.12;
-varYvel = 0.0001;
+varYpos = 1.12; % m
+varYvel = 0.0001; % m/s
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
-varWvel = 0.000002;
-varWacc = 2.3559e-5; % m/s^2 or 2.4035*10^-6 G
+varWvel = 2.3559e-5; % rad/s
+varWacc = 5;
 
 varYWacc = 2.4496*10^-6; % rad/s^2
 SqM = sqrt([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
@@ -159,7 +159,7 @@ Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);
   y_rot(:,:,n) = [cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))];
  y_newpos(:,n) = y_newpos(:,n-1) + y_rot(:,:,n)*[Y(2,n-1);Y(5,n-1)].*ts; 
   x_rot(:,:,n) = [cos(X(7,n-1)) -sin(X(7,n-1));sin(X(7,n-1)) cos(X(7,n-1))];
- x_newpos(:,n) = y_newpos(:,n-1) + x_rot(:,:,n)*[X(2,n-1);X(5,n-1)].*ts;
+ x_newpos(:,n) = y_newpos(:,n) + y_rot(:,:,n)*[Wn(1,n);Wn(4,n)];% + y_rot(:,:,n)*[X(2,n-1);X(5,n-1)].*ts;
 end
 
 %% Output definitions:
@@ -365,8 +365,8 @@ for n = 2:N;
                    BD(:,:,n) = BD(:,:,n);
                           sC = 0;
              else                
-                   BD(1,:,n) = zeros(1,9);
-                   BD(4,:,n) = zeros(1,9);
+                   BD(:,1,n) = zeros(9,1);
+                   BD(:,4,n) = zeros(9,1);
              end
  YupdateD(:,n) = YpredD(:,n)+BD(:,:,n)*(XD(:,n)-XpredD(:,n));
 RupdateD(:,:,n) = (eye(9)-BD(:,:,n)*An)*RpredD(:,:,n);
@@ -377,7 +377,7 @@ RupdateD(:,:,n) = (eye(9)-BD(:,:,n)*An)*RpredD(:,:,n);
   y_rotD(:,:,n) = [cos(YD(7,n-1)) -sin(YD(7,n-1));sin(YD(7,n-1)) cos(YD(7,n-1))];
  y_newposD(:,n) = y_newposD(:,n-1) + y_rotD(:,:,n)*[YD(2,n-1);YD(5,n-1)].*ts; 
   x_rotD(:,:,n) = [cos(XD(7,n-1)) -sin(XD(7,n-1));sin(XD(7,n-1)) cos(XD(7,n-1))];
- x_newposD(:,n) = y_newposD(:,n-1) + x_rotD(:,:,n)*[XD(2,n-1);XD(5,n-1)].*ts;
+ x_newposD(:,n) = y_newposD(:,n) + y_rotD(:,:,n)*[Wn(1,n);Wn(4,n)];
 end
 
 %% Output definitions - Multirate sampling:
@@ -574,18 +574,26 @@ for n = 2:N;
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
        YK(:,n) = Hn*YK(:,n-1)+Z(:,n);
        XK(:,n) = An*YK(:,n)+Wn(:,n);
+             if sK == GPS_freq;
+                 XK(1,n) = XK(1,n);
+                 XK(4,n) = XK(4,n);
+                      sK = 0;
+             else
+                 XK(1,n) = XK(1,n-1);
+                 XK(4,n) = XK(4,n-1);
+             end
    YpredK(:,n) = Hn*YupdateK(:,n-1);
    XpredK(:,n) = An*YpredK(:,n);
  RpredK(:,:,n) = Hn*RupdateK(:,:,n-1)*Hn'+Qz(:,:,n);
      BK(:,:,n) = (RpredK(:,:,n)*An')/(An*RpredK(:,:,n)*An'+Qw(:,:,n));
-             if sK == GPS_freq; % GPS_freq is the slow frequency of the GPS
-                   BK(1,:,n) = BK(1,:,n);
-                   BK(4,:,n) = BK(4,:,n);
-                          sK = 0;
-             else
-                   BK(1,:,n) = BK(1,:,n-1);
-                   BK(4,:,n) = BK(4,:,n-1);
-             end
+%              if sK == GPS_freq; % GPS_freq is the slow frequency of the GPS
+%                    BK(:,1,n) = BK(:,1,n);
+%                    BK(:,4,n) = BK(:,4,n);
+%                           sK = 0;
+%              else
+%                    BK(:,1,n) = BK(:,1,n-1);
+%                    BK(:,4,n) = BK(:,4,n-1);
+%              end
  YupdateK(:,n) = YpredK(:,n)+BK(:,:,n)*(XK(:,n)-XpredK(:,n));
 RupdateK(:,:,n) = (eye(9)-BK(:,:,n)*An)*RpredK(:,:,n);
             sK = sK + 1;
@@ -595,7 +603,7 @@ RupdateK(:,:,n) = (eye(9)-BK(:,:,n)*An)*RpredK(:,:,n);
   y_rotK(:,:,n) = [cos(YK(7,n-1)) -sin(YK(7,n-1));sin(YK(7,n-1)) cos(YK(7,n-1))];
  y_newposK(:,n) = y_newposK(:,n-1) + y_rotK(:,:,n)*[YK(2,n-1);YK(5,n-1)].*ts; 
   x_rotK(:,:,n) = [cos(XK(7,n-1)) -sin(XK(7,n-1));sin(XK(7,n-1)) cos(XK(7,n-1))];
- x_newposK(:,n) = y_newposK(:,n-1) + x_rotK(:,:,n)*[XK(2,n-1);XK(5,n-1)].*ts;
+ x_newposK(:,n) = y_newposK(:,n) + y_rotK(:,:,n)*[Wn(1,n);Wn(4,n)];
 end
 
 %% Output definintions - Multirate (Only changing at the new update steps!).
@@ -755,82 +763,308 @@ xlabel('Position [m]')
 ylabel('Position [m]')
 grid on
 
+%% Kalman Filtering with Lost Packages:
+% The Kalman gain is used to see if a packet is lost during the
+% transmission, and if one is lost / corrupted, the gain should be set to
+% zero, as this will make the system rely on estimates. 
+% Resetting the parameters:
+YL = zeros(9,N);
+XL = zeros(9,N);
+YpredL = zeros(9,N);
+XpredL = zeros(9,N);
+RpredL = zeros(9,9,N);
+BL = zeros(9,9,N);
+YupdateL = zeros(9,N);
+RupdateL = zeros(9,9,N);
+k_newposL = zeros(2,N);
+y_newposL = zeros(2,N);
+x_newposL = zeros(2,N);
+k_rotL = zeros(2,2,N);
+y_rotL = zeros(2,2,N);
+x_rotL = zeros(2,2,N);
+packLost = zeros(9,N);
+
+sL = 1;
+
+for n = 2:N;
+            %sC = isinteger(n/10) % Sensor Count, used to zero out unsampled system inputs. 
+      % Wn(:,n) = randn(9,1).*SqM';
+     %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
+     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+       YL(:,n) = Hn*YL(:,n-1)+Z(:,n);
+       XL(:,n) = An*YL(:,n)+Wn(:,n);
+   YpredL(:,n) = Hn*YupdateL(:,n-1);
+   XpredL(:,n) = An*YpredL(:,n);
+ RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
+     BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
+ packLost(:,n) = rand(9,1)<0.60 ; % Looses 10 percent of the packages. 
+             if sL == GPS_freq;
+                   BL(:,:,n) = BL(:,:,n);
+                          sL = 0;
+             else                
+                   BL(:,1,n) = zeros(9,1);
+                   BL(:,4,n) = zeros(9,1);
+             end
+       packRow = find(packLost(:,n)==0);
+BL(:,packRow,n) = zeros(9,numel(packRow));
+ YupdateL(:,n) = YpredL(:,n)+BL(:,:,n)*(XL(:,n)-XpredL(:,n));
+RupdateL(:,:,n) = (eye(9)-BL(:,:,n)*An)*RpredL(:,:,n);
+            sL = sL + 1;
+% Below - rotation udpate, so the route can be plotted:
+  k_rotL(:,:,n) = [cos(YupdateL(7,n-1)) -sin(YupdateL(7,n-1));sin(YupdateL(7,n-1)) cos(YupdateL(7,n-1))];
+ k_newposL(:,n) = k_newposL(:,n-1) + k_rotL(:,:,n)*[YupdateL(2,n-1);YupdateL(5,n-1)].*ts; % k_newposD(:,n-1)
+  y_rotL(:,:,n) = [cos(YL(7,n-1)) -sin(YL(7,n-1));sin(YL(7,n-1)) cos(YL(7,n-1))];
+ y_newposL(:,n) = y_newposL(:,n-1) + y_rotL(:,:,n)*[YL(2,n-1);YL(5,n-1)].*ts; 
+  x_rotL(:,:,n) = [cos(XL(7,n-1)) -sin(XL(7,n-1));sin(XL(7,n-1)) cos(XL(7,n-1))];
+ x_newposL(:,n) = y_newposL(:,n) + y_rotL(:,:,n)*[Wn(1,n);Wn(4,n)];
+end
+
+%% Output Definitions - Lost Package Scenario
+Y_kal_pos_XL = YupdateL(1,:)'; % Updated Y - x position
+Y_kal_vel_XL = YupdateL(2,:)';
+Y_kal_acc_XL = YupdateL(3,:)'; 
+
+Y_kal_pos_YL = YupdateL(4,:)'; % Updated Y - y position
+Y_kal_vel_YL = YupdateL(5,:)';
+Y_kal_acc_YL = YupdateL(6,:)'; 
+
+Y_kal_pos_WL = YupdateL(7,:)'; % Updated Y - angle
+Y_kal_vel_WL = YupdateL(8,:)';
+Y_kal_acc_WL = YupdateL(9,:)'; 
+
+% Measured:
+X_pos_XL = XL(1,:)'; % Observation X - x position
+X_vel_XL = XL(2,:)';
+X_acc_XL = XL(3,:)';
+
+X_pos_YL = XL(4,:)'; % Observation X - y position
+X_vel_YL = XL(5,:)';
+X_acc_YL = XL(6,:)';
+
+X_pos_WL = XL(7,:)'; % Observation X - angle
+X_vel_WL = XL(8,:)';
+X_acc_WL = XL(9,:)';
+
+% Actual:
+Y_pos_XL = YL(1,:)'; % True Y - x position
+Y_vel_XL = YL(2,:)';
+Y_acc_XL = YL(3,:)';
+
+Y_pos_YL = YL(4,:)'; % True Y - x position
+Y_vel_YL = YL(5,:)';
+Y_acc_YL = YL(6,:)';
+
+Y_pos_WL = YL(7,:)'; % True Y - x position
+Y_vel_WL = YL(8,:)';
+Y_acc_WL = YL(9,:)';
+
+%% Plot of the Lost Package Scenario
+h13 = figure(13);
+subplot(3,1,1)
+hold on
+plot(X_pos_XL,'g+','MarkerSize',2);
+plot(Y_kal_pos_XL,'b','LineWidth',1);
+plot(Y_pos_XL,'m','LineWidth',1);
+hold off
+title('X-Position Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Position [m]');
+grid on
+
+subplot(3,1,2)
+hold on
+plot(X_pos_YL,'g+','MarkerSize',2);
+plot(Y_kal_pos_YL,'b','LineWidth',1);
+plot(Y_pos_YL,'m','LineWidth',1);
+hold off
+title('Y-Position Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Position [m]');
+grid on
+
+subplot(3,1,3)
+hold on
+plot(X_pos_WL,'g+','MarkerSize',2);
+plot(Y_kal_pos_WL,'b','LineWidth',1);
+plot(Y_pos_WL,'m','LineWidth',1);
+hold off
+title('Angle Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Angle [rad]');
+grid on
+
+% Plot of velocity (x,y,w)
+h14 = figure(14);
+subplot(3,1,1)
+hold on
+plot(X_vel_XL,'g+','MarkerSize',2);
+plot(Y_kal_vel_XL,'b','LineWidth',1);
+plot(Y_vel_XL,'m','LineWidth',1);
+hold off
+title('X-Velocity Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Velocity [m/s]');
+grid on
+
+subplot(3,1,2)
+hold on
+plot(X_vel_YL,'g+','MarkerSize',2);
+plot(Y_kal_vel_YL,'b','LineWidth',1);
+plot(Y_vel_YL,'m','LineWidth',1);
+hold off
+title('Y-Velocity Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Velocity [m/s]');
+grid on
+
+subplot(3,1,3)
+hold on
+plot(X_vel_WL,'g+','MarkerSize',2);
+plot(Y_kal_vel_WL,'b','LineWidth',1);
+plot(Y_vel_WL,'m','LineWidth',1);
+hold off
+title('Angular Velocity Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Angular velocity [rad/s]');
+grid on
+
+% Plot of acceleration (x,y,w)
+h15 = figure(15);
+subplot(3,1,1)
+hold on
+plot(X_acc_XL,'g+','MarkerSize',2);
+plot(Y_kal_acc_XL,'b','LineWidth',1);
+plot(Y_acc_XL,'m','LineWidth',1);
+hold off
+title('X-Acceleration Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Acceleration [m/s^2]');
+grid on
+
+subplot(3,1,2)
+hold on
+plot(X_acc_YL,'g+','MarkerSize',2);
+plot(Y_kal_acc_YL,'b','LineWidth',1);
+plot(Y_acc_YL,'m','LineWidth',1);
+hold off
+title('Y-Acceleration Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Acceleration [m/s^2]');
+grid on
+
+subplot(3,1,3)
+hold on
+plot(X_acc_WL,'g+','MarkerSize',2);
+plot(Y_kal_acc_WL,'b','LineWidth',1);
+plot(Y_acc_WL,'m','LineWidth',1);
+hold off
+title('Angular Acceleration Estimation - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Sample [n]') ;ylabel('Angular acceleration [rad/s]');
+grid on
+
+% Plot of actual X-Y position
+h16 = figure(16);
+hold on
+plot(x_newposL(1,:),x_newposL(2,:),'g+','MarkerSize',2);
+plot(k_newposL(1,:),k_newposL(2,:),'b','LineWidth',1);
+plot(y_newposL(1,:),y_newposL(2,:),'m','LineWidth',1);
+hold off
+title('XY Position - Lost Packages')
+legend('Measured','Filtered','True')
+xlabel('Position [m]')
+ylabel('Position [m]')
+grid on
+
 %% Calculation differente between Monorate and Multirate
 % The difference in X-position:
 diffX_pos = Y(1,:)' - Y_kal_pos_X;
 diffX_posD = YD(1,:)' - Y_kal_pos_XD;
 diffX_posK = YK(1,:)' - Y_kal_pos_XK;
+diffX_posL = YL(1,:)' - Y_kal_pos_XL; % Lost packages
 
 % The difference in Y-position:
 diffY_pos = Y(4,:)' - Y_kal_pos_Y;
 diffY_posD = YD(4,:)' - Y_kal_pos_YD;
 diffY_posK = YK(4,:)' - Y_kal_pos_YK;
+diffY_posL = YL(4,:)' - Y_kal_pos_YL;
 
 % The difference in W-position:
 diffW_pos = Y(7,:)' - Y_kal_pos_W;
 diffW_posD = YD(7,:)' - Y_kal_pos_WD;
 diffW_posK = YK(7,:)' - Y_kal_pos_WK;
+diffW_posL = YL(7,:)' - Y_kal_pos_WL;
 
 % The difference in X-velocity:
 diffX_vel = Y(2,:)' - Y_kal_vel_X;
 diffX_velD = YD(2,:)' - Y_kal_vel_XD;
 diffX_velK = YK(2,:)' - Y_kal_vel_XK;
+diffX_velL = YL(2,:)' - Y_kal_vel_XL;
 
 % The difference in Y-velocity:
 diffY_vel = Y(5,:)' - Y_kal_vel_Y;
 diffY_velD = YD(5,:)' - Y_kal_vel_YD;
 diffY_velK = YK(5,:)' - Y_kal_vel_YK;
+diffY_velL = YL(5,:)' - Y_kal_vel_YL;
 
 % The difference in W-velocity:
 diffW_vel = Y(8,:)' - Y_kal_vel_W;
 diffW_velD = YD(8,:)' - Y_kal_vel_WD;
 diffW_velK = YK(8,:)' - Y_kal_vel_WK;
+diffW_velL = YL(8,:)' - Y_kal_vel_WL;
 
 % The difference in X-acceleration:
 diffX_acc = Y(3,:)' - Y_kal_acc_X;
 diffX_accD = YD(3,:)' - Y_kal_acc_XD;
 diffX_accK = YK(3,:)' - Y_kal_acc_XK;
+diffX_accL = YL(3,:)' - Y_kal_acc_XL;
 
 % The difference in Y-acceleration:
 diffY_acc = Y(6,:)' - Y_kal_acc_Y;
 diffY_accD = YD(6,:)' - Y_kal_acc_YD;
 diffY_accK = YK(6,:)' - Y_kal_acc_YK;
+diffY_accL = YL(6,:)' - Y_kal_acc_YL;
 
 % The difference in W-acceleration:
 diffW_acc = Y(9,:)' - Y_kal_acc_W;
 diffW_accD = YD(9,:)' - Y_kal_acc_WD;
 diffW_accK = YK(9,:)' - Y_kal_acc_WK;
+diffW_accL = YL(9,:)' - Y_kal_acc_WL;
 
 % The difference in absolute position:
 diff_pos = y_newpos' - k_newpos';
 diff_posD = y_newposD' - k_newposD';
 diff_posK = y_newposK' - k_newposK';
+diff_posL = y_newposL' - k_newposL';
 
 %% Plot of the error between monorate and multirate:
 % Position
-h13 = figure(13);
+h17 = figure(17);
 subplot(3,1,1) % X
 plot(diffX_pos,'b'); hold on
 plot(diffX_posD,'r'); 
+plot(diffW_posL,'m');
 plot(diffX_posK,'g'); hold off
 title('Difference Monorate/Multirate - X-Position')
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m]');
 subplot(3,1,2) % Y
 plot(diffY_pos,'b'); hold on
 plot(diffY_posD,'r'); 
+plot(diffY_posD,'m');
 plot(diffY_posK,'g'); hold off
 title('Difference Monorate/Multirate - Y-Position')
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m]');
 subplot(3,1,3) % W
 plot(diffW_pos,'b'); hold on
 plot(diffW_posD,'r');
+plot(diffW_posL,'m');
 plot(diffW_posK,'g'); hold off
 title('Difference Monorate/Multirate - W-Position')
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m]');
 xlabel('Sample [n]');
@@ -838,82 +1072,90 @@ hold off
 grid on
 
 % Velocity
-h14 = figure(14);
+h18 = figure(18);
 subplot(3,1,1) % X
 plot(diffX_vel,'b'); hold on
 plot(diffX_velD,'r'); 
+plot(diffX_velL,'m');
 plot(diffX_velK,'g'); hold off
 title('Difference Monorate/Multirate - X-Velocity')
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m/s]');
 subplot(3,1,2) % Y
 plot(diffY_vel,'b'); hold on
 plot(diffY_velD,'r'); 
+plot(diffY_velL,'m');
 plot(diffY_velK,'g'); hold off
 title('Difference Monorate/Multirate - Y-Velocity')
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m/s]');
 subplot(3,1,3) % W
 plot(diffW_vel,'b'); hold on
 plot(diffW_velD,'r'); 
+plot(diffW_velL,'m'); 
 plot(diffW_velK,'g'); hold off
 title('Difference Monorate/Multirate - W-Velocity')
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 ylabel('Error [m/s]');
 xlabel('Sample [n]');
 hold off
 grid on
 
 % Acceleration
-h15 = figure(15);
+h19 = figure(19);
 subplot(3,1,1) % X
 plot(diffX_accD,'r'); hold on
 plot(diffX_acc,'b');
+plot(diffX_accL,'m'); 
 plot(diffX_accK,'g'); hold off
 title('Difference Monorate/Multirate - X-Acceleration')
-legend('Multirate','Monorate','Multirate NI')
+legend('Multirate','Monorate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m/s^2]');
 subplot(3,1,2) % Y
 plot(diffY_accD,'r'); hold on
 plot(diffY_acc,'b'); 
+plot(diffY_accL,'m'); 
 plot(diffY_accK,'g'); hold off
 title('Difference Monorate/Multirate - Y-Acceleration')
-legend('Multirate','Monorate','Multirate NI')
+legend('Multirate','Monorate','Lost Packages','Multirate NI')
 grid on
 ylabel('Error [m/s^2]');
 subplot(3,1,3) % W
 plot(diffW_accD,'r'); hold on
 plot(diffW_acc,'b'); 
+plot(diffW_accL,'m');
 plot(diffW_accK,'g'); hold off
 title('Difference Monorate/Multirate - W-Acceleration')
-legend('Multirate','Monorate','Multirate NI')
+legend('Multirate','Monorate','Lost Packages','Multirate NI')
 ylabel('Error [m/s^2]');
 xlabel('Sample [n]');
 hold off
 grid on
 
 %Absolute position:
-h16 = figure(16);
+h20 = figure(20);
 subplot(2,1,1)
 plot(diff_pos(:,1),'b'); hold on
 plot(diff_posD(:,1),'r');
+plot(diff_posL(:,1),'m');
 plot(diff_posK(:,1),'g'); hold off
 title('Error in X-Position');
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 subplot(2,1,2)
 plot(diff_pos(:,2),'b'); hold on
 plot(diff_posD(:,2),'r');
+plot(diff_posL(:,2),'m');
 plot(diff_posK(:,2),'g'); hold off
 title('Error in Y-Position');
 
-legend('Monorate','Multirate','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 
-%% Changing the Covariance Matrices and inputs:
+%% NOT USED! - Changing the Covariance Matrices and inputs:
 % As the inputs to the system is seen to vary a lot, the system is is now
 % computed where the inputs are considered a normal distribution of
 % numbers, thus giving the following two distributions: 
@@ -971,23 +1213,23 @@ grid on
 % the GPS used as reference for the ship (no bias, as the ship doesn't
 % drift when running on wheels!). 
 
-%% Figure export:
-print(h1,'-depsc2','-painters','KF_pos_monorate.eps');
-print(h2,'-depsc2','-painters','KF_vel_monorate.eps');
-print(h3,'-depsc2','-painters','KF_acc_monorate.eps');
-print(h4,'-depsc2','-painters','KF_xy_monorate.eps');
-
-print(h5,'-depsc2','-painters','KF_pos_multirate.eps');
-print(h6,'-depsc2','-painters','KF_vel_multirate.eps');
-print(h7,'-depsc2','-painters','KF_acc_multirate.eps');
-print(h8,'-depsc2','-painters','KF_xy_multirate.eps');
-
-print(h9,'-depsc2','-painters','KF_pos_mnirate.eps');
-print(h10,'-depsc2','-painters','KF_vel_mnirate.eps');
-print(h11,'-depsc2','-painters','KF_acc_mnirate.eps');
-print(h12,'-depsc2','-painters','KF_xy_mnirate.eps');
-
-print(h13,'-depsc2','-painters','poserror.eps');
-print(h14,'-depsc2','-painters','velerror.eps');
-print(h15,'-depsc2','-painters','accerror.eps');
-print(h16,'-depsc2','-painters','xyerror.eps');
+%% Figure export - CURRENTLY COMMENTED OUT!:
+% print(h1,'-depsc2','-painters','KF_pos_monorate.eps');
+% print(h2,'-depsc2','-painters','KF_vel_monorate.eps');
+% print(h3,'-depsc2','-painters','KF_acc_monorate.eps');
+% print(h4,'-depsc2','-painters','KF_xy_monorate.eps');
+% 
+% print(h5,'-depsc2','-painters','KF_pos_multirate.eps');
+% print(h6,'-depsc2','-painters','KF_vel_multirate.eps');
+% print(h7,'-depsc2','-painters','KF_acc_multirate.eps');
+% print(h8,'-depsc2','-painters','KF_xy_multirate.eps');
+% 
+% print(h9,'-depsc2','-painters','KF_pos_mnirate.eps');
+% print(h10,'-depsc2','-painters','KF_vel_mnirate.eps');
+% print(h11,'-depsc2','-painters','KF_acc_mnirate.eps');
+% print(h12,'-depsc2','-painters','KF_xy_mnirate.eps');
+% 
+% print(h13,'-depsc2','-painters','poserror.eps');
+% print(h14,'-depsc2','-painters','velerror.eps');
+% print(h15,'-depsc2','-painters','accerror.eps');
+% print(h16,'-depsc2','-painters','xyerror.eps');

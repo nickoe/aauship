@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.16"
+    ComputedModelVersion    "1.20"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [64.0, 340.0, 1433.0, 797.0]
+      Location		      [108.0, 251.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -55,8 +55,8 @@ Model {
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
 	Extents			[1209.0, 623.0]
-	ZoomFactor		[1.03]
-	Offset			[-40.634100876965817, 0.0]
+	ZoomFactor		[1.0977859778597787]
+	Offset			[-38.438937762604951, 2.2470588235294109]
       }
     }
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Dec 04 08:33:24 2012"
-  RTWModifiedTimeStamp	  276173622
-  ModelVersionFormat	  "1.%<AutoIncrement:16>"
+  LastModifiedDate	  "Wed Dec 05 11:32:52 2012"
+  RTWModifiedTimeStamp	  276549128
+  ModelVersionFormat	  "1.%<AutoIncrement:20>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -887,7 +887,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [64, 340, 1497, 1137]
+    Location		    [108, 251, 1541, 1048]
     Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
@@ -899,14 +899,14 @@ Model {
     TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "103"
+    ZoomFactor		    "109"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "45"
+    SIDHighWatermark	    "49"
     Block {
       BlockType		      Gain
       Name		      "A"
       SID		      "1"
-      Position		      [595, 205, 625, 235]
+      Position		      [625, 205, 655, 235]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "sysD.a"
@@ -919,10 +919,9 @@ Model {
       BlockType		      Sum
       Name		      "Add"
       SID		      "31"
-      Ports		      [4, 1]
-      Position		      [575, 347, 590, 538]
+      Ports		      [2, 1]
+      Position		      [640, 352, 655, 543]
       ZOrder		      -2
-      Inputs		      "++++"
       InputSameDT	      off
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
@@ -931,7 +930,7 @@ Model {
       BlockType		      Gain
       Name		      "B"
       SID		      "3"
-      Position		      [485, 100, 515, 130]
+      Position		      [515, 100, 545, 130]
       ZOrder		      -8
       Gain		      "sysD.b"
       Multiplication	      "Matrix(K*u)"
@@ -944,7 +943,7 @@ Model {
       Name		      "Band-Limited\nWhite Noise"
       SID		      "4"
       Ports		      [0, 1]
-      Position		      [835, 205, 865, 235]
+      Position		      [865, 205, 895, 235]
       ZOrder		      -2
       BlockMirror	      on
       LibraryVersion	      "1.281"
@@ -959,7 +958,7 @@ Model {
       BlockType		      Gain
       Name		      "C"
       SID		      "5"
-      Position		      [835, 100, 865, 130]
+      Position		      [865, 100, 895, 130]
       ZOrder		      -8
       Gain		      "sysD.c"
       Multiplication	      "Matrix(K*u)"
@@ -971,7 +970,7 @@ Model {
       BlockType		      Clock
       Name		      "Clock"
       SID		      "18"
-      Position		      [70, 18, 115, 42]
+      Position		      [100, 18, 145, 42]
       ZOrder		      -4
       DisplayTime	      on
     }
@@ -979,7 +978,7 @@ Model {
       BlockType		      Gain
       Name		      "F"
       SID		      "6"
-      Position		      [595, 300, 625, 330]
+      Position		      [625, 300, 655, 330]
       ZOrder		      -8
       BlockMirror	      on
       Gain		      "sysD_F"
@@ -993,7 +992,7 @@ Model {
       Name		      "Mux"
       SID		      "8"
       Ports		      [2, 1]
-      Position		      [110, 68, 115, 277]
+      Position		      [180, 68, 185, 277]
       ZOrder		      -12
       ShowName		      off
       Inputs		      "2"
@@ -1003,7 +1002,7 @@ Model {
       BlockType		      Gain
       Name		      "N"
       SID		      "9"
-      Position		      [265, 100, 295, 130]
+      Position		      [295, 100, 325, 130]
       ZOrder		      -8
       Gain		      "sysD_N"
       Multiplication	      "Matrix(K*u)"
@@ -1017,7 +1016,7 @@ Model {
       Name		      "Reference signal"
       SID		      "10"
       Ports		      [1]
-      Position		      [265, 45, 325, 75]
+      Position		      [295, 45, 355, 75]
       ZOrder		      -7
       VariableName	      "referenceD"
       MaxDataPoints	      "inf"
@@ -1025,20 +1024,21 @@ Model {
     }
     Block {
       BlockType		      SignalGenerator
-      Name		      "Signal Generator"
-      SID		      "44"
+      Name		      "Signal\nGenerator"
+      SID		      "49"
       Ports		      [0, 1]
-      Position		      [45, 210, 75, 240]
-      ZOrder		      1
-      Amplitude		      "0.1"
-      Frequency		      "0.009"
+      Position		      [20, 210, 50, 240]
+      ZOrder		      -19
+      WaveForm		      "sawtooth"
+      Amplitude		      "2*pi"
+      Frequency		      "0.001"
     }
     Block {
       BlockType		      SubSystem
       Name		      "Smoothing\nProcess"
       SID		      "21"
       Ports		      [1, 1]
-      Position		      [305, 351, 350, 399]
+      Position		      [335, 351, 380, 399]
       ZOrder		      -17
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -1217,40 +1217,20 @@ Model {
       BlockType		      Step
       Name		      "Step"
       SID		      "35"
-      Position		      [495, 360, 525, 390]
+      Position		      [560, 385, 590, 415]
       ZOrder		      -22
-      Time		      "0"
-      After		      "3.14"
+      Time		      "100"
+      After		      "pi/2"
       SampleTime	      "0"
     }
     Block {
       BlockType		      Step
       Name		      "Step1"
       SID		      "36"
-      Position		      [520, 405, 550, 435]
+      Position		      [560, 480, 590, 510]
       ZOrder		      -22
-      Time		      "20"
-      After		      "-3.14"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step2"
-      SID		      "37"
-      Position		      [495, 450, 525, 480]
-      ZOrder		      -22
-      Time		      "40"
-      After		      "-3.14/2"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step3"
-      SID		      "38"
-      Position		      [520, 495, 550, 525]
-      ZOrder		      -22
-      Time		      "60"
-      After		      "3.14/2"
+      Time		      "400"
+      After		      "-pi/2"
       SampleTime	      "0"
     }
     Block {
@@ -1258,7 +1238,7 @@ Model {
       Name		      "Sum"
       SID		      "11"
       Ports		      [2, 1]
-      Position		      [535, 105, 555, 125]
+      Position		      [565, 105, 585, 125]
       ZOrder		      -18
       ShowName		      off
       IconShape		      "round"
@@ -1272,7 +1252,7 @@ Model {
       Name		      "Sum1"
       SID		      "12"
       Ports		      [2, 1]
-      Position		      [315, 105, 335, 125]
+      Position		      [345, 105, 365, 125]
       ZOrder		      -18
       ShowName		      off
       IconShape		      "round"
@@ -1286,7 +1266,7 @@ Model {
       Name		      "System Input"
       SID		      "14"
       Ports		      [1]
-      Position		      [495, 45, 555, 75]
+      Position		      [525, 45, 585, 75]
       ZOrder		      -7
       VariableName	      "inputD"
       MaxDataPoints	      "inf"
@@ -1297,7 +1277,7 @@ Model {
       Name		      "System Input1"
       SID		      "43"
       Ports		      [1]
-      Position		      [380, 20, 440, 50]
+      Position		      [410, 20, 470, 50]
       ZOrder		      -7
       VariableName	      "inputD_non"
       MaxDataPoints	      "inf"
@@ -1308,7 +1288,7 @@ Model {
       Name		      "System output"
       SID		      "15"
       Ports		      [1]
-      Position		      [920, 100, 980, 130]
+      Position		      [950, 100, 1010, 130]
       ZOrder		      -7
       VariableName	      "outputD"
       MaxDataPoints	      "inf"
@@ -1319,7 +1299,7 @@ Model {
       Name		      "To Workspace"
       SID		      "19"
       Ports		      [1]
-      Position		      [150, 15, 210, 45]
+      Position		      [180, 15, 240, 45]
       ZOrder		      -7
       VariableName	      "time"
       MaxDataPoints	      "inf"
@@ -1329,7 +1309,7 @@ Model {
       BlockType		      UnitDelay
       Name		      "Unit Delay"
       SID		      "17"
-      Position		      [605, 98, 640, 132]
+      Position		      [635, 98, 670, 132]
       ZOrder		      -18
       InputProcessing	      "Elements as channels (sample based)"
       SampleTime	      "-1"
@@ -1338,7 +1318,7 @@ Model {
       BlockType		      Constant
       Name		      "Velocity"
       SID		      "16"
-      Position		      [30, 105, 60, 135]
+      Position		      [20, 105, 50, 135]
       ZOrder		      -5
     }
     Line {
@@ -1407,28 +1387,10 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Step1"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step3"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      4
-    }
-    Line {
       SrcBlock		      "Step"
       SrcPort		      1
       DstBlock		      "Add"
       DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Step2"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      3
     }
     Line {
       SrcBlock		      "F"
@@ -1438,15 +1400,9 @@ Model {
       DstPort		      2
     }
     Line {
-      SrcBlock		      "Signal Generator"
-      SrcPort		      1
-      DstBlock		      "Mux"
-      DstPort		      2
-    }
-    Line {
       SrcBlock		      "Mux"
       SrcPort		      1
-      Points		      [70, 0; 0, -60; 39, 0]
+      Points		      [30, 0; 0, -60; 39, 0]
       Branch {
 	Points			[0, -55]
 	DstBlock		"Reference signal"
@@ -1477,6 +1433,12 @@ Model {
 	DstBlock		"C"
 	DstPort			1
       }
+    }
+    Line {
+      SrcBlock		      "Signal\nGenerator"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      2
     }
   }
 }
