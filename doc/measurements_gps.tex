@@ -1,4 +1,5 @@
 \chapter{Measurement Journal: GPS Variance}
+\label{chap:MeasJourGPS}
 The intention of this journal is to measure the variance of the output of the ADIS16405 IMU.\todo{change to GPS}
 \section{Equipment}
 \begin{itemize}
@@ -26,4 +27,4 @@ s^2_{N-1} = \frac{1}{N-1} \sum^N_{i=1}(x_i-\overline{x})^2
 \section{Measurements}
 The measurements of the position can be found in gpsSDlog291112.log, while the speed data can be found in speedlog.log. As the speed measurements are not present in every sample from the GPS, the two files contain a different amount of samples. While position log contain 25220 measurements, the speedlog only contain 1690. This is however deemed sufficient for the variance estimate.
 \section{Results}
-The resulting variance of the GPS measurements were found to be 0.0026 $\frac{m}{s}$ for the speed measurements, while the variances for the position measurements were found to be 0.979 $m$ and 1.12 $m$, for the $x$ and $y$ position, respectively.
+The resulting variance of the GPS measurements were found to be $0.0026\frac{\mathrm{m}}{\mathrm{s}}$ for the speed measurements, while the variances for the position measurements were found to be 0.979 m and 1.12 m, for the $x$ and $y$ position, respectively.
