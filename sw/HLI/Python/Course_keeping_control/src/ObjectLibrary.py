@@ -289,10 +289,14 @@ class O_PathWayPoints:
     def __init__(self):
         self.WayPoints = 0
         
-    def AddWP(self, WPC):
+    def SetWP(self, WPC):
         
         self.WayPoints = WPC
-    
+        
+    def AddWP(self, WPC):
+        
+        self.WayPoints = numpy.append(self.WayPoints, WPC, 1)
+        
     def PlanWP(self, coast, coastlength, decimation, safety):
         '''
         Plans the waypoints based on a known coastline
@@ -384,12 +388,13 @@ class O_EulerSpiral:
 #############################################
 '''    
 class O_PosData:
-    '''
+    """
     Contains a position and an orientation (optional)
     The purpose is to have all the points in an object type
     so methods that expect Positions will not accept anything else
-    '''
+    """
     def __init__(self, X, Y, O_X, O_Y):
+
         self.X = X;
         self.Y = Y;
         self.O_X = O_X / math.sqrt(math.pow(O_X,2) + math.pow(O_Y,2));

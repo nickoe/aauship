@@ -10,6 +10,7 @@ import scipy
 import matplotlib.pyplot as plt
 import FunctionLibrary as FL
 import ObjectLibrary as OL
+import KalmanFilter as KF
 
 '''
 #############################################
@@ -49,7 +50,13 @@ class O_Ship:
         self.omega = 0
         self.Theta = 0
         
-        self.mark = 0;
+        self.x = numpy.matrix([[0],[0],[0]])
+        
+        self.mark = 0
+        self.EndPath = 0
+        self.WPsEnded = 0
+        
+        self.Filter = KF.Filter()
         
         '''
         The control matrices
@@ -67,8 +74,10 @@ class O_Ship:
         where A[0,n] is the X, A[1,n] is the Y coordinate
         '''
         WP_Planner = OL.O_PathWayPoints();
-        WP_Planner.AddWP(WPC)
+        WP_Planner.SetWP(WPC)
         self.Waypoints = WP_Planner
+        
+        self.EndPath = 0
     
     def Plan_WP(self, coastline, decimation, safety):
         
@@ -130,19 +139,19 @@ class O_Ship:
             
             '''Turning waypoint''' 
             n = self.LastWP + 1 + i; 
-            
+            print(n, self.LastWP);
             try:
                 Nm = self.Waypoints.get_SingleWayPoint(n - i);
                 Nt = self.Waypoints.get_SingleWayPoint(n);
                 Np = self.Waypoints.get_SingleWayPoint(n + 1);
             except IndexError:
-                return('Path ended');
+                return(-1);
             
             
             
             gamma = FL.CosLaw(Nm, Nt, Np);
             
-        print(n);
+        
         
         self.Path = OL.O_LocalPath(gamma, self.Sigma_max, self.Kappa_max);
         
@@ -161,7 +170,12 @@ class O_Ship:
         
         '''
         Forms the calculates Straight path and Turn path into an ordered list of points
+        If WPsEnded == 1 the only SWP is the starting point
         '''
+        
+        
+        
+            
         try:
             LS = OL.O_PosData(self.Straight.SubWP[0,0], self.Straight.SubWP[1,0], float('NaN'), float('NaN'))
             LF = OL.O_PosData(self.Straight.SubWP[0,len(self.Straight.SubWP)-1], self.Straight.SubWP[1,len(self.Straight.SubWP)-1], float('NaN'), float('NaN'))
@@ -221,20 +235,27 @@ class O_Ship:
             '''
             Gets the current destination point
             '''
-            if len(self.SegmentCoords)>0 and self.NextSWP_No < len(self.SegmentCoords[0]):
-                self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
-                if self.mark == 0:
-                    plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o')
-                    self.mark = 1
+            if self.WPsEnded == 0:
             
-            else:
-                '''
-                If there is no current destination point, the method requests a new path
-                '''
-                self.LastWP = self.LastWP + 1
-                self.Plan_LocalPath(self.Path.Range)
-                self.get_PathSegment()
+                if len(self.SegmentCoords)>0 and self.NextSWP_No < len(self.SegmentCoords[0]):
+                    self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
+                    if self.mark == 0:
+                        plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o')
+                        self.mark = 1
                 
+                else:
+                    '''
+                    If there is no current destination point, the method requests a new path
+                    '''
+                    self.LastWP = self.LastWP + 1
+                    ret = self.Plan_LocalPath(self.Path.Range)
+                    if ret == -1:
+                        self.WPsEnded = 1
+                        self.NextSWP = self.Waypoints.get_SingleWayPoint(self.LastWP + 2)
+                    self.get_PathSegment()
+                    
+            else:
+                self.NextSWP = self.Waypoints.get_SingleWayPoint(self.LastWP + 2)
             '''
             Calculation of the required heading
             and the current deviation from required heading
@@ -249,19 +270,26 @@ class O_Ship:
             navigation procedure jumps to the next Sub-Waypoint
             '''
             valid = (FL.Distance(self.Pos, self.NextSWP) > self.FollowDistance);
+            
+            if valid == 0 and self.WPsEnded == 1:
+                self.EndPath = 1
+                break
 
             if valid == 1:
                 break
-            self.NextSWP_No = self.NextSWP_No + 1
-            self.mark = 0
+            if self.WPsEnded == 0:
+                self.NextSWP_No = self.NextSWP_No + 1
+                self.mark = 0
+                
+            
             
             
         '''
         #############################################
-        # RUN CONTROL ALGORITHM FOR DELTA HERE
+        # RUN CONTROL ALGORITHM HERE
         '''
        
-        Ref = numpy.matrix([[2], [self.x[1]-delta]])
+        Ref = numpy.matrix([[1], [self.x[1]-delta]])
 
         
         N = -self.F * self.x + self.N * Ref
@@ -276,26 +304,42 @@ class O_Ship:
         Vertical(!) numpy Matrix(!)
         '''
         
-        return N;
+        if self.EndPath == 0:
+            return N;
+        else:
+            return numpy.matrix([[0], [0]])
     
-    def ReadStates(self, v, theta, omega, Pos):
+    def ReadStates(self, x, xd, xdd, y, yd, ydd, theta, omega, angacc, input_f):
         
         '''
         Reads systems states from sensors (processed data)
         '''
         
-        self.v = v
-        self.omega = omega
-        self.Theta = math.atan2(math.sin(theta), math.cos(theta))
-        self.Pos = OL.O_PosData(Pos[0], Pos[1], math.cos(theta), math.sin(theta))
-        self.x = numpy.matrix([[v],[self.Theta],[omega]])
+        Wn = numpy.matrix([[x], [xd], [xdd], [y], [yd], [ydd], [theta], [omega], [angacc]])
+        
+        noise = 0.01
+        states = self.Filter.FilterStep(input_f, Wn+noise)
+
+        self.Ts = 0.1
+        
+        self.v = numpy.sum(states[2])
+        self.omega = numpy.sum(states[4])
+        self.Theta = math.atan2(math.sin(numpy.sum(states[3])), math.cos(numpy.sum(states[3])))
+        self.x = numpy.matrix([[self.v],[self.Theta],[self.omega]])
+        
+        curpos = self.Pos.get_Pos()
+        x_next = numpy.sum(self.Ts * states[2] * math.cos(states[3]) + curpos[0])
+        y_next = numpy.sum(self.Ts * states[2] * math.sin(states[3]) + curpos[1])
+        self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
     
+        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(states[2]), 'FT', numpy.sum(states[3]), 'FO', numpy.sum(states[4]))
+        
+        
     def get_Thera_r(self):
         
         '''
         Calculates the required heading
         '''
-        
         Theta_r = FL.CosLaw(self.Pos.Extend_Zero(), self.Pos, self.NextSWP)
         '''
         The CosLaw function returns a positive angle
@@ -321,8 +365,13 @@ class O_Ship:
         '''
         delta = math.atan2(math.sin(delta), math.cos(delta))
         return delta
-    
-    def SendData(self, data):
-        
-        Stream = CU.Streamer()
-        
+         
+    def AddRelativeCourse(self, WPC):
+        '''
+        Sets a 
+        '''
+        #Parameters: self, list of WP-s
+        xy = numpy.matrix([[WPC.get_Pos_X()],[WPC.get_Pos_Y()]])
+        self.Waypoints.AddWP(xy)
+        self.WPsEnded = 0
+        self.EndPath = 0
