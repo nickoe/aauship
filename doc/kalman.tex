@@ -145,19 +145,7 @@ Linear acceleration from the \ac{IMU}: accelerometer
 Angular acceleration from the \ac{IMU}: gyrometer
 Angle from the \ac{IMU}: magnetometer (compass)
 
-Estimating the bias of added wind and water current. As the wind and current shifts the ship around, and changes the torque to allow for a bias. This can be dealt with by extending the \ac{KF}, to include these as measurements, and then subtracting these in the end result. This results in a filter that does not deal with the bias directly, but instead estimates without looking in to this. 
+\section{Estimation of position on a lossy channel}
+As the controls are run on a remote platform, the \ac{KF} should be able to work even though some sensor measurements are corrupted. To work around this, the Kalman gain should be set to zero of the readout is corrupted - so every time the receiver gets a packet where the checksom is invalid, it generates a vector mask that tells which rows of the Kalman gain should be zeroed. 
 
-\begin{align}
-\vec{A}_{ext} = \begin{bmatrix}
-\vec{A}\\
-\bar{\vec{b}}
-\end{bmatrix}
-\end{align}
-\noindent Where:
-\begin{ffk}
-$\bar{\vec{b}}$ is the vector representing the bias in the x- and y-direction. 
-\end{ffk}
-
-\MATLAB plot indsættes af hvordan dette ser ud! (med og uden bias!).
-
-The signal from the GPS can be seen as the actual position, plus some noise. 
+To test this, \MATLAB has been used, which generates the the following results for a given packet loss rate. This rate can be then be altered to see how the system responds to a given data loss rate. The data loss rate is given in percent. If the system looses 10\% of the packages, the following error curves are produced:

@@ -9,6 +9,7 @@ load inputD.mat; % Loads system input file from contsimu.m
 inputD = inputD';
 %close all;
 
+load Wn.mat
 % To reduce the amount of noise on the measurements which are fed to the
 % system, and to enhance the precision of these, the data is run through a
 % Kalman filter which is then estiamtes the position, given the noisy
@@ -64,6 +65,20 @@ An = eye(9); % An eye matrix, as all the outputs scales equally - everything is 
 % The Z(n) is the "driving noise" - as the system input is a forward force
 % and a torque, these are input here as well. The "input" matrix for the
 % driving noise Z(n) is then equal to: 
+varXpos = 0.979; % m
+varXvel = 0.00262; % m/s
+varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
+
+varYpos = 1.12; % m
+varYvel = 0.0001; % m/s
+varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
+
+varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
+varWvel = 2.3559e-5; % rad/s
+varWacc = 5;
+
+varYWacc = 2.4496*10^-6; % rad/s^2
+SqM = sqrt([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
 
 Bn = [0 0;...
      0 0;...
@@ -82,21 +97,6 @@ end
 % W is the measurement noise on the system, this can be estimated to be
 % white gaussian noise, with zero mean (for most cases) and with a
 % variance, that are estimated in Appendix #XX. 
-varXpos = 0.979; % m
-varXvel = 0.00262; % m/s
-varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
-
-varYpos = 1.12; % m
-varYvel = 0.0001; % m/s
-varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
-
-varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
-varWvel = 2.3559e-5; % rad/s
-varWacc = 5;
-
-varYWacc = 2.4496*10^-6; % rad/s^2
-SqM = sqrt([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
-
  % Random number at each iteration with a given variance. 
 
 %% Covariance Matrices: 
@@ -119,7 +119,7 @@ SqM = sqrt([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varW
 
 %% System initiation:
 % The system is initialized, the parameters are: 
-Wn = zeros(9,N);
+%Wn = zeros(9,N);
 Qz = zeros(9,9,N);
 Qw = zeros(9,9,N);
 Y = zeros(9,N);
@@ -139,7 +139,7 @@ x_rot = zeros(2,2,N);
 
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
-       Wn(:,n) = randn(9,1).*SqM';
+      % Wn(:,n) = randn(9,1).*SqM';
      Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
@@ -797,7 +797,7 @@ for n = 2:N;
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.60 ; % Looses 10 percent of the packages. 
+ packLost(:,n) = rand(9,1)<0.90 ; % Looses 10 percent of the packages. 
              if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
