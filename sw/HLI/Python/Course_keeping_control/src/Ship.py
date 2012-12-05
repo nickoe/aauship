@@ -317,20 +317,24 @@ class O_Ship:
         
         Wn = numpy.matrix([[x], [xd], [xdd], [y], [yd], [ydd], [theta], [omega], [angacc]])
         
-        noise = 0.01
+        noise = 0
         states = self.Filter.FilterStep(input_f, Wn+noise)
 
         self.Ts = 0.1
-        
         self.v = numpy.sum(states[2])
         self.omega = numpy.sum(states[4])
         self.Theta = math.atan2(math.sin(numpy.sum(states[3])), math.cos(numpy.sum(states[3])))
+        self.Theta = math.atan2(math.sin(theta), math.cos(numpy.sum(theta)))
+        self.v = xd
+        
         self.x = numpy.matrix([[self.v],[self.Theta],[self.omega]])
+        self.x = numpy.matrix([[xd],[math.atan2(math.sin(numpy.sum(theta)), math.cos(numpy.sum(theta)))],[omega]])
         
         curpos = self.Pos.get_Pos()
-        x_next = numpy.sum(self.Ts * states[2] * math.cos(states[3]) + curpos[0])
-        y_next = numpy.sum(self.Ts * states[2] * math.sin(states[3]) + curpos[1])
+        x_next = numpy.sum(self.Ts * self.v * math.sin(self.Theta) + curpos[0])
+        y_next = numpy.sum(self.Ts * self.v * math.cos(self.Theta) + curpos[1])
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
+
     
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(states[2]), 'FT', numpy.sum(states[3]), 'FO', numpy.sum(states[4]))
         

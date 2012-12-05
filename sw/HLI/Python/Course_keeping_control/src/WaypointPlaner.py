@@ -83,7 +83,7 @@ Control loop initializations
 '''
 i = 0
 
-ni = 100
+ni = 1000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
@@ -121,7 +121,7 @@ while i < ni:
     '''Sensor reading'''
     #AAUSHIP.ReadStates(numpy.sum(states[0]), numpy.sum(states[1]), numpy.sum(states[2]), pos)
     #AAUSHIP.ReadStates(pos[0]+0.1,numpy.sum(states[0]), math.cos(numpy.sum(states[0])-numpy.sum(prevstates[0])), pos[1]+0.1, 0, math.sin(numpy.sum(states[0])-numpy.sum(prevstates[0])), numpy.sum(states[1]), numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor)
-    AAUSHIP.ReadStates(pos[0],numpy.sum(states[0]), numpy.sum(states[0])-numpy.sum(prevstates[0]), pos[1], 0, 0, numpy.sum(states[1])+math.pi*2, numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor)
+    AAUSHIP.ReadStates(pos[0],numpy.sum(states[0]), numpy.sum(states[0])-numpy.sum(prevstates[0]), pos[1], 0, 0, numpy.sum(states[1])+math.pi*2, numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor) 
     #if i == 9000:
         #AAUSHIP.AddRelativeCourse(startpos)
 '''
