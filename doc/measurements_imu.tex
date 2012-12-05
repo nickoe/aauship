@@ -8,7 +8,7 @@ The intention of this journal is to measure the variance of the output of the AD
 \end{itemize}
 
 \section{Method}
-A python script was implemented which logged the data which was accepted according to the specifications in the protocol section \todo{ref to protocol section}. The board on which the IMU is mounted is reading the data with a set delay between reads, and then bursting the data as soon as it has read. The data is timestamped when it is received by the python script. The script will keep running, receiving data, until it is cancelled. As it is very easy to gather samples, a large amount of samples has been gathered, by allowing the system to run overnight.\\
+A python script was implemented which logged the data which was accepted according to the protcol specifications chapter \ref{chap:Protocol}. The board on which the IMU is mounted is reading the data with a set delay between reads, and then bursting the data as soon as it has read. The data is timestamped when it is received by the python script. The script will keep running, receiving data, until it is cancelled. As it is very easy to gather samples, a large amount of samples has been gathered, by allowing the system to run overnight.\\
 From an early trial run of the system it was discovered that the IMU would sporadically deliver measurements which were clearly wrong. Luckily all of the measurements were affected by this. Therefore it was possible to filter this by attaching the ADC of the IMU to ground, and then discarding the measurement when the ADC reads a high value.\\
 The measurements are then input in Matlab and the variances of the measurements are estimated, using the 'var()' function.
 \section{Measurements}
