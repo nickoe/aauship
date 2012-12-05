@@ -4,12 +4,12 @@ clc; clear all; close all; clear java;
 % for lunde = 1:15
 %     clf(lunde)
 % end
-%run('contsimu.m');
+run('contsimu.m');
 load inputD.mat; % Loads system input file from contsimu.m
 inputD = inputD';
-%close all;
+close all;
 
-load Wn.mat
+%load Wn.mat
 % To reduce the amount of noise on the measurements which are fed to the
 % system, and to enhance the precision of these, the data is run through a
 % Kalman filter which is then estiamtes the position, given the noisy
@@ -139,7 +139,7 @@ x_rot = zeros(2,2,N);
 
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
-      % Wn(:,n) = randn(9,1).*SqM';
+       Wn(:,n) = randn(9,1).*SqM';
      Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
@@ -797,7 +797,7 @@ for n = 2:N;
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.90 ; % Looses 10 percent of the packages. 
+ packLost(:,n) = rand(9,1)<0.5 ; % Looses 10 percent of the packages. 
              if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
@@ -1037,6 +1037,14 @@ diff_posD = y_newposD' - k_newposD';
 diff_posK = y_newposK' - k_newposK';
 diff_posL = y_newposL' - k_newposL';
 
+% Absolute distance between Y and filtered
+for jj = 1:N
+    diff_abs(jj)  = sqrt(((k_newpos(1,jj) - y_newpos(1,jj))^2)+((k_newpos(2,jj) - y_newpos(2,jj))^2));
+    diff_absD(jj) = sqrt(((k_newposD(1,jj) - y_newposD(1,jj))^2)+((k_newposD(2,jj) - y_newposD(2,jj))^2));
+    diff_absK(jj) = sqrt(((k_newposK(1,jj) - y_newposK(1,jj))^2)+((k_newposK(2,jj) - y_newposK(2,jj))^2));
+    diff_absL(jj) = sqrt(((k_newposL(1,jj) - y_newposL(1,jj))^2)+((k_newposL(2,jj) - y_newposL(2,jj))^2));
+end
+
 %% Plot of the error between monorate and multirate:
 % Position
 h17 = figure(17);
@@ -1151,8 +1159,18 @@ plot(diff_posD(:,2),'r');
 plot(diff_posL(:,2),'m');
 plot(diff_posK(:,2),'g'); hold off
 title('Error in Y-Position');
-
 legend('Monorate','Multirate','Lost Packages','Multirate NI')
+grid on
+
+h21 = figure(21);
+plot(diff_abs,'b.'); hold on
+plot(diff_absD,'r.');
+plot(diff_absL,'m.');
+plot(diff_absK,'g.'); hold off
+title('Absolute Position Error');
+legend('Monorate','Multirate','Lost Packages','Multirate NI');
+xlabel('Sample [n]');
+ylabel('Distance [m]');
 grid on
 
 %% NOT USED! - Changing the Covariance Matrices and inputs:
