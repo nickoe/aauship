@@ -335,7 +335,8 @@ class O_Ship:
         y_next = numpy.sum(self.Ts * self.v * math.cos(self.Theta) + curpos[1])
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
 
-    
+        x_next = numpy.sum(self.Ts * numpy.sum(states[2]) * math.sin(states[3]) + curpos[0])
+        y_next = numpy.sum(self.Ts * numpy.sum(states[2]) * math.cos(states[3]) + curpos[1])
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(states[2]), 'FT', numpy.sum(states[3]), 'FO', numpy.sum(states[4]))
         
         
