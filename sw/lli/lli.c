@@ -45,10 +45,11 @@ int main (void)
 	int	 len2 = 0;
 	int	 len3 = 0;
 	unsigned int i = 0;
-	char s[64];
 	char *ptr;
+	unsigned char hli_mutex = 0;
 	uint16_t xacc = 0;
 	uint8_t xacca[2];
+	char s[64];
 
 
   /* set outputs */
@@ -88,13 +89,17 @@ int main (void)
 
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
-
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
+		// Sample ADIS data periodically
 		if (adis_ready_counter >= 82) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
+		}
+
+		// Transmit ADIS data when GPS is not sending
+		if ((hli_mutex == 0) && (adis_ready_counter >= 82)) {
 			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
 			adis_ready_counter -= 82;
 			PORTL ^= (1<<LED4);
@@ -144,12 +149,14 @@ int main (void)
 				buffer3[len3] = c3;
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
+					hli_mutex = 1; // Disallow IMU to transmit to HLI
 					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+					hli_mutex = 0; // Allow IMU to transmit to HLI
 					len3 = -1; // Set flag in new packet mode
 				}
 			}
 		}
   }
- 
+
   return 1;
 }
