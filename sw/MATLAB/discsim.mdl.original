@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.18"
+    ComputedModelVersion    "1.20"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [118.0, 180.0, 1433.0, 797.0]
+      Location		      [108.0, 251.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -55,8 +55,8 @@ Model {
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
 	Extents			[1209.0, 623.0]
-	ZoomFactor		[1.03]
-	Offset			[-18.963653954487651, 0.0]
+	ZoomFactor		[1.0977859778597787]
+	Offset			[-38.438937762604951, 2.2470588235294109]
       }
     }
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Dec 05 09:23:54 2012"
+  LastModifiedDate	  "Wed Dec 05 11:32:52 2012"
   RTWModifiedTimeStamp	  276549128
-  ModelVersionFormat	  "1.%<AutoIncrement:18>"
+  ModelVersionFormat	  "1.%<AutoIncrement:20>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -887,8 +887,8 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [118, 180, 1551, 977]
-    Open		    off
+    Location		    [108, 251, 1541, 1048]
+    Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -899,7 +899,7 @@ Model {
     TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "103"
+    ZoomFactor		    "109"
     ReportName		    "simulink-default.rpt"
     SIDHighWatermark	    "49"
     Block {
@@ -1029,9 +1029,9 @@ Model {
       Ports		      [0, 1]
       Position		      [20, 210, 50, 240]
       ZOrder		      -19
-      WaveForm		      "random"
-      Amplitude		      "4"
-      Frequency		      "0.01"
+      WaveForm		      "sawtooth"
+      Amplitude		      "2*pi"
+      Frequency		      "0.001"
     }
     Block {
       BlockType		      SubSystem
