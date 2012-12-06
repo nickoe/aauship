@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [108.0, 251.0, 1433.0, 797.0]
+      Location		      [294.0, 234.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -887,7 +887,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [108, 251, 1541, 1048]
+    Location		    [294, 234, 1727, 1031]
     Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200

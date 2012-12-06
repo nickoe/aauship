@@ -78,6 +78,7 @@ varWvel = 2.3559e-5; % rad/s
 varWacc = 5;
 
 varYWacc = 2.4496*10^-6; % rad/s^2
+
 SqM = sqrt([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
 
 Bn = [0 0;...
@@ -139,7 +140,10 @@ x_rot = zeros(2,2,N);
 
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
-       Wn(:,n) = randn(9,1).*SqM';
+       Wn(:,n) = [randn(4,1);0;randn(4,1)].*SqM';
+       Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n);
+       %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
+       %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
      Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
@@ -149,7 +153,7 @@ for n = 2:N;
     Ypred(:,n) = Hn*Yupdate(:,n-1);
     Xpred(:,n) = An*Ypred(:,n);
   Rpred(:,:,n) = Hn*Rupdate(:,:,n-1)*Hn'+Qz(:,:,n);
-      B(:,:,n) = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
+      B(:,:,n)       = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
 Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  
      
@@ -1163,10 +1167,10 @@ legend('Monorate','Multirate','Lost Packages','Multirate NI')
 grid on
 
 h21 = figure(21);
-plot(diff_abs,'b.'); hold on
-plot(diff_absD,'r.');
-plot(diff_absL,'m.');
-plot(diff_absK,'g.'); hold off
+plot(diff_abs,'b'); hold on
+plot(diff_absD,'r');
+plot(diff_absL,'m');
+plot(diff_absK,'g'); hold off
 title('Absolute Position Error');
 legend('Monorate','Multirate','Lost Packages','Multirate NI');
 xlabel('Sample [n]');
