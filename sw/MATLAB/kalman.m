@@ -37,7 +37,7 @@ close all;
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 1000; % Then it fits with the Simulink Simulation!
+N = 10000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -65,11 +65,11 @@ An = eye(9); % An eye matrix, as all the outputs scales equally - everything is 
 % The Z(n) is the "driving noise" - as the system input is a forward force
 % and a torque, these are input here as well. The "input" matrix for the
 % driving noise Z(n) is then equal to: 
-varXpos = 0.979; % m
+varXpos = 0.00979; % m
 varXvel = 0.00262; % m/s
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
-varYpos = 1.12; % m
+varYpos = 0.112; % m
 varYvel = 0.0001; % m/s
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
@@ -141,9 +141,9 @@ x_rot = zeros(2,2,N);
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        Wn(:,n) = [randn(4,1);0;randn(4,1)].*SqM';
-       Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n);
+       %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
-       %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
+       Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
      Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
@@ -801,7 +801,7 @@ for n = 2:N;
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.5 ; % Looses 10 percent of the packages. 
+ packLost(:,n) = rand(9,1)<0.9 ; % Looses 10 percent of the packages. 
              if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;

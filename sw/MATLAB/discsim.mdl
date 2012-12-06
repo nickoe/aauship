@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.20"
+    ComputedModelVersion    "1.22"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [108.0, 251.0, 1433.0, 797.0]
+      Location		      [137.0, 22.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -56,7 +56,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1209.0, 623.0]
 	ZoomFactor		[1.0977859778597787]
-	Offset			[-38.438937762604951, 2.2470588235294109]
+	Offset			[-38.438937762604951, 2.2470588235294144]
       }
     }
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Dec 05 11:32:52 2012"
-  RTWModifiedTimeStamp	  276549128
-  ModelVersionFormat	  "1.%<AutoIncrement:20>"
+  LastModifiedDate	  "Thu Dec 06 16:50:50 2012"
+  RTWModifiedTimeStamp	  276628922
+  ModelVersionFormat	  "1.%<AutoIncrement:22>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -809,15 +809,6 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
-      BlockType		      SignalGenerator
-      WaveForm		      "sine"
-      TimeSource	      "Use simulation time"
-      Amplitude		      "1"
-      Frequency		      "1"
-      Units		      "Hertz"
-      VectorParams1D	      on
-    }
-    Block {
       BlockType		      Step
       Time		      "1"
       Before		      "0"
@@ -887,7 +878,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [108, 251, 1541, 1048]
+    Location		    [137, 22, 1570, 819]
     Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
@@ -901,7 +892,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "109"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "49"
+    SIDHighWatermark	    "51"
     Block {
       BlockType		      Gain
       Name		      "A"
@@ -919,9 +910,10 @@ Model {
       BlockType		      Sum
       Name		      "Add"
       SID		      "31"
-      Ports		      [2, 1]
-      Position		      [640, 352, 655, 543]
+      Ports		      [4, 1]
+      Position		      [85, 177, 100, 368]
       ZOrder		      -2
+      Inputs		      "++++"
       InputSameDT	      off
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
@@ -1021,17 +1013,6 @@ Model {
       VariableName	      "referenceD"
       MaxDataPoints	      "inf"
       SampleTime	      "ts"
-    }
-    Block {
-      BlockType		      SignalGenerator
-      Name		      "Signal\nGenerator"
-      SID		      "49"
-      Ports		      [0, 1]
-      Position		      [20, 210, 50, 240]
-      ZOrder		      -19
-      WaveForm		      "sawtooth"
-      Amplitude		      "2*pi"
-      Frequency		      "0.001"
     }
     Block {
       BlockType		      SubSystem
@@ -1217,7 +1198,7 @@ Model {
       BlockType		      Step
       Name		      "Step"
       SID		      "35"
-      Position		      [560, 385, 590, 415]
+      Position		      [5, 190, 35, 220]
       ZOrder		      -22
       Time		      "100"
       After		      "pi/2"
@@ -1227,10 +1208,30 @@ Model {
       BlockType		      Step
       Name		      "Step1"
       SID		      "36"
-      Position		      [560, 480, 590, 510]
+      Position		      [5, 235, 35, 265]
       ZOrder		      -22
-      Time		      "400"
+      Time		      "200"
       After		      "-pi/2"
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Step
+      Name		      "Step2"
+      SID		      "50"
+      Position		      [5, 280, 35, 310]
+      ZOrder		      1
+      Time		      "600"
+      After		      "-pi/2"
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Step
+      Name		      "Step3"
+      SID		      "51"
+      Position		      [5, 325, 35, 355]
+      ZOrder		      2
+      Time		      "700"
+      After		      "pi/2"
       SampleTime	      "0"
     }
     Block {
@@ -1435,10 +1436,29 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Signal\nGenerator"
+      SrcBlock		      "Add"
       SrcPort		      1
+      Points		      [35, 0; 0, -50]
       DstBlock		      "Mux"
       DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Step1"
+      SrcPort		      1
+      DstBlock		      "Add"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Step2"
+      SrcPort		      1
+      DstBlock		      "Add"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Step3"
+      SrcPort		      1
+      DstBlock		      "Add"
+      DstPort		      4
     }
   }
 }
