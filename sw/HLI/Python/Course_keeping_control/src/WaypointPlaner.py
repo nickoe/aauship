@@ -142,5 +142,3 @@ plt.show()
 plt.plot(x2)
 plt.show()
 
-AAUSHIP.plot()
-

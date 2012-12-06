@@ -122,10 +122,7 @@ class Filter:
         self.sC = 1; ''' Sample counter - used to only include the 10th GPS sample.'''
         
         self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
-        self.simlen = 10001
-        self.login = numpy.matrix(numpy.zeros([9,self.simlen]))
-        self.logout = numpy.matrix(numpy.zeros([9,self.simlen]))
-        self.i = 0 
+        
 
         
     
@@ -142,9 +139,10 @@ class Filter:
         % sampled as often as the IMU! When this is done, the computation of the
         % Kalman filter becomes: 
         ''' 
+        '''
         i = self.i
         self.login[:,i] = Wn[:,0]
-        
+        '''
         self.YD_prev = self.YD
         self.YupdateD_prev = self.YupdateD
         self.RupdateD_prev = self.RupdateD
@@ -176,9 +174,10 @@ class Filter:
         
         self.RupdateD = (numpy.eye(9)-self.BD*self.An)*self.RpredD;
         self.sC = self.sC + 1;
-        
+        '''
         self.logout[:,i] = self.YupdateD[:,0]
         self.i = i+1
+        '''
         return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
         
         

@@ -395,7 +395,7 @@ class O_Ship:
         self.Waypoints.AddWP(xy)
         self.WPsEnded = 0
         self.EndPath = 0
-        
+    '''    
     def plot(self):
         
         print 'X pos'
@@ -442,3 +442,4 @@ class O_Ship:
         plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[8])))
         plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[8])))
         plt.show()
+    '''
