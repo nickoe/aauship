@@ -119,7 +119,7 @@ class Filter:
         self.y_newposD = numpy.matrix(numpy.zeros([2,1]))
         self.x_newposD = numpy.matrix(numpy.zeros([2,1]))
         
-        self.sC = 1; ''' Sample counter - used to only include the 10th GPS sample.'''
+        self.sC = 0; ''' Sample counter - used to only include the 10th GPS sample.'''
         
         self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
         
@@ -143,7 +143,7 @@ class Filter:
         i = self.i
         self.login[:,i] = Wn[:,0]
         '''
-        self.YD_prev = self.YD
+        
         self.YupdateD_prev = self.YupdateD
         self.RupdateD_prev = self.RupdateD
          
@@ -153,7 +153,7 @@ class Filter:
         self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]));
         
         
-        self.YD = self.Hn*self.YD_prev+self.Z
+        
         self.XD = Wn
         self.YpredD = self.Hn*self.YupdateD_prev
         self.XpredD = self.An*self.YpredD
@@ -164,7 +164,7 @@ class Filter:
             self.BD = self.BD;
             self.sC = 0;
             
-        else:       
+        else:
                     
             self.BD[1,:] = numpy.zeros([1,9])
             self.BD[4,:] = numpy.zeros([1,9])
@@ -178,7 +178,7 @@ class Filter:
         self.logout[:,i] = self.YupdateD[:,0]
         self.i = i+1
         '''
-        return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
+        return numpy.matrix([[0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
         
         
     def plot(self):

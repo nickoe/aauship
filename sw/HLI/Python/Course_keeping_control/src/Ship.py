@@ -68,6 +68,14 @@ class O_Ship:
         
         self.states = numpy.matrix([[0],[0],[0],[0],[0]])
         
+        
+        self.log1 = list()
+        self.log2 = list()
+        self.log3 = list()
+        self.log4 = list()
+        self.log5 = list()
+        self.log6 = list()
+        
     def SetWaypoints(self, WPC):
         '''
         A method to hand-set the required waypoints
@@ -329,7 +337,7 @@ class O_Ship:
         Measured_Acc = OL.O_PosData(xdd, ydd, 1, 1)
         BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), self.Theta)
         
-        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [0], [0], [0], [theta], [omega], [angacc]])
+        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
         
         noise = 0
         self.states = self.Filter.FilterStep(input_f, Wn+noise)
@@ -349,9 +357,16 @@ class O_Ship:
         x_next = numpy.sum(self.Ts * self.v * math.sin(self.Theta) + curpos[0])
         y_next = numpy.sum(self.Ts * self.v * math.cos(self.Theta) + curpos[1])
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
+        
+        0 Yd 1 Y 2 V 3 Th 4 Om
         '''
-        x_next = numpy.sum(self.Ts * numpy.sum(self.states[2]) * math.sin(self.states[3]) + curpos[0])
-        y_next = numpy.sum(self.Ts * numpy.sum(self.states[2]) * math.cos(self.states[3]) + curpos[1])
+        V = numpy.sum(self.states[2])
+        Yd = numpy.sum(self.states[0])
+        Y = numpy.sum(self.states[1])
+        Th = numpy.sum(self.states[3])
+        
+        x_next = (V * math.sin(Th) - Yd * math.cos(Th)) * self.Ts + curpos[0]
+        y_next = (V * math.cos(Th) + Yd * math.sin(Th)) * self.Ts + curpos[1]
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
@@ -443,3 +458,16 @@ class O_Ship:
         plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[8])))
         plt.show()
     '''
+        
+    def log(self,a,b,c,d,e,f):
+        
+        self.log1.append(a)
+        self.log2.append(b)
+        self.log3.append(c)
+        self.log4.append(d)
+        self.log5.append(e)
+        self.log6.append(f)
+        
+    def plot(self):
+        
+        plt.plot(self.log1)

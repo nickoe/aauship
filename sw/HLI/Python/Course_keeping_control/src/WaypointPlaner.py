@@ -73,7 +73,7 @@ EMBEDDED STEP 3
 Set first target WP (should be 0 or 1)
 '''
 
-AAUSHIP.FlushPath(3)
+AAUSHIP.FlushPath(2)
 
 
 
