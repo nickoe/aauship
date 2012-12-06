@@ -66,6 +66,8 @@ class O_Ship:
         
         self.F = numpy.matrix([[1.6012147e+001, 1.5569542e-016, 3.3824418e-016], [8.3542070e-016, 2.2764131e+000, 2.2219859e+000]])
         
+        self.states = numpy.matrix([[0],[0],[0],[0],[0]])
+        
     def SetWaypoints(self, WPC):
         '''
         A method to hand-set the required waypoints
@@ -314,31 +316,44 @@ class O_Ship:
         '''
         Reads systems states from sensors (processed data)
         '''
+        Measured_Pos = OL.O_PosData(x, y, 1, 1)
         
-        Wn = numpy.matrix([[x], [xd], [xdd], [y], [yd], [ydd], [theta], [omega], [angacc]])
+        BodyXY = FL.NEDtoBody(Measured_Pos, self.Pos, self.Theta)
+        
+
+        PathFrameXY = list([BodyXY[0] + numpy.sum(self.states[0]), BodyXY[1] + numpy.sum(self.states[1])])
+        
+        Measured_Speed = OL.O_PosData(xd, yd, 1, 1)
+        BodySpeed = FL.NEDtoBody(Measured_Speed, OL.O_PosData(0,0,1,1), self.Theta)
+        
+        Measured_Acc = OL.O_PosData(xdd, ydd, 1, 1)
+        BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), self.Theta)
+        
+        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [0], [0], [0], [theta], [omega], [angacc]])
         
         noise = 0
-        states = self.Filter.FilterStep(input_f, Wn+noise)
+        self.states = self.Filter.FilterStep(input_f, Wn+noise)
 
         self.Ts = 0.1
-        self.v = numpy.sum(states[2])
-        self.omega = numpy.sum(states[4])
-        self.Theta = math.atan2(math.sin(numpy.sum(states[3])), math.cos(numpy.sum(states[3])))
-        self.Theta = math.atan2(math.sin(theta), math.cos(numpy.sum(theta)))
-        self.v = xd
+        self.v = numpy.sum(self.states[2])
+        self.omega = numpy.sum(self.states[4])
+        self.Theta = math.atan2(math.sin(numpy.sum(self.states[3])), math.cos(numpy.sum(self.states[3])))
+         
+        self.xreal = numpy.matrix([[numpy.linalg.norm([xd, yd])],[math.atan2(math.sin(theta), math.cos(numpy.sum(theta)))],[self.omega]])
+        self.x = numpy.matrix([[self.v],[self.Theta],[omega]])
         
-        self.x = numpy.matrix([[self.v],[self.Theta],[self.omega]])
-        self.x = numpy.matrix([[xd],[math.atan2(math.sin(numpy.sum(theta)), math.cos(numpy.sum(theta)))],[omega]])
+        
         
         curpos = self.Pos.get_Pos()
+        '''
         x_next = numpy.sum(self.Ts * self.v * math.sin(self.Theta) + curpos[0])
         y_next = numpy.sum(self.Ts * self.v * math.cos(self.Theta) + curpos[1])
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
-
-        x_next = numpy.sum(self.Ts * numpy.sum(states[2]) * math.sin(states[3]) + curpos[0])
-        y_next = numpy.sum(self.Ts * numpy.sum(states[2]) * math.cos(states[3]) + curpos[1])
-        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(states[2]), 'FT', numpy.sum(states[3]), 'FO', numpy.sum(states[4]))
-        
+        '''
+        x_next = numpy.sum(self.Ts * numpy.sum(self.states[2]) * math.sin(self.states[3]) + curpos[0])
+        y_next = numpy.sum(self.Ts * numpy.sum(self.states[2]) * math.cos(self.states[3]) + curpos[1])
+        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
     def get_Thera_r(self):
         
@@ -380,3 +395,50 @@ class O_Ship:
         self.Waypoints.AddWP(xy)
         self.WPsEnded = 0
         self.EndPath = 0
+        
+    def plot(self):
+        
+        print 'X pos'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[0])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[0])))
+        plt.show()
+        
+        print 'X dot'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[1])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[1])))
+        plt.show()
+        
+        print 'X dot dot'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[2])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[2])))
+        plt.show()
+        
+        print 'Y pos'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[3])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[3])))
+        plt.show()
+        
+        print 'Y dot'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[4])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[4])))
+        plt.show()
+        
+        print 'Y dot dot'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[5])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[5])))
+        plt.show()
+        
+        print 'Theta'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[6])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[6])))
+        plt.show()
+        
+        print 'Omega'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[7])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[7])))
+        plt.show()
+        
+        print 'Alpha'
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.login[8])))
+        plt.plot(range(self.simlen),numpy.squeeze(numpy.array(self.logout[8])))
+        plt.show()

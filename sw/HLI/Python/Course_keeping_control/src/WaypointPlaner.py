@@ -83,7 +83,7 @@ Control loop initializations
 '''
 i = 0
 
-ni = 1000
+ni = 10000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
@@ -119,11 +119,20 @@ while i < ni:
     i += 1
     print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
     '''Sensor reading'''
-    #AAUSHIP.ReadStates(numpy.sum(states[0]), numpy.sum(states[1]), numpy.sum(states[2]), pos)
-    #AAUSHIP.ReadStates(pos[0]+0.1,numpy.sum(states[0]), math.cos(numpy.sum(states[0])-numpy.sum(prevstates[0])), pos[1]+0.1, 0, math.sin(numpy.sum(states[0])-numpy.sum(prevstates[0])), numpy.sum(states[1]), numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor)
-    AAUSHIP.ReadStates(pos[0],numpy.sum(states[0]), numpy.sum(states[0])-numpy.sum(prevstates[0]), pos[1], 0, 0, numpy.sum(states[1])+math.pi*2, numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor) 
-    #if i == 9000:
-        #AAUSHIP.AddRelativeCourse(startpos)
+   
+    GPS_X = pos[0]
+    GPS_Y = pos[1]
+    Speed_X = math.sin(numpy.sum(states[1])) * numpy.sum(states[0])
+    Speed_Y = math.cos(numpy.sum(states[1])) * numpy.sum(states[0])
+    Acc_X = math.sin(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) * 0.1
+    Acc_Y = math.cos(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) * 0.1
+    Theta = numpy.sum(states[1])
+    Omega = numpy.sum(states[2])
+    Alpha = numpy.sum(states[2]-prevstates[2])*0.1
+   
+    #AAUSHIP.ReadStates(pos[0],numpy.sum(states[0]), numpy.sum(states[0])-numpy.sum(prevstates[0]), pos[1], 0, 0, numpy.sum(states[1])+math.pi*2, numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor) 
+    AAUSHIP.ReadStates(GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha, motor)
+
 '''
 End of voyage
 '''
@@ -132,3 +141,6 @@ plt.plot(x0,x1)
 plt.show()
 plt.plot(x2)
 plt.show()
+
+AAUSHIP.plot()
+

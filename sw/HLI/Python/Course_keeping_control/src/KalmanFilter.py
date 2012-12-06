@@ -6,6 +6,7 @@ Created on 2012.12.05.
 
 import numpy
 import math
+import matplotlib.pyplot as plt
 
 class Filter:
     
@@ -84,7 +85,7 @@ class Filter:
         
         ''' System initiation:'''
         # The system is initialized, the parameters are: 
-        Wn = numpy.matrix(numpy.zeros([9,1]))
+        
         self.Qz = numpy.matrix(numpy.zeros([9,9]))
         self.Qw = numpy.matrix(numpy.zeros([9,9]))
         self.Y = numpy.matrix(numpy.zeros([9,1]))
@@ -121,6 +122,11 @@ class Filter:
         self.sC = 1; ''' Sample counter - used to only include the 10th GPS sample.'''
         
         self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
+        self.simlen = 10001
+        self.login = numpy.matrix(numpy.zeros([9,self.simlen]))
+        self.logout = numpy.matrix(numpy.zeros([9,self.simlen]))
+        self.i = 0 
+
         
     
     def FilterStep(self, inputD, Wn):
@@ -136,12 +142,13 @@ class Filter:
         % sampled as often as the IMU! When this is done, the computation of the
         % Kalman filter becomes: 
         ''' 
-        
+        i = self.i
+        self.login[:,i] = Wn[:,0]
         
         self.YD_prev = self.YD
         self.YupdateD_prev = self.YupdateD
         self.RupdateD_prev = self.RupdateD
-        
+         
         self.Z = self.Bn*inputD
         
             
@@ -149,7 +156,7 @@ class Filter:
         
         
         self.YD = self.Hn*self.YD_prev+self.Z
-        self.XD = self.An*self.YD+Wn
+        self.XD = Wn
         self.YpredD = self.Hn*self.YupdateD_prev
         self.XpredD = self.An*self.YpredD
         self.RpredD = self.Hn*self.RupdateD_prev*numpy.transpose(self.Hn)+self.Qz
@@ -170,6 +177,14 @@ class Filter:
         self.RupdateD = (numpy.eye(9)-self.BD*self.An)*self.RpredD;
         self.sC = self.sC + 1;
         
+        self.logout[:,i] = self.YupdateD[:,0]
+        self.i = i+1
         return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
+        
+        
+    def plot(self):
+        
+        a = 1
+        
         
         
