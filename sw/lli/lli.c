@@ -47,6 +47,9 @@ int main (void)
 	unsigned int i = 0;
 	char *ptr;
 	unsigned char hli_mutex = 0;
+	unsigned int gps = 0;
+	unsigned int imu = 0;
+	signed int ratio = 0;
 	uint16_t xacc = 0;
 	uint8_t xacca[2];
 	char s[64];
@@ -88,20 +91,27 @@ int main (void)
 	adis_set_sample_rate();
 
   while (1) {
+		ratio = imu/gps;
+		itoa(ratio,s,10);
+		uart2_puts(s);
+		uart2_putc('\r');
+		uart2_putc('\n');
+	
 		/* Read each UART serially and check each of them for data, if there is handle it */ 
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
 		// Sample ADIS data periodically
-		if (adis_ready_counter >= 82) {
+		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
 		}
 
 		// Transmit ADIS data when GPS is not sending
-		if ((hli_mutex == 0) && (adis_ready_counter >= 82)) {
-			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-			adis_ready_counter -= 82;
+		if ((hli_mutex == 0) && (adis_ready_counter >= ADIS_READY)) {
+			//hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+			imu++;
+			adis_ready_counter -= ADIS_READY;
 			PORTL ^= (1<<LED4);
 		}
 
@@ -137,7 +147,7 @@ int main (void)
 		/* Reading from GPS */
 		if ( c3 & UART_NO_DATA ) {} else  // Data available
 		{
-			//uart_putc(c3); // Forward every byte from GSP to uart directly
+			uart_putc(c3); // Forward every byte from GSP to uart directly
 
 			/* Transmitting NMEA GPS sentences to the HLI */
 			if (c3 == '$') { // We have a possible message comming
@@ -150,7 +160,8 @@ int main (void)
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
 					hli_mutex = 1; // Disallow IMU to transmit to HLI
-					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+				//	hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+					gps++;
 					hli_mutex = 0; // Allow IMU to transmit to HLI
 					len3 = -1; // Set flag in new packet mode
 				}
