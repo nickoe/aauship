@@ -799,7 +799,7 @@ for n = 2:N;
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.1; % Looses 10 percent of the packages. 
+ packLost(:,n) = rand(9,1)<0.9; % Looses 10 percent of the packages. 
              if sC == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
