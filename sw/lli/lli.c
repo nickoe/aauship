@@ -49,6 +49,7 @@ int main (void)
 	char *ptr;
 	uint16_t xacc = 0;
 	uint8_t xacca[2];
+	unsigned int gps=0,imu=0;
 
 
   /* set outputs */
@@ -87,16 +88,20 @@ int main (void)
 	adis_set_sample_rate();
 
   while (1) {
-		/* Read each UART serially and check each of them for data, if there is handle it */ 
-
+		/* Read each UART serially and check each of them for data, if there is handle it */ 	
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-		if (adis_ready_counter >= 82) {
+		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
 			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-			adis_ready_counter -= 82;
+			imu++;
+		itoa(imu,s,10);
+		uart2_puts(s);
+		uart2_putc('\r');
+		uart2_putc('\n');
+			adis_ready_counter -= ADIS_READY;
 			PORTL ^= (1<<LED4);
 		}
 
@@ -144,8 +149,16 @@ int main (void)
 				buffer3[len3] = c3;
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
-					hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
-					len3 = -1; // Set flag in new packet mode
+					if(buffer3[4] == 'G') {
+						hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+				gps++;		
+		itoa(gps,s,10);
+		uart2_puts(s);
+		uart2_putc('\r');
+		uart2_putc('\n');
+		//imu=0;
+						len3 = -1; // Set flag in new packet mode
+					}
 				}
 			}
 		}
