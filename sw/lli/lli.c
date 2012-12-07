@@ -91,26 +91,20 @@ int main (void)
 	adis_set_sample_rate();
 
   while (1) {
-		ratio = imu/gps;
-		itoa(ratio,s,10);
-		uart2_puts(s);
-		uart2_putc('\r');
-		uart2_putc('\n');
-	
-		/* Read each UART serially and check each of them for data, if there is handle it */ 
+		/* Read each UART serially and check each of them for data, if there is handle it */ 	
 		c = uart_getc();
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
-		// Sample ADIS data periodically
 		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
-		}
+			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+/*			imu++;
+		itoa(imu,s,10);
+		uart2_puts(s);
+		uart2_putc('\r');
+		uart2_putc('\n');*/
 
-		// Transmit ADIS data when GPS is not sending
-		if ((hli_mutex == 0) && (adis_ready_counter >= ADIS_READY)) {
-			//hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-			imu++;
 			adis_ready_counter -= ADIS_READY;
 			PORTL ^= (1<<LED4);
 		}
@@ -126,10 +120,12 @@ int main (void)
 			if ( (idx2 < len2) && (idx2 >= 0)) { // We are buffering
 				buffer2[idx2] = c2;
 				idx2++;
+					PORTL ^= (1<<LED3);
 				if (idx2 == len2) { // We now have a full packet
 
 					parse(&rfmsg, buffer2);
 					process(&rfmsg);
+
 					idx2 = -1; // Set flag in new packet mode
 
 					#ifdef DEBUG
@@ -151,7 +147,7 @@ int main (void)
 
 			/* Transmitting NMEA GPS sentences to the HLI */
 			if (c3 == '$') { // We have a possible message comming
-				PORTL ^= (1<<LED3);
+				//PORTL ^= (1<<LED3);
 				len3 = 0; // Set "flag"
 			}
 
@@ -159,11 +155,16 @@ int main (void)
 				buffer3[len3] = c3;
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
-					hli_mutex = 1; // Disallow IMU to transmit to HLI
-				//	hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
-					gps++;
-					hli_mutex = 0; // Allow IMU to transmit to HLI
-					len3 = -1; // Set flag in new packet mode
+					if(buffer3[4] != 'S') { // Disable GSV and GSA messages
+						hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
+	/*			gps++;		
+		itoa(gps,s,10);
+		uart2_puts(s);
+		uart2_putc('\r');
+		uart2_putc('\n');*/
+		//imu=0;
+						len3 = -1; // Set flag in new packet mode
+					}
 				}
 			}
 		}
