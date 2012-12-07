@@ -58,6 +58,8 @@ class O_Ship:
         
         self.Filter = KF.Filter()
         
+        self.correction = 0
+        
         '''
         The control matrices
         '''
@@ -337,7 +339,7 @@ class O_Ship:
         Measured_Acc = OL.O_PosData(xdd, ydd, 1, 1)
         BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), theta)
         
-        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [BodyXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
+        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
         
         noise = 0
         self.states = self.Filter.FilterStep(input_f, Wn+noise)
@@ -359,16 +361,22 @@ class O_Ship:
         0 Yd 1 Y 2 V 3 Th 4 Om
         '''
         V = numpy.sum(self.states[2])
-        Yd = numpy.sum(self.states[0])
+        Yd = numpy.sum(self.states[1])
         Y = numpy.sum(self.states[1])
         Th = numpy.sum(self.states[3])
         Th = theta
-        self.states[1] = BodyXY[1]
+        #self.states[1] = PathFrameXY[1]
+        
+        self.correction = numpy.sum(self.states[1]) - self.correction
+        
         '''
         x_next = (V * math.sin(Th)) * self.Ts + curpos[0]
-        y_next = (V * math.cos(Th)) * self.Ts + curpos[1]'''
+        y_next = (V * math.cos(Th)) * self.Ts + curpos[1]
         x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + BodyXY[1] * math.cos(Th)
         y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - BodyXY[1] * math.sin(Th)
+        '''
+        x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * math.cos(Th)
+        y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * math.sin(Th)
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
