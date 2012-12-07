@@ -7,6 +7,7 @@ Created on 2012.12.05.
 import numpy
 import math
 
+
 class Filter:
     
     def __init__(self):
@@ -120,7 +121,7 @@ class Filter:
         
         self.sC = 1; ''' Sample counter - used to only include the 10th GPS sample.'''
         
-        self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
+        self.Qz = numpy.diag([0, 0, 55, 0, 0, 55, 0, 0, 20])
         
     
     def FilterStep(self, inputD, Wn):
@@ -148,13 +149,14 @@ class Filter:
         self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]));
         
         
-       ''' self.YD = self.Hn*self.YD_prev+self.Z '''
+        ''' self.YD = self.Hn*self.YD_prev+self.Z '''
         self.XD = Wn
         self.YpredD = self.Hn*self.YupdateD_prev
         self.XpredD = self.An*self.YpredD
         self.RpredD = self.Hn*self.RupdateD_prev*numpy.transpose(self.Hn)+self.Qz
         
         self.BD = (self.RpredD*numpy.transpose(self.An))*numpy.linalg.inv(self.An*self.RpredD*numpy.transpose(self.An)+self.Qw);
+        
         '''if self.sC == self.GPS_freq:
             self.BD = self.BD;
             self.sC = 0;
@@ -165,11 +167,14 @@ class Filter:
             self.BD[4,:] = numpy.zeros([1,9])
             
         '''
+        
         self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);
+        
+        
         
         self.RupdateD = (numpy.eye(9)-self.BD*self.An)*self.RpredD;
         self.sC = self.sC + 1;
         
         return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
         
-        
+

@@ -330,10 +330,10 @@ class O_PathWayPoints:
             self.WayPoints[0, i+1] = self.LowerWayPoints[0, j];
             self.WayPoints[0, i+2] = self.LowerWayPoints[0, j+1];
             self.WayPoints[0, i+3] = 0
-            self.WayPoints[1, i] = self.UpperWayPoints[1, j] + 10
+            self.WayPoints[1, i] = self.UpperWayPoints[1, j] + 100
             self.WayPoints[1, i+1] = self.LowerWayPoints[1, j];
             self.WayPoints[1, i+2] = self.LowerWayPoints[1, j+1];
-            self.WayPoints[1, i+3] = self.UpperWayPoints[1, j+1] + 10
+            self.WayPoints[1, i+3] = self.UpperWayPoints[1, j+1] + 100
             j = j+2;
         
     def get_WayPoints(self):
