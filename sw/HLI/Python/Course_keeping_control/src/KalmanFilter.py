@@ -148,7 +148,7 @@ class Filter:
         self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]));
         
         
-       ''' self.YD = self.Hn*self.YD_prev+self.Z '''
+        ''' self.YD = self.Hn*self.YD_prev+self.Z '''
         self.XD = Wn
         self.YpredD = self.Hn*self.YupdateD_prev
         self.XpredD = self.An*self.YpredD
