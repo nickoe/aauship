@@ -4,7 +4,7 @@ clc; clear all; close all; clear java;
 % for lunde = 1:15
 %     clf(lunde)
 % end
-run('contsimu.m');
+run('./contsimu.m');
 load inputD.mat; % Loads system input file from contsimu.m
 inputD = inputD';
 close all;
@@ -1142,7 +1142,7 @@ plot(diffW_accK,'g'); hold off
 title('Difference Monorate/Multirate - W-Acceleration')
 legend('Multirate','Monorate','Lost Packages','Multirate NI')
 ylabel('Error [m/s^2]');
-xlabel('Sample [n]');
+xlabel('Sampleï¿½[n]');
 hold off
 grid on
 
