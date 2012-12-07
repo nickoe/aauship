@@ -7,6 +7,7 @@ Created on 2012.12.05.
 import numpy
 import math
 
+
 class Filter:
     
     def __init__(self):
@@ -170,6 +171,6 @@ class Filter:
         self.RupdateD = (numpy.eye(9)-self.BD*self.An)*self.RpredD;
         self.sC = self.sC + 1;
         
-        return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
+        return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
         
-        
+
