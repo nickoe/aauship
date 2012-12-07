@@ -65,17 +65,17 @@ An = eye(9); % An eye matrix, as all the outputs scales equally - everything is 
 % The Z(n) is the "driving noise" - as the system input is a forward force
 % and a torque, these are input here as well. The "input" matrix for the
 % driving noise Z(n) is then equal to: 
-varXpos = 0.00979; % m
+varXpos = 0.979; % m
 varXvel = 0.00262; % m/s
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
-varYpos = 0.112; % m
-varYvel = 0.0001; % m/s
+varYpos = 1.12; % m
+varYvel = 0.00262; % m/s
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
 varWvel = 2.3559e-5; % rad/s
-varWacc = 5;
+varWacc = 0.004;
 
 varYWacc = 2.4496*10^-6; % rad/s^2
 
@@ -140,11 +140,11 @@ x_rot = zeros(2,2,N);
 
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
-       Wn(:,n) = [randn(4,1);0;randn(4,1)].*SqM';
+       Wn(:,n) = [randn(4,1);randn(1,1);randn(4,1)].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
-     Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
+     Qz(:,:,n) = diag([0 0 55 0 0 55 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
@@ -153,7 +153,7 @@ for n = 2:N;
     Ypred(:,n) = Hn*Yupdate(:,n-1);
     Xpred(:,n) = An*Ypred(:,n);
   Rpred(:,:,n) = Hn*Rupdate(:,:,n-1)*Hn'+Qz(:,:,n);
-      B(:,:,n)       = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
+      B(:,:,n) = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
 Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  
      
@@ -365,12 +365,14 @@ for n = 2:N;
    XpredD(:,n) = An*YpredD(:,n);
  RpredD(:,:,n) = Hn*RupdateD(:,:,n-1)*Hn'+Qz(:,:,n);
      BD(:,:,n) = (RpredD(:,:,n)*An')/(An*RpredD(:,:,n)*An'+Qw(:,:,n));
-             if sC == GPS_freq;
+             if sC == 1;
                    BD(:,:,n) = BD(:,:,n);
                           sC = 0;
              else                
                    BD(:,1,n) = zeros(9,1);
+                   BD(:,2,n) = zeros(9,1);
                    BD(:,4,n) = zeros(9,1);
+                   BD(:,5,n) = zeros(9,1);
              end
  YupdateD(:,n) = YpredD(:,n)+BD(:,:,n)*(XD(:,n)-XpredD(:,n));
 RupdateD(:,:,n) = (eye(9)-BD(:,:,n)*An)*RpredD(:,:,n);
@@ -580,24 +582,20 @@ for n = 2:N;
        XK(:,n) = An*YK(:,n)+Wn(:,n);
              if sK == GPS_freq;
                  XK(1,n) = XK(1,n);
+                 %XK(2,n) = XK(2,n);
                  XK(4,n) = XK(4,n);
+                 %XK(5,n) = XK(5,n);
                       sK = 0;
              else
                  XK(1,n) = XK(1,n-1);
+                 %XK(2,n) = XK(2,n-1);
                  XK(4,n) = XK(4,n-1);
+                 %XK(5,n) = XK(5,n-1);
              end
    YpredK(:,n) = Hn*YupdateK(:,n-1);
    XpredK(:,n) = An*YpredK(:,n);
  RpredK(:,:,n) = Hn*RupdateK(:,:,n-1)*Hn'+Qz(:,:,n);
      BK(:,:,n) = (RpredK(:,:,n)*An')/(An*RpredK(:,:,n)*An'+Qw(:,:,n));
-%              if sK == GPS_freq; % GPS_freq is the slow frequency of the GPS
-%                    BK(:,1,n) = BK(:,1,n);
-%                    BK(:,4,n) = BK(:,4,n);
-%                           sK = 0;
-%              else
-%                    BK(:,1,n) = BK(:,1,n-1);
-%                    BK(:,4,n) = BK(:,4,n-1);
-%              end
  YupdateK(:,n) = YpredK(:,n)+BK(:,:,n)*(XK(:,n)-XpredK(:,n));
 RupdateK(:,:,n) = (eye(9)-BK(:,:,n)*An)*RpredK(:,:,n);
             sK = sK + 1;
@@ -801,16 +799,17 @@ for n = 2:N;
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.9 ; % Looses 10 percent of the packages. 
-             if sL == GPS_freq;
+ packLost(:,n) = rand(9,1)<0.1; % Looses 10 percent of the packages. 
+             if sC == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
              else                
                    BL(:,1,n) = zeros(9,1);
+                   BL(:,2,n) = zeros(9,1);
                    BL(:,4,n) = zeros(9,1);
+                   BL(:,5,n) = zeros(9,1);
              end
-       packRow = find(packLost(:,n)==0);
-BL(:,packRow,n) = zeros(9,numel(packRow));
+     BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
  YupdateL(:,n) = YpredL(:,n)+BL(:,:,n)*(XL(:,n)-XpredL(:,n));
 RupdateL(:,:,n) = (eye(9)-BL(:,:,n)*An)*RpredL(:,:,n);
             sL = sL + 1;
