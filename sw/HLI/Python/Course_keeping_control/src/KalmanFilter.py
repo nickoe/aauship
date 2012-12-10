@@ -18,7 +18,7 @@ class Filter:
         ''' System Parameters:'''
         m = 12.; ''' The ships mass'''
         I = (1./12.)*m*(0.25*0.25+1.05*1.05); ''' The ships inertia'''
-        print(I)
+        
         
         betaX = 0.4462;
         betaY = 0.8;
@@ -66,17 +66,17 @@ class Filter:
         # W is the measurement noise on the system, this can be estimated to be
         # white gaussian noise, with zero mean (for most cases) and with a
         # variance, that are estimated in Appendix #XX. 
-        self.varXpos = 0.979;
-        self.varXvel = 0.00262;
-        self.varXacc = 4.9451e-5; #  m/s^2 or 5.045*10^-6 G 
+        self.varXpos = 0.979 * 10000
+        self.varXvel = 0.00262 * 10000
+        self.varXacc = 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
         
-        self.varYpos = 1.12;
-        self.varYvel = 0.0001;
-        self.varYacc = 4.8815e-5; # m/s^2; or 4.9801*10^-6 G
+        self.varYpos = 1.12 * 10000
+        self.varYvel = 0.0001 * 10000
+        self.varYacc = 4.8815e-5 # m/s^2; or 4.9801*10^-6 G
         
-        self.varWpos = 8.23332e-5; # computed from the conversion found in HoneyWell datasheet
-        self.varWvel = 0.000002;
-        self.varWacc = 2.3559e-5; # m/s^2 or 2.4035*10^-6 G
+        self.varWpos = 8.23332e-5 # computed from the conversion found in HoneyWell datasheet
+        self.varWvel = 2e-6
+        self.varWacc = 2.3559e-5 # m/s^2 or 2.4035*10^-6 G
         
         self.varYWacc = 2.4496*math.pow(10,-6); # rad/s^2
         #SqM = numpy.matrix(numpy.sqrt(numpy.array([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc])))
@@ -157,16 +157,27 @@ class Filter:
         
         self.BD = (self.RpredD*numpy.transpose(self.An))*numpy.linalg.inv(self.An*self.RpredD*numpy.transpose(self.An)+self.Qw);
         
-        '''if self.sC == self.GPS_freq:
+        if self.sC == self.GPS_freq:
             self.BD = self.BD;
             self.sC = 0;
-            
+            '''
+            self.BD[:,2] = 1.05 * self.BD[:,2]
+            self.BD[:,5] = 1.05 * self.BD[:,5]
+            '''
         else:       
-                    
+            
+            '''
+            self.BD[0,:] = numpy.zeros([1,9])
+            self.BD[3,:] = numpy.zeros([1,9])
             self.BD[1,:] = numpy.zeros([1,9])
             self.BD[4,:] = numpy.zeros([1,9])
+            '''      
+            self.BD[:,0] = numpy.zeros([9,1])
+            self.BD[:,3] = numpy.zeros([9,1])
+            self.BD[:,1] = numpy.zeros([9,1])
+            self.BD[:,4] = numpy.zeros([9,1])
             
-        '''
+            
         
         self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);
         

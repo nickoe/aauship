@@ -82,7 +82,7 @@ class Simulator:
         '''
         self.Pos = P
         
-        self.x = numpy.matrix([[0.],[0.],[0.]])
+        self.x = numpy.matrix([[0.],[0],[0.]])
         
         self.Ts = 0.1
         

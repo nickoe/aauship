@@ -364,6 +364,8 @@ class O_Ship:
         Yd = numpy.sum(self.states[1])
         Y = numpy.sum(self.states[1])
         Th = numpy.sum(self.states[3])
+        self.Theta = math.atan2(math.sin(numpy.sum(self.states[3])), math.cos(numpy.sum(self.states[3])))
+        #self.Theta = theta
         Th = theta
         #self.states[1] = PathFrameXY[1]
         
@@ -375,8 +377,8 @@ class O_Ship:
         x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + BodyXY[1] * math.cos(Th)
         y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - BodyXY[1] * math.sin(Th)
         '''
-        x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * math.cos(Th)
-        y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * math.sin(Th)
+        x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * 0.1* math.cos(Th)
+        y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * 0.1* math.sin(Th)
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
@@ -433,3 +435,15 @@ class O_Ship:
     def plot(self):
         
         plt.plot(self.log1)
+        
+    def FtoM(self, motor):
+
+        K = math.pow(0.05,4)*0.5*1000;
+        theta = math.pi/16;
+        C1 = 0.5*math.sin(theta);
+        C2 = 0.5*math.sin(-theta);
+        
+        L = numpy.matrix([[K, K],[K*C1, K*C2]])
+        L_inv = numpy.linalg.inv(L)
+        N = numpy.sqrt(numpy.array(L_inv*motor))
+        return list([N[0], N[1]])

@@ -29,14 +29,14 @@ coastlength = 200
 Sim = S.Simulator()
 
 coast = Sim.SimulateCoast(coastlength)
-startpos = OL.O_PosData(0, 0, 0, 1)
+startpos = OL.O_PosData(0, 0, 1, 0)
 Sim.SetDynamicModel(1, 1, 1, 1, 1, startpos)
 
 '''
 EMBEDDED STEP 1
 Init AAUSHIP
 '''
-Startpos = OL.O_PosData(0, 0, 1, 0)
+Startpos = OL.O_PosData(0, 0, 0, 1)
 AAUSHIP = Ship.O_Ship(Startpos)
 
 
@@ -79,19 +79,19 @@ AAUSHIP.FlushPath(2)
 
 '''
 SIMULATION STEP 3
-Control loop initializations
+Control loop initializations and logging
 '''
 i = 0
 
-ni = 10000
+ni = 18000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
 x3 = numpy.zeros(ni)
 x4 = numpy.zeros(ni)
-xx1 = numpy.zeros(ni)
-xx2 = numpy.zeros(ni)
-xx3 = numpy.zeros(ni)
+xx1 = numpy.zeros(2*ni)
+xx2 = numpy.zeros(2*ni)
+xx3 = numpy.zeros(2*ni)
 
 '''
 EMBEDDED STEP 4
@@ -110,13 +110,33 @@ Control loop
 
 
 while i < ni:
+    
     '''Force ant torque control'''
     motor = AAUSHIP.Control_Step()
+    
     '''Update of the simulated ship states'''
     prevstates = states
     states = Sim.UpdateStates(motor)
+    
     '''Acquiring ship coordinates / Calculating coordinates in simulation'''
     pos = Sim.UpdatePos(states)
+    
+    
+    '''Sensor reading'''
+    Theta = numpy.sum(states[1])
+    Omega = numpy.sum(states[2])
+    Alpha = numpy.sum(states[2]-prevstates[2])/0.1
+    GPS_X = pos[0]  + numpy.sum(5* scipy.randn(1))
+    GPS_Y = pos[1]  + numpy.sum(5* scipy.randn(1))
+    Speed_X = math.sin(numpy.sum(states[1])) * numpy.sum(states[0]) + numpy.sum(0.1* scipy.randn(1))
+    Speed_Y = math.cos(numpy.sum(states[1])) * numpy.sum(states[0]) + numpy.sum(0.1* scipy.randn(1))
+    Acc_X = math.sin(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) / 0.1
+    Acc_Y = math.cos(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) / 0.1
+    
+    
+    AAUSHIP.ReadStates(GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha, motor)
+    
+    '''Logging'''
     '''Logging'''
     thoughtpos = AAUSHIP.Pos.get_Pos()
     x3[i] = thoughtpos[0]
@@ -124,25 +144,11 @@ while i < ni:
     x0[i] = pos[0]
     x1[i] = pos[1]
     x2[i] = states[0]
-    xx1[i] = numpy.sum(AAUSHIP.x[0])
-    xx2[i] = numpy.sum(AAUSHIP.states[1])
-    xx3[i] = numpy.sum(AAUSHIP.states[0])
     i += 1
     print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
-    '''Sensor reading'''
-    Theta = numpy.sum(states[1])
-    Omega = numpy.sum(states[2])
-    Alpha = numpy.sum(states[2]-prevstates[2])*0.1
-    GPS_X = pos[0]
-    GPS_Y = pos[1]
-    Speed_X = math.sin(numpy.sum(states[1])) * numpy.sum(states[0])
-    Speed_Y = math.cos(numpy.sum(states[1])) * numpy.sum(states[0])
-    Acc_X = math.sin(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) * 0.1
-    Acc_Y = math.cos(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) * 0.1
-    
-   
-    #AAUSHIP.ReadStates(pos[0],numpy.sum(states[0]), numpy.sum(states[0])-numpy.sum(prevstates[0]), pos[1], 0, 0, numpy.sum(states[1])+math.pi*2, numpy.sum(states[2]), numpy.sum(states[2])-numpy.sum(prevstates[2]), motor) 
-    AAUSHIP.ReadStates(GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha, motor)
+    xx1[i] = Theta
+    xx2[i] = numpy.sum(AAUSHIP.states[2])
+    xx3[i] = numpy.sum(states[0])
 
 '''
 End of voyage
@@ -151,10 +157,13 @@ End of voyage
 plt.plot(x0,x1,'r')
 plt.plot(x3,x4,'k')
 plt.show()
-plt.plot(x2)
+#plt.plot(x2)
 plt.plot(xx1)
+
 plt.show()
 plt.plot(xx2)
 plt.plot(xx3)
 plt.show()
+
+
 
