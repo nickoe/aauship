@@ -25,7 +25,7 @@ import KalmanFilter as KF
 SIMULATION STEP 1
 Read / Generate coast, initialize simulator
 '''
-coastlength = 200
+coastlength = 120
 Sim = S.Simulator()
 
 coast = Sim.SimulateCoast(coastlength)
@@ -73,7 +73,7 @@ EMBEDDED STEP 3
 Set first target WP (should be 0 or 1)
 '''
 
-AAUSHIP.FlushPath(2)
+AAUSHIP.FlushPath(1)
 
 
 
@@ -83,21 +83,23 @@ Control loop initializations and logging
 '''
 i = 0
 
-ni = 18000
+ni = 30000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
 x3 = numpy.zeros(ni)
 x4 = numpy.zeros(ni)
-xx1 = numpy.zeros(2*ni)
-xx2 = numpy.zeros(2*ni)
-xx3 = numpy.zeros(2*ni)
+xx1 = numpy.zeros(ni+1)
+xx2 = numpy.zeros(ni+1)
+xx3 = numpy.zeros(ni+1)
 
 '''
 EMBEDDED STEP 4
 Sensor initializations
+Set return position!!!
 '''
 
+AAUSHIP.Return(startpos)
 AAUSHIP.ReadStates(0, 0, 0, 0, 0, 0, 0, 0, 0, numpy.matrix([[0],[0]]))
 states = numpy.matrix([[0],[0],[0]])
 
@@ -110,6 +112,16 @@ Control loop
 
 
 while i < ni:
+    
+    if i == 14000:
+        AAUSHIP.AddRelativeCourse(OL.O_PosData(200,100,1,1))
+        AAUSHIP.AddRelativeCourse(OL.O_PosData(100,100,1,1))
+        #AAUSHIP.AddRelativeCourse(OL.O_PosData(0,0,1,1))
+        
+    if i == 24000:
+        AAUSHIP.AddRelativeCourse(OL.O_PosData(100,0,1,1))
+        AAUSHIP.AddRelativeCourse(OL.O_PosData(100,200,1,1))
+        #AAUSHIP.AddRelativeCourse(OL.O_PosData(0,0,1,1))
     
     '''Force ant torque control'''
     motor = AAUSHIP.Control_Step()
@@ -126,10 +138,10 @@ while i < ni:
     Theta = numpy.sum(states[1])
     Omega = numpy.sum(states[2])
     Alpha = numpy.sum(states[2]-prevstates[2])/0.1
-    GPS_X = pos[0]  + numpy.sum(5* scipy.randn(1))
-    GPS_Y = pos[1]  + numpy.sum(5* scipy.randn(1))
-    Speed_X = math.sin(numpy.sum(states[1])) * numpy.sum(states[0]) + numpy.sum(0.1* scipy.randn(1))
-    Speed_Y = math.cos(numpy.sum(states[1])) * numpy.sum(states[0]) + numpy.sum(0.1* scipy.randn(1))
+    GPS_X = pos[0] + numpy.sum(2* scipy.randn(1))
+    GPS_Y = pos[1] + numpy.sum(2* scipy.randn(1))
+    Speed_X = math.sin(numpy.sum(states[1])) * numpy.sum(states[0]) + numpy.sum(0.01* scipy.randn(1))
+    Speed_Y = math.cos(numpy.sum(states[1])) * numpy.sum(states[0]) + numpy.sum(0.01* scipy.randn(1))
     Acc_X = math.sin(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) / 0.1
     Acc_Y = math.cos(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) / 0.1
     
@@ -145,7 +157,7 @@ while i < ni:
     x1[i] = pos[1]
     x2[i] = states[0]
     i += 1
-    print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
+    #print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
     xx1[i] = Theta
     xx2[i] = numpy.sum(AAUSHIP.states[2])
     xx3[i] = numpy.sum(states[0])
