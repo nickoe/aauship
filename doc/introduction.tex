@@ -7,7 +7,8 @@ Another purpose of these measurements, which will be the primary focus for this 
 
 These measurements are today carried out by one large vessel, which could be exchanged for several smaller ones to reduce the surveying time and labor cost. This would make for a faster measurement of the coastline as well as giving an opportunity to measure previously un-surveyed waters due to costs. 
 
-Reducing the size of a vessel, poses some other challenges in regards to the weather conditions and other environmental parameters, that has a much larger influence on small scale vessels, than on larger ones. This paper will deal with how such a surveying vessel can be developed, and still measure the water depth whilst under the influence of the above.
+Reducing the size of a vessel, poses some other challenges in regards to the weather conditions and other environmental parameters, that has a much larger influence on small scale vessels, than on larger ones.
+Limitations are also imposed from the availability of power for the boats,  the noise of measurements as well as limitations on the availability of computing power and communication links. This paper will deal with how such a surveying vessel can be developed, and still measure the water depth whilst under the influence of the above.
 
 A challenge using a single beam transducer to measure water depth is the roll/pitch of the craft. Figure \vref{fig:beamer} illustrates this problem, where an induced pitch of the ship (eg. a wave) makes it impossible for the vessel to make a precise measurement.
 
@@ -18,3 +19,4 @@ A challenge using a single beam transducer to measure water depth is the roll/pi
 \label{fig:beamer}
 \end{figure}
 
+Another challenge, using a fleet of measurement boats, would be how to enable them all to coordinate and effectivize their effort. This could be done by having a mothership which would be in charge of coordinating and controlling the smaller ships. This larger ship would be able to store larger amount of energy, and be able to charge the smaller ships as needed. Due to this easy access to power it would be able to turn up signal strength and computing power as needed. This way it would be possible to reduce the requirements for the hardware aboard the ships, while still having sufficient hardware to compute complex algorithms necessary for control. Having this process centralized, however, offers some additional challenges. Packetloss and limited communicationspeed demand a robust system where these conditions are addressed. In this project the effect of packetloss and limited available data is analyzed and a solution based on an implementation of a kalman filter is suggested.
