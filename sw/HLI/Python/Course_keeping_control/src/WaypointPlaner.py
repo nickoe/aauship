@@ -114,13 +114,13 @@ Control loop
 while i < ni:
     
     if i == 14000:
-        AAUSHIP.AddRelativeCourse(OL.O_PosData(200,100,1,1))
-        AAUSHIP.AddRelativeCourse(OL.O_PosData(100,100,1,1))
+        AAUSHIP.AddCourse(OL.O_PosData(200,100,1,1))
+        AAUSHIP.AddCourse(OL.O_PosData(100,100,1,1))
         #AAUSHIP.AddRelativeCourse(OL.O_PosData(0,0,1,1))
         
     if i == 24000:
-        AAUSHIP.AddRelativeCourse(OL.O_PosData(100,0,1,1))
-        AAUSHIP.AddRelativeCourse(OL.O_PosData(100,200,1,1))
+        AAUSHIP.AddRelativeCourse(OL.O_PosData(10000000,0,1,1))
+        AAUSHIP.AddRelativeCourse(OL.O_PosData(10000000,20000000,1,1))
         #AAUSHIP.AddRelativeCourse(OL.O_PosData(0,0,1,1))
     
     '''Force ant torque control'''
@@ -158,7 +158,7 @@ while i < ni:
     x2[i] = states[0]
     i += 1
     #print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
-    xx1[i] = Theta
+    xx1[i] = numpy.sum(motor[0])/5
     xx2[i] = numpy.sum(AAUSHIP.states[2])
     xx3[i] = numpy.sum(states[0])
 
@@ -170,11 +170,14 @@ plt.plot(x0,x1,'r')
 plt.plot(x3,x4,'k')
 plt.show()
 #plt.plot(x2)
-plt.plot(xx1)
 
-plt.show()
-plt.plot(xx2)
+
+#plt.show()
+
+
 plt.plot(xx3)
+plt.plot(xx2)
+plt.plot(xx1)
 plt.show()
 
 

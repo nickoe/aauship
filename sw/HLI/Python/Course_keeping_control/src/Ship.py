@@ -427,6 +427,25 @@ class O_Ship:
         Sets a 
         '''
         #Parameters: self, list of WP-s
+        
+        R = 6371080
+        
+        lon = math.degrees(WPC.get_Pos_X() / R)
+        lat = math.degrees(WPC.get_Pos_Y() / R)
+        
+        
+        
+        xy = numpy.array([[lon],[lat]])
+        self.Waypoints.AddWP(xy)
+        self.WPsEnded = 0
+        self.EndPath = 0
+        
+    def AddCourse(self, WPC):
+        
+        '''
+        Sets a 
+        '''
+        #Parameters: self, list of WP-s
         xy = numpy.array([[WPC.get_Pos_X()],[WPC.get_Pos_Y()]])
         self.Waypoints.AddWP(xy)
         self.WPsEnded = 0
