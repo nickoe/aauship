@@ -16,12 +16,9 @@ It has been designed as a box with the following features:
 \item[5V]\hfill \\ regulated output.
 \end{description}
 
-\begin{figure}
-\centering
-\includegraphics{img/lli-hw}
-\label{fig:lli-hw}
-\caption{Hardware layout for the LLI}
-\end{figure}
+The hardware layout can be seen in figure~\vref{fig:lli-hw} and the hardware schematic can be seen in appendix~\vref{chap:schema}.
+
+
 
 \section{Bow thruster}
 The ship design includes a bow thruster, which can be used to perform precision maneuvers in tight spaces. This component is not currently included in our control algorithms, because it has little or no effect on the ship when used at speeds above \todo{what speeds?}. It will be controlled by the \ac{LLI} with a direction and a \ac{PWM} signal. 
