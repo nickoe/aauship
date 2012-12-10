@@ -4,11 +4,18 @@ clc; clear all; close all; clear java;
 % for lunde = 1:15
 %     clf(lunde)
 % end
-run('./contsimu.m');
-load inputD.mat; % Loads system input file from contsimu.m
-inputD = inputD';
-close all;
+%run('./contsimu.m');
+%load inputD.mat; % Loads system input file from contsimu.m
+%inputD = inputD';
+%close all;
+IMU = load('accdata00185.csv');
+GPS = load('pos-local.csv');
 
+gpsX = GPS(:,1);
+gpsY = GPS(:,2);
+
+
+%% System Definiton
 %load Wn.mat
 % To reduce the amount of noise on the measurements which are fed to the
 % system, and to enhance the precision of these, the data is run through a
@@ -37,7 +44,7 @@ close all;
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 10000; % Then it fits with the Simulink Simulation!
+N = 80000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -46,7 +53,13 @@ I = (1/12)*m*(0.25*0.25+1.05*1.05); % The ships inertia
 betaX = 0.4462;
 betaY = 0.8;
 betaW = 0.0784;
-GPS_freq = 10;
+
+GPS_freq = 20;
+
+%% Actual drag forces linearized:
+% betaX = 
+% betaY = 
+% betaW = 
 
 %% System Definition:
 Hn = [1 ts (ts^2)/2 0 0 0 0 0 0;... % The X position
@@ -92,7 +105,7 @@ Bn = [0 0;...
      0 1/I]; % From torque to angular acceleration
 
  for ii = 1:N
-    Z(:,ii) = Bn*inputD(:,ii);
+    Z(:,ii) = Bn*zeros(2,1); % inputD(:,ii);
 end
 
 % W is the measurement noise on the system, this can be estimated to be
@@ -138,9 +151,102 @@ k_rot = zeros(2,2,N);
 y_rot = zeros(2,2,N);
 x_rot = zeros(2,2,N);
 
+%% Maiden Voyage Plot
+% Rasmus Christensen
+imu = load('accdata00185.csv');
+
+accS = 0.00333;
+gyrS = 0.05 * (pi/180);
+graA = 9.816;
+magS = 0.5*(1/1000);
+
+gyrY = imu(:,2)*gyrS; % X pointed starboard during test
+gyrX = -imu(:,3)*gyrS; % Y pointed backward during test
+gyrZ = imu(:,4)*gyrS;
+
+accY = imu(:,5)*accS; % X pointed starboard during test
+accX = -imu(:,6)*accS; % Y pointed backward during test
+accZ = imu(:,7)*accS;
+
+magY = imu(:,8)*magS; % X pointed starboard during test
+magX = -imu(:,9)*magS; % Y pointed backward during test
+magZ = imu(:,10)*magS;
+
+temP = imu(:,11);
+
+accX = -accZ.*accX;
+
+accX = accX*graA;
+accY = accY*graA;
+accZ = accZ*graA;
+
+volT = imu(:,1);
+
+for n = 2:numel(accX);
+    if abs(accX(n)) > 50
+        accX(n) = accX(n-1);
+    end
+    if abs(accY(n)) > 50
+        accY(n) = accY(n-1);
+    end
+    if abs(accZ(n)) > 50
+        accZ(n) = accZ(n-1);
+    end
+    if abs(gyrX(n)) > 200
+        gyrX(n) = gyrX(n-1);
+    end
+    if abs(gyrY(n)) > 200
+        gyrY(n) = gyrY(n-1);
+    end
+    if abs(gyrZ(n)) > 200
+        gyrZ(n) = gyrZ(n-1);
+    end
+    if abs(magX(n)) > 1
+        magX(n) = magX(n-1);
+    end
+    if abs(magY(n)) > 1
+        magY(n) = magY(n-1);
+    end
+    if abs(magZ(n)) > 1
+        magZ(n) = magZ(n-1);
+    end
+end
+
+%% Conversion from Magnetic Field Strength to Heading:
+for i = 1:numel(magX)
+    if magY(i) > 0
+        heaX(i) = 90 - atan(magX(i)/magY(i));
+    end
+    if magY(i) < 0
+        heaX(i) = 270 - atan(magX(i)/magY(i));
+    end
+    if magY(i) == 0 & magX(i) < 0
+        heaX(i) = 180;
+    end
+    if magY(i) == 0 & magX(i) > 0
+        heaX(i) = 0;
+    end
+end
+
+%% GPS Measurements:
+gpsA = zeros(N,2);
+tGPS = 1;
+cGPS = 1;
+
+for ki = 1:N
+    if tGPS == 19;
+        gpsA(ki,:) = GPS(cGPS,:);
+        tGPS = 0;
+        cGPS = cGPS + 1;
+    else
+        gpsA(ki,:) = zeros(1,2);
+        tGPS = tGPS + 1;
+    end
+end
+
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
-       Wn(:,n) = [randn(4,1);randn(1,1);randn(4,1)].*SqM';
+       Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
@@ -148,12 +254,15 @@ for n = 2:N;
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
-        Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
-        X(:,n) = An*Y(:,n)+Wn(:,n);
+        %Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
+        X(:,n) = Wn(:,n);
     Ypred(:,n) = Hn*Yupdate(:,n-1);
     Xpred(:,n) = An*Ypred(:,n);
   Rpred(:,:,n) = Hn*Rupdate(:,:,n-1)*Hn'+Qz(:,:,n);
       B(:,:,n) = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
+               if gpsA(n,:) == [0 0];
+                   B(:,[1 4],n) = zeros(9,2);
+               end
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
 Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  
      

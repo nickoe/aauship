@@ -120,11 +120,14 @@ int main (void)
 			if ( (idx2 < len2) && (idx2 >= 0)) { // We are buffering
 				buffer2[idx2] = c2;
 				idx2++;
-					PORTL ^= (1<<LED3);
+
 				if (idx2 == len2) { // We now have a full packet
 
-					parse(&rfmsg, buffer2);
-					process(&rfmsg);
+					if (parse(&rfmsg, buffer2)) {
+						PORTL ^= (1<<LED3);
+						process(&rfmsg);
+						grs_send(package(0, 0x00, 0x07, NULL), 0); // GRS ACK
+					}
 
 					idx2 = -1; // Set flag in new packet mode
 

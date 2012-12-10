@@ -26,7 +26,9 @@ class O_Ship:
         - Initial start waypoint
         - Navigation parameters (FollowDistance)
         '''
-        self.Pos = init_position;
+        self.Pos = init_position
+        
+        self.retpos = self.Pos
         
         self.NextSWP = self.Pos
         
@@ -70,14 +72,6 @@ class O_Ship:
         
         self.states = numpy.matrix([[0],[0],[0],[0],[0]])
         
-        
-        self.log1 = list()
-        self.log2 = list()
-        self.log3 = list()
-        self.log4 = list()
-        self.log5 = list()
-        self.log6 = list()
-        
     def SetWaypoints(self, WPC):
         '''
         A method to hand-set the required waypoints
@@ -100,6 +94,7 @@ class O_Ship:
         WP_Planner = OL.O_PathWayPoints();
         WP_Planner.PlanWP(coastline, len(coastline), decimation, safety);
         self.Waypoints = WP_Planner
+        self.AddRelativeCourse(self.retpos)
         
     def Plan_FullPath(self, plotit = 0):
         
@@ -151,14 +146,28 @@ class O_Ship:
             
             '''Turning waypoint''' 
             n = self.LastWP + 1 + i; 
-            print(n, self.LastWP);
-            try:
-                Nm = self.Waypoints.get_SingleWayPoint(n - i);
-                Nt = self.Waypoints.get_SingleWayPoint(n);
-                Np = self.Waypoints.get_SingleWayPoint(n + 1);
-            except IndexError:
-                return(-1);
             
+            wpnum = len(self.Waypoints.get_WayPoints()[0])
+            print (wpnum,n)
+            
+            try:
+                
+                if n+1 >= wpnum:
+                    
+                    Nm = self.Waypoints.get_SingleWayPoint(n - i);
+                    Nt = self.Waypoints.get_SingleWayPoint(n);
+                    Np = self.retpos;
+                    
+                else:
+                    
+                    Nm = self.Waypoints.get_SingleWayPoint(n - i);
+                    Nt = self.Waypoints.get_SingleWayPoint(n);
+                    Np = self.Waypoints.get_SingleWayPoint(n + 1);
+                
+            except IndexError:
+
+                return(-1);
+
             
             
             gamma = FL.CosLaw(Nm, Nt, Np);
@@ -252,7 +261,7 @@ class O_Ship:
                 if len(self.SegmentCoords)>0 and self.NextSWP_No < len(self.SegmentCoords[0]):
                     self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
                     if self.mark == 0:
-                        plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o')
+                        plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o') 
                         self.mark = 1
                 
                 else:
@@ -260,19 +269,25 @@ class O_Ship:
                     If there is no current destination point, the method requests a new path
                     '''
                     self.LastWP = self.LastWP + 1
+                    
                     ret = self.Plan_LocalPath(self.Path.Range)
                     if ret == -1:
                         self.WPsEnded = 1
-                        self.NextSWP = self.Waypoints.get_SingleWayPoint(self.LastWP + 2)
+                        self.NextSWP_No = 100000
+                        
+                        #self.NextSWP = self.Waypoints.get_SingleWayPoint(self.LastWP + 1)
+                        self.NextSWP = self.retpos
                     self.get_PathSegment()
                     
             else:
-                self.NextSWP = self.Waypoints.get_SingleWayPoint(self.LastWP + 2)
+                self.NextSWP = self.retpos
+                
+                
             '''
             Calculation of the required heading
             and the current deviation from required heading
             '''
-                
+            
             Theta_r = self.get_Thera_r()
             delta = self.get_Delta(Theta_r)
             
@@ -294,7 +309,7 @@ class O_Ship:
                 self.mark = 0
                 
             
-            
+        
             
         '''
         #############################################
@@ -371,15 +386,9 @@ class O_Ship:
         
         self.correction = numpy.sum(self.states[1]) - self.correction
         
-        '''
-        x_next = (V * math.sin(Th)) * self.Ts + curpos[0]
-        y_next = (V * math.cos(Th)) * self.Ts + curpos[1]
-        x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + BodyXY[1] * math.cos(Th)
-        y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - BodyXY[1] * math.sin(Th)
-        '''
         x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * 0.1* math.cos(Th)
         y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * 0.1* math.sin(Th)
-        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
     def get_Thera_r(self):
@@ -418,23 +427,29 @@ class O_Ship:
         Sets a 
         '''
         #Parameters: self, list of WP-s
-        xy = numpy.matrix([[WPC.get_Pos_X()],[WPC.get_Pos_Y()]])
+        
+        R = 6371080
+        
+        lon = math.degrees(WPC.get_Pos_X() / R)
+        lat = math.degrees(WPC.get_Pos_Y() / R)
+        
+        
+        
+        xy = numpy.array([[lon],[lat]])
         self.Waypoints.AddWP(xy)
         self.WPsEnded = 0
         self.EndPath = 0
         
-    def log(self,a,b,c,d,e,f):
+    def AddCourse(self, WPC):
         
-        self.log1.append(a)
-        self.log2.append(b)
-        self.log3.append(c)
-        self.log4.append(d)
-        self.log5.append(e)
-        self.log6.append(f)
-        
-    def plot(self):
-        
-        plt.plot(self.log1)
+        '''
+        Sets a 
+        '''
+        #Parameters: self, list of WP-s
+        xy = numpy.array([[WPC.get_Pos_X()],[WPC.get_Pos_Y()]])
+        self.Waypoints.AddWP(xy)
+        self.WPsEnded = 0
+        self.EndPath = 0
         
     def FtoM(self, motor):
 
@@ -447,3 +462,7 @@ class O_Ship:
         L_inv = numpy.linalg.inv(L)
         N = numpy.sqrt(numpy.array(L_inv*motor))
         return list([N[0], N[1]])
+    
+    def Return(self, retpos):
+        
+        self.retpos = retpos
