@@ -166,12 +166,6 @@ class Filter:
             '''
         else:       
             
-            '''
-            self.BD[0,:] = numpy.zeros([1,9])
-            self.BD[3,:] = numpy.zeros([1,9])
-            self.BD[1,:] = numpy.zeros([1,9])
-            self.BD[4,:] = numpy.zeros([1,9])
-            '''      
             self.BD[:,0] = numpy.zeros([9,1])
             self.BD[:,3] = numpy.zeros([9,1])
             self.BD[:,1] = numpy.zeros([9,1])
