@@ -2,19 +2,32 @@
 % Rasmus Christensen
 imu = load('accdata00185.csv');
 
+%% Filtering algorithm:
+imuF = zeros(numel(accX),13);
+
+for fN = 2:numel(imu(:,1))
+    for fA = 1:13
+        if abs(imu(fN,fA) - imu(fN-1,fA)) > 50
+            imuF(fN,fA) = imu(fN-1,fA);
+        else
+            imuF(fN,fA) = imu(fN,fA);
+        end
+    end
+end
+
 accS = 0.00333;
 gyrS = 1/20;
 graA = 9.816;
 magS = 1/1000;
 temC = 0.14;
 
-gyrY = imu(:,2)*gyrS; % X pointed starboard during test
-gyrX = imu(:,3)*gyrS; % Y pointed backward during test
-gyrZ = imu(:,4)*gyrS;
+gyrY = imuF(:,2)*gyrS; % X pointed starboard during test
+gyrX = imuF(:,3)*gyrS; % Y pointed backward during test
+gyrZ = imuF(:,4)*gyrS;
 
-accY = imu(:,5)*accS; % X pointed starboard during test
-accX = -imu(:,6)*accS; % Y pointed backward during test
-accZ = imu(:,7)*accS;
+accY = imuF(:,5)*accS; % X pointed starboard during test
+accX = -imuF(:,6)*accS; % Y pointed backward during test
+accZ = imuF(:,7)*accS;
 
 accX = -accZ.*accX;
 
@@ -22,38 +35,14 @@ accX = accX * graA;
 accY = accY * graA;
 accZ = accZ * graA;
 
-magY = imu(:,8)*magS; % X pointed starboard during test
-magX = -imu(:,9)*magS; % Y pointed backward during test
-magZ = imu(:,10)*magS;
+magY = imuF(:,8)*magS; % X pointed starboard during test
+magX = imuF(:,9)*magS; % Y pointed backward during test
+magZ = imuF(:,10)*magS;
 
-temP = imu(:,11)*temC;
+temP = imuF(:,11)*temC;
 
-volT = imu(:,1);
+volT = imuF(:,1);
 
-for n = 1:numel(accX);
-    if accX(n) > 100
-        accX(n) = accX(n-1);
-    end
-    if accX(n) < -100
-        accX(n) = accX(n-1);
-    end
-    if accY(n) > 100
-        accY(n) = accY(n-1);
-    end
-    if accY(n) < -100
-        accY(n) = accY(n-1);
-    end
-    if accZ(n) > 100
-        accZ(n) = accZ(n-1);
-    end
-    if accZ(n) < -100
-        accZ(n) = accZ(n-1);
-    end
-end
-
-accX = smooth(accX,20);
-accY = smooth(accY,20);
-accZ = smooth(accZ,20);
 
 %% Conversion from Magnetic Field Strength to Heading:
 for i = 1:numel(magX)
