@@ -4,10 +4,10 @@ clc; clear all; close all; clear java;
 % for lunde = 1:15
 %     clf(lunde)
 % end
-%run('./contsimu.m');
-%load inputD.mat; % Loads system input file from contsimu.m
-%inputD = inputD';
-%close all;
+run('./contsimu.m');
+load inputD.mat; % Loads system input file from contsimu.m
+inputD = inputD';
+close all;
 IMU = load('accdata00185.csv');
 GPS = load('pos-local.csv');
 
@@ -44,7 +44,7 @@ gpsY = GPS(:,2);
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 80000; % Then it fits with the Simulink Simulation!
+N = 5000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -54,7 +54,7 @@ betaX = 0.4462;
 betaY = 0.8;
 betaW = 0.0784;
 
-GPS_freq = 20;
+GPS_freq = 10;
 
 %% Actual drag forces linearized:
 % betaX = 
@@ -105,7 +105,7 @@ Bn = [0 0;...
      0 1/I]; % From torque to angular acceleration
 
  for ii = 1:N
-    Z(:,ii) = Bn*zeros(2,1); % inputD(:,ii);
+    Z(:,ii) = Bn*inputD(:,ii); % inputD(:,ii);
 end
 
 % W is the measurement noise on the system, this can be estimated to be
@@ -246,7 +246,8 @@ end
 
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
-       Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
+       %Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
+       Wn(:,n) = [randn(4,1);randn(1,1);randn(4,1)].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
@@ -254,15 +255,15 @@ for n = 2:N;
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
-        %Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
-        X(:,n) = Wn(:,n);
+        Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
+        X(:,n) = An*Y(:,n) + Wn(:,n);
     Ypred(:,n) = Hn*Yupdate(:,n-1);
     Xpred(:,n) = An*Ypred(:,n);
   Rpred(:,:,n) = Hn*Rupdate(:,:,n-1)*Hn'+Qz(:,:,n);
       B(:,:,n) = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
-               if gpsA(n,:) == [0 0];
-                   B(:,[1 4],n) = zeros(9,2);
-               end
+%                if gpsA(n,:) == [0 0];
+%                    B(:,[1 4],n) = zeros(9,2);
+%                end
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
 Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  
      
@@ -691,15 +692,15 @@ for n = 2:N;
        XK(:,n) = An*YK(:,n)+Wn(:,n);
              if sK == GPS_freq;
                  XK(1,n) = XK(1,n);
-                 %XK(2,n) = XK(2,n);
+                 XK(2,n) = XK(2,n);
                  XK(4,n) = XK(4,n);
-                 %XK(5,n) = XK(5,n);
+                 XK(5,n) = XK(5,n);
                       sK = 0;
              else
                  XK(1,n) = XK(1,n-1);
-                 %XK(2,n) = XK(2,n-1);
+                 XK(2,n) = XK(2,n-1);
                  XK(4,n) = XK(4,n-1);
-                 %XK(5,n) = XK(5,n-1);
+                 XK(5,n) = XK(5,n-1);
              end
    YpredK(:,n) = Hn*YupdateK(:,n-1);
    XpredK(:,n) = An*YpredK(:,n);
@@ -1260,7 +1261,7 @@ h20 = figure(20);
 subplot(2,1,1)
 plot(diff_pos(:,1),'b'); hold on
 plot(diff_posD(:,1),'r');
-plot(diff_posL(:,1),'m');
+%plot(diff_posL(:,1),'m');
 plot(diff_posK(:,1),'g'); hold off
 title('Error in X-Position');
 legend('Monorate','Multirate','Lost Packages','Multirate NI')
@@ -1268,7 +1269,7 @@ grid on
 subplot(2,1,2)
 plot(diff_pos(:,2),'b'); hold on
 plot(diff_posD(:,2),'r');
-plot(diff_posL(:,2),'m');
+%plot(diff_posL(:,2),'m');
 plot(diff_posK(:,2),'g'); hold off
 title('Error in Y-Position');
 legend('Monorate','Multirate','Lost Packages','Multirate NI')
@@ -1277,10 +1278,10 @@ grid on
 h21 = figure(21);
 plot(diff_abs,'b'); hold on
 plot(diff_absD,'r');
-plot(diff_absL,'m');
+%plot(diff_absL,'m');
 plot(diff_absK,'g'); hold off
 title('Absolute Position Error');
-legend('Monorate','Multirate','Lost Packages','Multirate NI');
+legend('Monorate','Multirate (zero K)','Multirate (normal K)');
 xlabel('Sample [n]');
 ylabel('Distance [m]');
 grid on
@@ -1347,19 +1348,19 @@ grid on
 % print(h1,'-depsc2','-painters','KF_pos_monorate.eps');
 % print(h2,'-depsc2','-painters','KF_vel_monorate.eps');
 % print(h3,'-depsc2','-painters','KF_acc_monorate.eps');
-% print(h4,'-depsc2','-painters','KF_xy_monorate.eps');
-% 
+print(h4,'-depsc2','-painters','KF_xy_monorate.eps');
+
 % print(h5,'-depsc2','-painters','KF_pos_multirate.eps');
 % print(h6,'-depsc2','-painters','KF_vel_multirate.eps');
 % print(h7,'-depsc2','-painters','KF_acc_multirate.eps');
-% print(h8,'-depsc2','-painters','KF_xy_multirate.eps');
-% 
+print(h8,'-depsc2','-painters','KF_xy_multirate.eps');
+
 % print(h9,'-depsc2','-painters','KF_pos_mnirate.eps');
 % print(h10,'-depsc2','-painters','KF_vel_mnirate.eps');
 % print(h11,'-depsc2','-painters','KF_acc_mnirate.eps');
-% print(h12,'-depsc2','-painters','KF_xy_mnirate.eps');
+print(h12,'-depsc2','-painters','KF_xy_mnirate.eps');
 % 
 % print(h13,'-depsc2','-painters','poserror.eps');
 % print(h14,'-depsc2','-painters','velerror.eps');
 % print(h15,'-depsc2','-painters','accerror.eps');
-% print(h16,'-depsc2','-painters','xyerror.eps');
+print(h21,'-depsc2','-painters','xyerror.eps');

@@ -1,4 +1,4 @@
-\chapter{Velocity and Angle estimation}
+\chapter{State Estimation}
 To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs to combine theese depending variance and different sample rate to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data directly.
 
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
@@ -93,7 +93,7 @@ y(n)\\
 In \vref{eq:matr} the system matrix is seen to be 3 individual systems. The inputs to the \ac{KF} is the desired force (computed by the controller) and the measurements given by the sensors mounted about the ship. The desired inputs to the system are put through the $\vec{B}$ matrix, which converts these to an acceleration and an angular acceleration respectively. These are then used as a basis for computing the estimating the output of the system. 
 
 \begin{align}
-\vec{Z} = \begin{bmatrix}
+\vec{Z(n)} = \begin{bmatrix}
 0 & 0\\
 0 & 0\\
 \frac{1}{m} & 0\\
@@ -104,8 +104,8 @@ In \vref{eq:matr} the system matrix is seen to be 3 individual systems. The inpu
 0 & 0\\
 0 & \frac{1}{I}\\
 \end{bmatrix}\begin{bmatrix}
-F\\
-\tau
+F(n)\\
+\tau(n)
 \end{bmatrix}
 \end{align}
 
@@ -126,9 +126,9 @@ As the \ac{IMU} samples at 10 Hz and the \ac{GPS} samples at 1 Hz the two measur
 To do this, the receiver decoding the packages sent to the \ac{HLI} wirelessly are checked for validity, and the outcome of every package is then inserted into a matrix, which is then multiplied onto the Kalman gain, which sets the gain (if any) to zero, and the \ac{KF} will then respond to the \ac{IMU} measurements instead, giving a more precise estimate when no \ac{GPS} measurement is present. 
 This matrix mask can be given as:
 \begin{align}
-\Lambda = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
 \end{align}
-\noindent Where the individual $\lambda$ is given as 
+\noindent Where the individual $\lambda$'s is given as: 
 \begin{align}
 \lambda = 
 \left\{ 
@@ -139,20 +139,51 @@ This matrix mask can be given as:
 \end{align}
 Thus augmenting the \ac{KF} equations to:
 \begin{align}
-\vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)\\
-\vec{z}(k) = \vec{H}(k)\vec{x}(k) + \vec{v}(k)
+\vec{x}(k) &= \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)\\
+\vec{z}(k) &= \vec{H}(k)\vec{x}(k) + \vec{v}(k)\\
+\hat{\vec{x}}(k)_{(-)} &= \vec{\Phi}(k-1)\hat{\vec{x}}(k-1)_{(+)}\\
+\vec{P}(k)_{(-)} &= \vec{\Phi}(k-1) \vec{P}(k-1)_+ \vec{\Phi}(k-1)^T + \vec{Q}(k-1)\\
+\hat{\vec{x}}(k)_{(+)} &= \hat{\vec{x}}(k)_{(-)} + \bar{\vec{K}(k)}[\vec{z}(k) - \vec{H}(k)\cdot\hat{\vec{x}}(k)_{(-)}]\\
+\vec{P}(k)_{(+)} &= [\vec{I} - \bar{\vec{K}(k)}\vec{H}(k)]\vec{P}(k)_{(-)}\\
+\bar{\vec{K}(k)} &= \vec{\Lambda}\langle\vec{P}(k)_{(-)} \vec{H}(k)^T [\vec{H}(k)\vec{P}(k)_{(-)} \vec{H}(k)^T + \vec{R}(k)]^{-1}\rangle
 \end{align}
+\noindent Where
+\begin{ffk}
+$\hat{\vec{x}}(k)_{(-)}$ = Predicted step of $\vec{x}}(k)$\\
+$\vec{P}(k)_{(-)}$ = Prediction of the covariance\\
+$\hat{\vec{x}}(k)_{(+)}$= Estimate of the state\\
+$\vec{P}(k)_{(+)}$ = Update of the covariance\\
+$\bar{\vec{K}(k)}$ = Kalman gain with $\vec{\Lambda}$ multiplied onto it
+\end{ffk}
 
 
 \subsection{Simulations of the filter}
-Simulation of the \ac{KF} have proven to provide an accurate estimate, however - the actual variances have to be measured. 
+Below is 3 plots of the \ac{KF}  running with a square pulse input as the angle reference. Figure \vref{fig:xymono} depicts the system running when the sensors are running at the same sampling frequency. On the box on the plot the estimate clearly converges and follows the actual path nicely. 
 
-To avoid computational problems the Joseph Form of the \ac{KF} can be used. This ensures that the matrices used in the updating step is non-singular and positive definite. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/xymono}
+	\caption{Simulation of the \ac{KF} with the same sampling rate on the sensors}
+	\label{fig:xymono}
+\end{figure}
 
-If the filter is simulated, the following results are produced. 
-\todo{insert filter pictures once we decided on final filter! -rlc}
+On \vref{fig:xymulti1} the sampling rates are different and the Kalman gain $\bar{\vec{K}(k)}$ is set to zero when no new \ac{GPS} sample is present. This also tracks the true path very nicely, but varies a little more. 
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/xymultirate}
+	\caption{Simulation of the \ac{KF} with the \ac{IMU} running at 10 Hz and the \ac{GPS} at 1 Hz}
+	\label{fig:xymulti1}
+\end{figure}
 
+The last figure \vref{fig:xymulti2}  depicts the system where the input is only updated once every second. And this causes the system to diverge, but then pick up the lost sample again, thus making for a system that slowly will diverge.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/xymnirate}
+	\caption{Simulation of the \ac{KF} with the \ac{IMU} running at 10 Hz and the \ac{GPS} at 1 Hz - but converging towards the old sample}
+	\label{fig:xymulti2}
+\end{figure}
 
 \section{Position estimation}
 During the development of the \ac{KF} a lot or problems were discovered. One is to estimate the variances of the different measurement devies. The GPS delivers a position in latitude longitude format - which is converted into an x and y coordinate by rotating the entire system and shifting the local frame of the ship as a surface tangent to the earth. This will of course only be an estimate, but as the curvature of the earth is relatively small. The distance to the horizon can be estimated by $d \approx 3.57\sqrt{h}$ which on the ground, equals that the distance to the horizon is approximately 3.57 kilometers. As the areas to be measured are defined by a local bounding box - this area will to be defined to be smaller than 3.5 kilometers.
