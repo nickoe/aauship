@@ -24,7 +24,7 @@ class packetParser():
 		pass
 			
 	def parse(self,packet):
-		#print packet
+		print packet
 		try:
 			if(ord(packet['DevID']) == 20):
 				if(ord(packet['MsgID']) == 13):
