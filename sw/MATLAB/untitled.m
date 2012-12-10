@@ -7,10 +7,10 @@ imuF = zeros(numel(accX),13);
 
 for fN = 2:numel(imu(:,1))
     for fA = 1:13
-        if abs(imu(fN,fA) - imu(fN-1,fA)) > 50
-            imuF(fN,fA) = imu(fN-1,fA);
-        else
+        if abs(imu(fN,fA) - imu(fN-1,fA)) < 5
             imuF(fN,fA) = imu(fN,fA);
+        else
+            imuF(fN,fA) = imu(fN-1,fA);
         end
     end
 end
@@ -29,7 +29,7 @@ accY = imuF(:,5)*accS; % X pointed starboard during test
 accX = -imuF(:,6)*accS; % Y pointed backward during test
 accZ = imuF(:,7)*accS;
 
-accX = -accZ.*accX;
+accX = accZ.*accX;
 
 accX = accX * graA;
 accY = accY * graA;
