@@ -123,7 +123,7 @@ As these cannot be measured accurately, we need to add noise to the input signal
 
 As the \ac{IMU} samples at 10 Hz and the \ac{GPS} samples at 1 Hz the two measurements are to be fusioned together. As the most precise estimate is wanted, the \ac{KF} will be run at 10 Hz - utilizing the low variance of the \ac{IMU} measurements for a better estimate when a new \ac{GPS} sample is not present. 
 
-To do this, the receiver decoding the packages sent to the \ac{HLI} wirelessly are checked for validity, and the outcome of every package is then inserted into a matrix, which is then multiplied onto the Kalman gain, which sets the gain (if any) to zero, and the \ac{KF} will then respond to the \ac{IMU} measurements instead, giving a more precise estimate when no \ac{GPS} measurement is present. 
+To do this, the receiver decoding the packages sent to the \ac{HLI} wirelessly are checked for validity, and the outcome of every package is then inserted into a matrix, which is then multiplied onto the Kalman gain, which sets the gain (if any) to zero, and the \ac{KF} will then respond to the \ac{IMU} measurements instead, giving a more precise estimate when no \ac{GPS} measurement is present. 
 This matrix mask can be given as:
 \begin{align}
 \Lambda = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
