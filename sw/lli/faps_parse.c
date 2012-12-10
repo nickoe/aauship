@@ -2,9 +2,12 @@
 #include	"faps_process.h"
 
 
-void parse(msg_t *msg, char s[])
+int8_t parse(msg_t *msg, char s[])
 {
 	int i;
+	uint16_t crc = 0;
+
+	// Structure message in a message struct
 	msg->len = s[0];
 	msg->devid = s[1];
 	msg->msgid = s[2];
@@ -12,6 +15,14 @@ void parse(msg_t *msg, char s[])
 		msg->data[i] = s[3+i];
 		msg->ckh = s[msg->len+3];
 		msg->ckl = s[msg->len+4];
+	}
+
+	// Caclulate and verify CRC
+	crc = crc16_ccitt_calc(msg, msg->len);
+	if ( ((msg->ckh << 8) & 0xff00 | msg->ckl) == 0x1337 ) {	
+		return 1;
+	} else {
+		return 0;
 	}
 }
 

@@ -32,7 +32,7 @@ msg_t hlimsg;
 	@param   pointer of message structure, string array of buffer
 	@return  none
 */
-void parse(msg_t *msg, char s[]);
+int8_t parse(msg_t *msg, char s[]);
 
 
 /**
