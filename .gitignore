@@ -43,3 +43,9 @@ hw/*.000
 hw/lib/*.bak
 hw/lib/*.bck
 
+
+sw/MATLAB/pos.csv
+
+sw/MATLAB/pos-local.csv
+
+sw/MATLAB/accdata00185.csv

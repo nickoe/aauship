@@ -66,12 +66,12 @@ class Filter:
         # W is the measurement noise on the system, this can be estimated to be
         # white gaussian noise, with zero mean (for most cases) and with a
         # variance, that are estimated in Appendix #XX. 
-        self.varXpos = 0.979 * 10000
-        self.varXvel = 0.00262 * 10000
+        self.varXpos = 0.979 * 1
+        self.varXvel = 0.00262 * 1
         self.varXacc = 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
         
-        self.varYpos = 1.12 * 10000
-        self.varYvel = 0.0001 * 10000
+        self.varYpos = 1.12 * 1
+        self.varYvel = 0.0001 * 1
         self.varYacc = 4.8815e-5 # m/s^2; or 4.9801*10^-6 G
         
         self.varWpos = 8.23332e-5 # computed from the conversion found in HoneyWell datasheet
@@ -166,12 +166,6 @@ class Filter:
             '''
         else:       
             
-            '''
-            self.BD[0,:] = numpy.zeros([1,9])
-            self.BD[3,:] = numpy.zeros([1,9])
-            self.BD[1,:] = numpy.zeros([1,9])
-            self.BD[4,:] = numpy.zeros([1,9])
-            '''      
             self.BD[:,0] = numpy.zeros([9,1])
             self.BD[:,3] = numpy.zeros([9,1])
             self.BD[:,1] = numpy.zeros([9,1])

@@ -1,5 +1,5 @@
 \chapter{Velocity and Angle estimation}
-To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs, and uses these to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data. 
+To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs to combine theese depending variance and different sample rate to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data directly.
 
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
 
@@ -121,9 +121,28 @@ On \vref{fig:revol} a test input to the system is plotted. The sequence is an al
 
 As these cannot be measured accurately, we need to add noise to the input signals.
 
-As the GPS have a different sampling rate than the \ac{IMU} the measurements are to be kept at zero if the 
+As the \ac{IMU} samples at 10 Hz and the \ac{GPS} samples at 1 Hz the two measurements are to be fusioned together. As the most precise estimate is wanted, the \ac{KF} will be run at 10 Hz - utilizing the low variance of the \ac{IMU} measurements for a better estimate when a new \ac{GPS} sample is not present. 
 
-Foreslag til Paper: Hvor langt ned kan man gå i sampling på GPS'en for at spare båndbredde, uden at miste præcision!
+To do this, the receiver decoding the packages sent to the \ac{HLI} wirelessly are checked for validity, and the outcome of every package is then inserted into a matrix, which is then multiplied onto the Kalman gain, which sets the gain (if any) to zero, and the \ac{KF} will then respond to the \ac{IMU} measurements instead, giving a more precise estimate when no \ac{GPS} measurement is present. 
+This matrix mask can be given as:
+\begin{align}
+\Lambda = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+\end{align}
+\noindent Where the individual $\lambda$ is given as 
+\begin{align}
+\lambda = 
+\left\{ 
+  \begin{array}{l l}
+    1 & \quad \text{if measurement is valid}\\
+    0 & \quad \text{otherwise}
+  \end{array} \right.
+\end{align}
+Thus augmenting the \ac{KF} equations to:
+\begin{align}
+\vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)\\
+\vec{z}(k) = \vec{H}(k)\vec{x}(k) + \vec{v}(k)
+\end{align}
+
 
 \subsection{Simulations of the filter}
 Simulation of the \ac{KF} have proven to provide an accurate estimate, however - the actual variances have to be measured. 
@@ -152,3 +171,5 @@ As the controls are run on a remote platform, the \ac{KF} should be able to work
 To test this, \MATLAB has been used, which generates the the following results for a given packet loss rate. This rate can be then be altered to see how the system responds to a given data loss rate. The data loss rate is given in percent. If the system looses 10\% of the packages, the following error curves are produced:
 
 The 4 figures represent the error with a 10 percent loss, a 20 percent loss, a 30 percent loss and finally a 40 percent loss in data. 
+
+\section{Implementation of the \ac{KF}}
