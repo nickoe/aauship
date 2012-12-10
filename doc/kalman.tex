@@ -121,7 +121,7 @@ On \vref{fig:revol} a test input to the system is plotted. The sequence is an al
 
 As these cannot be measured accurately, we need to add noise to the input signals.
 
-SETTING THE MEASUREMENT TO ZERO IF THERE IS NO SAMPLE to ensure that you still get a computation, without having a measurement - henvisning til Jespers første forelæsning!
+As the GPS have a different sampling rate than the \ac{IMU} the measurements are to be kept at zero if the 
 
 Foreslag til Paper: Hvor langt ned kan man gå i sampling på GPS'en for at spare båndbredde, uden at miste præcision!
 
@@ -131,6 +131,7 @@ Simulation of the \ac{KF} have proven to provide an accurate estimate, however -
 To avoid computational problems the Joseph Form of the \ac{KF} can be used. This ensures that the matrices used in the updating step is non-singular and positive definite. 
 
 If the filter is simulated, the following results are produced. 
+\todo{insert filter pictures once we decided on final filter! -rlc}
 
 
 
@@ -149,3 +150,5 @@ Angle from the \ac{IMU}: magnetometer (compass)
 As the controls are run on a remote platform, the \ac{KF} should be able to work even though some sensor measurements are corrupted. To work around this, the Kalman gain should be set to zero of the readout is corrupted - so every time the receiver gets a packet where the checksom is invalid, it generates a vector mask that tells which rows of the Kalman gain should be zeroed. 
 
 To test this, \MATLAB has been used, which generates the the following results for a given packet loss rate. This rate can be then be altered to see how the system responds to a given data loss rate. The data loss rate is given in percent. If the system looses 10\% of the packages, the following error curves are produced:
+
+The 4 figures represent the error with a 10 percent loss, a 20 percent loss, a 30 percent loss and finally a 40 percent loss in data. 

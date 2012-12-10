@@ -49,5 +49,6 @@
  * Message related stuff
  */
 #define MAX_MSG_SIZE 1024  // This should probably be 250 + len + devid + msgid + checksum
+#define ADIS_READY 82
 
 #endif // CONFIG_H 

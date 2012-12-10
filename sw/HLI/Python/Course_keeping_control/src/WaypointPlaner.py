@@ -126,6 +126,7 @@ while i < ni:
     x2[i] = states[0]
     xx1[i] = numpy.sum(AAUSHIP.x[0])
     xx2[i] = numpy.sum(AAUSHIP.states[1])
+    xx3[i] = numpy.sum(AAUSHIP.states[0])
     i += 1
     print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
     '''Sensor reading'''
@@ -147,11 +148,13 @@ while i < ni:
 End of voyage
 '''
 
-plt.plot(x0,x1,x3,x4)
+plt.plot(x0,x1,'r')
+plt.plot(x3,x4,'k')
 plt.show()
 plt.plot(x2)
 plt.plot(xx1)
 plt.show()
 plt.plot(xx2)
+plt.plot(xx3)
 plt.show()
 

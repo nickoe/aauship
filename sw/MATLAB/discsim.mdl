@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.22"
+    ComputedModelVersion    "1.23"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Dec 06 16:50:50 2012"
-  RTWModifiedTimeStamp	  276628922
-  ModelVersionFormat	  "1.%<AutoIncrement:22>"
+  LastModifiedDate	  "Fri Dec 07 13:32:42 2012"
+  RTWModifiedTimeStamp	  276779847
+  ModelVersionFormat	  "1.%<AutoIncrement:23>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -809,13 +809,13 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
-      BlockType		      Step
-      Time		      "1"
-      Before		      "0"
-      After		      "1"
-      SampleTime	      "-1"
+      BlockType		      SignalGenerator
+      WaveForm		      "sine"
+      TimeSource	      "Use simulation time"
+      Amplitude		      "1"
+      Frequency		      "1"
+      Units		      "Hertz"
       VectorParams1D	      on
-      ZeroCross		      on
     }
     Block {
       BlockType		      SubSystem
@@ -892,7 +892,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "109"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "51"
+    SIDHighWatermark	    "52"
     Block {
       BlockType		      Gain
       Name		      "A"
@@ -903,18 +903,6 @@ Model {
       Gain		      "sysD.a"
       Multiplication	      "Matrix(K*u)"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
-    }
-    Block {
-      BlockType		      Sum
-      Name		      "Add"
-      SID		      "31"
-      Ports		      [4, 1]
-      Position		      [85, 177, 100, 368]
-      ZOrder		      -2
-      Inputs		      "++++"
-      InputSameDT	      off
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
     }
@@ -1013,6 +1001,17 @@ Model {
       VariableName	      "referenceD"
       MaxDataPoints	      "inf"
       SampleTime	      "ts"
+    }
+    Block {
+      BlockType		      SignalGenerator
+      Name		      "Signal Generator"
+      SID		      "52"
+      Ports		      [0, 1]
+      Position		      [65, 260, 95, 290]
+      ZOrder		      3
+      WaveForm		      "square"
+      Amplitude		      "pi/2"
+      Frequency		      "0.01"
     }
     Block {
       BlockType		      SubSystem
@@ -1195,46 +1194,6 @@ Model {
       }
     }
     Block {
-      BlockType		      Step
-      Name		      "Step"
-      SID		      "35"
-      Position		      [5, 190, 35, 220]
-      ZOrder		      -22
-      Time		      "100"
-      After		      "pi/2"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step1"
-      SID		      "36"
-      Position		      [5, 235, 35, 265]
-      ZOrder		      -22
-      Time		      "200"
-      After		      "-pi/2"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step2"
-      SID		      "50"
-      Position		      [5, 280, 35, 310]
-      ZOrder		      1
-      Time		      "600"
-      After		      "-pi/2"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step3"
-      SID		      "51"
-      Position		      [5, 325, 35, 355]
-      ZOrder		      2
-      Time		      "700"
-      After		      "pi/2"
-      SampleTime	      "0"
-    }
-    Block {
       BlockType		      Sum
       Name		      "Sum"
       SID		      "11"
@@ -1388,12 +1347,6 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Step"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      1
-    }
-    Line {
       SrcBlock		      "F"
       SrcPort		      1
       Points		      [-265, 0]
@@ -1436,29 +1389,11 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Add"
+      SrcBlock		      "Signal Generator"
       SrcPort		      1
-      Points		      [35, 0; 0, -50]
+      Points		      [37, 0; 0, -50]
       DstBlock		      "Mux"
       DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step1"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step2"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      3
-    }
-    Line {
-      SrcBlock		      "Step3"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      4
     }
   }
 }
