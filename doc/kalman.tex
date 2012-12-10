@@ -1,5 +1,5 @@
 \chapter{Velocity and Angle estimation}
-To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs, and uses these to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data. 
+To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs to combine theese depending variance and different sample rate to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data directly.
 
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
 
