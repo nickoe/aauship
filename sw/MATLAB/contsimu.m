@@ -167,7 +167,7 @@ Sxx_filt = ((abs(fftshift(fft(syDn)))).^2)./numel(outputD(:,1));
 plot(fft(Sxx_filt)')
 grid on
 
-%% Save file:
+%% Save noise file:
 save('inputD', 'inputD')
 
 %% Save Discrete Control Matrices

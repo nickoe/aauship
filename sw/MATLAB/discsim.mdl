@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.23"
+    ComputedModelVersion    "1.28"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [137.0, 22.0, 1433.0, 797.0]
+      Location		      [397.0, 394.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Dec 07 13:32:42 2012"
-  RTWModifiedTimeStamp	  276779847
-  ModelVersionFormat	  "1.%<AutoIncrement:23>"
+  LastModifiedDate	  "Tue Dec 11 14:33:34 2012"
+  RTWModifiedTimeStamp	  277136112
+  ModelVersionFormat	  "1.%<AutoIncrement:28>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -809,15 +809,6 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
-      BlockType		      SignalGenerator
-      WaveForm		      "sine"
-      TimeSource	      "Use simulation time"
-      Amplitude		      "1"
-      Frequency		      "1"
-      Units		      "Hertz"
-      VectorParams1D	      on
-    }
-    Block {
       BlockType		      SubSystem
       ShowPortLabels	      "FromPortIcon"
       Permissions	      "ReadWrite"
@@ -878,7 +869,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [137, 22, 1570, 819]
+    Location		    [397, 394, 1830, 1191]
     Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
@@ -1001,17 +992,6 @@ Model {
       VariableName	      "referenceD"
       MaxDataPoints	      "inf"
       SampleTime	      "ts"
-    }
-    Block {
-      BlockType		      SignalGenerator
-      Name		      "Signal Generator"
-      SID		      "52"
-      Ports		      [0, 1]
-      Position		      [65, 260, 95, 290]
-      ZOrder		      3
-      WaveForm		      "square"
-      Amplitude		      "pi/2"
-      Frequency		      "0.01"
     }
     Block {
       BlockType		      SubSystem
@@ -1389,9 +1369,7 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Signal Generator"
-      SrcPort		      1
-      Points		      [37, 0; 0, -50]
+      Points		      [50, 225; 5, 0]
       DstBlock		      "Mux"
       DstPort		      2
     }

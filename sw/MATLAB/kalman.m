@@ -6,6 +6,7 @@ clc; clear all; close all; clear java;
 % end
 run('./contsimu.m');
 load inputD.mat; % Loads system input file from contsimu.m
+%load Wn.mat;
 inputD = inputD';
 close all;
 IMU = load('accdata00185.csv');
@@ -88,7 +89,7 @@ varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
 varWvel = 2.3559e-5; % rad/s
-varWacc = 0.004;
+varWacc = 2.3559e-5;;
 
 varYWacc = 2.4496*10^-6; % rad/s^2
 
@@ -133,7 +134,7 @@ end
 
 %% System initiation:
 % The system is initialized, the parameters are: 
-%Wn = zeros(9,N);
+Wn = zeros(9,N);
 Qz = zeros(9,9,N);
 Qw = zeros(9,9,N);
 Y = zeros(9,N);
@@ -247,15 +248,10 @@ end
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        %Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
-       Wn(:,n) = [randn(4,1);randn(1,1);randn(4,1)].*SqM';
-       %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
-       %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
-       %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
-     Qz(:,:,n) = diag([0 0 55 0 0 55 0 0 20]); %
-   %covari(n,:) = autocorr(Z(:,n));
-     %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
+       Wn(:,n) = [randn(4,1);0;randn(3,1);0].*SqM';
+     Qz(:,:,n) = diag([0 0 55 0 0 20 0 0 20]); %
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
-        Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
+        Y(:,n) = Hn*Y(:,n-1) + Z(:,n);
         X(:,n) = An*Y(:,n) + Wn(:,n);
     Ypred(:,n) = Hn*Yupdate(:,n-1);
     Xpred(:,n) = An*Ypred(:,n);
@@ -434,7 +430,6 @@ legend('Measured','Filtered','True')
 xlabel('Position [m]')
 ylabel('Position [m]')
 grid on
-
 %% Running Computation of the Multirate Kalman filter (Negating the GPS input when no new sample is present):
 % As not all of the measurements are sampled at the same time (some are
 % slower, as the GPS for instance) - the samples where no GPS reading is
@@ -475,14 +470,11 @@ for n = 2:N;
    XpredD(:,n) = An*YpredD(:,n);
  RpredD(:,:,n) = Hn*RupdateD(:,:,n-1)*Hn'+Qz(:,:,n);
      BD(:,:,n) = (RpredD(:,:,n)*An')/(An*RpredD(:,:,n)*An'+Qw(:,:,n));
-             if sC == 1;
+             if sC == GPS_freq;
                    BD(:,:,n) = BD(:,:,n);
                           sC = 0;
              else                
-                   BD(:,1,n) = zeros(9,1);
-                   BD(:,2,n) = zeros(9,1);
-                   BD(:,4,n) = zeros(9,1);
-                   BD(:,5,n) = zeros(9,1);
+                   BD(:,[1 2 4 5],n) = zeros(9,4);
              end
  YupdateD(:,n) = YpredD(:,n)+BD(:,:,n)*(XD(:,n)-XpredD(:,n));
 RupdateD(:,:,n) = (eye(9)-BD(:,:,n)*An)*RpredD(:,:,n);
@@ -909,15 +901,12 @@ for n = 2:N;
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.9; % Looses 10 percent of the packages. 
-             if sC == GPS_freq;
+ packLost(:,n) = rand(9,1)<=0.9; % Looses 10 percent of the packages. 
+             if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
              else                
-                   BL(:,1,n) = zeros(9,1);
-                   BL(:,2,n) = zeros(9,1);
-                   BL(:,4,n) = zeros(9,1);
-                   BL(:,5,n) = zeros(9,1);
+                   BL(:,[1 2 4 5],n) = zeros(9,4);
              end
      BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
  YupdateL(:,n) = YpredL(:,n)+BL(:,:,n)*(XL(:,n)-XpredL(:,n));
@@ -1077,7 +1066,7 @@ xlabel('Sample [n]') ;ylabel('Angular acceleration [rad/s]');
 grid on
 
 % Plot of actual X-Y position
-h16 = figure(16);
+h16 = figure(16)
 hold on
 plot(x_newposL(1,:),x_newposL(2,:),'g+','MarkerSize',2);
 plot(k_newposL(1,:),k_newposL(2,:),'b','LineWidth',1);
@@ -1100,57 +1089,62 @@ diffX_posL = YL(1,:)' - Y_kal_pos_XL; % Lost packages
 diffY_pos = Y(4,:)' - Y_kal_pos_Y;
 diffY_posD = YD(4,:)' - Y_kal_pos_YD;
 diffY_posK = YK(4,:)' - Y_kal_pos_YK;
-diffY_posL = YL(4,:)' - Y_kal_pos_YL;
+diffY_posL = YL(4,:)' - Y_kal_pos_YL; % Lost packages
 
 % The difference in W-position:
 diffW_pos = Y(7,:)' - Y_kal_pos_W;
 diffW_posD = YD(7,:)' - Y_kal_pos_WD;
 diffW_posK = YK(7,:)' - Y_kal_pos_WK;
-diffW_posL = YL(7,:)' - Y_kal_pos_WL;
+diffW_posL = YL(7,:)' - Y_kal_pos_WL; % Lost packages
 
 % The difference in X-velocity:
 diffX_vel = Y(2,:)' - Y_kal_vel_X;
 diffX_velD = YD(2,:)' - Y_kal_vel_XD;
 diffX_velK = YK(2,:)' - Y_kal_vel_XK;
-diffX_velL = YL(2,:)' - Y_kal_vel_XL;
+diffX_velL = YL(2,:)' - Y_kal_vel_XL; % Lost packages
 
 % The difference in Y-velocity:
 diffY_vel = Y(5,:)' - Y_kal_vel_Y;
 diffY_velD = YD(5,:)' - Y_kal_vel_YD;
 diffY_velK = YK(5,:)' - Y_kal_vel_YK;
-diffY_velL = YL(5,:)' - Y_kal_vel_YL;
+diffY_velL = YL(5,:)' - Y_kal_vel_YL; % Lost packages
 
 % The difference in W-velocity:
 diffW_vel = Y(8,:)' - Y_kal_vel_W;
 diffW_velD = YD(8,:)' - Y_kal_vel_WD;
 diffW_velK = YK(8,:)' - Y_kal_vel_WK;
-diffW_velL = YL(8,:)' - Y_kal_vel_WL;
+diffW_velL = YL(8,:)' - Y_kal_vel_WL; % Lost packages
 
 % The difference in X-acceleration:
 diffX_acc = Y(3,:)' - Y_kal_acc_X;
 diffX_accD = YD(3,:)' - Y_kal_acc_XD;
 diffX_accK = YK(3,:)' - Y_kal_acc_XK;
-diffX_accL = YL(3,:)' - Y_kal_acc_XL;
+diffX_accL = YL(3,:)' - Y_kal_acc_XL; % Lost packages
 
 % The difference in Y-acceleration:
 diffY_acc = Y(6,:)' - Y_kal_acc_Y;
 diffY_accD = YD(6,:)' - Y_kal_acc_YD;
 diffY_accK = YK(6,:)' - Y_kal_acc_YK;
-diffY_accL = YL(6,:)' - Y_kal_acc_YL;
+diffY_accL = YL(6,:)' - Y_kal_acc_YL; % Lost packages
 
 % The difference in W-acceleration:
 diffW_acc = Y(9,:)' - Y_kal_acc_W;
 diffW_accD = YD(9,:)' - Y_kal_acc_WD;
 diffW_accK = YK(9,:)' - Y_kal_acc_WK;
-diffW_accL = YL(9,:)' - Y_kal_acc_WL;
+diffW_accL = YL(9,:)' - Y_kal_acc_WL; % Lost packages
 
 % The difference in absolute position:
 diff_pos = y_newpos' - k_newpos';
 diff_posD = y_newposD' - k_newposD';
 diff_posK = y_newposK' - k_newposK';
-diff_posL = y_newposL' - k_newposL';
+diff_posL = y_newposL' - k_newposL'; % Lost packages
 
 % Absolute distance between Y and filtered
+diff_abs = zeros(N,1);
+diff_absD = zeros(N,1);
+diff_absK = zeros(N,1);
+diff_absL = zeros(N,1);
+
 for jj = 1:N
     diff_abs(jj)  = sqrt(((k_newpos(1,jj) - y_newpos(1,jj))^2)+((k_newpos(2,jj) - y_newpos(2,jj))^2));
     diff_absD(jj) = sqrt(((k_newposD(1,jj) - y_newposD(1,jj))^2)+((k_newposD(2,jj) - y_newposD(2,jj))^2));
@@ -1261,27 +1255,27 @@ h20 = figure(20);
 subplot(2,1,1)
 plot(diff_pos(:,1),'b'); hold on
 plot(diff_posD(:,1),'r');
-%plot(diff_posL(:,1),'m');
+plot(diff_posL(:,1),'m');
 plot(diff_posK(:,1),'g'); hold off
 title('Error in X-Position');
-legend('Monorate','Multirate','Lost Packages','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate (same input)')
 grid on
 subplot(2,1,2)
 plot(diff_pos(:,2),'b'); hold on
 plot(diff_posD(:,2),'r');
-%plot(diff_posL(:,2),'m');
+plot(diff_posL(:,2),'m');
 plot(diff_posK(:,2),'g'); hold off
 title('Error in Y-Position');
-legend('Monorate','Multirate','Lost Packages','Multirate NI')
+legend('Monorate','Multirate','Lost Packages','Multirate (same input)')
 grid on
 
 h21 = figure(21);
 plot(diff_abs,'b'); hold on
 plot(diff_absD,'r');
-%plot(diff_absL,'m');
+plot(diff_absL,'m');
 plot(diff_absK,'g'); hold off
 title('Absolute Position Error');
-legend('Monorate','Multirate (zero K)','Multirate (normal K)');
+legend('Monorate','Multirate (zero K)','Lost Packages','Multirate (same input)');
 xlabel('Sample [n]');
 ylabel('Distance [m]');
 grid on
