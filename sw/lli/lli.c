@@ -91,11 +91,6 @@ int main (void)
 	adis_reset_factory();
 	adis_set_sample_rate();
 
-
-itoa(sizeof(adis_reduced_t),s,10);
-		uart2_puts(s);
-		uart2_putc('\r');
-		uart2_putc('\n');
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 	
 		c = uart_getc();
@@ -105,8 +100,8 @@ itoa(sizeof(adis_reduced_t),s,10);
 		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
 			adis_reduce_decoded_burst(&adis_data_decoded, &adis_data_decoded_reduced); // Reduce data ammount
-			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-			grs_send(package(sizeof(adis_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced), sizeof(adis_reduced_t));
+			//hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+			//grs_send(package(sizeof(adis_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced), sizeof(adis_reduced_t));
 
 
 			imu++;
@@ -138,7 +133,6 @@ itoa(sizeof(adis_reduced_t),s,10);
 					if (parse(&rfmsg, buffer2)) {
 						PORTL ^= (1<<LED3);
 						process(&rfmsg);
-						grs_send(package(0, 0x00, 0x07, NULL), 0); // GRS ACK
 					}
 
 					idx2 = -1; // Set flag in new packet mode
@@ -158,8 +152,6 @@ itoa(sizeof(adis_reduced_t),s,10);
 		/* Reading from GPS */
 		if ( c3 & UART_NO_DATA ) {} else  // Data available
 		{
-			uart_putc(c3); // Forward every byte from GSP to uart directly
-
 			/* Transmitting NMEA GPS sentences to the HLI */
 			if (c3 == '$') { // We have a possible message comming
 				//PORTL ^= (1<<LED3);
@@ -177,7 +169,7 @@ itoa(sizeof(adis_reduced_t),s,10);
 							// Invalid 
 
 						} else {
-							grs_send(package(42, 30, 6, rmc),42);
+							//grs_send(package(42, 30, 6, rmc),42);
 							//PORTL ^= (1<<LED3);
 						}
 

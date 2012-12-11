@@ -49,19 +49,17 @@ int process(msg_t *msg)
 		case 10: 
 			switch (msg->msgid) {
 				case 0:
-					grs_send(package(0, 0x00, 0x08, 0),0); // NACK
 					break;
 				case 1:
-					grs_send(package(0, 0x00, 0x08, 0),0); // NACK
 					break;
 				case 2:
-					grs_send(package(0, 0x00, 0x08, 0),0); // NACK
 					break;
 				case 3:
 					duty = (int16_t) (msg->data[0]);
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC1, duty );
+					grs_ack();
 					break;
 				case 4:
 				case 5:
@@ -69,6 +67,7 @@ int process(msg_t *msg)
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC2, duty );
+					grs_ack();
 					break;
 				case 6:
 				case 7:
@@ -76,6 +75,7 @@ int process(msg_t *msg)
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC3, duty );
+					grs_ack();
 					break;
 				case 8:
 				case 9:
@@ -83,6 +83,7 @@ int process(msg_t *msg)
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC4, duty );
+					grs_ack();
 					break;
 				case 10:
 				case 11:
@@ -90,20 +91,37 @@ int process(msg_t *msg)
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC5, duty );
+					grs_ack();
 					break;
 				case 12:
 				case 13:
 					pwm_set_duty(DC1, msg->data[0]);
+					grs_ack();
 					break;
 				case 14:
 				case 15:
 					pwm_set_duty(DC2, msg->data[0]);
+					grs_ack();
 					break;
 				case 16:
 				case 17:
 					pwm_set_duty(DC3, msg->data[0]);
+					grs_ack();
 					break;
 				case 18:
+					break;
+				case 19:
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(RC1, duty );
+					duty = (int16_t) (msg->data[2]);
+					duty = (duty << 8) & 0xFF00; 
+					duty = (duty | ((msg->data[3])&0xFF));
+					pwm_set_duty(RC2, duty );
+					grs_ack();
+					break;
+				case 20:
 					break;
 
 			}
@@ -177,3 +195,16 @@ void grs_send(uint8_t ptr[], uint8_t len) {
 	}
 }
 
+/*
+ * GRS ACK
+ */
+void grs_ack(void) {
+	grs_send(package(0, 0x00, 0x07, NULL), 0); // GRS ACK
+}
+
+/*
+ * GRS NACK
+ */
+void grs_nack(void) {
+	grs_send(package(0, 0x00, 0x08, NULL), 0); // GRS NACK
+}

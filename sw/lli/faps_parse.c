@@ -1,7 +1,6 @@
 #include	"faps_parse.h"
 #include	"faps_process.h"
 
-
 int8_t parse(msg_t *msg, char s[])
 {
 	int i;
@@ -13,12 +12,12 @@ int8_t parse(msg_t *msg, char s[])
 	msg->msgid = s[2];
 	for (i = 0; i < msg->len; i++) {
 		msg->data[i] = s[3+i];
-		msg->ckh = s[msg->len+3];
-		msg->ckl = s[msg->len+4];
 	}
+	msg->ckh = s[msg->len+3];
+	msg->ckl = s[msg->len+4];
 
 	// Caclulate and verify CRC
-	crc = crc16_ccitt_calc(msg, msg->len);
+	crc = crc16_ccitt_calc(msg, msg->len+3);
 	if ( ((msg->ckh << 8) & 0xff00 | msg->ckl) == crc ) {	
 		return 1;
 	} else {
