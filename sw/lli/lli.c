@@ -91,6 +91,11 @@ int main (void)
 	adis_reset_factory();
 	adis_set_sample_rate();
 
+
+itoa(sizeof(adis_reduced_t),s,10);
+		uart2_puts(s);
+		uart2_putc('\r');
+		uart2_putc('\n');
   while (1) {
 		/* Read each UART serially and check each of them for data, if there is handle it */ 	
 		c = uart_getc();
@@ -99,7 +104,11 @@ int main (void)
 
 		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
+			adis_reduce_decoded_burst(&adis_data_decoded, &adis_data_decoded_reduced); // Reduce data ammount
 			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
+			grs_send(package(sizeof(adis_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced), sizeof(adis_reduced_t));
+
+
 			imu++;
 
 
@@ -169,7 +178,7 @@ int main (void)
 
 						} else {
 							grs_send(package(42, 30, 6, rmc),42);
-PORTL ^= (1<<LED3);
+							//PORTL ^= (1<<LED3);
 						}
 
 /*			gps++;		

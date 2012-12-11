@@ -100,8 +100,20 @@ typedef struct  {
 
 } adis8_t;
 
+typedef struct  {
+	uint16_t zgyro;
+	uint16_t xaccl;
+	uint16_t yaccl;
+	uint16_t xmagn;
+	uint16_t ymagn;
+	uint16_t adc;
+
+} adis_reduced_t;
+
+
 adis16_t adis_data_raw;
 adis8_t adis_data_decoded;
+adis_reduced_t adis_data_decoded_reduced; // Used for minimal bandwidth
 
 /* Function prototypes */
 void adis_self_test( void );

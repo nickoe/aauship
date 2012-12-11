@@ -161,6 +161,26 @@ int adis_decode_burst_read_pack(uint8_t data[sizeof(adis8_t)]) {
 }
 
 /**
+ * Reduce already burst read and decoded pack of IMU data
+ */
+void adis_reduce_decoded_burst(adis16_t *adis_orig, adis_reduced_t *adis_reduced) {
+		adis_reduced->zgyro = adis_orig->zgyro;
+		adis_reduced->xaccl = adis_orig->xaccl;
+		adis_reduced->yaccl = adis_orig->yaccl;
+		adis_reduced->xmagn = adis_orig->xmagn;
+		adis_reduced->ymagn = adis_orig->ymagn;
+		adis_reduced->adc = adis_orig->adc;
+
+/*
+		adis_orig[0] = adis_orig[3];
+		adis_orig[1] = adis_orig[4];
+		adis_orig[2] = adis_orig[5];
+		adis_orig[3] = adis_orig[7];
+		adis_orig[4] = adis_orig[8];
+		adis_orig[5] = adis_orig[11];*/
+}
+
+/**
  * Word to byte-array pointer
  * Converts a 16-bit word to a 2 elements 8-bit byte array
  */
