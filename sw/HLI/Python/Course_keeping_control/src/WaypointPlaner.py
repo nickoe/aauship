@@ -25,7 +25,7 @@ import KalmanFilter as KF
 SIMULATION STEP 1
 Read / Generate coast, initialize simulator
 '''
-coastlength = 120
+coastlength = 2000
 Sim = S.Simulator()
 
 coast = Sim.SimulateCoast(coastlength)
@@ -99,7 +99,7 @@ Sensor initializations
 Set return position!!!
 '''
 
-AAUSHIP.Return(startpos)
+#AAUSHIP.Return(startpos)
 AAUSHIP.ReadStates(0, 0, 0, 0, 0, 0, 0, 0, 0, numpy.matrix([[0],[0]]))
 states = numpy.matrix([[0],[0],[0]])
 
@@ -148,7 +148,6 @@ while i < ni:
     
     AAUSHIP.ReadStates(GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha, motor)
     
-    '''Logging'''
     '''Logging'''
     thoughtpos = AAUSHIP.Pos.get_Pos()
     x3[i] = thoughtpos[0]

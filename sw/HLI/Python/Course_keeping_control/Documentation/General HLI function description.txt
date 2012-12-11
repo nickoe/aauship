@@ -128,9 +128,17 @@ def get_Delta(self, Theta_r):
 		
 		Calculates the deviation from current heading. The calculated delta is the normalized: the current heading (Theta) is in the range of [-pi,pi]+k*pi | k = ..-2,-1,0,1,2... It's trivial, that the control matrices would not work properly with an angle error value > 2 pi. Therefore the +k*pi part must be cut off. This is implemented by trigonometrial functions, exploiting the periodicity of these functions.
 		
+def AddCourse(self, WPC):
+
+        '''
+        Append a new Waypoint to the list of Waypoints
+        '''
+
 def AddRelativeCourse(self, WPC):
 
-INCOMPLETE
+        '''
+        Append a new Relative Waypoint to the list of Waypoints. The relative waypoint is defined in the Body frame, in meters[X,Y]
+        '''
 
 4: Simulator - Object Definition
 
