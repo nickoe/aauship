@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.28"
+    ComputedModelVersion    "1.29"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [397.0, 394.0, 1433.0, 797.0]
+      Location		      [397.0, 340.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Dec 11 14:33:34 2012"
-  RTWModifiedTimeStamp	  277136112
-  ModelVersionFormat	  "1.%<AutoIncrement:28>"
+  LastModifiedDate	  "Tue Dec 11 16:04:38 2012"
+  RTWModifiedTimeStamp	  277142677
+  ModelVersionFormat	  "1.%<AutoIncrement:29>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -809,6 +809,15 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
+      BlockType		      SignalGenerator
+      WaveForm		      "sine"
+      TimeSource	      "Use simulation time"
+      Amplitude		      "1"
+      Frequency		      "1"
+      Units		      "Hertz"
+      VectorParams1D	      on
+    }
+    Block {
       BlockType		      SubSystem
       ShowPortLabels	      "FromPortIcon"
       Permissions	      "ReadWrite"
@@ -869,7 +878,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [397, 394, 1830, 1191]
+    Location		    [397, 340, 1830, 1137]
     Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
@@ -883,7 +892,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "109"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "52"
+    SIDHighWatermark	    "53"
     Block {
       BlockType		      Gain
       Name		      "A"
@@ -992,6 +1001,17 @@ Model {
       VariableName	      "referenceD"
       MaxDataPoints	      "inf"
       SampleTime	      "ts"
+    }
+    Block {
+      BlockType		      SignalGenerator
+      Name		      "Signal Generator"
+      SID		      "53"
+      Ports		      [0, 1]
+      Position		      [20, 210, 50, 240]
+      ZOrder		      1
+      WaveForm		      "sawtooth"
+      Amplitude		      "10"
+      Frequency		      "0.01"
     }
     Block {
       BlockType		      SubSystem
@@ -1369,7 +1389,8 @@ Model {
       }
     }
     Line {
-      Points		      [50, 225; 5, 0]
+      SrcBlock		      "Signal Generator"
+      SrcPort		      1
       DstBlock		      "Mux"
       DstPort		      2
     }
