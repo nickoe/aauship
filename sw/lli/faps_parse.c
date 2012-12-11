@@ -19,7 +19,7 @@ int8_t parse(msg_t *msg, char s[])
 
 	// Caclulate and verify CRC
 	crc = crc16_ccitt_calc(msg, msg->len);
-	if ( ((msg->ckh << 8) & 0xff00 | msg->ckl) == 0x1337 ) {	
+	if ( ((msg->ckh << 8) & 0xff00 | msg->ckl) == crc ) {	
 		return 1;
 	} else {
 		return 0;
