@@ -168,7 +168,7 @@ int main (void)
 							// Invalid 
 
 						} else {
-							grs_send(rmc,42-6);
+							grs_send(package(42, 30, 6, rmc),42);
 PORTL ^= (1<<LED3);
 						}
 
