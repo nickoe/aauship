@@ -1146,10 +1146,10 @@ diff_absK = zeros(N,1);
 diff_absL = zeros(N,1);
 
 for jj = 1:N
-    diff_abs(jj)  = sqrt(((k_newpos(1,jj) - y_newpos(1,jj))^2)+((k_newpos(2,jj) - y_newpos(2,jj))^2));
-    diff_absD(jj) = sqrt(((k_newposD(1,jj) - y_newposD(1,jj))^2)+((k_newposD(2,jj) - y_newposD(2,jj))^2));
-    diff_absK(jj) = sqrt(((k_newposK(1,jj) - y_newposK(1,jj))^2)+((k_newposK(2,jj) - y_newposK(2,jj))^2));
-    diff_absL(jj) = sqrt(((k_newposL(1,jj) - y_newposL(1,jj))^2)+((k_newposL(2,jj) - y_newposL(2,jj))^2));
+    diff_abs(jj)  = sqrt(((Y_pos_X(jj) - Y_kal_posX(jj))^2)+((Y_pos_Y(jj) - Y_kal_posY(jj))^2));
+    diff_absD(jj) = sqrt(((Y_pos_XD(jj) - Y_kal_posXD(jj))^2)+((Y_pos_YD(jj) - Y_kal_pos_YD(jj))^2));
+    diff_absK(jj) = sqrt(((Y_pos_XK(jj) - Y_kal_posXK(jj))^2)+((Y_pos_YK(jj) - Y_kal_pos_YD(jj))^2));
+    diff_absL(jj) = sqrt(((k_newposL(jj) - Y_kal_posXL(jj))^2)+((Y_pos_YL(jj) - Y_kal_posYL(jj))^2));
 end
 
 %% Plot of the error between monorate and multirate:
