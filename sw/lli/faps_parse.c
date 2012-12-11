@@ -36,4 +36,22 @@ void puts_msg(msg_t *msg)
 	uart2_putc(rfmsg.ckl);
 }
 
+uint8_t rmc_cut(char rmc[], char data[]) {
+	uint8_t i = 0;
+	uint8_t split = 0;
 
+	// Cut if valid
+	if (rmc[18] == 'A') { 
+		i = 7;
+		while (split < 7) {
+			if ((rmc[i] == ',') & (split != 7))
+				split++;
+			data[i-7] = rmc[i];
+			i++;
+		}
+		data[i-8] = 0;
+		return 0; // valid
+	} else {
+		return 1; // invalid
+	}
+}

@@ -53,6 +53,7 @@ int main (void)
 	uint16_t xacc = 0;
 	uint8_t xacca[2];
 	char s[64];
+	char rmc[256];
 
 
   /* set outputs */
@@ -99,15 +100,17 @@ int main (void)
 		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
 			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-/*			imu++;
-		itoa(imu,s,10);
+			imu++;
+
+
+			adis_ready_counter -= ADIS_READY;
+/*		itoa(imu,s,10);
 		uart2_puts(s);
 		uart2_putc('\r');
 		uart2_putc('\n');*/
-
-			adis_ready_counter -= ADIS_READY;
 			PORTL ^= (1<<LED4);
 		}
+
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
@@ -159,9 +162,19 @@ int main (void)
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
 					if(buffer3[4] != 'S') { // Disable GSV and GSA messages
-						hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
-	/*			gps++;		
+						//grs_send(package(len3, 0x1E, 0x06, buffer3), len3); // Log to SD card
+
+						if (rmc_cut(buffer3,rmc)) {
+							// Invalid 
+
+						} else {
+							grs_send(rmc,42-6);
+PORTL ^= (1<<LED3);
+						}
+
+/*			gps++;		
 		itoa(gps,s,10);
+		uart2_puts(s);
 		uart2_puts(s);
 		uart2_putc('\r');
 		uart2_putc('\n');*/
