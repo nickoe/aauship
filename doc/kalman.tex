@@ -145,11 +145,11 @@ Thus augmenting the \ac{KF} equations to:
 \vec{P}(k)_{(-)} &= \vec{\Phi}(k-1) \vec{P}(k-1)_+ \vec{\Phi}(k-1)^T + \vec{Q}(k-1)\\
 \hat{\vec{x}}(k)_{(+)} &= \hat{\vec{x}}(k)_{(-)} + \bar{\vec{K}(k)}[\vec{z}(k) - \vec{H}(k)\cdot\hat{\vec{x}}(k)_{(-)}]\\
 \vec{P}(k)_{(+)} &= [\vec{I} - \bar{\vec{K}(k)}\vec{H}(k)]\vec{P}(k)_{(-)}\\
-\bar{\vec{K}(k)} &= \vec{\Lambda}\langle\vec{P}(k)_{(-)} \vec{H}(k)^T [\vec{H}(k)\vec{P}(k)_{(-)} \vec{H}(k)^T + \vec{R}(k)]^{-1}\rangle
+\bar{\vec{K}(k)} &= \vec{\Lambda}\langle\vec{P}(k)_{(-)} \vec{H}(k)^T [\vec{H}(k)\vec{P}(k)_{(-)} \vec{H}(k)^T + \vec{R}(k)]^{-1}\rangle
 \end{align}
 \noindent Where
 \begin{ffk}
-$\hat{\vec{x}}(k)_{(-)}$ = Predicted step of $\vec{x}}(k)$\\
+$\hat{\vec{x}}(k)_{(-)}$ = Predicted step of $\vec{x}(k)$\\
 $\vec{P}(k)_{(-)}$ = Prediction of the covariance\\
 $\hat{\vec{x}}(k)_{(+)}$= Estimate of the state\\
 $\vec{P}(k)_{(+)}$ = Update of the covariance\\
@@ -158,7 +158,7 @@ $\bar{\vec{K}(k)}$ = Kalman gain with $\vec{\Lambda}$ multiplied onto it
 
 
 \subsection{Simulations of the filter}
-Below is 3 plots of the \ac{KF}  running with a square pulse input as the angle reference. Figure \vref{fig:xymono} depicts the system running when the sensors are running at the same sampling frequency. On the box on the plot the estimate clearly converges and follows the actual path nicely. 
+Below is 3 plots of the \ac{KF} running with a square pulse input as the angle reference. Figure \vref{fig:xymono} depicts the system running when the sensors are running at the same sampling frequency. On the box on the plot the estimate clearly converges and follows the actual path nicely. 
 
 \begin{figure}[htbp]
 	\centering
@@ -167,7 +167,7 @@ Below is 3 plots of the \ac{KF}  running with a square pulse input as the angle
 	\label{fig:xymono}
 \end{figure}
 
-On \vref{fig:xymulti1} the sampling rates are different and the Kalman gain $\bar{\vec{K}(k)}$ is set to zero when no new \ac{GPS} sample is present. This also tracks the true path very nicely, but varies a little more. 
+On \vref{fig:xymulti1} the sampling rates are different and the Kalman gain $\bar{\vec{K}(k)}$ is set to zero when no new \ac{GPS} sample is present. This also tracks the true path very nicely, but varies a little more. 
 
 \begin{figure}[htbp]
 	\centering
@@ -176,7 +176,7 @@ On \vref{fig:xymulti1} the sampling rates are different and the Kalman gain $\b
 	\label{fig:xymulti1}
 \end{figure}
 
-The last figure \vref{fig:xymulti2}  depicts the system where the input is only updated once every second. And this causes the system to diverge, but then pick up the lost sample again, thus making for a system that slowly will diverge.
+The last figure \vref{fig:xymulti2} depicts the system where the input is only updated once every second. And this causes the system to diverge, but then pick up the lost sample again, thus making for a system that slowly will diverge.
 
 \begin{figure}[htbp]
 	\centering
