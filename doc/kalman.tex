@@ -149,11 +149,14 @@ F(n)\\
 \end{align}
 
 \section{\ac{KF} description}
-The \ac{KF} can be divided into two steps, an update step and a prediction step. The update step updates all the variables, while the prediction step does the actual prediction. This is carried out using 
+The \ac{KF} can be divided into two steps, an update step and a prediction step. The update step updates all the variables, while the prediction step does the actual prediction. The update step is given as:
 \begin{align}
 \vec{x}(k) &= \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)\\
 \vec{z}(k) &= \vec{H}(k)\vec{x}(k) + \vec{v}(k)\\
 \hat{\vec{x}}(k)_{(-)} &= \vec{\Phi}(k-1)\hat{\vec{x}}(k-1)_{(+)}\\
+\end{align}
+The prediction step is then given as:
+\begin{align}
 \vec{P}(k)_{(-)} &= \vec{\Phi}(k-1) \vec{P}(k-1)_+ \vec{\Phi}(k-1)^T + \vec{Q}(k-1)\\
 \hat{\vec{x}}(k)_{(+)} &= \hat{\vec{x}}(k)_{(-)} + \bar{\vec{K}(k)}[\vec{z}(k) - \vec{H}(k)\cdot\hat{\vec{x}}(k)_{(-)}]\\
 \vec{P}(k)_{(+)}&= [\vec{I} - \bar{\vec{K}(k)}\vec{H}(k)]\vec{P}(k)_{(-)}\\
