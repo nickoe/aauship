@@ -48,9 +48,11 @@
 /**
  * Message related stuff
  */
-#define MAX_MSG_SIZE 1024  // This should probably be 250 + len + devid + msgid + checksum
+#define MAX_MSG_SIZE 1024  // This should probably be 255 + len + devid + msgid + checksum
+#define TX_BUFF_SIZE 350
 //#define ADIS_READY 164 // 10 Hz
 #define ADIS_READY 82 // 20Hz
 //#define ADIS_READY 42 // 40Hz
+#define TX_READY 273 // 3Hz
 
 #endif // CONFIG_H 

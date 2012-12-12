@@ -23,15 +23,19 @@
 #include "config.h"
 #include "uart.h"
 #include "faps_parse.h"
+
 #include "pwm.h"
 #include "spi.h"
 #include "adis16405.h"
 
+
 volatile int adis_ready_counter=0;
+volatile int tx_counter = 0;
 
 
 ISR(PCINT2_vect) {
 	adis_ready_counter++;
+	tx_counter++;
 }
 
 int main (void)
@@ -44,6 +48,10 @@ int main (void)
 	int  idx = 0, idx2 = -1, idx3 = -1;
 	int	 len2 = 0;
 	int	 len3 = 0;
+	char meas_buffer[TX_BUFF_SIZE];
+
+	int txi = 0;
+	int txtop=0;
 	unsigned int i = 0;
 	char *ptr;
 	unsigned char hli_mutex = 0;
@@ -97,21 +105,27 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
+		if(tx_counter >= TX_READY) {
+			//empty buffer
+			for (txi = 0; txi < txtop; txi++) {
+				uart2_putc(meas_buffer[txi]);
+			}
+			txtop = 0;
+PORTL ^= (1<<LED3);
+			tx_counter -= TX_READY;
+		}
+
+
 		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
-			adis_reduce_decoded_burst(&adis_data_decoded, &adis_data_decoded_reduced); // Reduce data ammount
-			//hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-			//grs_send(package(sizeof(adis_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced), sizeof(adis_reduced_t));
+			adis_reduce_decoded_burst(); // Reduce data ammount
+			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t)); // Log to SD card
+			//grs_send(package(sizeof(adis8_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced), sizeof(adis8_reduced_t));
 
-
-			imu++;
-
-
+			memcpy(&meas_buffer[txtop],	(char *)package(sizeof(adis8_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced),sizeof(adis8_reduced_t)+6);
+			txtop=txtop+sizeof(adis8_reduced_t)+6;
 			adis_ready_counter -= ADIS_READY;
-/*		itoa(imu,s,10);
-		uart2_puts(s);
-		uart2_putc('\r');
-		uart2_putc('\n');*/
+
 			PORTL ^= (1<<LED4);
 		}
 
@@ -131,7 +145,7 @@ int main (void)
 				if (idx2 == len2) { // We now have a full packet
 
 					if (parse(&rfmsg, buffer2)) {
-						PORTL ^= (1<<LED3);
+						//PORTL ^= (1<<LED3);
 						process(&rfmsg);
 					}
 
@@ -169,17 +183,10 @@ int main (void)
 							// Invalid 
 
 						} else {
-							//grs_send(package(42, 30, 6, rmc),42);
-							//PORTL ^= (1<<LED3);
+							grs_send(package(42, 30, 6, rmc),42);
+							PORTL ^= (1<<LED2);
 						}
 
-/*			gps++;		
-		itoa(gps,s,10);
-		uart2_puts(s);
-		uart2_puts(s);
-		uart2_putc('\r');
-		uart2_putc('\n');*/
-		//imu=0;
 						len3 = -1; // Set flag in new packet mode
 					}
 				}

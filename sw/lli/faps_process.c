@@ -119,7 +119,8 @@ int process(msg_t *msg)
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[3])&0xFF));
 					pwm_set_duty(RC2, duty );
-					grs_ack();
+					
+					//empty_meas_buffer(
 					break;
 				case 20:
 					break;
