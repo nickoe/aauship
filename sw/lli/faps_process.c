@@ -6,14 +6,14 @@
 #include "crc16.h"
 #include <string.h>
 
+int awake_flag;
 /*
  * Decide what to do with a given command
  */
 int process(msg_t *msg) 
 {
 	char buildtime[] =  __DATE__ " " __TIME__;
-#define GITCOMMIT "hej"
-	char gitcommit[sizeof(GITCOMMIT)] = GITCOMMIT;
+	char gitcommit[sizeof(__GIT_COMMIT__)] = __GIT_COMMIT__;
 	char buildinfo[sizeof(buildtime)+40+2];
 	int16_t duty = 0;
 	int i = 0;
@@ -119,7 +119,7 @@ int process(msg_t *msg)
 					duty = (duty << 8) & 0xFF00; 
 					duty = (duty | ((msg->data[3])&0xFF));
 					pwm_set_duty(RC2, duty );
-					
+					awake_flag = 0;
 					//empty_meas_buffer(
 					break;
 				case 20:
