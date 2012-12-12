@@ -23,15 +23,21 @@
 #include "config.h"
 #include "uart.h"
 #include "faps_parse.h"
+
 #include "pwm.h"
 #include "spi.h"
 #include "adis16405.h"
 
+
 volatile int adis_ready_counter=0;
+volatile int tx_counter = 0;
+int awake_flag = 0;
+uint8_t rmc_idx = 0;
 
 
 ISR(PCINT2_vect) {
 	adis_ready_counter++;
+	tx_counter++;
 }
 
 int main (void)
@@ -44,6 +50,9 @@ int main (void)
 	int  idx = 0, idx2 = -1, idx3 = -1;
 	int	 len2 = 0;
 	int	 len3 = 0;
+	char meas_buffer[TX_BUFF_SIZE];
+	int txi = 0;
+	int txtop=0;
 	unsigned int i = 0;
 	char *ptr;
 	unsigned char hli_mutex = 0;
@@ -53,6 +62,8 @@ int main (void)
 	uint16_t xacc = 0;
 	uint8_t xacca[2];
 	char s[64];
+	char rmc[256];
+
 
 
   /* set outputs */
@@ -96,23 +107,46 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
+		// Stop motors when connection is lost
+		if (awake_flag > AWAKE_THRESHOLD) {
+			duty = 0;
+			pwm_set_duty(RC1, duty );
+			duty = 0;
+			pwm_set_duty(RC2, duty );
+		};
+
+		if(tx_counter >= TX_READY) {
+			//empty buffer
+			for (txi = 0; txi < txtop; txi++) {
+				uart2_putc(meas_buffer[txi]);
+			}
+			txtop = 0;
+			awake_flag++;
+PORTL ^= (1<<LED2);
+			tx_counter -= TX_READY;
+		}
+
+
 		if (adis_ready_counter >= ADIS_READY) {
 			adis_decode_burst_read_pack(&adis_data_decoded);
-			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t));
-/*			imu++;
-		itoa(imu,s,10);
-		uart2_puts(s);
-		uart2_putc('\r');
-		uart2_putc('\n');*/
+			adis_reduce_decoded_burst(); // Reduce data ammount
+			#ifdef LOG_ENABLE
+			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t)); // Log to SD card
+			#endif
+
+			memcpy(&meas_buffer[txtop],	(char *)package(sizeof(adis8_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced),sizeof(adis8_reduced_t)+6);
+			txtop=txtop+sizeof(adis8_reduced_t)+6;
 
 			adis_ready_counter -= ADIS_READY;
+
 			PORTL ^= (1<<LED4);
 		}
+
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
 		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
-
+uart_putc(c2);
 			if (idx2 == 0) { // We should buffer a packet
 				len2 = c2+5; // Set length
 			}
@@ -124,9 +158,8 @@ int main (void)
 				if (idx2 == len2) { // We now have a full packet
 
 					if (parse(&rfmsg, buffer2)) {
-						PORTL ^= (1<<LED3);
+						//PORTL ^= (1<<LED3);
 						process(&rfmsg);
-						grs_send(package(0, 0x00, 0x07, NULL), 0); // GRS ACK
 					}
 
 					idx2 = -1; // Set flag in new packet mode
@@ -146,8 +179,6 @@ int main (void)
 		/* Reading from GPS */
 		if ( c3 & UART_NO_DATA ) {} else  // Data available
 		{
-			uart_putc(c3); // Forward every byte from GSP to uart directly
-
 			/* Transmitting NMEA GPS sentences to the HLI */
 			if (c3 == '$') { // We have a possible message comming
 				//PORTL ^= (1<<LED3);
@@ -159,13 +190,21 @@ int main (void)
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
 					if(buffer3[4] != 'S') { // Disable GSV and GSA messages
-						hli_send(package(len3, 0x1E, 0x06, buffer3), len3);
-	/*			gps++;		
-		itoa(gps,s,10);
-		uart2_puts(s);
-		uart2_putc('\r');
-		uart2_putc('\n');*/
-		//imu=0;
+						#ifdef LOG_ENABLE
+						hli_send(package(len3, 0x1E, 0x06, buffer3), len3); // Log to SD card
+						#endif
+						if (rmc_cut(buffer3,rmc)) {
+							// Invalid 
+
+						} else {
+							//hli_send(package(42, 30, 6, rmc),42);
+
+							memcpy(&meas_buffer[txtop],	(char *)package(rmc_idx, 30, 6, rmc),rmc_idx+6);
+							txtop=txtop+rmc_idx+6;
+
+							PORTL ^= (1<<LED3);
+						}
+
 						len3 = -1; // Set flag in new packet mode
 					}
 				}
