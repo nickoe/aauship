@@ -2,7 +2,7 @@
 \label{chap:control}
 
 \section{Overview of the control system}
-This is an overview of the information flow for control in regard to the rest of the system containing, sensors, \ac{LLI} and \ac{HLI}.
+This is an overview of the information flow for control in regard to the rest of the system containing, sensors, \ac{LLI} and \ac{HLI}. The System uses a two staged control system. The control system is the heart of the autonomous navigation, it is responsible for keeping the ship on its predefined course. The inputs of the whole control system are the sensor measurement data, and the output is the motor speed \ac{PWM} percentages, passed to the \ac{LLI}.
 
 \begin{figure}[htbp]
 	\centering
@@ -11,11 +11,41 @@ This is an overview of the information flow for control in regard to the rest of
 	\label{fig:vessel-block-overview}
 \end{figure}
 
-\todo{Illustrate on figure~\vref{fig:vessel-block-overview} where RF comms is or maybe that should be on the block overvieww diagram without regard to contorl abstraction}
+\todo{Illustrate on figure~\vref{fig:vessel-block-overview} where RF comms is or maybe that should be on the block overview diagram without regard to contol abstraction}
+
+\section{Navigation control}
+\subsection{Calculation of Reference Heading}
+
+\includegraphics[width=\textwidth]{img/ControlStrategyFigures/Navigation.png}
+
+In the First Stage the required heading of the ship is calculated that keeps the course closest to the planned waypoint.
+
+In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy of the first path is to navigate through all of these SWPs in a predefined order, one by one. (Navigation Figure) The heading of the ship is defined in NED coordinate system. The required heading is determined by the law of Cosines, based on the Position of the Ship and the Position of the next Sub-Waypoint.
+\begin{center}
+\includegraphics[scale = 0.4]{img/ControlStrategyFigures/Law_of_Cosines.png}
+\end{center}
+Problems rise and corrections are necessary, if the heading of the ship $\theta$ is $\theta < -\pi$ or $\theta < \pi$. The heading of the ship is calculated based on the Gyro sensor and the heading can have any value in the form of: $$\theta = [-{\pi} ; \pi ] \pm 2*k*\pi$$. Before invoking the control procedure, all of the heading angles must be transformed into the $[-\pi ; \pi]$ interval.
+This procedure causes a possible error though.
+
+\includegraphics[width=\textwidth]{img/ControlStrategyFigures/Headings.png}
+
+The required heading or the heading of the ship must be transformed into a different representation, where $$|\theta_{r}-\theta| < \pi$$. To keep a consistent heading representation, first the deviation angle $$\theta = \pi_{r}-\pi$$ is calculated, than transformed to the $[-\pi;\pi]$ interval and finally, with $\delta$ we can transform $\theta_{r}$ to $$\theta_{r}(\theta) = \theta + \delta$$.
+If the conditions above are met, $\theta$ and $\theta_r(\theta)$ will always yield values that result in correct controller output.
+
+\subsection{Subwaypoint Validity}
+
+The overall navigation can be improved, if the Target SWPs are considered “reached” in a certain distance. Optimally this distance (Validity distance) should be somewhat longer than the minimum turning radius of the ship ($R_{min}$). If it’s shorter, the ship might not be able to reach the SWP, if it’s way longer, the ship will divert from its course in turns.
+
+Generally if the Validity distance is approaching $R_{min}$ the ship will stay close to the Waypoints, and will navigate through a geometrically broken line, but if the ship speed is too high, the overall path-accuracy might be low. At a higher speed a longer Validity distance is recommended, because it will increase the path-accuracy in the overall navigation.
+
+\includegraphics[width=\textwidth]{img/ControlStrategyFigures/SWP_Validity.png}
+
+The main objective of the controller is to provide a fairly robust system that is unable to enter an unstable or uncontrollable state. In order to ensure this, we have analyzed all of the possible ship states, and crated a simple but efficient method to control the ship, by guaranteeing that the input of the second stage is always appropriate, under any circumstances. We secured this condition with the proper pair of $\theta$ and $\theta_r(\theta)$, resulting in the SWP Validity checking and the conditioning of $\theta$ and $\theta_r$.
 
 \section{State Space Model}
 \subsection{Choosing the right states}
 
+The Second Stage ensures that the ship will stay true to its required heading, therefore staying on its local path.
 \todo{Why we chose a lot of states in the beginning, and then were left with just a few, talk about that}
 
 \subsection{Linearizing the outputs}
@@ -99,5 +129,3 @@ From which we can identify the coefficients that correspond tot the linear relat
 \[ \alpha_{\omega} = -1.88 \]
 \[ \beta_{\omega} = 3.77 \]
 \end{minipage}
-
-
