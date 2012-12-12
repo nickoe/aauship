@@ -53,6 +53,6 @@
 //#define ADIS_READY 164 // 10 Hz
 #define ADIS_READY 82 // 20Hz
 //#define ADIS_READY 42 // 40Hz
-#define TX_READY 273 // 3Hz
+#define TX_READY 546 // 3Hz
 
 #endif // CONFIG_H 

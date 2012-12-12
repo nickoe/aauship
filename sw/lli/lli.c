@@ -177,7 +177,7 @@ PORTL ^= (1<<LED3);
 				len3++;
 				if (c3 == '\n') { // We now have a full packet
 					if(buffer3[4] != 'S') { // Disable GSV and GSA messages
-						//grs_send(package(len3, 0x1E, 0x06, buffer3), len3); // Log to SD card
+						hli_send(package(len3, 0x1E, 0x06, buffer3), len3); // Log to SD card
 
 						if (rmc_cut(buffer3,rmc)) {
 							// Invalid 
