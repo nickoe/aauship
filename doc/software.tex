@@ -5,10 +5,42 @@ The LLI functionality was implemented in C as this is the primary embedded progr
 
 \section{System Description}
 
-\includegraphics[width = \textwidth]{img/HLIFigures/ObjectDiagram.png}
+The HLI consists of 3 main modules and an additional simulator module, which is not rqeuired for the embedded application.
 
-\includegraphics[width = 0.5\textwidth]{img/HLIFigures/System-Simulation_Interactions.png}\includegraphics[width = 0.5\textwidth]{img/HLIFigures/System-World_Interactions.png}
+The main module of the software is the Ship Class and its function definitions.
+The Ship Class itself represents an emph{actor} in the system. A Ship Object has individual dynamic model, controller and objective. Each Ship Object can plan its own waypoints, navigate trough them using their own sensor data and log informations.
 
+\begin{center}
+\includegraphics[width = 0.5\textwidth]{img/HLIFigures/ActorModel/Actor-model0.png}
+\end{center}
+
+A Ship Object requires auxillary Classes and Functions. The two side-modules of the system are the ObjectLibrary and FunctionLibrary. These Libraries store Classes and Functions, which are not directly connected to the physical behaviour of the ship, but provide an essential support for the Path Planning and Navigation control.
+
+\includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/Actor-model1.png}
+
+
+Each ship calculates it's own \emph{Waypoints}, depending on their individual capabilities and inputs.
+There is a possibility for the ships to communicate trough a wireless channel with each other directly or trough a nearby mothership/computer, in order to share position data (to avoid collisions), or distribute the Path Planning tasks for enhanced computation power.
+
+\includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/Actor-model2.png}
+
+
+The additional simulator module is an extension of the \emph{Ship Object}. In Simulation mode, to each \empg{Ship} belongs a \emph{Simulator}, simulating its interface communication and dynamic behaviour. The design of the simulator was led by two objectives:
+\begin{itemize}
+\item The \emph{Simulation} and the \emph{Embedded} application must run with the absolutely same \empg{Ship Class Module}
+\item The simulator must predict the behaviour of the system well, but must be using a different model than the inner \emph{State Estimator Kalman Filter} of the ship
+\item The simulator must be completely independent from the simulated system, except for the actuator values of the Ship.
+\end{itemize}
+
+\includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/SimModel.png}
+
+Because of the predefined objectives above, the flowchart of the simulated and the actual task only slightly differs (Appendix)
+
+%\includegraphics[width = \textwidth]{img/HLIFigures/System-Simulation_Interactions.png}
+
+%The differences are kept on the right side of the Flowchart:
+
+%\includegraphics[width = \textwidth]{img/HLIFigures/System-World_Interactions.png}
 
 \section{Course keeping control}
 
@@ -55,7 +87,7 @@ The initial idea was dropped after the following considerations:
 
 The new idea is originated from: Komlósi István: Mobilis robotok autonóm navigációja mozgó akadályok elkerülésével (English version: István Komlósi and Bálint Kiss: Motion planning for multiple mobile robots using time-scaling)
 The idea is to determine the maximum possible path curvature that the robot can handle. This is based on the Sigma and Kappa values of the Ship, where sigma is a function of the maximum speed of Torque change, and kappa is the maximum curvature of the path at a given speed. The local path is generated in a specific way that the robot will always turn with the maximum possible curvature at the current speed, thus staying the closest to the \emph{Waypoint} without losing speed. There is a threshold turn-angle, which determines if the robot requires only two identical Euler-spiral paths to turn or an arc path that has the maximum curvature, with two Euler spiral paths leading in or out.
-In order to create the path the algorithm calculates 5 or 3 (depending on the threshold) key points and fits a Hermite-poly onto them (Figure). From this point on the local path in the given range is determined by these points only, thus saving memory and CPU time, while calculating a better path.
+In order to create the path the algorithm calculates 5 or 3 (depending on the threshold) key points and fits a Hermite-poly onto them. From this point on the local path in the given range is determined by these points only, thus saving memory and CPU time, while calculating a better path.
 \begin{center}
 \includegraphics[width = \textwidth]{img/LocalPlannerFigures/3Points.png}
 The calculation of the 3 key-points if $\epsilon < \epsilon_{max}$ (no circular path component is needed)
