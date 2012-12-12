@@ -49,3 +49,27 @@ sw/MATLAB/pos.csv
 sw/MATLAB/pos-local.csv
 
 sw/MATLAB/accdata00185.csv
+
+poster/poster.log
+
+poster/poster.fls
+
+poster/poster.blg
+
+poster/poster.bbl
+
+poster/poster.aux
+
+*.log
+
+*.fls
+
+*.blg
+
+*.bbl
+
+*.aux
+
+*.pdf
+
+poster/poster.pdf
