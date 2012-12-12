@@ -51,7 +51,6 @@ int main (void)
 	int	 len2 = 0;
 	int	 len3 = 0;
 	char meas_buffer[TX_BUFF_SIZE];
-	//awake_flag = 0;
 	int txi = 0;
 	int txtop=0;
 	unsigned int i = 0;
@@ -108,8 +107,12 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
+		// Stop motors when connection is lost
 		if (awake_flag > AWAKE_THRESHOLD) {
-//		@TODO Shutdown actuators here
+			duty = 0;
+			pwm_set_duty(RC1, duty );
+			duty = 0;
+			pwm_set_duty(RC2, duty );
 		};
 
 		if(tx_counter >= TX_READY) {
@@ -143,7 +146,7 @@ PORTL ^= (1<<LED2);
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
 		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
-//uart_putc(c2);
+uart_putc(c2);
 			if (idx2 == 0) { // We should buffer a packet
 				len2 = c2+5; // Set length
 			}
