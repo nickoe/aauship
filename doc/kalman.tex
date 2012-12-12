@@ -4,7 +4,7 @@ To give a better position estimate which can be fed to the controller as well, t
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system. 
 
 \subsection{State model}
-The state model is used as a base for computing the influence the different inputs have on the system. The matrix is the same as the $\vec{A}$ matrix used to describe the state space representation of the system. The general state expression is given as:
+The state model is used as a base for computing the influence the different inputs have on the system. The below formula is a general description for the state model of the system. 
 \begin{align}
 \vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)
 \end{align}
@@ -16,7 +16,46 @@ $\vec{w}(k)$ is the driving noise (the system input)
 \end{ffk}
 In this case, the driving noise $\vec{w}(n)$ will be the inputs to the system, which can then be used to estimate the different states. The states to be estimated is the velocity $\dot{x}$, the angular velocity $\omega$ and the angle of the vessel in the local frame $\theta$. The driving noise (or input) can be defined as the $\vec{B}$ matrix in the state system, multiplied with the different inputs given to the system, namely $n_1$ and $n_2$. When inserted, the formula for the state model becomes:
 \begin{align}
-\vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{B}\cdot\vec{u}
+\vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)
+\end{align}
+The state model $\vec{\Phi}(k)$ can be seen as the same matrix 3-by-3 matrix inserted on the diagonal of a 9-by-9 matrix. This matrix expresses how an acceleration is turned into a position by defining the current position (or next) as a sum of the last position, the change due to the last velocity and the change due to the last acceleration, thus giving:
+\begin{align}
+\text{Pos}_x(k) = \text{Pos}_x(k-1) + \text{Vel}_x(k-1)\cdot ts +  \text{Acc}_x(k-1) \cdot \frac{ts^2}{2}
+\end{align}
+Using the same notation, it is possible to define the current velocity as:
+\begin{align}
+\text{Vel}_x(k) = \text{Vel}_x(k-1) + \text{Acc}_x(k-1) \cdot ts 
+\end{align}
+And finally define the acceleration as:
+\begin{align}
+\text{Acc}_x(k) = \text{Vel}_x(k-1)\cdot \beta_x(k-1) + \text{Acc}_x(k-1)
+\label{eq:accx}
+\end{align}
+As the input to the system is an acceleration, the $\text{Acc}_x(k-1)$ term in equation \vref{eq:accx} is zeroed out, and is then input to the system via the input. These 3 formulas can be simplified and put on matrix form to make further computations easier, thus stating the state matrix as: 
+\begin{align}
+\vec{\Phi}_{X,Y,\omega}(k) = \begin{bmatrix}
+1 & ts & \frac{ts^2}{2}\\
+0 & 1 & ts\\
+0 & -\beta _{X} & 0
+\end{bmatrix}
+\end{align}
+Thus producing the state matrix as:
+\begin{align}
+\vec{\Phi}(k) = diag\{\vec{\Phi}_{X}(k),\vec{\Phi}_{Y}(k),\vec{\Phi}_{\omega}(k)\} 
+\end{align}
+$\vec{x}(k)$ is the state vector, and are given as:
+\begin{align}
+\vec{x}(k) = [x(k),\dot{x}(k),\ddot{x}(k),y(k),\dot{y}(k),\ddot{y}(k),\theta(k),\omega(k),\alpha(k)]^T
+\end{align}
+It is not all the available states we want to output, but the more inputs the system have, the better the estimate becomes. As stated, the input to the system is given as an acceleration. This can be defined as an input given as a force and an input given as a torque. The input can be defined as $\vec{u}(k)$ (the controller output) this is multiplied with an augmented version of the $\vec{B}$ matrix from the state space model $\vec{B}_a$ to transform it to an acceleration thus can $\vec{w}(k)$ be described by:
+\begin{align}
+\vec{w}(k) = \vec{B}_a\vec{u}(k) = \begin{bmatrix}
+0 & 0 & \frac{1}{m} & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{I}
+\end{bmatrix}^T\begin{bmatrix}
+F(k)\\
+\tau(k)
+\end{bmatrix}
 \end{align}
 
 \subsection{Observation model}
@@ -109,43 +148,16 @@ F(n)\\
 \end{bmatrix}
 \end{align}
 
-
-
-On \vref{fig:revol} a test input to the system is plotted. The sequence is an alternating angle reference sequence, the angle is a sine curve. 
-\begin{figure}[htbp]
-	\centering
-%	\includegraphics[width=\textwidth]{img/revol}
-	\caption{Test input to the system}
-	\label{fig:revol}
-\end{figure}
-
-As these cannot be measured accurately, we need to add noise to the input signals.
-
-As the \ac{IMU} samples at 10 Hz and the \ac{GPS} samples at 1 Hz the two measurements are to be fusioned together. As the most precise estimate is wanted, the \ac{KF} will be run at 10 Hz - utilizing the low variance of the \ac{IMU} measurements for a better estimate when a new \ac{GPS} sample is not present. 
-
-To do this, the receiver decoding the packages sent to the \ac{HLI} wirelessly are checked for validity, and the outcome of every package is then inserted into a matrix, which is then multiplied onto the Kalman gain, which sets the gain (if any) to zero, and the \ac{KF} will then respond to the \ac{IMU} measurements instead, giving a more precise estimate when no \ac{GPS} measurement is present. 
-This matrix mask can be given as:
-\begin{align}
-\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
-\end{align}
-\noindent Where the individual $\lambda$'s is given as: 
-\begin{align}
-\lambda = 
-\left\{ 
-  \begin{array}{l l}
-    1 & \quad \text{if measurement is valid}\\
-    0 & \quad \text{otherwise}
-  \end{array} \right.
-\end{align}
-Thus augmenting the \ac{KF} equations to:
+\section{\ac{KF} description}
+The \ac{KF} can be divided into two steps, an update step and a prediction step. The update step updates all the variables, while the prediction step does the actual prediction. This is carried out using 
 \begin{align}
 \vec{x}(k) &= \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)\\
 \vec{z}(k) &= \vec{H}(k)\vec{x}(k) + \vec{v}(k)\\
 \hat{\vec{x}}(k)_{(-)} &= \vec{\Phi}(k-1)\hat{\vec{x}}(k-1)_{(+)}\\
 \vec{P}(k)_{(-)} &= \vec{\Phi}(k-1) \vec{P}(k-1)_+ \vec{\Phi}(k-1)^T + \vec{Q}(k-1)\\
 \hat{\vec{x}}(k)_{(+)} &= \hat{\vec{x}}(k)_{(-)} + \bar{\vec{K}(k)}[\vec{z}(k) - \vec{H}(k)\cdot\hat{\vec{x}}(k)_{(-)}]\\
-\vec{P}(k)_{(+)} &= [\vec{I} - \bar{\vec{K}(k)}\vec{H}(k)]\vec{P}(k)_{(-)}\\
-\bar{\vec{K}(k)} &= \vec{\Lambda}\langle\vec{P}(k)_{(-)} \vec{H}(k)^T [\vec{H}(k)\vec{P}(k)_{(-)} \vec{H}(k)^T + \vec{R}(k)]^{-1}\rangle
+\vec{P}(k)_{(+)}&= [\vec{I} - \bar{\vec{K}(k)}\vec{H}(k)]\vec{P}(k)_{(-)}\\
+\bar{\vec{K}(k)} &= \vec{P}(k)_{(-)} \vec{H}(k)^T [\vec{H}(k)\vec{P}(k)_{(-)} \vec{H}(k)^T + \vec{R}(k)]^{-1}
 \end{align}
 \noindent Where
 \begin{ffk}
@@ -156,6 +168,35 @@ $\vec{P}(k)_{(+)}$ = Update of the covariance\\
 $\bar{\vec{K}(k)}$ = Kalman gain with $\vec{\Lambda}$ multiplied onto it
 \end{ffk}
 
+\section{Simulations of the \ac{KF}}
+Through simulations, the covariance matrices have been determined, as a dynamic covariance matrix have produced some bad results. When the system is simulated with a $sin(\theta)$ (0.2 amplitude, 0.001 Hz) angle reference and a $1$ m/s velocity reference using the \MATLAB  script found on the CD-rom for 5000 samples , the system produces the below figure \vref{fig:kalmanA}. All the figures below are zoomed in on the tip of the track, where the biggest error is expected as this is where the ship turns. 
+
+
+When the system is simulated it gives the following response for estimating the position.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/kalmana}
+	\caption{Simulation of the \ac{KF} with reference signal given as: 1 m/s and angle as $sin(\theta)$, with 0.2 amplitude and 0.001 Hz frequency for 5000 samples. The two sensors samples at 10 Hz.}
+	\label{fig:kalmanA}
+\end{figure}
+
+Figure\vref{fig:kalmanA} depicts the output of the \ac{KF} when the sampling rate of the \ac{GPS} and the \ac{IMU} are equal. However on the actual system - the \ac{GPS} only samples at 1 Hz and the \ac{IMU} samples at 10 Hz, the filter needs to be changed. The \ac{KF} must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain $\bar{\vec{K}(k)}$ to zero. Another implementation would be to zero the gain manually. This produces the below figure \vref{fig:kalmanB} as a function of the \ac{GPS} being sampled only once every second, while the \ac{IMU} is sampled at 10 Hz. 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/kalmanb}
+	\caption{Simulation of the \ac{KF} with reference signal given as: 1 m/s and angle as $sin(\theta)$, with 0.2 amplitude and 0.001 Hz frequency for 10000 samples. The system gains the measurements when no \ac{GPS} amples are present with 0.}
+	\label{fig:kalmanB}
+\end{figure}
+
+If the Kalman gain $\bar{\vec{K}(k)}$ is not zeroed out, the \ac{KF} will use the same sample as input, this causes the filter to try and make the system converge towards the last known value. If this is simulated it produces the following plot shown on \vref{fig:kalmanC}:
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/kalmanc}
+	\caption{Simulation of the \ac{KF} with reference signal given as: 1 m/s and angle as $sin(\theta)$, with 0.2 amplitude and 0.001 Hz frequency for 5000 samples. The system sets the current \ac{GPS} measurement equal the last when no new sample is present.}
+	\label{fig:kalmanC}
+\end{figure}
 
 \subsection{Simulations of the filter}
 Below is 3 plots of the \ac{KF} running with a square pulse input as the angle reference. Figure \vref{fig:xymono} depicts the system running when the sensors are running at the same sampling frequency. On the box on the plot the estimate clearly converges and follows the actual path nicely. 
@@ -199,8 +240,31 @@ Angle from the \ac{IMU}: magnetometer (compass)
 \section{Estimation of position on a lossy channel}
 As the controls are run on a remote platform, the \ac{KF} should be able to work even though some sensor measurements are corrupted. To work around this, the Kalman gain should be set to zero of the readout is corrupted - so every time the receiver gets a packet where the checksom is invalid, it generates a vector mask that tells which rows of the Kalman gain should be zeroed. 
 
-To test this, \MATLAB has been used, which generates the the following results for a given packet loss rate. This rate can be then be altered to see how the system responds to a given data loss rate. The data loss rate is given in percent. If the system looses 10\% of the packages, the following error curves are produced:
+\begin{align}
+\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+\end{align}
+\noindent Where the individual $\lambda$'s is given as: 
+\begin{align}
+\lambda = 
+\left\{ 
+  \begin{array}{l l}
+    1 & \quad \text{if measurement is valid}\\
+    0 & \quad \text{otherwise}
+  \end{array} \right.
+\end{align} 
+Thus augmenting the Kalman gain $\bar{\vec{K}(k)}$ equations to:
+\begin{align}
+\bar{\vec{K}(k)} &= \langle\vec{P}(k)_{(-)} \vec{H}(k)^T [\vec{H}(k)\vec{P}(k)_{(-)} \vec{H}(k)^T + \vec{R}(k)]^{-1}\rangle\vec{\Lambda} 
+\end{align} 
 
 The 4 figures represent the error with a 10 percent loss, a 20 percent loss, a 30 percent loss and finally a 40 percent loss in data. 
 
 \section{Implementation of the \ac{KF}}
+The \ac{KF} is implemented in Python and is run on the \ac{HLI}. On the implementation it self, the \ac{KF} is fed the control signals measured. A depiction of the actual implementation is seen on figure \vref{fig:kalmanimp}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{img/kalmanim}
+	\caption{Depiction of the \ac{KF} implementation. The \ac{KF} is used to estimate the measurements more precisely.}
+	\label{fig:kalmanimp}
+\end{figure}
