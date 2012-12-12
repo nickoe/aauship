@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.29"
+    ComputedModelVersion    "1.33"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [397.0, 340.0, 1433.0, 797.0]
+      Location		      [408.0, 309.0, 1433.0, 797.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Dec 11 16:04:38 2012"
-  RTWModifiedTimeStamp	  277142677
-  ModelVersionFormat	  "1.%<AutoIncrement:29>"
+  LastModifiedDate	  "Tue Dec 11 16:38:22 2012"
+  RTWModifiedTimeStamp	  277144606
+  ModelVersionFormat	  "1.%<AutoIncrement:33>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -878,7 +878,7 @@ Model {
   }
   System {
     Name		    "discsim"
-    Location		    [397, 340, 1830, 1137]
+    Location		    [408, 309, 1841, 1106]
     Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
@@ -1009,9 +1009,8 @@ Model {
       Ports		      [0, 1]
       Position		      [20, 210, 50, 240]
       ZOrder		      1
-      WaveForm		      "sawtooth"
-      Amplitude		      "10"
-      Frequency		      "0.01"
+      Amplitude		      "0.2"
+      Frequency		      "0.001"
     }
     Block {
       BlockType		      SubSystem

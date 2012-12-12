@@ -109,7 +109,7 @@ $\bar{\vec{K}(k)}$ = Kalman gain with $\vec{\Lambda}$ multiplied onto it
 \end{ffk}
 
 \section{Simulations of the \ac{KF}}
-Through simulations, the covariance matrices have been determined, as a dynamic covariance matrix have produced some bad results. When the system is simulated with a $sin(\theta)$ (0.2 amplitude, 0.001 Hz) angle reference and a $1$ m/s velocity reference using the \MATLAB  script found on the CD-rom for 5000 samples , the system produces the below figure \vref{fig:kalmanA}.
+Through simulations, the covariance matrices have been determined, as a dynamic covariance matrix have produced some bad results. When the system is simulated with a $sin(\theta)$ (0.2 amplitude, 0.001 Hz) angle reference and a $1$ m/s velocity reference using the \MATLAB  script found on the CD-rom for 5000 samples , the system produces the below figure \vref{fig:kalmanA}. All the figures below are zoomed in on the tip of the track, where the biggest error is expected as this is where the ship turns. 
 
 
 When the system is simulated it gives the following response for estimating the position.
@@ -120,12 +120,12 @@ When the system is simulated it gives the following response for estimating the 
 	\label{fig:kalmanA}
 \end{figure}
 
-Figure\vref{fig:kalmanA} depicts the output of the \ac{KF} when the sampling rate of the \ac{GPS} and the \ac{IMU} are equal. However on the actual system - the \ac{GPS} only samples at 1 Hz and the \ac{IMU} samples at 20 Hz, the filter needs to be changed. The \ac{KF} must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain $\bar{\vec{K}(k)}$ to zero. Another implementation would be to zero the gain manually. This produces the below figure \vref{fig:kalmanB} as a function of the \ac{GPS} being sampled only once every second, while the \ac{IMU} is sampled at 20 Hz. 
+Figure\vref{fig:kalmanA} depicts the output of the \ac{KF} when the sampling rate of the \ac{GPS} and the \ac{IMU} are equal. However on the actual system - the \ac{GPS} only samples at 1 Hz and the \ac{IMU} samples at 10 Hz, the filter needs to be changed. The \ac{KF} must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain $\bar{\vec{K}(k)}$ to zero. Another implementation would be to zero the gain manually. This produces the below figure \vref{fig:kalmanB} as a function of the \ac{GPS} being sampled only once every second, while the \ac{IMU} is sampled at 10 Hz. 
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{img/kalmanb}
-	\caption{Simulation of the \ac{KF} with reference signal given as: 1 m/s and angle as $sin(\theta)$, with 0.2 amplitude and 0.001 Hz frequency for 5000 samples. The system gains the measurements when no \ac{GPS} samples are present with 0.}
+	\caption{Simulation of the \ac{KF} with reference signal given as: 1 m/s and angle as $sin(\theta)$, with 0.2 amplitude and 0.001 Hz frequency for 10000 samples. The system gains the measurements when no \ac{GPS} samples are present with 0.}
 	\label{fig:kalmanB}
 \end{figure}
 
