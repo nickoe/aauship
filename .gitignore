@@ -19,6 +19,21 @@ doc/*.bbl
 doc/*.toc
 doc/.goutputstream-*
 
+poster/*.out
+poster/*.aux
+poster/*.log
+poster/*.maf
+poster/*.mtc
+poster/*.mtc0
+poster/*.pdf
+poster/*.synctex.gz
+poster/*.fdb_latexmk
+poster/*.fls
+poster/*.blg
+poster/*.bbl
+poster/*.toc
+poster/.goutputstream-*
+
 # Software files
 *.out
 *.elf
