@@ -17,6 +17,7 @@ doc/*.fls
 doc/*.blg
 doc/*.bbl
 doc/*.toc
+doc/.goutputstream-*
 
 # Software files
 *.out
@@ -32,6 +33,10 @@ sw/MATLAB/html/*
 sw/MATLAB/*.eps
 sw/MATLAB/*.mat
 
+sw/MATLAB/pos.csv
+sw/MATLAB/pos-local.csv
+sw/MATLAB/accdata00185.csv
+
 # LLI stuff
 sw/lli/doc
 
@@ -43,9 +48,3 @@ hw/*.000
 hw/lib/*.bak
 hw/lib/*.bck
 
-
-sw/MATLAB/pos.csv
-
-sw/MATLAB/pos-local.csv
-
-sw/MATLAB/accdata00185.csv
