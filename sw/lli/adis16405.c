@@ -161,6 +161,35 @@ int adis_decode_burst_read_pack(uint8_t data[sizeof(adis8_t)]) {
 }
 
 /**
+ * Reduce already burst read and decoded pack of IMU data
+ */
+void adis_reduce_decoded_burst(void) {
+//		adis_reduced.zgyro = adis_orig.zgyro;
+
+	adis_data_decoded_reduced.zgyro[0] = adis_data_decoded.zgyro[0];
+	adis_data_decoded_reduced.zgyro[1] = adis_data_decoded.zgyro[1];
+	adis_data_decoded_reduced.xaccl[0] = adis_data_decoded.xaccl[0];
+	adis_data_decoded_reduced.xaccl[1] = adis_data_decoded.xaccl[1];
+	adis_data_decoded_reduced.yaccl[0] = adis_data_decoded.yaccl[0];
+	adis_data_decoded_reduced.yaccl[1] = adis_data_decoded.yaccl[1];
+	adis_data_decoded_reduced.xmagn[0] = adis_data_decoded.xmagn[0];
+	adis_data_decoded_reduced.xmagn[1] = adis_data_decoded.xmagn[1];
+	adis_data_decoded_reduced.ymagn[0] = adis_data_decoded.ymagn[0];
+	adis_data_decoded_reduced.ymagn[1] = adis_data_decoded.ymagn[1];
+	adis_data_decoded_reduced.adc[0] = adis_data_decoded.adc[0];
+	adis_data_decoded_reduced.adc[1] = adis_data_decoded.adc[1];
+
+
+/*
+		adis_orig[0] = adis_orig[3];
+		adis_orig[1] = adis_orig[4];
+		adis_orig[2] = adis_orig[5];
+		adis_orig[3] = adis_orig[7];
+		adis_orig[4] = adis_orig[8];
+		adis_orig[5] = adis_orig[11];*/
+}
+
+/**
  * Word to byte-array pointer
  * Converts a 16-bit word to a 2 elements 8-bit byte array
  */
