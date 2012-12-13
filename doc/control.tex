@@ -224,34 +224,71 @@ D = 0
 
 \subsection{Discretizing for use with a particular timestep}
 
-The system described so far is continuous and needs to be discretized before implementation in a computer algorithm, so we use the function c2d from MATLAB and the time step Ts in order to do this. \todo{explain more about c2d or what we will eventually use}
+The system described so far is continuous and needs to be discretized before being converted into an algorithm. Discretization is carried out in \MATLAB using the \texttt{c2d} command. This command takes the continous time state space model and the discretization time step - and outputs the discrete equivalent. 
 
-\subsection{Pole assignment}
 
-For assigning poles, we use the lqr function implemented in MATLAB. This calculates the gain matrix $ F $ by minimizing the quadratic cost function:\todo{taken from here http://www.mathworks.se/help/control/ref/lqr.html}
-\[
-J(u)=\sum_{0}^{\inf} \{x^{T}Qx+u^{T}Ru+2x^{T}Nu\}
-\]
+
+\subsection{Optimal pole assignment}
+To achieve an optimal response of the system, an optimal pole placement strategy have been used. This is done by minimizing the cost function in equation \vref{eq:optf}. The optimal pole placement is then computed by solving the Algebraic Ricatti Equation. 
+\begin{align}
+\mathcal{J}(u)=\int_{0}^{\infty} (\vec{x}^T \vec{Q} \vec{x} + \vec{u}^T \vec{R} \vec{u}) dt
+\label{eq:optf}
+\end{align}
+Again, this is done in \MATLAB, and gives poles in:
+\todo{insert poles once final -lunde}
+\begin{align}
+\vec{F}_{opt} = \begin{bmatrix}
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}
+\end{align}
+This changes the input of the system to $\vec{u} = -\vec{F}_{opt}\vec{x}$, however, this does not take into account that we can end up with a steady state error. Therefore a reference gain is introduced. 
 
 
 \subsection{Reference gain}
-
-A reference gain is calculated and implemented in order to counter the steady state error. This is calculated using the formula $ N = Nu+FNx $ \todo{insert refference to feedback book, page 470}, where:
-\[
+The purpose of the reference gain is to zero out the steady state error. This is done by augmenting the state space system, and equating the error to zero. This can be written as:
+\begin{align}
+\vec{0} &= \vec{A}\vec{x}_{ss} + \vec{G}\vec{u}_{ss}\\
+\vec{y}_{ss} &= \vec{C}\vec{x}_{ss} + \vec{D}\vec{u}_{ss}
+\end{align}
+The gain $N$ is now introduced as a scaling factor on the reference signal, to make this error zero. The input $\vec{u}$ of the steady state version is then changed to the reference signal multiplied with the steady state input of the system. Written on matrix form this becomes:
+\begin{align}
 \begin{bmatrix}
-Nx\\
-Nu
+\vec{A} & \vec{B}\\
+\vec{C} & \vec{D}
+\end{bmatrix}\begin{bmatrix}
+\vec{N}_x\\
+\vec{N}_u
+\end{bmatrix} = \begin{bmatrix}
+\vec{0}\\
+\vec{I}
 \end{bmatrix}
-=
+\end{align}
+Thus, solving for $\begin{bmatrix} \vec{N}_x\\ \vec{N}_u \end{bmatrix}$ gives the following: \todo{insert refference to feedback book, page 470}, where:
+\begin{align}
 \begin{bmatrix}
-A & B\\
-C & D
+\vec{N}_x\\
+\vec{N}_u
+\end{bmatrix} =
+\begin{bmatrix}
+\vec{A} & \vec{B}\\
+\vec{C} & \vec{D}
 \end{bmatrix}^{-1}
-\!
-\cdot
 \begin{bmatrix}
 0\\
-I
+\vec{I}
 \end{bmatrix}
-\]
-\todo{Why we chose a lot of states in the beginning, and then were left with just a few?}
+\end{align}
+Thus the final control signal changing the input $\vec{u}$ to:
+\begin{align}
+\vec{u} = -\vec{F}_{opt}\vec{x} + (\vec{N}_u + \vec{F}_{opt}\vec{N}_\vec{x})\vec{r}
+\label{eq:refg}
+\end{align}
+The latter in equation \vref{eq:refg}  can be combined, and gives the following:
+\begin{align}
+\vec{u} = -\vec{F}_{opt}\vec{x} + \bar{\vec{N}}\vec{r}
+\end{align}
+
+\section{Implementation of control loop}
+The control loop is implemented in Python and is run on the HLI. 
+

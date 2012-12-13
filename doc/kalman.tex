@@ -105,49 +105,6 @@ When the system is simulated it gives the following response for estimating the 
 \end{figure}
 Figure\vref{fig:kalmanA} depicts how the system responds when running the measurements at the same sample rate. However - the \ac{GPS} only samples at 1Hz and the \ac{IMU} samples at 10Hz, the filter needs to be changed. The \ac{KF} must account for this change, which can be done by setting the noise of the measurement to a high value, which in turn will reduce the Kalman gain \todo{insert name of matrix -rlc} to zero, or just set the Kalman gain to zero. Both methods provide different results, as the estimate would then converge towards the last fixed value, whilst setting it to zero, would make the system use the other measurements available to the filter, and thus given an estimate, rather than convergin towards a fixed value. 	
 
-\begin{align}
-\vec{x}(n+1) = \vec{\Phi}\cdot\vec{x}(n) = \begin{bmatrix}
-1 & t_s & \frac{t_s^2}{2} & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 1 & t_s & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & -\beta_X & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 1 & t_s & \frac{t_s^2}{2} & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 1 & t_s & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & -\beta_Y & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 1 & t_s & \frac{t_s^2}{2}\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & t_s\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & -\beta_\omega & 0\\
-\end{bmatrix}\begin{bmatrix}
-x(n)\\
-\dot{x(n)}\\
-\ddot{x(n)}\\
-y(n)\\
-\dot{y(n)}\\
-\ddot{y(n)}\\
-\theta(n)\\
-\omega(n)\\
-\alpha(n)\\
-\end{bmatrix}
-\label{eq:matr}
-\end{align}
-In \vref{eq:matr} the system matrix is seen to be 3 individual systems. The inputs to the \ac{KF} is the desired force (computed by the controller) and the measurements given by the sensors mounted about the ship. The desired inputs to the system are put through the $\vec{B}$ matrix, which converts these to an acceleration and an angular acceleration respectively. These are then used as a basis for computing the estimating the output of the system. 
-
-\begin{align}
-\vec{Z(n)} = \begin{bmatrix}
-0 & 0\\
-0 & 0\\
-\frac{1}{m} & 0\\
-0 & 0\\
-0 & 0\\
-0 & 0\\
-0 & 0\\
-0 & 0\\
-0 & \frac{1}{I}\\
-\end{bmatrix}\begin{bmatrix}
-F(n)\\
-\tau(n)
-\end{bmatrix}
-\end{align}
-
 \section{\ac{KF} description}
 The \ac{KF} can be divided into two steps, an update step and a prediction step. The update step updates all the variables, while the prediction step does the actual prediction. The update step is given as:
 \begin{align}
