@@ -124,7 +124,7 @@ class Filter:
         self.Qz = numpy.diag([0, 0, 55, 0, 0, 55, 0, 0, 20])
         
     
-    def FilterStep(self, inputD, Wn):
+    def FilterStep(self, inputD, Wn, inputV):
         '''
         %% Running Computation of the Multirate Kalman filter (Negating the GPS input when no new sample is present):
         % As not all of the measurements are sampled at the same time (some are
@@ -144,10 +144,8 @@ class Filter:
         self.RupdateD_prev = self.RupdateD
         
         self.Z = self.Bn*inputD
-        
             
         self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]));
-        
         
         ''' self.YD = self.Hn*self.YD_prev+self.Z '''
         self.XD = Wn
@@ -157,20 +155,19 @@ class Filter:
         
         self.BD = (self.RpredD*numpy.transpose(self.An))*numpy.linalg.inv(self.An*self.RpredD*numpy.transpose(self.An)+self.Qw);
         
+        self.BD = self.BD * numpy.diag(inputV)
+        '''
         if self.sC == self.GPS_freq:
             self.BD = self.BD;
             self.sC = 0;
-            '''
-            self.BD[:,2] = 1.05 * self.BD[:,2]
-            self.BD[:,5] = 1.05 * self.BD[:,5]
-            '''
+            
         else:       
             
             self.BD[:,0] = numpy.zeros([9,1])
             self.BD[:,3] = numpy.zeros([9,1])
             self.BD[:,1] = numpy.zeros([9,1])
             self.BD[:,4] = numpy.zeros([9,1])
-            
+         '''   
             
         
         self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);

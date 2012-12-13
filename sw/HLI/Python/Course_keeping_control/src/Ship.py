@@ -336,11 +336,22 @@ class O_Ship:
         else:
             return numpy.matrix([[0], [0]])
     
-    def ReadStates(self, x, xd, xdd, y, yd, ydd, theta, omega, angacc, input_f):
+    def ReadStates(self, input_m, input_f):
         
         '''
         Reads systems states from sensors (processed data)
         '''
+        
+        x = input_m[0,0]
+        xd = input_m[1,0]
+        xdd = input_m[2,0]
+        y = input_m[3,0]
+        yd = input_m[4,0]
+        ydd = input_m[5,0]
+        theta = input_m[6,0]
+        omega = input_m[7,0]
+        angacc = input_m[8,0]
+        
         Measured_Pos = OL.O_PosData(x, y, 1, 1)
         
         BodyXY = FL.NEDtoBody(Measured_Pos, self.Pos, theta)
@@ -353,11 +364,16 @@ class O_Ship:
         
         Measured_Acc = OL.O_PosData(xdd, ydd, 1, 1)
         BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), theta)
-        
+        '''
         Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
+        '''
+        Wn = numpy.matrix([[x], [xd], [xdd], [y], [yd], [ydd], [theta], [omega], [angacc]])
         
         noise = 0
-        self.states = self.Filter.FilterStep(input_f, Wn+noise)
+        '''Kalman'''
+        a = input_m[:,0]
+        b = input_m[:,1]
+        self.states = self.Filter.FilterStep(input_f, a, b)
 
         self.Ts = 0.1
         self.v = numpy.sum(self.states[2])
@@ -427,7 +443,7 @@ class O_Ship:
         Append a new Relative Waypoint to the list of Waypoints. The relative waypoint is defined in the Body frame, in meters[X,Y]
         '''
         #Parameters: self, list of WP-s
-        
+        '''
         R = 6371080
         
         lon = math.degrees(WPC.get_Pos_X() / R)
@@ -436,6 +452,13 @@ class O_Ship:
         
         
         xy = numpy.array([[lon],[lat]])
+        self.Waypoints.AddWP(xy)
+        self.WPsEnded = 0
+        self.EndPath = 0
+        '''
+        X = self.Pos.get_Pos_X() + WPC.get_Pos_X()
+        Y = self.Pos.get_Pos_Y() + WPC.get_Pos_Y()
+        xy = numpy.array([[X],[Y]])
         self.Waypoints.AddWP(xy)
         self.WPsEnded = 0
         self.EndPath = 0

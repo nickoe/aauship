@@ -44,23 +44,21 @@ AAUSHIP = Ship.O_Ship(Startpos)
 EMBEDDED OPTIONAL STEP 2/A
 Waypoint planning
 '''
-
+'''
 decimation = 20
 safety = 10
 coast = coast - numpy.max(coast) - 10* safety
 
 AAUSHIP.Plan_WP(coast, decimation, safety)
-
+'''
 '''
 EMBEDDED OPTIONAL STEP 2/B
 Waypoint ADDING
 '''
-'''
-X = scipy.rand(100)*100
-Y = scipy.rand(100)*100
+X = numpy.array([0,1,2,3,4,5,6,7])
+Y = numpy.array([10,11,12,13,14,15,16,17])
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
-'''
 
 '''
 NON-CRITICAL SIMULATION STEP 2
@@ -100,7 +98,7 @@ Set return position!!!
 '''
 
 #AAUSHIP.Return(startpos)
-AAUSHIP.ReadStates(0, 0, 0, 0, 0, 0, 0, 0, 0, numpy.matrix([[0],[0]]))
+
 states = numpy.matrix([[0],[0],[0]])
 
 '''
@@ -146,7 +144,7 @@ while i < ni:
     Acc_Y = math.cos(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) / 0.1
     
     
-    AAUSHIP.ReadStates(GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha, motor)
+    AAUSHIP.ReadStates(numpy.array([GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha]), motor)
     
     '''Logging'''
     thoughtpos = AAUSHIP.Pos.get_Pos()
