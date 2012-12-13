@@ -357,6 +357,7 @@ class O_Ship:
         BodyXY = FL.NEDtoBody(Measured_Pos, self.Pos, theta)
         
         
+        
         PathFrameXY = list([BodyXY[0] + numpy.sum(self.states[0]), BodyXY[1] + numpy.sum(self.states[1])])
         
         Measured_Speed = OL.O_PosData(xd, yd, 1, 1)
@@ -366,7 +367,9 @@ class O_Ship:
         '''
         Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
         '''
-        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [xdd], [PathFrameXY[0]], [BodySpeed[1]], [ydd], [theta], [omega], [angacc]])
+        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [xdd], [BodyXY[1]], [BodySpeed[1]], [ydd], [theta], [omega], [angacc]])
+        
+        Y_prev = numpy.sum(self.states[1])
         
         '''Kalman'''
         
@@ -398,8 +401,9 @@ class O_Ship:
         Th = theta
         #self.states[1] = PathFrameXY[1]
         
-        self.correction = numpy.sum(self.states[1]) - self.correction
-        self.correction = 0
+        self.correction = Y
+        
+        
         
         x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * 0.1* math.cos(Th)
         y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * 0.1* math.sin(Th)
