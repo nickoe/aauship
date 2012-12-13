@@ -116,7 +116,7 @@ awake_flag = 0;
 		if(tx_counter >= TX_READY) {
 			//empty buffer
 			for (txi = 0; txi < txtop; txi++) {
-				//uart2_putc(meas_buffer[txi]); // Sending buffered data to RF
+				uart2_putc(meas_buffer[txi]); // Sending buffered data to RF
 			}
 			txtop = 0;
 			#ifdef AUTO_SHUTDOWN_ENABLE
