@@ -63,7 +63,7 @@ int main (void)
 	uint8_t xacca[2];
 	char s[64];
 	char rmc[256];
-
+awake_flag = 0;
 
 
   /* set outputs */
@@ -116,10 +116,12 @@ int main (void)
 		if(tx_counter >= TX_READY) {
 			//empty buffer
 			for (txi = 0; txi < txtop; txi++) {
-				uart2_putc(meas_buffer[txi]); // Sending buffered data to RF
+				//uart2_putc(meas_buffer[txi]); // Sending buffered data to RF
 			}
 			txtop = 0;
+			#ifdef AUTO_SHUTDOWN_ENABLE
 			awake_flag++;
+			#endif
 			PORTL ^= (1<<LED2);
 			tx_counter -= TX_READY;
 		}

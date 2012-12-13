@@ -60,6 +60,7 @@ int process(msg_t *msg)
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC1, duty );
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 4:
 				case 5:
@@ -68,6 +69,7 @@ int process(msg_t *msg)
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC2, duty );
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 6:
 				case 7:
@@ -76,6 +78,7 @@ int process(msg_t *msg)
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC3, duty );
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 8:
 				case 9:
@@ -84,6 +87,7 @@ int process(msg_t *msg)
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC4, duty );
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 10:
 				case 11:
@@ -92,21 +96,25 @@ int process(msg_t *msg)
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC5, duty );
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 12:
 				case 13:
 					pwm_set_duty(DC1, msg->data[0]);
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 14:
 				case 15:
 					pwm_set_duty(DC2, msg->data[0]);
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 16:
 				case 17:
 					pwm_set_duty(DC3, msg->data[0]);
 					grs_ack();
+					awake_flag = 0;
 					break;
 				case 18:
 					break;
