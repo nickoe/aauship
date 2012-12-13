@@ -68,7 +68,7 @@ int main (void)
 
   /* set outputs */
 	PORTL = 0xff; // Turn off LEDS
-  DDRL = (1<<LED3) | (1<<LED4); // Set pins for LED as output
+  DDRL = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); // Set pins for LED as output
 
 	pwm_init();
 	spiInit();
@@ -109,20 +109,18 @@ int main (void)
 
 		// Stop motors when connection is lost
 		if (awake_flag > AWAKE_THRESHOLD) {
-			duty = 0;
-			pwm_set_duty(RC1, duty );
-			duty = 0;
-			pwm_set_duty(RC2, duty );
+			pwm_set_duty(RC1, 0 );
+			pwm_set_duty(RC2, 0 );
 		};
 
 		if(tx_counter >= TX_READY) {
 			//empty buffer
 			for (txi = 0; txi < txtop; txi++) {
-				uart2_putc(meas_buffer[txi]);
+				uart2_putc(meas_buffer[txi]); // Sending buffered data to RF
 			}
 			txtop = 0;
 			awake_flag++;
-PORTL ^= (1<<LED2);
+			PORTL ^= (1<<LED2);
 			tx_counter -= TX_READY;
 		}
 
@@ -146,7 +144,7 @@ PORTL ^= (1<<LED2);
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
 		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
-uart_putc(c2);
+//uart_putc(c2);
 			if (idx2 == 0) { // We should buffer a packet
 				len2 = c2+5; // Set length
 			}
@@ -158,7 +156,7 @@ uart_putc(c2);
 				if (idx2 == len2) { // We now have a full packet
 
 					if (parse(&rfmsg, buffer2)) {
-						//PORTL ^= (1<<LED3);
+						PORTL ^= (1<<LED1);
 						process(&rfmsg);
 					}
 
@@ -194,11 +192,8 @@ uart_putc(c2);
 						hli_send(package(len3, 0x1E, 0x06, buffer3), len3); // Log to SD card
 						#endif
 						if (rmc_cut(buffer3,rmc)) {
-							// Invalid 
-
+							// Invalid RMC data
 						} else {
-							//hli_send(package(42, 30, 6, rmc),42);
-
 							memcpy(&meas_buffer[txtop],	(char *)package(rmc_idx, 30, 6, rmc),rmc_idx+6);
 							txtop=txtop+rmc_idx+6;
 

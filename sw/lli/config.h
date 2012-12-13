@@ -9,7 +9,7 @@
  */
 
 #define DEBUG 
-//#define LOG_ENABLE
+#define LOG_ENABLE
 extern int awake_flag;
 extern uint8_t rmc_idx;
 /**
