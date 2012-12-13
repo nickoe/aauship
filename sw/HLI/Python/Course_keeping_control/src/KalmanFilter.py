@@ -137,7 +137,7 @@ class Filter:
         % sampled as often as the IMU! When this is done, the computation of the
         % Kalman filter becomes: 
         ''' 
-        
+        #print Wn
         
         self.YD_prev = self.YD
         self.YupdateD_prev = self.YupdateD
@@ -154,20 +154,21 @@ class Filter:
         self.RpredD = self.Hn*self.RupdateD_prev*numpy.transpose(self.Hn)+self.Qz
         
         self.BD = (self.RpredD*numpy.transpose(self.An))*numpy.linalg.inv(self.An*self.RpredD*numpy.transpose(self.An)+self.Qw);
+        Validity_M = numpy.diag([numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0])])
+        self.BD = self.BD
         
-        self.BD = self.BD * numpy.diag(inputV)
-        '''
         if self.sC == self.GPS_freq:
             self.BD = self.BD;
             self.sC = 0;
             
         else:       
-            
+            '''Pos'''
             self.BD[:,0] = numpy.zeros([9,1])
             self.BD[:,3] = numpy.zeros([9,1])
+            '''Speed'''
             self.BD[:,1] = numpy.zeros([9,1])
             self.BD[:,4] = numpy.zeros([9,1])
-         '''   
+           
             
         
         self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);
