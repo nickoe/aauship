@@ -356,24 +356,22 @@ class O_Ship:
         
         BodyXY = FL.NEDtoBody(Measured_Pos, self.Pos, theta)
         
-
+        
         PathFrameXY = list([BodyXY[0] + numpy.sum(self.states[0]), BodyXY[1] + numpy.sum(self.states[1])])
         
         Measured_Speed = OL.O_PosData(xd, yd, 1, 1)
         BodySpeed = FL.NEDtoBody(Measured_Speed, OL.O_PosData(0,0,1,1), theta)
-        
-        Measured_Acc = OL.O_PosData(xdd, ydd, 1, 1)
-        BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), theta)
+    
+    
         '''
         Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
         '''
-        Wn = numpy.matrix([[x], [xd], [xdd], [y], [yd], [ydd], [theta], [omega], [angacc]])
+        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [xdd], [PathFrameXY[0]], [BodySpeed[1]], [ydd], [theta], [omega], [angacc]])
         
-        noise = 0
         '''Kalman'''
-        a = input_m[:,0]
-        b = input_m[:,1]
-        self.states = self.Filter.FilterStep(input_f, a, b)
+        
+        Validity_matrix = input_m[:,1]
+        self.states = self.Filter.FilterStep(input_f, Wn, Validity_matrix)
 
         self.Ts = 0.1
         self.v = numpy.sum(self.states[2])
@@ -401,10 +399,11 @@ class O_Ship:
         #self.states[1] = PathFrameXY[1]
         
         self.correction = numpy.sum(self.states[1]) - self.correction
+        self.correction = 0
         
         x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * 0.1* math.cos(Th)
         y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * 0.1* math.sin(Th)
-        #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
     def get_Thera_r(self):

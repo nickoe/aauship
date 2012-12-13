@@ -44,22 +44,23 @@ AAUSHIP = Ship.O_Ship(Startpos)
 EMBEDDED OPTIONAL STEP 2/A
 Waypoint planning
 '''
-'''
+
 decimation = 20
 safety = 10
 coast = coast - numpy.max(coast) - 10* safety
 
 AAUSHIP.Plan_WP(coast, decimation, safety)
-'''
+
 '''
 EMBEDDED OPTIONAL STEP 2/B
 Waypoint ADDING
 '''
-X = numpy.array([0,1,2,3,4,5,6,7])
+'''
+X = numpy.array([0,100,200,300,400,500,600,700])
 Y = numpy.array([10,11,12,13,14,15,16,17])
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
-
+'''
 '''
 NON-CRITICAL SIMULATION STEP 2
 '''
@@ -81,7 +82,7 @@ Control loop initializations and logging
 '''
 i = 0
 
-ni = 30000
+ni = 10000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
@@ -144,7 +145,10 @@ while i < ni:
     Acc_Y = math.cos(numpy.sum(states[1])) * (numpy.sum(states[0])-numpy.sum(prevstates[0])) / 0.1
     
     
-    AAUSHIP.ReadStates(numpy.array([GPS_X, Speed_X, Acc_X, GPS_Y, Speed_Y, Acc_Y, Theta, Omega, Alpha]), motor)
+    Measured_Acc = OL.O_PosData(Acc_X, Acc_Y, 1, 1)
+    BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), Theta)
+    measurement_matrix = numpy.transpose(numpy.matrix(numpy.array([[GPS_X, Speed_X, BodyAcc[0], GPS_Y, Speed_Y, BodyAcc[1], Theta, Omega, Alpha],[1, 1, 1, 1, 1, 1, 1, 1, 1]])))
+    AAUSHIP.ReadStates(measurement_matrix, motor)
     
     '''Logging'''
     thoughtpos = AAUSHIP.Pos.get_Pos()
@@ -154,7 +158,7 @@ while i < ni:
     x1[i] = pos[1]
     x2[i] = states[0]
     i += 1
-    #print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
+    print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
     xx1[i] = numpy.sum(motor[0])/5
     xx2[i] = numpy.sum(AAUSHIP.states[2])
     xx3[i] = numpy.sum(states[0])
