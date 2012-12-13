@@ -316,7 +316,7 @@ class O_Ship:
         # RUN CONTROL ALGORITHM HERE
         '''
        
-        Ref = numpy.matrix([[3], [self.x[1]-delta]])
+        Ref = numpy.matrix([[1], [self.x[1]-delta]])
 
         
         N = -self.F * self.x + self.N * Ref
@@ -440,7 +440,7 @@ class O_Ship:
          
     def AddRelativeCourse(self, WPC):
         '''
-        Append a new Relative Waypoint to the list of Waypoints. The relative waypoint is defined in the Body frame, in meters[X,Y]
+        Sets a 
         '''
         #Parameters: self, list of WP-s
         '''

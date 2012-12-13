@@ -2,7 +2,7 @@
 \label{chap:control}
 
 \section{Overview of the control system}
-This is an overview of the information flow for control in regard to the rest of the system containing, sensors, \ac{LLI} and \ac{HLI}. The System uses a two staged control system. The control system is the heart of the autonomous navigation, it is responsible for keeping the ship on its predefined course. The inputs of the whole control system are the sensor measurement data, and the output is the motor speed \ac{PWM} percentages, passed to the \ac{LLI}.
+This is an overview of the information flow for control in regard to the rest of the system containing, sensors, \ac{LLI} and \ac{HLI}.
 
 \begin{figure}[htbp]
 	\centering
@@ -11,12 +11,9 @@ This is an overview of the information flow for control in regard to the rest of
 	\label{fig:vessel-block-overview}
 \end{figure}
 
-\todo{Illustrate on figure~\vref{fig:vessel-block-overview} where RF comms is or maybe that should be on the block overview diagram without regard to contol abstraction}
+\todo{Illustrate on figure~\vref{fig:vessel-block-overview} where RF comms is or maybe that should be on the block overvieww diagram without regard to contorl abstraction}
 
-\section{Navigation control}
-\subsection{Calculation of Reference Heading}
 
-\includegraphics[width=\textwidth]{img/ControlStrategyFigures/Navigation.png}
 
 In the First Stage the required heading of the ship is calculated that keeps the course closest to the planned waypoint.
 
@@ -34,19 +31,17 @@ If the conditions above are met, $\theta$ and $\theta_r(\theta)$ will always yie
 
 \subsection{Subwaypoint Validity}
 
-The overall navigation can be improved, if the Target SWPs are considered “reached” in a certain distance. Optimally this distance (Validity distance) should be somewhat longer than the minimum turning radius of the ship ($R_{min}$). If it’s shorter, the ship might not be able to reach the SWP, if it’s way longer, the ship will divert from its course in turns.
+The overall navigation can be improved, if the Target SWPs are considered ''reachedÂ´Â´ in a certain distance. Optimally this distance (Validity distance) should be somewhat longer than the minimum turning radius of the ship ($R_{min}$). If it is shorter, the ship might not be able to reach the SWP, if it is way longer, the ship will divert from its course in turns.
 
-Generally if the Validity distance is approaching $R_{min}$ the ship will stay close to the Waypoints, and will navigate through a geometrically broken line, but if the ship speed is too high, the overall path-accuracy might be low. At a higher speed a longer Validity distance is recommended, because it will increase the path-accuracy in the overall navigation.
+%1. what is it
+\todo{description}
 
-\includegraphics[width=\textwidth]{img/ControlStrategyFigures/SWP_Validity.png}
+%2. why are we using it
 
-The main objective of the controller is to provide a fairly robust system that is unable to enter an unstable or uncontrollable state. In order to ensure this, we have analyzed all of the possible ship states, and crated a simple but efficient method to control the ship, by guaranteeing that the input of the second stage is always appropriate, under any circumstances. We secured this condition with the proper pair of $\theta$ and $\theta_r(\theta)$, resulting in the SWP Validity checking and the conditioning of $\theta$ and $\theta_r$.
 
-\section{State Space Model}
-\subsection{Choosing the right states}
+The reason for which the State Space representation was chosen is because it is a very simple, yet powerful way of modeling linear systems, allowing us to adjust and manipulate its dynamics in a very wide range of situations. 
 
-The Second Stage ensures that the ship will stay true to its required heading, therefore staying on its local path.
-\todo{Why we chose a lot of states in the beginning, and then were left with just a few, talk about that}
+%3. what are we using from it
 
 \subsection{Linearizing the outputs}
 
@@ -61,6 +56,7 @@ In order to prevent this from happening, the state space model was updated to on
 This is a better solution anyway because if the state space model only outputs T and F, then it could be used for some other ship configurations, without modifications to the model, only to the module that translates the force and torque to N1 and N2. This, for example, can allow us to change the size of the propellers or their positions.
 
 \subsection{Linearizing the drag forces}
+\label{sect:Linearizing drag forces}
 
 The drag forces acting on the bow of the ship while it's moving through the water are influenced by the area of the hull that is below water depth in the direction of movement, the density of the water, a drag constant $ C_{D} $ , and the square of the ship's speed components $ v_{x} $ and $ v_{y} $. 
 
@@ -101,27 +97,29 @@ Where $y = f(x)$ is the function we want to linearize around a value of interest
 Given \vref{fig:ship_sizes}
  $ v_{l} = 1m/s $ ,
  $ \omega_{l} = 1 s ^{-1} $ ,
- $ C_{D}x = 0.5 $ (for a triangle) ,
- $ C_{D}y = 1 $ (for a box) ,
+ $ C_{D}x = 0.5 $ (triangle) ,
+ $ C_{D}y = 1 $ (box) ,
  $ \rho = 1000 kg/m ^{2} $,
  $ A_{front} = 0.0178 m^{2} $,
  $ A_{side} = 0.0840 m ^{2} $,
  $ d = 0.0775 m $,
  $ r_{f} = 0.6208 m $,
  $ r_{b} = 0.4642 m $,
- 
 the linearized formulas for the drag forces can be computed to be:
 
-\[ Dx_{l}(v) = -4.45 + 8.9 \cdot v_{x} \]
-\[ Dy_{l}(v) = -42 + 84 \cdot v_{y} \]
-\[ \tau_{l}(\omega) = -1.88 + 3.77 \cdot \omega \]
+
+\begin{align}
+ Dx_{l}(v) &= -4.45 + 8.9 \cdot v_{x} \\
+ Dy_{l}(v) &= -42 + 84 \cdot v_{y} \\
+ \tau_{l}(\omega) &= -1.88 + 3.77 \cdot \omega
+\end{align}
 
 From which we can identify the coefficients that correspond tot the linear relation $ y_{l}(x) = \alpha + \beta \cdot x $:\\
-\begin{minipage}{0.3\linewidth}	
+\begin{minipage}{0.3\linewidth}
 \[ \alpha_{x} = -4.45 \] 
 \[ \beta_{x} = 8.9 \]
 \end{minipage}
-\begin{minipage}{0.3\linewidth}	
+\begin{minipage}{0.3\linewidth}
 \[ \alpha_{y} = -42 \] 
 \[ \beta_{y} = 84 \]
 \end{minipage}
@@ -129,3 +127,131 @@ From which we can identify the coefficients that correspond tot the linear relat
 \[ \alpha_{\omega} = -1.88 \]
 \[ \beta_{\omega} = 3.77 \]
 \end{minipage}
+
+
+\subsection{Choosing the right states}
+
+The variables we chose to be the states in our model are the speed of the ship in the forward direction in the ship frame $v$, the angular position of the ship's x axis relative to true North $\theta$ and the angular speed $\omega$.\\
+\[\begin{cases}
+F - F_{D} = m \cdot \dot{v}\\
+T - T_{D} = I \cdot \dot{\omega}\\
+\end{cases}\]
+
+Where $ F $ and $ T $ are the force and torque produced by the propellers, $ F_{D} $ and $ T_{D} $ are the force and torque caused by water drag, $ m $ is the mass of the ship, $ I $ is the moment of inertia, $ \dot{v} $  and $ \dot{\omega} $ are forward and angular acceleration respectively.
+
+The linearized drag force and torque from \ref{sect:Linearizing drag forces} can be substituted in these equations:
+\begin{align}
+ \dot{v} &= - \frac{\beta_{x} \cdot v}{m} + \frac{F}{m}\\
+ \dot{\omega} &= - \frac{\beta_{y} \cdot \omega}{I} + \frac{T}{I}\\
+ \dot{\theta} &= \omega
+\end{align}
+
+Note that we have also dropped the $ \alpha $ term of the equations because we're currently only interested in the dynamic behavior of the system. The $ \alpha $ offset will be compensated for when removing the steady state error. Consequently, these relations can be rewritten in a matrix notation as follows:
+\[
+\dot{
+	\begin{bmatrix}
+	 v\\
+	 \theta\\
+	 \omega
+	\end{bmatrix}
+}
+=
+\begin{bmatrix}
+ -\frac{\beta_{x}}{m} & 0 & 0\\
+ 0 & 0 & 1\\
+ 0 & 0 & - \frac{\beta_{y}}{I}\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+v\\
+\theta\\
+\omega
+\end{bmatrix}
++
+\begin{bmatrix}
+\frac{1}{m} & 0\\
+0 & 0\\
+0 & \frac{1}{I}\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+F\\
+T
+\end{bmatrix}
+\]
+
+This corresponds to the State Space Model equation:
+\[\dot{X} = AX + BU\]
+
+Since the output matrix we need is $ Y = \begin{bmatrix}v \\ \theta \end{bmatrix} $, the output equation
+\[Y = CX + DU\]
+becomes:
+\[\begin{bmatrix}v \\ \theta \end{bmatrix}
+ = 
+\begin{bmatrix}
+1 & 0\\
+0 & 1\\
+0 & 0
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+v\\
+\theta\\
+\omega
+\end{bmatrix}
+\]
+
+So the system matrices are:
+\[
+A =\begin{bmatrix}
+ -\frac{\beta_{x}}{m} & 0 & 0\\
+ 0 & 0 & 1\\
+ 0 & 0 & - \frac{\beta_{y}}{I}\\
+\end{bmatrix}\\
+B = \begin{bmatrix}
+\frac{1}{m} & 0\\
+0 & 0\\
+0 & \frac{1}{I}\\
+\end{bmatrix}\\
+C = 
+\begin{bmatrix}
+1 & 0\\
+0 & 1\\
+0 & 0
+\end{bmatrix}\\
+D = 0
+\]
+
+\subsection{Discretizing for use with a particular timestep}
+
+The system described so far is continuous and needs to be discretized before implementation in a computer algorithm, so we use the function c2d from MATLAB and the time step Ts in order to do this. \todo{explain more about c2d or what we will eventually use}
+
+\subsection{Pole assignment}
+
+For assigning poles, we use the lqr function implemented in MATLAB. This calculates the gain matrix $ F $ by minimizing the quadratic cost function:\todo{taken from here http://www.mathworks.se/help/control/ref/lqr.html}
+\[
+J(u)=\sum_{0}^{\inf} \{x^{T}Qx+u^{T}Ru+2x^{T}Nu\}
+\]
+
+
+\subsection{Reference gain}
+
+A reference gain is calculated and implemented in order to counter the steady state error. This is calculated using the formula $ N = Nu+FNx $ \todo{insert refference to feedback book, page 470}, where:
+\[
+\begin{bmatrix}
+Nx\\
+Nu
+\end{bmatrix}
+=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}^{-1}
+\!
+\cdot
+\begin{bmatrix}
+0\\
+I
+\end{bmatrix}
+\]
+\todo{Why we chose a lot of states in the beginning, and then were left with just a few?}

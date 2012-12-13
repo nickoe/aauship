@@ -42,13 +42,6 @@ int8_t parse(msg_t *msg, char s[]);
 */
 void puts_msg(msg_t *msg);
 
-/**
-	@brief   Function to cut importat information out of GPRMC to reduce data size
-	@param   pointer of message structure
-	@return  0 if valid and 1 if invalid message
-*/
-uint8_t rmc_cut(char rmc[], char data[]);
-
 /**@}*/
 
 #endif	/* _FAPS_PARSE_H */

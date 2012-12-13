@@ -1,6 +1,7 @@
 \chapter{Software}
 
 To implement the HLI functionality Python was chosen for its ease of writing as well as its extensive library of predefined functions. This enables the programmer to utilize highly complex functions through simple and  On of these libraries is NumPy, which enables the user to define vectors and matrices and do calculations with these, in the same way Matlab does. This made it easy to port Matlab code from simulation to actual implementation. Another library is the MatPlotLib library. This eased the path planning implementation, as it was possible to plot the result of the proposed algorithms during testing. Further, another Python library allowed the script to easily access the OpenStreetMap API and retrieve the relevant data.
+
 The LLI functionality was implemented in C as this is the primary embedded programming language with which the project group has experience.
 
 \section{System Description}
@@ -19,15 +20,15 @@ A Ship Object requires auxillary Classes and Functions. The two side-modules of 
 \includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/Actor-model1.png}
 
 
-Each ship calculates it's own \emph{Waypoints}, depending on their individual capabilities and inputs.
+Each ship calculates its own \emph{Waypoints}, depending on their individual capabilities and inputs.
 There is a possibility for the ships to communicate trough a wireless channel with each other directly or trough a nearby mothership/computer, in order to share position data (to avoid collisions), or distribute the Path Planning tasks for enhanced computation power.
 
 \includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/Actor-model2.png}
 
 
-The additional simulator module is an extension of the \emph{Ship Object}. In Simulation mode, to each \empg{Ship} belongs a \emph{Simulator}, simulating its interface communication and dynamic behaviour. The design of the simulator was led by two objectives:
+The additional simulator module is an extension of the \emph{Ship Object}. In Simulation mode, to each \emph{Ship} belongs a \emph{Simulator}, simulating its interface communication and dynamic behaviour. The design of the simulator was led by two objectives:
 \begin{itemize}
-\item The \emph{Simulation} and the \emph{Embedded} application must run with the absolutely same \empg{Ship Class Module}
+\item The \emph{Simulation} and the \emph{Embedded} application must run with the absolutely same \emph{Ship Class Module}
 \item The simulator must predict the behaviour of the system well, but must be using a different model than the inner \emph{State Estimator Kalman Filter} of the ship
 \item The simulator must be completely independent from the simulated system, except for the actuator values of the Ship.
 \end{itemize}
@@ -52,7 +53,7 @@ The program controls the ship along the specified path. If there is no next sub-
 \includegraphics[width = \textwidth]{img/HLIFigures/SWPNavigationConcept.png}
 
 Using Sub-\emph{Waypoints} instead of a full path line makes the navigation much easier. In open water there is significant sideways-motion caused by wind, ocean currents and waves, so staying perfectly true to a predefined path line is extremely difficult.
-Instead, by using a series of Sub-\emph{Waypoints}, the navigation of the ship resembles to a series of Buoys guiding trough hazardous waters. The Ship approaches each Sub-\emph{Waypoint} in a predefined order and turns to the next, when the “buoy” is close enough.
+Instead, by using a series of Sub-\emph{Waypoints}, the navigation of the ship resembles to a series of Buoys guiding trough hazardous waters. The Ship approaches each Sub-\emph{Waypoint} in a predefined order and turns to the next, when the ''buoyÂ´Â´ is close enough.
 The characteristics of the navigation and course can be varied only by changing the definition of the Sub-\emph{Waypoints}, setting optimal parameters for different locations and settings.
 
 \section{\emph{Waypoint} Planning}
@@ -73,7 +74,7 @@ The need for a basic \emph{Waypoint}-planner is essential, but optimizing it was
 
 The Local planner is responsible for planning a segment of the path, in order to supply the controller with a series of Sub-\emph{Waypoints}. The Local path should result in a set of points, which are lined up smoothly enough for the ship to sail through them with the reference speed.
 
-The path can be divided to a straight line and a turning sub-path. The combination of a straight path and a turn is a Path Segment. The local planner calculates a Path Segment from the current position to the end of the turn at the next Turning \emph{Waypoint} (Footnote: If three \emph{Waypoints} are in a line, the angle at the second is $\pi$, therefore it’s not a turning \emph{Waypoint}), based on the \emph{Waypoint} after the Turning \emph{Waypoint} as well.
+The path can be divided to a straight line and a turning sub-path. The combination of a straight path and a turn is a Path Segment. The local planner calculates a Path Segment from the current position to the end of the turn at the next Turning \emph{Waypoint} (Footnote: If three \emph{Waypoints} are in a line, the angle at the second is $\pi$, therefore it is not a turning \emph{Waypoint}), based on the \emph{Waypoint} after the Turning \emph{Waypoint} as well.
 
 \includegraphics[width = \textwidth]{img/LocalPlannerFigures/StraightRoute.png}
 
@@ -85,7 +86,7 @@ The initial idea was dropped after the following considerations:
 \item The path would be smooth but would not have optimal parameters \ldots
 \end{itemize}
 
-The new idea is originated from: Komlósi István: Mobilis robotok autonóm navigációja mozgó akadályok elkerülésével (English version: István Komlósi and Bálint Kiss: Motion planning for multiple mobile robots using time-scaling)
+The new idea is originated from: KomlÃ³si IstvÃ¡n: Mobilis robotok autonÃ³m navigÃ¡ciÃ³ja mozgÃ³ akadÃ¡lyok elkerÃ¼lÃ©sÃ©vel (English version: IstvÃ¡n KomlÃ³si and BÃ¡lint Kiss: Motion planning for multiple mobile robots using time-scaling)
 The idea is to determine the maximum possible path curvature that the robot can handle. This is based on the Sigma and Kappa values of the Ship, where sigma is a function of the maximum speed of Torque change, and kappa is the maximum curvature of the path at a given speed. The local path is generated in a specific way that the robot will always turn with the maximum possible curvature at the current speed, thus staying the closest to the \emph{Waypoint} without losing speed. There is a threshold turn-angle, which determines if the robot requires only two identical Euler-spiral paths to turn or an arc path that has the maximum curvature, with two Euler spiral paths leading in or out.
 In order to create the path the algorithm calculates 5 or 3 (depending on the threshold) key points and fits a Hermite-poly onto them. From this point on the local path in the given range is determined by these points only, thus saving memory and CPU time, while calculating a better path.
 \begin{center}

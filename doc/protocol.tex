@@ -108,9 +108,7 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Set PWM output 2 & 15 & 2 & Auxiliary\\
 	& Read PWM output 2 & 16 & 2 & Auxiliary\\ 
 	& Set PWM output 3 & 17 & 2 & Auxiliary\\
-	& Read PWM output 3 & 18 & 2 & Auxiliary\\
-	x& Set PWM actuator 1 and 2  & 19 & 4 & Engine 1 and 2, then LLI should return buffered reduced data\\
-	& Read PWM actuator 1 and 2 & 20 & 4 & Engine 1 and 2\\
+	& Read PWM output 3 & 18 & 2 & Auxiliary\\ 
 	\midrule
 	\label{tab:commands}
 	\end{tabular}
@@ -137,7 +135,6 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Z-Mag & 11 & 2 & Magnetometer in Z-direction\\
 	& Temp & 12 & 2 & Temperature in IMU\\
 	x& Burst read & 13 & 24 & Reading with all sensor data\\
-	x& Burst read reduced & 14 & 12 & Reading with burst data reduced\\
 	\midrule
 	\label{tab:commands}
 	\end{tabular}
@@ -157,7 +154,6 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Velocity & 3 & 2 & Velocity\\
 	& Latitude & 4 & 4 & Latitude\\
 	& Longitude & 5 & 4 & Longitude\\
-	& Lat, Lon, Vel & 6 & 42 & Condensed RMC i.e. \texttt{122935.000,A,5700.8349,N,00959.1367,E,0.62}\\
 	\midrule
 	\multicolumn{5}{l}{\textbf{40: Temperature}}\\
 	\midrule

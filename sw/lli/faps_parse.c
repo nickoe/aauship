@@ -1,6 +1,8 @@
 #include	"faps_parse.h"
 #include	"faps_process.h"
 
+uint8_t rmc_idx;
+
 int8_t parse(msg_t *msg, char s[])
 {
 	int i;
@@ -49,6 +51,7 @@ uint8_t rmc_cut(char rmc[], char data[]) {
 			i++;
 		}
 		data[i-8] = 0;
+		rmc_idx = i-8;
 		return 0; // valid
 	} else {
 		return 1; // invalid

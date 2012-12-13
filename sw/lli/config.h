@@ -9,7 +9,9 @@
  */
 
 #define DEBUG 
-
+//#define LOG_ENABLE
+extern int awake_flag;
+extern uint8_t rmc_idx;
 /**
  * Serial rates
  */
@@ -54,5 +56,6 @@
 #define ADIS_READY 82 // 20Hz
 //#define ADIS_READY 42 // 40Hz
 #define TX_READY 546 // 3Hz
+#define AWAKE_THRESHOLD 3
 
 #endif // CONFIG_H 
