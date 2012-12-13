@@ -13,8 +13,8 @@ STARTCHAR = ord('$')
 class seriald:
 
 	class Serial:
-		def __init__(self,serialport,speed):
-			self.f = open("LOG00185.txt",'rb')
+		def __init__(self,serialport,speed,timeout):
+			self.f = open("LOG00203.txt",'rb')
 			self.l = 0;
 			#self.array = []
 			#l = 0
@@ -36,7 +36,9 @@ class seriald:
 			#print self.l
 			'''print self.array[0]'''
 			c = self.f.read(1)
-			#print c
+			if ord(c) != 0:
+				#print c
+				pass
 			if not c:
 				c = self.c.read(1)
 			if not c:
@@ -55,15 +57,19 @@ class seriald:
 		
 		def close(self):
 			self.open = False;
+			
+		def inWaiting():
+			return 1
 
 class packetHandler(threading.Thread):
 	
-	def __init__(self,serialport,speed,queue):
-		self.connection = seriald.Serial(serialport,speed)	#Serial Connection
+	def __init__(self,serialport,speed,time,queue):
+		self.connection = serial.Serial(serialport,speed,timeout=time)	#Serial Connection
 		print self.connection
+		print self.connection.inWaiting()
 		self.myNewdata = []				#Array for storing new packets
 		self.q = queue					#Queue to share data between threads
-		 
+		self.errorcount = 0
 		self.table = [
 			0x0000, 0x1189, 0x2312, 0x329B, 0x4624, 0x57AD, 0x6536, 0x74BF,
 			0x8C48, 0x9DC1, 0xAF5A, 0xBED3, 0xCA6C, 0xDBE5, 0xE97E, 0xF8F7,
@@ -100,8 +106,8 @@ class packetHandler(threading.Thread):
 		threading.Thread.__init__(self) #Initialize Thread
 		
 	def run(self):
-		print "running thread"
-		print self.connection.isOpen() 
+		#print "running thread"
+		#print self.connection.isOpen() 
 		while self.connection.isOpen():	
 			#print "Reading"
 			try:
@@ -112,20 +118,43 @@ class packetHandler(threading.Thread):
 					#print "Checkchar is correct!"
 					length=self.connection.read(1)	#The next char after start byte is the length
 					res = self.parser(length)	#Input the length into the parser function
+					#print res
 					if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
 						#print "Valid packet"
-						self.preparePacket(res[1])
-			except:
+						#print res
+						
+						packetforqueue = self.preparePacket(res[1])
+						self.q.put(packetforqueue)
+					else:
+						print '\033[1m'
+						print res
+						print '\033[0m'
+				elif checkchar == '':
+					endpacket = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
+					self.q.put(endpacket)
+			except KeyboardInterrupt:
+				self.connection.close()
+			except Exception as inst:
+			##	print inst
 				pass
 		running = False
 		return
 			
 	def close(self):
+		print str(self.errorcount)
 		self.connection.close()	#Close connection
 		
 	def CheckSum(self,packet):
 		crc = 0xFFFF
-		
+		#print packet
+		try:
+			if ord(packet[0]) != 12:
+				pass
+				#print str(packet)
+		except:
+			#print str(packet)
+			pass
+		#print ord(packet[0])
 		for i in packet:
 			try:
 				value = (crc ^ i) & 0xFF		#If the value of 'i' is an int
@@ -133,7 +162,6 @@ class packetHandler(threading.Thread):
 				value = (crc ^ ord(i)) & 0xFF	#if the value of 'i' is a chr
 			crc = (crc >> 8) ^self.table[value]	
 		result = [chr((crc>>8)&0xFF),chr(crc&0xFF)] 		#Format checksum correctly
-		
 		return result
 		
 	def constructPacket(self,data,DevID,MsgID):
@@ -162,12 +190,30 @@ class packetHandler(threading.Thread):
 		Checksum = self.CheckSum(packet)	#First, the checksum of the packet is generated
 		packet.append(Checksum[0])	#The checksum is appropriately appended
 		packet.append(Checksum[1])
+		'''
+		#print "Packet to send: [",
+		#print hex(ord('$')) + " ,",
+		try:
+			for i in packet:
+				try:
+					print hex(i),
+				except:
+					try:
+						print hex(ord(i)),
+					except:
+						print i	
+				#print ",",			
+			#print "]"
+		except:
+			pass
+		'''
 		self.connection.write(chr(STARTCHAR)) #The startChar is written
 		for i in range(len(packet)):	#The byte are then written individually
 			try:
 				self.connection.write(chr(packet[i]))
 			except:
 				self.connection.write(packet[i])
+		#print "Succesfully sent packet"
 		
 	def isOpen(self):
 		return self.connection.isOpen()
@@ -196,7 +242,8 @@ class packetHandler(threading.Thread):
 		newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data, 'Time': time.time()}
 		#print newpacket
 		self.myNewdata.append(newpacket)
-		self.q.put(newpacket)
+		return newpacket
+		#self.q.put(newpacket)
 		#print 'success'
 		#print self.myNewdata[len(self.myNewdata)-1]
 		#print '-------------'
@@ -240,21 +287,53 @@ class packetHandler(threading.Thread):
 			packet.append(array)
 			extrabits = 4
 		for i in range((ord(packet[0])-length+5)):
-			packet.append(self.connection.read(1))
+			tempc = self.connection.read(1)
+			deltaerr = 0
+			if not tempc:
+				tempc = self.connection.read(1)
+				self.errorcount += 1
+				if deltaerr > 10:
+					break
+				deltaerr += 1
+				#print ""
+				#print "Read empty - tried again1: \t" + tempc
+				#print "Number of errors: " + str(self.errorcount)
+				#print ""
+			packet.append(tempc)
 			#print packet
 		check = self.packetCheck(packet)
+		if ord(packet[0]) != 12:
+			pass
+			#print str(ord(packet[0])) + "\t",
+			#print str(check) + " \t " + str(packet)
 		if(check):
 			#print "EEEEEEEENS!"
+			#	print "True: " + str(packet)
 			return [True, packet]
 		else:
+		#	print "False: " + str(packet)
 			try:
 				index = packet.index(0x24)
 				if index == len(packet)-1:
-					packet.append(self.connection.read(1))
+					tempc = self.connection.read(1)
+					deltaerr = 0
+					while not tempc:
+						tempc = self.connection.read(1)
+						self.errorcount += 1
+						if deltaerr > 10:
+							break
+						deltaerr += 1
+						
+						
+				#		print ""
+					#	print "Read empty - tried again2: \t" + tempc
+			#			print "Number of errors: " + str(self.errorcount)
+		#				print ""
+					packet.append(tempc)
 				del packet[0:index+1]
 				return self.parser(packet)
 			except:
-				return [False,0]
+				return [False,packet]
 
 				pass
 

@@ -1,19 +1,24 @@
 import struct
 import csv
+import Queue
+import numpy
 from pynmea import nmea
+from math import pi, atan
+import gpsfunctions
 class packetParser():
-	def __init__(self,accelfile,gpsfile):
+	def __init__(self,accelfile,gpsfile,measstate):
 		self.GPS = {0: 'Latitude', 1: 'Longtitude', 2: 'Velocity'}
 		self.IMU = {0: 'Acceleration X', 1: 'Acceleration Y', 2: 'Acceleration Z', 3: 'Gyroscope X', 4: 'Gyroscope Y', 5: 'GyroscopeZ', 6: 'MagnetometerX', 7: 'MagnetometerY', 8: 'MagnetometerZ', 9: 'Temperature'}
 		self.MsgID = {0: self.GPS, 1: self.IMU}
 		self.DevID = {0: 'GPS', 1: 'IMU'}
-		self.accelburst = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+		self.accelburst = [0,0,0,0,0,0,0]
 		self.accellog = accelfile
 		self.accelwriter = csv.writer(self.accellog)
 		self.prevtime = 0
 		self.excount = 0
 		#self.accelburst = 0
 		self.gpspacket = 0
+		self.measureddata = measstate
 		
 		self.gpsdata = [0,0,0,0,0,0,0,0]
 		#Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
@@ -21,52 +26,184 @@ class packetParser():
 		self.writer = csv.writer(self.accellog)
 		#self.gpswriter = csv.writer(self.gpslog)
 		#print "Stdsqewarted!"
+		self.state = numpy.zeros((9,2))
+		self.mergedata = False
+		
+		self.centerlat = 0
+		self.centerlon = 0
+		self.rot = gpsfunctions.get_rot_matrix(self.centerlat,self.centerlon)
+		
+		
+		self.accconst = 0.003333333333333
+		self.gyroconst = 0.05*pi/180
+		
 		pass
 			
 	def parse(self,packet):
-		print packet
+		#print packet
 		try:
 			if(ord(packet['DevID']) == 20):
-				if(ord(packet['MsgID']) == 13):
+			
+				if(ord(packet['MsgID']) == 14):
 					#self.accelburst = self.accelburst + 1
 					#print "IMU: " + str(self.accelburst)
 					
 					
+					
+					meas = numpy.zeros((9,2))
 					accelnr = 0
+					order = [7,1,4,6,6]
+					if self.mergedata:
+						pass
+					self.mergedata = False
+					
 					try:
+						
+						'''The structure of the packet is 
+						Zgyro
+						X acc
+						Y acc
+						X Mag
+						Y Mag
+						ADC
+						'''
+						#types = ['ADC','Ymag', 'Xmag', 'Yacc', 'Xacc', 'Zgyro']
+						measurements = []
+						for i in range(len(packet['Data'])):
+							if ((i & 1) == 1):
+								tempval = packet['Data'][i-1:i+1]
+								tempval.reverse()
+								val = 0
+								try:
+									val = struct.unpack('h', "".join(tempval))
+								except:
+									pass
+								measurements.append(val[0])
+								#print val[0]
+						#print measurements[5]
+						
+						if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value
+							#Calculate heading from magnetometer:
+							heading = 0
+							if measurements[3] > 0:
+								heading = (90 - atan(measurements[4]/measurements[3])*180/pi)*pi/180
+							elif measurements[3] < 0:
+								heading = (270 - atan(measurements[4]/measurements[3])*180/pi)*pi/180
+							else:
+								if measurements[4] < 0:
+									heading = pi
+								else:
+									heading = 0
+							#print heading
+							
+							accx = measurements[1] * self.accconst
+							accy = -measurements[2] * self.accconst
+							gyroz = measurements[0] * self.gyroconst
+							
+							
+							self.state[2] = [accx,		0]
+							self.state[5] = [accy,		0]
+							self.state[6] = [heading,	0]
+							self.state[7] = [gyroz,		0]
+							#print self.state
+							for i in range(numpy.size(self.state,0)):
+								for j in range(numpy.size(self.state,1)):
+									self.measureddata[i,j] = self.state[i,j]
+							#measstate = self.state
+							
+							#print chr(27) + "[2J"
+							#print self.measureddata
+							self.state = numpy.zeros((9,2))
+							
+						'''
+					
 						for i in range(len(packet['Data'])):
 							#print packet['Data'][i] +"\t (" + str(ord(packet['Data'][i])) + ")\t [" + hex(ord(packet['Data'][i])) + "]"
 		
 							#print str(packet['Data'][i-1:i+1])
-							if ((i & 1) == 1):
-								tempval = packet['Data'][i-1:i+1]
-								tempval.reverse()
+							if ((i & 1) == 1): #Take every other value (Where the lower bit is 1)
+								tempval = packet['Data'][i-1:i+1] #Combine 2 of the numbers in to 1 value
+								tempval.reverse() #reverse them, to have the endian right.
 								#print str("".join(tempval))
+								
 								val = 0
 								try:
 									val = struct.unpack('h', "".join(tempval))
 								except:
 									pass
 								#val = struct.unpack('h', "".join(packet['Data'][i-1:i+1]))
+								''#The structure of the packet is 
+								#Zgyro
+								#X acc
+								#Y acc
+								#X Mag
+								#Y Mag
+								#ADC
+							''
 								self.accelburst[accelnr] = val[0]
+								try:
+									meas[order[accelnr]][0] = val[0]
+									meas[order[accelnr]][1] = 1
+								except IndexError:
+									pass
 								accelnr = accelnr + 1
 								#print str(val[0])
 						self.accelburst[accelnr] = packet['Time']
-						if(abs(self.accelburst[accelnr-2]) > 1000):
+						if(abs(self.accelburst[accelnr-1]) > 100):
 							print packet
 							print self.accelburst
 						#print self.accelburst
 						else:
+							self.q.put(meas)
 							self.writer.writerow(self.accelburst)
 					except Exception as e:
 						print e
-					
+					'''
+					except Exception as e:
+						print e
 					
 					#print "IMU BURST!"
 					pass
 		
 			elif (ord(packet['DevID']) == 30):
 				if(ord(packet['MsgID']) == 6):
+				
+					print str("".join(packet['Data']))
+					content = "".join(packet['Data']).split(',')
+					# The GPRMC packet contain the following information:
+					# [0] Timestamp
+					# [1] A for valid, V for invalid (only valid packets gets send)
+					# [2] Latitude
+					# [3] N or S (N)
+					# [4] Longitude
+					# [5] E or W (E)
+					# [6] Speed over ground
+					#print content[6]
+					speed = float(content[6]) * 0.514444444
+					#print str(speed) + " m/s"
+					[latdec, londec] = gpsfunctions.nmea2decimal(float(content[2]),content[3],float(content[4]),content[5])
+					if self.centerlat == 0 and self.centerlon == 0:
+						self.rot=gpsfunctions.get_rot_matrix(float(latdec),float(londec))
+						self.centerlat = float(latdec)
+						self.centerlon = float(londec)
+					
+					
+					pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
+					
+					print pos
+					
+					self.state[0] = [float(pos[0,0]),		1]
+					self.state[1] = [speed, 1]
+					self.state[3] = [float(pos[1,0]), 	1]
+					
+					
+				'''	
+					
+					
+					
+					
+				
+					self.mergedata = True
 					self.gpspacket += 1
 					#print "GPS: " + str(self.gpspacket)
 					#print "".join(packet['Data']),
@@ -78,12 +215,12 @@ class packetParser():
 						tempstr = "".join(packet['Data'])
 						gpgga.parse(tempstr)
 						#print "Timestamp:" + gpgga.timestamp
-						'''try:
+						''try:
 							deltat = int(float(gpgga.timestamp))-self.prevtime
 							print deltat
 							self.prevtime = int(float(gpgga.timestamp))
 						except Exception as e:
-							print e'''
+							print e''
 						gpsd = [gpgga.timestamp, gpgga.latitude, gpgga.longitude, packet['Time']]
 						#self.gpswriter.writerow(gpsd)
 					
@@ -103,9 +240,12 @@ class packetParser():
 						self.gpsdata[7] = packet['Time']
 					#	print self.gpsdata
 						#print self.gpsdata
+				
 						#self.gpswriter.writerow(self.gpsdata)
+				'''
+			
 			else:
-				print "unknown packet"	
+				print packet
 		except Exception as e:
 			self.excount += 1
 			print " "+ str(self.excount)
