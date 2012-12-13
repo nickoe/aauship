@@ -147,8 +147,10 @@ while i < ni:
     
     Measured_Acc = OL.O_PosData(Acc_X, Acc_Y, 1, 1)
     BodyAcc = FL.NEDtoBody(Measured_Acc, OL.O_PosData(0,0,1,1), Theta)
-    measurement_matrix = numpy.transpose(numpy.matrix(numpy.array([[GPS_X, Speed_X, BodyAcc[0], GPS_Y, Speed_Y, BodyAcc[1], Theta, Omega, Alpha],[1, 1, 1, 1, 1, 1, 1, 1, 1]])))
+    measurement_matrix = numpy.transpose(numpy.matrix(numpy.array([[GPS_X, numpy.sum(states[0]), BodyAcc[0], GPS_Y, 0, BodyAcc[1], Theta, Omega, Alpha],[1, 1, 0, 1, 1, 0, 1, 1, 1]])))
     AAUSHIP.ReadStates(measurement_matrix, motor)
+    
+    #print AAUSHIP.FtoM(motor)
     
     '''Logging'''
     thoughtpos = AAUSHIP.Pos.get_Pos()
