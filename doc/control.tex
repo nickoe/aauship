@@ -7,7 +7,7 @@ This is an overview of the information flow for control in regard to the rest of
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{img/vessel-block-overview}
-	\caption{Overview of control information flow in regard to the subsystems. The blue part indicates information that is not fetched directly to the control part, it is electrically connected to the \ac{LLI} whilst being forwarded to the \ac{HLI}.}
+	\caption{Overview of control information flow in regard to the subsystems. The blue part indicates information that is not fetched fed to the control part, it is electrically connected to the \ac{LLI} whilst being forwarded to the \ac{HLI}. The red parts is what happens on the \ac{HLI}. The yellow part is the \ac{LLI} itself.}
 	\label{fig:vessel-block-overview}
 \end{figure}
 
@@ -21,7 +21,7 @@ In order to efficiently and accurately navigate along the path, a set of Sub-Way
 \begin{center}
 \includegraphics[scale = 0.4]{img/ControlStrategyFigures/Law_of_Cosines.png}
 \end{center}
-Problems rise and corrections are necessary, if the heading of the ship $\theta$ is $\theta < -\pi$ or $\theta < \pi$. The heading of the ship is calculated based on the Gyro sensor and the heading can have any value in the form of: $$\theta = [-{\pi} ; \pi ] \pm 2*k*\pi$$. Before invoking the control procedure, all of the heading angles must be transformed into the $[-\pi ; \pi]$ interval.
+Problems rise and corrections are necessary, if the heading of the ship $\theta$ is $\theta < -\pi$ or $\theta < \pi$. The heading of the ship is calculated based on the Gyro sensor and the heading can have any value in the form of: $$\theta = [-{\pi} ; \pi ] \pm 2 \cdot k \cdot \pi$$. Before invoking the control procedure, all of the heading angles must be transformed into the $[-\pi ; \pi]$ interval.
 This procedure causes a possible error though.
 
 \includegraphics[width=\textwidth]{img/ControlStrategyFigures/Headings.png}
@@ -31,7 +31,7 @@ If the conditions above are met, $\theta$ and $\theta_r(\theta)$ will always yie
 
 \subsection{Subwaypoint Validity}
 
-The overall navigation can be improved, if the Target SWPs are considered ''reached´´ in a certain distance. Optimally this distance (Validity distance) should be somewhat longer than the minimum turning radius of the ship ($R_{min}$). If it is shorter, the ship might not be able to reach the SWP, if it is way longer, the ship will divert from its course in turns.
+The overall navigation can be improved, if the Target SWPs are considered ``reached'' in a certain distance. Optimally this distance (Validity distance) should be somewhat longer than the minimum turning radius of the ship ($R_{min}$). If it is shorter, the ship might not be able to reach the SWP, if it is way longer, the ship will divert from its course in turns.
 
 %1. what is it
 \todo{description}
@@ -45,7 +45,7 @@ The reason for which the State Space representation was chosen is because it is 
 
 \subsection{Linearizing the outputs}
 
-Using Newton's second law of motion for forward  and rotational movement (F = m * A; T = I * W'), we can easily see that the inputs to our system will be F and T representing the forward force and the torque produced by the motors. It is worth mentioning that, since there are two propellers rotating in opposite directions, a torque that would induce a rotation around Z axis passing through the boat's center of mass only if the two propellers are rotating at different speeds.
+Using Newton's second law of motion for forward  and rotational movement ($F = m \cdot A$ and $T = I \cdot \dot{\omega}$), we can easily see that the inputs to our system will be F and T representing the forward force and the torque produced by the motors. It is worth mentioning that, since there are two propellers rotating in opposite directions, a torque that would induce a rotation around Z axis passing through the boat's center of mass only if the two propellers are rotating at different speeds.
 
 These two rotational speeds N1 and N2 were initially included in the state space model as inputs to the system, as they could be controlled directly via a PWM pulse. This though proved to complicate matters because the relationship between the speeds of the propellers N1 and N2 and the force F and torque T generating accelerations is not a linear one. Because of this, our system would not be linear and would be beyond the scope of this project. 
 
@@ -60,7 +60,7 @@ This is a better solution anyway because if the state space model only outputs T
 
 The drag forces acting on the bow of the ship while it's moving through the water are influenced by the area of the hull that is below water depth in the direction of movement, the density of the water, a drag constant $ C_{D} $ , and the square of the ship's speed components $ v_{x} $ and $ v_{y} $. 
 
-A worthy note is the fact that the drag coefficient $ C_{D} $ will have two values depending on the direction of the ship's movement. When moving forward in the x direction, the coefficient $ C_{D}x $ will be approximated for a triangular shape, which is the closest simple shape that we have values for. For lateral movement in the y direction, $ C_{D}y $is given for a square box. These approximations should not present a problem in the operation of our control system as the errors ca easily be corrected and adjusted for by a good controller.
+A worthy note is the fact that the drag coefficient $ C_{D} $ will have two values depending on the direction of the ship's movement. When moving forward in the $x$ direction, the coefficient $ C_{Dx} $ will be approximated for a triangular shape, which is the closest simple shape that we have values for. For lateral movement in the $y$ direction, $ C_{Dy} $ is given for a square box. These approximations should not present a problem in the operation of our control system as the errors ca easily be corrected and adjusted for by a good controller.
 
 \[ D_{x}(v_{x}) = \frac{C_{Dx}\cdot\rho_{water}\cdot A_{front}\cdot v_{x}^{2}}{2} \]
 \[ D_{y}(v_{y}) = \frac{C_{Dy}\cdot\rho_{water}\cdot A_{side}\cdot  v_{y}^{2}}{2} \]
@@ -81,11 +81,11 @@ Approximation of the drag forces around the points of interest $v_{l} $ and $\om
 
 Where $y = f(x)$ is the function we want to linearize around a value of interest $a$. Applying this formula to our situation yields:
 
-\[ Dx_{l}(v_{x}) = \frac{C_{D}x\cdot\rho_{water}\cdot A_{front}\cdot v_{l}^{2}}{2} + (C_{D}x\cdot\rho_{water}\cdot A_{front})\cdot (v_{x}-v_{l}) \]
+\[ Dx_{l}(v_{x}) = \frac{C_{Dx}\cdot\rho_{water}\cdot A_{front}\cdot v_{l}^{2}}{2} + (C_{Dx}\cdot\rho_{water}\cdot A_{front})\cdot (v_{x}-v_{l}) \]
 
-\[ Dy_{l}(v_{y}) = \frac{C_{Dy}\cdot\rho_{water}\cdot A_{side}\cdot v_{l}^{2}}{2} + (C_{D}y\cdot\rho_{water}\cdot A_{side})\cdot (v_{y}-v_{l}) \]
+\[ Dy_{l}(v_{y}) = \frac{C_{Dy}\cdot\rho_{water}\cdot A_{side}\cdot v_{l}^{2}}{2} + (C_{Dy}\cdot\rho_{water}\cdot A_{side})\cdot (v_{y}-v_{l}) \]
 
-\[ \tau_{l}(\omega) = \frac{C_{D}y \cdot \rho_{water} \cdot d \cdot (r_{f}^{4} + r_{b}^{4}) \cdot \omega_{l}^{2}}{8} + \frac{C_{D}y \cdot \rho_{water} \cdot d \cdot (r_{f}^{4} + r_{b}^{4}) \cdot \omega_{l}}{4} \cdot (\omega - \omega_{l}) \] 
+\[ \tau_{l}(\omega) = \frac{C_{Dy} \cdot \rho_{water} \cdot d \cdot (r_{f}^{4} + r_{b}^{4}) \cdot \omega_{l}^{2}}{8} + \frac{C_{Dy} \cdot \rho_{water} \cdot d \cdot (r_{f}^{4} + r_{b}^{4}) \cdot \omega_{l}}{4} \cdot (\omega - \omega_{l}) \] 
 
 \begin{figure}[htbp]
 	\centering
@@ -94,17 +94,17 @@ Where $y = f(x)$ is the function we want to linearize around a value of interest
 	\label{fig:ship_sizes}
 \end{figure}
 
-Given \vref{fig:ship_sizes}
- $ v_{l} = 1m/s $ ,
- $ \omega_{l} = 1 s ^{-1} $ ,
- $ C_{D}x = 0.5 $ (triangle) ,
- $ C_{D}y = 1 $ (box) ,
- $ \rho = 1000 kg/m ^{2} $,
- $ A_{front} = 0.0178 m^{2} $,
- $ A_{side} = 0.0840 m ^{2} $,
- $ d = 0.0775 m $,
- $ r_{f} = 0.6208 m $,
- $ r_{b} = 0.4642 m $,
+Given figure \vref{fig:ship_sizes}:
+ $ v_{l} = 1m/s $ , \quad
+ $ \omega_{l} = 1 s ^{-1} $ ,\quad
+ $ C_{Dx} = 0.5 $ (triangle) ,\quad
+ $ C_{Dy} = 1 $ (box) ,\quad
+ $ \rho = 1000 kg/m ^{2} $,\quad
+ $ A_{front} = 0.0178 m^{2} $,\quad
+ $ A_{side} = 0.0840 m ^{2} $,\quad
+ $ d = 0.0775 m $,\quad
+ $ r_{f} = 0.6208 m $,\quad
+ $ r_{b} = 0.4642 m $,\quad
 the linearized formulas for the drag forces can be computed to be:
 
 
