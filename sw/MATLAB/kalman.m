@@ -44,7 +44,7 @@ gpsY = GPS(:,2);
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 1000; % Then it fits with the Simulink Simulation!
+N = 5000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -83,12 +83,12 @@ varXvel = 0.00262; % m/s
 varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
 varYpos = 1.12; % m
-varYvel = 0.00262; % m/s
+varYvel = 4.8815e-5; % m/s
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
 varWvel = 2.3559e-5; % rad/s
-varWacc = 0.004;
+varWacc = 2.3559e-5;
 
 varYWacc = 2.4496*10^-6; % rad/s^2
 
@@ -247,7 +247,7 @@ end
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        %Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
-       Wn(:,n) = [randn(4,1);0;randn(4,1)].*SqM';
+       Wn(:,n) = [randn(4,1);0;randn(3,1);randn(1,1)].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
