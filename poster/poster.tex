@@ -30,11 +30,11 @@ Greenland has in excess of 30.000 kilometers of coastal line with outdated maps.
 \paragraph{Path Optimization}
 The path planner divides the path into straight and turning subsegments. The interesting part of this, is the turning subsegments. The turning segments are each defined by a threshold $\varepsilon_\text{max}$ which defines which algorithm to use dependent on the curvature of the path. The sub-waypoints are computed using the normalized Fresnel integral functions $C_F$ and $S_F$ in equation (\ref{eq:fresnel}) generating an Euler spiral in and out of the turn. 
 \begin{align}
-C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x sin(t^2)dt
+C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
 This allows for the ship to as much momentum as possible. If the curvature is below the threshold $\varepsilon < \varepsilon_ \text{max}$ the algorithm only computes 3 key sub-waypoints as seen on figure (Fig \ref{fig:3points}):
-\begin{figure}[htbp]
+\begin{figure}
 	\centering
 	\includegraphics[width=0.99\threecolwidth]{img/3points.pdf}
   	\caption{Sub waypoint calculation when $\varepsilon < \varepsilon _\text{max}$.}
