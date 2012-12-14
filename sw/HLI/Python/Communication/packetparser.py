@@ -101,7 +101,8 @@ class packetParser():
 									
 							#heading = -(2*pi-heading-pi/2)
 							heading = -heading
-							#print "[" + str(measurements[4]) + ", " + str(measurements[3]) + "]\t Theta: " + str(heading)
+							#print chr(27) + "[2J"
+							#print "[" + str(measurements[4]) + ", " + str(measurements[3]) + "]\t Theta: " + str(heading) + "\t Time:" + str(time.time())
 							
 							accx = -measurements[1] * self.accconst
 							accy = -measurements[2] * self.accconst
@@ -201,7 +202,6 @@ class packetParser():
 					pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
 					
 					#print pos
-					
 					self.state[0] = [float(pos[0,0]),		1]
 					self.state[1] = [speed, 1]
 					self.state[3] = [float(pos[1,0]), 	1]

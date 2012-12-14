@@ -12,8 +12,9 @@ import ObjectLibrary as OL
 
 Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
 swp = open("measurements/swp141212.txt",'w')
+controllog = open("measurements/controllog141212.txt",'w')
 Startpos = OL.O_PosData(0, 0, 0, 1)
-AAUSHIP = Ship.O_Ship(Startpos,swp)
+AAUSHIP = Ship.O_Ship(Startpos,swp,Kalmanfile)
 
 '''
 EMBEDDED OPTIONAL STEP 2/B
@@ -22,8 +23,11 @@ Waypoint ADDING
 
 #X = numpy.array([0,1,2,3,4,5,6,7])
 #Y = numpy.array([10,11,12,13,14,15,16,17])
-Y = numpy.array([0,35.0543,35.5730,58.8078])
-X = numpy.array([0,-0.5753,26.0082,25.5482])
+#Y = numpy.array([0,35.0543,35.5730,58.8078])
+#X = numpy.array([0,-0.5753,26.0082,25.5482])
+
+Y = numpy.array([33.866070951884211, 35.298945836124972]) #Easting
+X = numpy.array([-28.917917253103049,42.596021647672877]) #Northing
 
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
@@ -51,6 +55,7 @@ Control loop
 
 accf = open("measurements/accdata141212.csv", 'w')
 gpsf = open("measurements/gpsdata141212.txt", 'w')
+
 qu = Queue.Queue()
 kalqueue = Queue.Queue()
 to = 0.1665
@@ -113,6 +118,7 @@ try:
 					#	print p2
 						parser.parse(p)
 						parser.parse(p2)
+						#print measuredstates[0]
 						motor = AAUSHIP.Control_Step()
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
@@ -120,6 +126,7 @@ try:
 						
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 20:
 						parser.parse(p2)
+						#print measuredstates[0]
 						motor = AAUSHIP.Control_Step()
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
@@ -131,6 +138,10 @@ try:
 						sendControl += 1
 						
 					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
+						print chr(27) + "[2J"
+						if measuredstates[0][1] == 1:
+							print "blaH"
+						
 						#print sendControl
 						sendControl = 0
 						#print sendControl
@@ -141,14 +152,17 @@ try:
 						tosend = AAUSHIP.FtoM(motor)
 						#print sendControl
 						#print "Sent data"
-						print chr(27) + "[2J"
-						#print motor
-						print "LastWP: \t" +  str(AAUSHIP.LastWP)
+						
+						print motor
+						#print "LastWP: \t" +  str(AAUSHIP.LastWP)
 						print "Theta_r: \t" + str(AAUSHIP.get_Thera_r()*180/pi)
 						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
 						print "NextWP (E,N): \t" + str(AAUSHIP.NextSWP.get_Pos())
 						print "Pos (E,N): \t" + str(AAUSHIP.Pos.get_Pos())
+						print "Vel: \t" + str(AAUSHIP.get_vel())
 						sign = -sign
+						#print motor[1,0]
+						controllog.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + "\r\n")
 						#print tosend
 						receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
 						#print measuredstates
@@ -247,6 +261,7 @@ accf.close()
 gpsf.close()
 Kalmanfile.close()
 swp.close()
+controllog.close()
 print "done"
 
 quit()	
