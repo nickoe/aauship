@@ -5,7 +5,7 @@ clc; clear all; close all; clear java;
 %     clf(lunde)
 % end
 run('./contsimu.m');
-load inputD.mat; % Loads system input file from contsimu.m
+% load inputD.mat; % Loads system input file from contsimu.m
 inputD = inputD';
 close all;
 IMU = load('accdata00185.csv');

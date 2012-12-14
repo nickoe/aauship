@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.9.19)  12 DEC 2012 22:46
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.9.19)  14 DEC 2012 14:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -367,18 +367,18 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 )) (./ifacconf.aux)
 \openout1 = `ifacconf.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 (/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count109
@@ -431,53 +431,22 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Calculating math sizes for size <14> on input line 25.
+LaTeX Font Info:    Calculating math sizes for size <14> on input line 26.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14> on input line 25.
+(Font)              <14> on input line 26.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9.79996> on input line 25.
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.44 ...ction set. Please use this document as a “
-                                                  template” to prepare your ...
-
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.44 .... Please use this document as a “template”
-                                                   to prepare your manuscrip...
-
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
+(Font)              <9.79996> on input line 26.
 \c@sv@footnote=\count115
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.52 ...e style at this point in the document is “
-                                                  Text”). Highlight a sectio...
-
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
+Runaway argument?
+{hypo \subsection {A subsection} Bifurcation: Plot of local maxima of\ETC.
+! Paragraph ended before \end was complete.
+<to be read again> 
+                   \par 
+l.65 
+     
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
 
 
 ! Package inputenc Error: Keyboard character used is undefined
@@ -487,21 +456,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.52 ...le at this point in the document is “Text”
-                                                  ). Highlight a section tha...
-
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.57 ...hen Edit | Paste Special | Picture (with “
+l.66 ...hen Edit | Paste Special | Picture (with “
                                                   Float over text” unchecked).
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -514,7 +469,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.57 ... Special | Picture (with “Float over text”
+l.66 ... Special | Picture (with “Float over text”
                                                    unchecked).
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -527,7 +482,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.59 ...of your paper. Your manuscript should be ‘
+l.68 ...of your paper. Your manuscript should be ‘
                                                   camera-ready.’ Page limits...
 
 You need to provide a definition with \DeclareInputText 
@@ -541,7 +496,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.59 ... Your manuscript should be ‘camera-ready.’
+l.68 ... Your manuscript should be ‘camera-ready.’
                                                    Page limits vary from con...
 
 You need to provide a definition with \DeclareInputText 
@@ -550,7 +505,7 @@ or \DeclareInputMath before using this key.
 <img/10percent.pdf, id=1, 597.51233pt x 421.10324pt>
 File: img/10percent.pdf Graphic file (type pdf)
 <use img/10percent.pdf>
-Package pdftex.def Info: img/10percent.pdf used on input line 63.
+Package pdftex.def Info: img/10percent.pdf used on input line 72.
 (pdftex.def)             Requested size: 242.23734pt x 170.71652pt.
 
 ! Package inputenc Error: Keyboard character used is undefined
@@ -560,7 +515,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.86 {\bf Please use this document as a “
+l.95 {\bf Please use this document as a “
                                          template” to prepare your manuscrip...
 
 You need to provide a definition with \DeclareInputText 
@@ -574,7 +529,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.86 {\bf Please use this document as a “template”
+l.95 {\bf Please use this document as a “template”
                                                    to prepare your manuscrip...
 
 You need to provide a definition with \DeclareInputText 
@@ -591,7 +546,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.135 ...t transfer system in due course. Please “
+l.144 ...t transfer system in due course. Please “
                                                   do not” send copyright for...
 
 You need to provide a definition with \DeclareInputText 
@@ -605,7 +560,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.135 ...fer system in due course. Please “do not”
+l.144 ...fer system in due course. Please “do not”
                                                    send copyright forms by m...
 
 You need to provide a definition with \DeclareInputText 
@@ -619,7 +574,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.140 ...crosoft Equation or MathType Equation). “
+l.149 ...crosoft Equation or MathType Equation). “
                                                   Float over text” should no...
 
 You need to provide a definition with \DeclareInputText 
@@ -633,7 +588,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.140 ... or MathType Equation). “Float over text”
+l.149 ... or MathType Equation). “Float over text”
                                                    should not be selected. O...
 
 You need to provide a definition with \DeclareInputText 
@@ -647,7 +602,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.144 ...ers in data storage. For example, write “
+l.153 ...ers in data storage. For example, write “
                                                   $15 Gb/cm^2$ ($100 Gb/in^2...
 
 You need to provide a definition with \DeclareInputText 
@@ -661,7 +616,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.144 ...le, write “$15 Gb/cm^2$ ($100 Gb/in^2$).”
+l.153 ...le, write “$15 Gb/cm^2$ ($100 Gb/in^2$).”
                                                    An exception is when Engl...
 
 You need to provide a definition with \DeclareInputText 
@@ -675,7 +630,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.144 ...e used as identifiers in trade, such as “
+l.153 ...e used as identifiers in trade, such as “
                                                   3.5 in disk drive.” Avoid ...
 
 You need to provide a definition with \DeclareInputText 
@@ -689,7 +644,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.144 ...rs in trade, such as “3.5 in disk drive.”
+l.153 ...rs in trade, such as “3.5 in disk drive.”
                                                    Avoid combining SI and CG...
 
 You need to provide a definition with \DeclareInputText 
@@ -703,7 +658,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.145 ...r dot to separate compound units, e.g., “
+l.154 ...r dot to separate compound units, e.g., “
                                                   $A\cdot m^2$.”
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -716,7 +671,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.145 ...ate compound units, e.g., “$A\cdot m^2$.”
+l.154 ...ate compound units, e.g., “$A\cdot m^2$.”
                                                   
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -729,7 +684,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...bols. As an example, write the quantity “
+l.160 ...bols. As an example, write the quantity “
                                                   Magnetization,” or “Magnet...
 
 You need to provide a definition with \DeclareInputText 
@@ -743,7 +698,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...mple, write the quantity “Magnetization,”
+l.160 ...mple, write the quantity “Magnetization,”
                                                    or “Magnetization M,” not...
 
 You need to provide a definition with \DeclareInputText 
@@ -757,7 +712,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ... write the quantity “Magnetization,” or “
+l.160 ... write the quantity “Magnetization,” or “
                                                   Magnetization M,” not just...
 
 You need to provide a definition with \DeclareInputText 
@@ -771,7 +726,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...ty “Magnetization,” or “Magnetization M,”
+l.160 ...ty “Magnetization,” or “Magnetization M,”
                                                    not just “M.” Put units i...
 
 You need to provide a definition with \DeclareInputText 
@@ -785,7 +740,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...zation,” or “Magnetization M,” not just “
+l.160 ...zation,” or “Magnetization M,” not just “
                                                   M.” Put units in parenthes...
 
 You need to provide a definition with \DeclareInputText 
@@ -799,7 +754,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...ion,” or “Magnetization M,” not just “M.”
+l.160 ...ion,” or “Magnetization M,” not just “M.”
                                                    Put units in parentheses....
 
 You need to provide a definition with \DeclareInputText 
@@ -813,7 +768,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...units. As in Fig. 1, for example, write “
+l.160 ...units. As in Fig. 1, for example, write “
                                                   Magnetization (A/m)” or “M...
 
 You need to provide a definition with \DeclareInputText 
@@ -827,7 +782,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ... for example, write “Magnetization (A/m)”
+l.160 ... for example, write “Magnetization (A/m)”
                                                    or “Magnetization (A m?1)...
 
 You need to provide a definition with \DeclareInputText 
@@ -841,7 +796,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...example, write “Magnetization (A/m)” or “
+l.160 ...example, write “Magnetization (A/m)” or “
                                                   Magnetization (A m?1),” no...
 
 You need to provide a definition with \DeclareInputText 
@@ -855,7 +810,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...zation (A/m)” or “Magnetization (A m?1),”
+l.160 ...zation (A/m)” or “Magnetization (A m?1),”
                                                    not just “A/m.” Do not la...
 
 You need to provide a definition with \DeclareInputText 
@@ -869,7 +824,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...)” or “Magnetization (A m?1),” not just “
+l.160 ...)” or “Magnetization (A m?1),” not just “
                                                   A/m.” Do not label axes wi...
 
 You need to provide a definition with \DeclareInputText 
@@ -883,7 +838,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ... “Magnetization (A m?1),” not just “A/m.”
+l.160 ... “Magnetization (A m?1),” not just “A/m.”
                                                    Do not label axes with a ...
 
 You need to provide a definition with \DeclareInputText 
@@ -897,7 +852,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...uantities and units. For example, write “
+l.160 ...uantities and units. For example, write “
                                                   Temperature (K),” not “Tem...
 
 You need to provide a definition with \DeclareInputText 
@@ -911,7 +866,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...ts. For example, write “Temperature (K),”
+l.160 ...ts. For example, write “Temperature (K),”
                                                    not “Temperature/K.”
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -924,7 +879,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...r example, write “Temperature (K),” not “
+l.160 ...r example, write “Temperature (K),” not “
                                                   Temperature/K.”
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -937,7 +892,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...e “Temperature (K),” not “Temperature/K.”
+l.160 ...e “Temperature (K),” not “Temperature/K.”
                                                   
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -950,7 +905,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.153 ...iers can be especially confusing. Write “
+l.162 ...iers can be especially confusing. Write “
                                                   Magnetization (kA/m)” or “...
 
 You need to provide a definition with \DeclareInputText 
@@ -964,7 +919,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.153 ...y confusing. Write “Magnetization (kA/m)”
+l.162 ...y confusing. Write “Magnetization (kA/m)”
                                                    or “Magnetization (103 A/...
 
 You need to provide a definition with \DeclareInputText 
@@ -978,7 +933,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.153 ...fusing. Write “Magnetization (kA/m)” or “
+l.162 ...fusing. Write “Magnetization (kA/m)” or “
                                                   Magnetization (103 A/m).” ...
 
 You need to provide a definition with \DeclareInputText 
@@ -992,7 +947,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.153 ...ion (kA/m)” or “Magnetization (103 A/m).”
+l.162 ...ion (kA/m)” or “Magnetization (103 A/m).”
                                                    Do not write “Magnetizati...
 
 You need to provide a definition with \DeclareInputText 
@@ -1006,7 +961,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.153 ...“Magnetization (103 A/m).” Do not write “
+l.162 ...“Magnetization (103 A/m).” Do not write “
                                                   Magnetization (A/m) ? 1000...
 
 You need to provide a definition with \DeclareInputText 
@@ -1020,7 +975,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.153 ...Do not write “Magnetization (A/m) ? 1000”
+l.162 ...Do not write “Magnetization (A/m) ? 1000”
                                                    because the reader would ...
 
 You need to provide a definition with \DeclareInputText 
@@ -1034,7 +989,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.158 ...e not been published should be cited as “
+l.167 ...e not been published should be cited as “
                                                   unpublished.” Capitalize o...
 
 You need to provide a definition with \DeclareInputText 
@@ -1048,7 +1003,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.158 ...blished should be cited as “unpublished.”
+l.167 ...blished should be cited as “unpublished.”
                                                    Capitalize only the first...
 
 You need to provide a definition with \DeclareInputText 
@@ -1062,7 +1017,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.162 ...e periods should not have spaces: write “
+l.171 ...e periods should not have spaces: write “
                                                   C.N.R.S.,” not “C. N. R. S...
 
 You need to provide a definition with \DeclareInputText 
@@ -1076,7 +1031,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.162 ...should not have spaces: write “C.N.R.S.,”
+l.171 ...should not have spaces: write “C.N.R.S.,”
                                                    not “C. N. R. S.” Do not ...
 
 You need to provide a definition with \DeclareInputText 
@@ -1090,7 +1045,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.162 ... not have spaces: write “C.N.R.S.,” not “
+l.171 ... not have spaces: write “C.N.R.S.,” not “
                                                   C. N. R. S.” Do not use ab...
 
 You need to provide a definition with \DeclareInputText 
@@ -1104,7 +1059,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.162 ...aces: write “C.N.R.S.,” not “C. N. R. S.”
+l.171 ...aces: write “C.N.R.S.,” not “C. N. R. S.”
                                                    Do not use abbreviations ...
 
 You need to provide a definition with \DeclareInputText 
@@ -1118,7 +1073,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.162 ...less they are unavoidable (for example, “
+l.171 ...less they are unavoidable (for example, “
                                                   IFAC” in the title of this...
 
 You need to provide a definition with \DeclareInputText 
@@ -1132,36 +1087,8 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.162 ...they are unavoidable (for example, “IFAC”
+l.171 ...they are unavoidable (for example, “IFAC”
                                                    in the title of this arti...
-
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.166 ...to create the equation. Then select the “
-                                                  Equation” markup style. Pr...
-
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.166 ... the equation. Then select the “Equation”
-                                                   markup style. Press the t...
 
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -1175,7 +1102,35 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...ure, but T is the unit tesla). Refer to “
+l.175 ...to create the equation. Then select the “
+                                                  Equation” markup style. Pr...
+
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.175 ... the equation. Then select the “Equation”
+                                                   markup style. Press the t...
+
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.184 ...ure, but T is the unit tesla). Refer to “
                                                   (1),” not “Eq. (1)” or “eq...
 
 You need to provide a definition with \DeclareInputText 
@@ -1189,7 +1144,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...but T is the unit tesla). Refer to “(1),”
+l.184 ...but T is the unit tesla). Refer to “(1),”
                                                    not “Eq. (1)” or “equatio...
 
 You need to provide a definition with \DeclareInputText 
@@ -1203,7 +1158,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...is the unit tesla). Refer to “(1),” not “
+l.184 ...is the unit tesla). Refer to “(1),” not “
                                                   Eq. (1)” or “equation (1),...
 
 You need to provide a definition with \DeclareInputText 
@@ -1217,7 +1172,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...nit tesla). Refer to “(1),” not “Eq. (1)”
+l.184 ...nit tesla). Refer to “(1),” not “Eq. (1)”
                                                    or “equation (1),” except...
 
 You need to provide a definition with \DeclareInputText 
@@ -1231,7 +1186,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...esla). Refer to “(1),” not “Eq. (1)” or “
+l.184 ...esla). Refer to “(1),” not “Eq. (1)” or “
                                                   equation (1),” except at t...
 
 You need to provide a definition with \DeclareInputText 
@@ -1245,7 +1200,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...o “(1),” not “Eq. (1)” or “equation (1),”
+l.184 ...o “(1),” not “Eq. (1)” or “equation (1),”
                                                    except at the beginning o...
 
 You need to provide a definition with \DeclareInputText 
@@ -1259,7 +1214,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ... except at the beginning of a sentence: “
+l.184 ... except at the beginning of a sentence: “
                                                   Equation (1) is ... .”
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -1272,7 +1227,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.175 ...ng of a sentence: “Equation (1) is ... .”
+l.184 ...ng of a sentence: “Equation (1) is ... .”
                                                   
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -1285,7 +1240,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...nd colons. Hyphenate complex modifiers: “
+l.188 ...nd colons. Hyphenate complex modifiers: “
                                                   zero-field-cooled magnetiz...
 
 You need to provide a definition with \DeclareInputText 
@@ -1299,7 +1254,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...fiers: “zero-field-cooled magnetization.”
+l.188 ...fiers: “zero-field-cooled magnetization.”
                                                    Avoid dangling participle...
 
 You need to provide a definition with \DeclareInputText 
@@ -1313,7 +1268,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ....” Avoid dangling participles, such as, “
+l.188 ....” Avoid dangling participles, such as, “
                                                   Using (1), the potential w...
 
 You need to provide a definition with \DeclareInputText 
@@ -1327,7 +1282,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...Using (1), the potential was calculated.”
+l.188 ...Using (1), the potential was calculated.”
                                                    [It is not clear who or w...
 
 You need to provide a definition with \DeclareInputText 
@@ -1341,7 +1296,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...r who or what used (1).] Write instead, “
+l.188 ...r who or what used (1).] Write instead, “
                                                   The potential was calculat...
 
 You need to provide a definition with \DeclareInputText 
@@ -1355,7 +1310,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...e potential was calculated by using (1),”
+l.188 ...e potential was calculated by using (1),”
                                                    or “Using (1), we calcula...
 
 You need to provide a definition with \DeclareInputText 
@@ -1369,7 +1324,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...ential was calculated by using (1),” or “
+l.188 ...ential was calculated by using (1),” or “
                                                   Using (1), we calculated t...
 
 You need to provide a definition with \DeclareInputText 
@@ -1383,7 +1338,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.179 ...“Using (1), we calculated the potential.”
+l.188 ...“Using (1), we calculated the potential.”
                                                   
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -1396,7 +1351,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ... Avoid contractions; for example, write “
+l.190 ... Avoid contractions; for example, write “
                                                   do not” instead of “don’t....
 
 You need to provide a definition with \DeclareInputText 
@@ -1410,7 +1365,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ...contractions; for example, write “do not”
+l.190 ...contractions; for example, write “do not”
                                                    instead of “don’t.” The s...
 
 You need to provide a definition with \DeclareInputText 
@@ -1424,7 +1379,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ... for example, write “do not” instead of “
+l.190 ... for example, write “do not” instead of “
                                                   don’t.” The serial comma i...
 
 You need to provide a definition with \DeclareInputText 
@@ -1438,7 +1393,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ... example, write “do not” instead of “don’
+l.190 ... example, write “do not” instead of “don’
                                                   t.” The serial comma is pr...
 
 You need to provide a definition with \DeclareInputText 
@@ -1452,7 +1407,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ...ample, write “do not” instead of “don’t.”
+l.190 ...ample, write “do not” instead of “don’t.”
                                                    The serial comma is prefe...
 
 You need to provide a definition with \DeclareInputText 
@@ -1466,7 +1421,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ...“don’t.” The serial comma is preferred: “
+l.190 ...“don’t.” The serial comma is preferred: “
                                                   A, B, and C” instead of “A...
 
 You need to provide a definition with \DeclareInputText 
@@ -1480,7 +1435,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ... serial comma is preferred: “A, B, and C”
+l.190 ... serial comma is preferred: “A, B, and C”
                                                    instead of “A, B and C.”
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -1493,7 +1448,7 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ... is preferred: “A, B, and C” instead of “
+l.190 ... is preferred: “A, B, and C” instead of “
                                                   A, B and C.”
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
@@ -1506,37 +1461,69 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.181 ...d: “A, B, and C” instead of “A, B and C.”
+l.190 ...d: “A, B, and C” instead of “A, B and C.”
                                                   
 You need to provide a definition with \DeclareInputText 
 or \DeclareInputMath before using this key.
 
-[3] (./ifacconf.aux) ) 
+
+! Package inputenc Error: Keyboard character used is undefined
+(inputenc)                in inputencoding `utf8'.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.198 ...Assistant Professor Carles Navarro Manch—
+                                                  n, Section for Navigation ...
+
+You need to provide a definition with \DeclareInputText 
+or \DeclareInputMath before using this key.
+
+[3]
+
+! LaTeX Error: \begin{hypo} on input line 62 ended by \end{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.249 \end{document}
+                    
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(./ifacconf.aux) )
+(\end occurred inside a group at level 1)
+
+### semi simple group (level 1) entered at line 62 (\begingroup)
+### bottom level 
 Here is how much of TeX's memory you used:
  2800 strings out of 493488
  35093 string characters out of 3141326
- 97348 words of memory out of 3000000
+ 96348 words of memory out of 3000000
  6072 multiletter control sequences out of 15000+200000
  12563 words of font info for 39 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 37i,10n,23p,622b,257s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-su
-per/cm-super-t1.enc}</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr5.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
-.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
-b></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb>
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></
-usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></us
-r/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/
-local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on ifacconf.pdf (3 pages, 477962 bytes).
+ 37i,10n,23p,554b,311s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-super/cm
+-super-t1.enc}</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10
+.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pf
+b></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><
+/usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
+usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></us
+r/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/
+local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/lo
+cal/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/loca
+l/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/
+texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on ifacconf.pdf (3 pages, 478385 bytes).
 PDF statistics:
  98 PDF objects out of 1000 (max. 8388607)
  63 compressed objects within 1 object stream

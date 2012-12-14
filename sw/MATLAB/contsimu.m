@@ -169,7 +169,7 @@ plot(fft(Sxx_filt)')
 grid on
 
 %% Save file:
-save('inputD', 'inputD')
+%save('inputD', 'inputD')
 
 %% Save Discrete Control Matrices
 saveAname = 1;

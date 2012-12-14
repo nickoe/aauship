@@ -18,6 +18,7 @@
 %\begin{prop} ... \end{prop}	% Proposition
 %\begin{crit} ... \end{crit}	% Criterion
 
+
 \begin{document}
 
 \begin{frontmatter}
@@ -41,16 +42,24 @@
 
 
 \begin{abstract}                          % Abstract of not more than 250 words.
-These instructions give you guidelines for preparing papers for IFAC conferences. Use this document as a template to compose your paper if you are using Microsoft Word 6.0 or later. Otherwise, use this document as an instruction set. Please use this document as a “template” to prepare your manuscript. For submission guidelines, follow instructions on paper submission system as well as the Conference website. There is a very small blank line immediately above the abstract, do not delete it; it sets the footnote at the bottom of this column.
+This paper considers the subject of running a centralized controller for the purpose of navigating a small Autonomous Surface Vehicle (ASV). The centralized controller is using a Kalman filter as a state predictor to improve the precision of the navigational aids mounted aboard. The work presents the design of the motion control system as well as the development of a protocol used to push through as much data on a standard 9.6 kbps data link simplex link.
+
+The performance for the algorithms developed in this project, have been tested in Limfjorden in Aalborg, and towards the end, results of these tests are shown. 
 \end{abstract}
 
 \end{frontmatter}
 
 \section{Introduction}
-The process of making depth maps of the waters in and around Greenland is currently a time consuming and expensive task. To reduce this, as well as 
+As up to date mapping of the coastal areas around Greenland is not available, and the process of creating these are a both time consuming and expensive task. One way to reduce both the costs and the amount of time invested in such a project could be to develop small autonomous drones to carry out this task. 
 
-You can type over sections of ifacconf.doc or cut and paste from another document and then use markup styles. The pull-down style menu is at the left of the Formatting Toolbar at the top of your Word window (for example, the style at this point in the document is “Text”). Highlight a section that you want to designate with a certain style, then select the appropriate name on the style menu. The style will adjust your fonts and line spacing. {\bf Do not change the font sizes or line spacing to squeeze more text into a limited number of pages. Use italics for emphasis; do not underline}.
+These drones should be controlled by a mothership, which would utilize a simple data link, both to preserve bandwith, but also to make the duration at which the ships are able to sail as long as possible, by limiting the power consumption. 
 
+Currently the main focus of autonomous vehicles have been on aerial, ground and underwater vehicles, why there is close to no research going on about small autonomous surface vessels. An example of such a vessel is the Stingray ASV developed by Isreali Based Elbit Systems. The purpose of this vehicle is somewhat military related, where the purpose of measuring the coastal areas around Greenland are purely humanitarian,
+
+{\bf Do not change the font sizes or line spacing to squeeze more text into a limited number of pages. Use italics for emphasis; do not underline}.
+
+\subsection{Problem statement}
+\begin{hypo} Is it possible to develop a centralized state estimator for use in the maritime environment using a small data link \end{hypo
 \subsection{A subsection}
 Bifurcation: Plot of local maxima of $x$ with damping $a$ decreasing (Fig.~\ref{fig1}).
 
@@ -186,7 +195,7 @@ A parenthetical statement at the end of a sentence is punctuated outside of the 
 A conclusion section is not required. Although a conclusion may review the main points of the paper, do not replicate the abstract as the conclusion. A conclusion might elaborate on the importance of the work or suggest applications and extensions. 
 
 \begin{ack}                               % Place acknowledgements
-Partially supported by the Roman Senate.  % here.
+A special thank should be given to Assistant Professor Carles Navarro Manch—n, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter.  % here.
 \end{ack}
 
 %\bibliographystyle{alpha}        % Include this if you use bibtex 

@@ -234,6 +234,13 @@ The variance of the $\vec{F}$ and the $\vec{\tau}$ are estimated using normal di
 \begin{align}
 \mu_{\vec{F}} = \frac{1}{n}\sum_{i = 1}^n F_i
 \end{align}
-As the velocity of the ship is moving at the speed of 1 m/s the amount of force taken to acheive this speed is roughly 5.34 N. The variance of the force can however not be estimated that easily, as this can fluctuate from a negative value to a positive value. Therefore a trial-and-error approach have been used to estimate this, using the simulation in \MATLAB to to estimate this, when a number was reached it was reasoned wether that would be a good estimate. An estimate that proves good results have shown to be 55 N in either direction. As the ship doesn't need to move faster than 1 m/s it does not need to apply a big amount of force. 
+As the velocity of the ship is moving at the speed of 1 m/s the amount of force taken to acheive this speed is roughly 5.34 N. The variance of the force can however not be estimated that easily, as this can fluctuate from a negative value to a positive value. Therefore a trial-and-error approach have been used to estimate this, using the simulation in \MATLAB to to estimate this, when a number was reached it was reasoned wether that would be a good estimate. An estimate that proves good results have shown to be 55 N in either direction. As the ship doesn't need to move faster than 1 m/s it does not need to apply a big amount of force. Therefore, the distribution for the forward force can be given as:
+\begin{align}
+\vec{F}_x \sim \mathcal{N}(5.34,55)
+\end{align}
 Tests in the laboratory have shown that the ship produces around 20 N (using a manual-read out potentiometer) when both the input to the propellers are 150/500. And as the amount of force is related to the propeller revolutions squared, the ship is able to produce around this amount of thrust. 
-The variance and mean of the torque are seen as a zero-mean process, as the ship mainly sails straight forward, but then the variance changes as the ship turns.  
+The variance and mean of the torque are seen as a zero-mean process, as the ship mainly sails straight forward, but then the variance changes as the ship turns. The variance have proven good results with a variance of 20. This gives the following distribution for the torque of the vessel:
+\begin{align}
+\vec{\tau}_\omega \sim \mathcal{N}(0,20)
+\end{align}
+This concludes the state estimator worksheet. These can be used to estimate the covariance matrix of the ship. 
