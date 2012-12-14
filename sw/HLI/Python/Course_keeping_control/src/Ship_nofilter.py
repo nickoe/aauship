@@ -372,9 +372,16 @@ class O_Ship:
         
         self.Pos.get_Pos_X()
         
-        x_next = 0.7 * x + 0.3 * self.Pos.get_Pos_X()
-        y_next = 0.7 * y + 0.3 * self.Pos.get_Pos_Y()
+        if numpy.sum(input_m[0,1]):
+            
+            x_next = 0.7 * x + 0.3 * self.Pos.get_Pos_X()
+            y_next = 0.7 * y + 0.3 * self.Pos.get_Pos_Y()
+            
+        else:
         
+            x_next = xd * 0.1 * math.sin(theta) + self.Pos.get_Pos_X()
+            y_next = yd * 0.1 * math.cos(theta) + self.Pos.get_Pos_Y()
+            
         #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))

@@ -21,6 +21,8 @@ import Ship_nofilter as Ship
 import Simulator as S
 import KalmanFilter as KF
 
+f = open('log', 'w')
+
 '''
 SIMULATION STEP 1
 Read / Generate coast, initialize simulator
@@ -29,15 +31,15 @@ coastlength = 2000
 Sim = S.Simulator()
 
 coast = Sim.SimulateCoast(coastlength)
-startpos = OL.O_PosData(0, 0, 1, 0)
+startpos = OL.O_PosData(-80, -80, 1, 0)
 Sim.SetDynamicModel(1, 1, 1, 1, 1, startpos)
 
 '''
 EMBEDDED STEP 1
 Init AAUSHIP
 '''
-Startpos = OL.O_PosData(0, 0, 0, 1)
-AAUSHIP = Ship.O_Ship(Startpos)
+Startpos = OL.O_PosData(-80, -80, 0, 1)
+AAUSHIP = Ship.O_Ship(Startpos, f)
 
 
 '''
@@ -83,7 +85,7 @@ Control loop initializations and logging
 '''
 i = 0
 
-ni = 100
+ni = 10000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
@@ -171,9 +173,8 @@ while i < ni:
 '''
 End of voyage
 '''
-
-plt.plot(x0,x1,'r')
 plt.plot(x3,x4,'k')
+plt.plot(x0,x1,'r')
 plt.show()
 #plt.plot(x2)
 

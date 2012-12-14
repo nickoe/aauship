@@ -67,7 +67,7 @@ class Simulator:
         self.B = numpy.matrix([[K1, K2],[K3, -K4],[0., 0.]])
         '''
         
-        self.Ts = 1
+        self.Ts = 0.1
         
         if self.Ts == 1:
             self.A = numpy.matrix([[9.5636083e-001, 0, 0], [0, 1, 9.6180466e-001], [0, 0, 9.2459451e-001]])
