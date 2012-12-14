@@ -255,17 +255,17 @@ for n = 2:N;
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
-        Y(:,n) = Hn*Y(:,n-1)+Z(:,n);
-        X(:,n) = An*Y(:,n) + Wn(:,n);
-    Ypred(:,n) = Hn*Yupdate(:,n-1);
-    Xpred(:,n) = An*Ypred(:,n);
-  Rpred(:,:,n) = Hn*Rupdate(:,:,n-1)*Hn'+Qz(:,:,n);
-      B(:,:,n) = (Rpred(:,:,n)*An')/(An*Rpred(:,:,n)*An'+Qw(:,:,n));
+        Y(:,n) = Hn * Y(:,n-1) +Z(:,n); % xk
+        X(:,n) = An * Y(:,n) + Wn(:,n); % zk
+    Ypred(:,n) = Hn * Yupdate(:,n-1); % xk -
+    Xpred(:,n) = An * Ypred(:,n) + Z(:,n); 
+  Rpred(:,:,n) = Hn * Rupdate(:,:,n-1) * Hn' + Qz(:,:,n); % Pk-
+      B(:,:,n) = (Rpred(:,:,n) * An') / (An * Rpred(:,:,n) * An' + Qw(:,:,n)); % K
 %                if gpsA(n,:) == [0 0];
 %                    B(:,[1 4],n) = zeros(9,2);
 %                end
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
-Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  
+Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  % Pk+
      
 % Below - rotation udpate, so the route can be plotted:
   k_rot(:,:,n) = [cos(Yupdate(7,n-1)) -sin(Yupdate(7,n-1));sin(Yupdate(7,n-1)) cos(Yupdate(7,n-1))];
