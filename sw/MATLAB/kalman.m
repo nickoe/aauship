@@ -255,15 +255,12 @@ for n = 2:N;
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
-        Y(:,n) = Hn * Y(:,n-1) +Z(:,n); % xk
+        Y(:,n) = Hn * Y(:,n-1) + Z(:,n); % xk
         X(:,n) = An * Y(:,n) + Wn(:,n); % zk
     Ypred(:,n) = Hn * Yupdate(:,n-1); % xk -
     Xpred(:,n) = An * Ypred(:,n); 
   Rpred(:,:,n) = Hn * Rupdate(:,:,n-1) * Hn' + Qz(:,:,n); % Pk-
       B(:,:,n) = (Rpred(:,:,n) * An') / (An * Rpred(:,:,n) * An' + Qw(:,:,n)); % K
-%                if gpsA(n,:) == [0 0];
-%                    B(:,[1 4],n) = zeros(9,2);
-%                end
   Yupdate(:,n) = Ypred(:,n)+B(:,:,n)*(X(:,n)-Xpred(:,n));
 Rupdate(:,:,n) = (eye(9)-B(:,:,n)*An)*Rpred(:,:,n);  % Pk+
      
@@ -475,7 +472,7 @@ for n = 2:N;
    XpredD(:,n) = An*YpredD(:,n);
  RpredD(:,:,n) = Hn*RupdateD(:,:,n-1)*Hn'+Qz(:,:,n);
      BD(:,:,n) = (RpredD(:,:,n)*An')/(An*RpredD(:,:,n)*An'+Qw(:,:,n));
-             if sC == 1;
+             if sC == GPS_freq;
                    BD(:,:,n) = BD(:,:,n);
                           sC = 0;
              else                
@@ -910,7 +907,6 @@ for n = 2:N;
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
  packLost(:,n) = rand(9,1)<0.9; % Looses 10 percent of the packages. 
-      BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
              if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
@@ -920,6 +916,7 @@ for n = 2:N;
                    BL(:,4,n) = zeros(9,1);
                    BL(:,5,n) = zeros(9,1);
              end
+     BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
  YupdateL(:,n) = YpredL(:,n)+BL(:,:,n)*(XL(:,n)-XpredL(:,n));
 RupdateL(:,:,n) = (eye(9)-BL(:,:,n)*An)*RpredL(:,:,n);
             sL = sL + 1;
