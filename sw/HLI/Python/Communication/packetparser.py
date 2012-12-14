@@ -99,7 +99,8 @@ class packetParser():
 								else:
 									heading = 0
 									
-							heading = 2*pi-heading
+							#heading = -(2*pi-heading-pi/2)
+							heading = -heading
 							#print "[" + str(measurements[4]) + ", " + str(measurements[3]) + "]\t Theta: " + str(heading)
 							
 							accx = -measurements[1] * self.accconst

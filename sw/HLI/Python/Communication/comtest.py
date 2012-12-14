@@ -22,8 +22,8 @@ Waypoint ADDING
 
 #X = numpy.array([0,1,2,3,4,5,6,7])
 #Y = numpy.array([10,11,12,13,14,15,16,17])
-X = numpy.array([0,35.0543,35.5730,58.8078])
-Y = numpy.array([0,-0.5753,26.0082,25.5482])
+Y = numpy.array([0,35.0543,35.5730,58.8078])
+X = numpy.array([0,-0.5753,26.0082,25.5482])
 
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
@@ -141,13 +141,13 @@ try:
 						tosend = AAUSHIP.FtoM(motor)
 						#print sendControl
 						#print "Sent data"
-						#print chr(27) + "[2J"
+						print chr(27) + "[2J"
 						#print motor
-						#print "LastWP: \t" +  str(AAUSHIP.LastWP)
-						#print "Theta_r: \t" + str(AAUSHIP.get_Thera_r())
+						print "LastWP: \t" +  str(AAUSHIP.LastWP)
+						print "Theta_r: \t" + str(AAUSHIP.get_Thera_r()*180/pi)
 						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
-						#print "NextWP: \t" + str(AAUSHIP.NextSWP.get_Pos())
-						#print "Pos: \t\t" + str(AAUSHIP.Pos.get_Pos())
+						print "NextWP (E,N): \t" + str(AAUSHIP.NextSWP.get_Pos())
+						print "Pos (E,N): \t" + str(AAUSHIP.Pos.get_Pos())
 						sign = -sign
 						#print tosend
 						receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
