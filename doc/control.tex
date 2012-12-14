@@ -116,7 +116,7 @@ the linearized formulas for the drag forces can be computed to be:
 
 From which we can identify the coefficients that correspond tot the linear relation $ y_{l}(x) = \alpha + \beta \cdot x $:\\
 \begin{minipage}{0.3\linewidth}
-\[ \alpha_{x} = -4.45 \] 
+\[ \alpha_{x} = -4.45 \]
 \[ \beta_{x} = 8.9 \]
 \end{minipage}
 \begin{minipage}{0.3\linewidth}
@@ -132,22 +132,22 @@ From which we can identify the coefficients that correspond tot the linear relat
 \subsection{Choosing the right states}
 
 The variables we chose to be the states in our model are the speed of the ship in the forward direction in the ship frame $v$, the angular position of the ship's x axis relative to true North $\theta$ and the angular speed $\omega$.\\
-\[\begin{cases}
+\begin{align}\begin{cases}
 F - F_{D} = m \cdot \dot{v}\\
 T - T_{D} = I \cdot \dot{\omega}\\
-\end{cases}\]
+\end{cases}\end{align}
 
 Where $ F $ and $ T $ are the force and torque produced by the propellers, $ F_{D} $ and $ T_{D} $ are the force and torque caused by water drag, $ m $ is the mass of the ship, $ I $ is the moment of inertia, $ \dot{v} $  and $ \dot{\omega} $ are forward and angular acceleration respectively.
 
 The linearized drag force and torque from \ref{sect:Linearizing drag forces} can be substituted in these equations:
 \begin{align}
- \dot{v} &= - \frac{\beta_{x} \cdot v}{m} + \frac{F}{m}\\
- \dot{\omega} &= - \frac{\beta_{y} \cdot \omega}{I} + \frac{T}{I}\\
+ \dot{v} &= \frac{1}{m}(- \beta_{x} \cdot v + \vec{F})\\
+ \dot{\omega} &= \frac{1}{I}(-\beta_{y} \cdot \omega + T)\\
  \dot{\theta} &= \omega
 \end{align}
 
 Note that we have also dropped the $ \alpha $ term of the equations because we're currently only interested in the dynamic behavior of the system. The $ \alpha $ offset will be compensated for when removing the steady state error. Consequently, these relations can be rewritten in a matrix notation as follows:
-\[
+\begin{align}
 \dot{
 	\begin{bmatrix}
 	 v\\
@@ -178,53 +178,61 @@ v\\
 F\\
 T
 \end{bmatrix}
-\]
-
-This corresponds to the State Space Model equation:
-\[\vec{\dot{X}} = \vec{AX} + \vec{BU}\]
-
-Since the output matrix we need is $ \vec{Y} = \begin{bmatrix}v \\ \theta \end{bmatrix} $, the output equation
-\[\vec{Y} = \vec{CX} + \vec{DU}\]
-becomes:
-\[\begin{bmatrix}v \\ \theta \end{bmatrix}
- = 
-\begin{bmatrix}
-1 & 0\\
-0 & 1\\
-0 & 0
-\end{bmatrix}
-\cdot
-\begin{bmatrix}
-v\\
-\theta\\
-\omega
-\end{bmatrix}
-\]
-
-So the system matrices are:
-\[
-\vec{A} =\begin{bmatrix}
- -\frac{\beta_{x}}{m} & 0 & 0\\
- 0 & 0 & 1\\
- 0 & 0 & - \frac{\beta_{y}}{I}\\
-\end{bmatrix}\\
-\vec{B} = \begin{bmatrix}
-\frac{1}{m} & 0\\
-0 & 0\\
-0 & \frac{1}{I}\\
-\end{bmatrix}\\
-\vec{C} = 
-\begin{bmatrix}
-1 & 0\\
-0 & 1\\
-0 & 0
-\end{bmatrix}\\
-\vec{D} = \vec{0}
-\]
+\label{eq:ssmodel}
+\end{align}
+Equation \vref{eq:ssmodel} corresponds to a 3 \ac{DOF} model for the ship - with the 3 degrees noted as movement in the X-direction ($x$), Y-direction ($y$) and the rotation about the Z-axis ($\theta$). This model corresponds to the state equations, which are used as a base for developing the control algorithm.
+\begin{align}
+\vec{\dot{x}} = \vec{A}\vec{x} + \vec{B}\vec{u}
+\end{align}
+Since we only need to output the velocity and the angle, the output matrix $\vec{C}$ is added to the system. No feedforward loop is implemented, so this part can be removed, resulting in the output equation for the system becomes:
+\begin{align}
+\vec{y} = \vec{C}\vec{x}
+\end{align}
 
 \subsection{Discretizing for use with a particular timestep}
 
-The system described so far is continuous and needs to be discretized before being converted into an algorithm. Discretization is carried out in \MATLAB \ using the \texttt{c2d} command. This command takes the continous time state space model and the discretization time step - and outputs the discrete equivalent. 
+The system described so far is continuous and needs to be discretized before being converted into an algorithm. Discretization is carried out in \MATLAB \ using the \texttt{c2d} command. This command takes the continous time state space model and the discretization time step - and outputs the discrete equivalent. The \textt{c2d} command uses a zero-order hold algorithm to discretize the system.
+The zero order hold algorithm is defined as:
+\begin{align}
+\vec{x}(t)  = \sum_{n = -\infty}^{\infty} \vec{x}[n] \cdot \text{rect}\left(\frac{t-T/2 - nT}{T}\right)
+\end{align}
+\noindent Where:
+\begin{ffk}
+$\text{rect}$ is a rectangular window function\\
+$T$ is the time interval
+\end{ffk}
+The matrices once discretized becomes:
+\begin{align}
+\dot{
+	\begin{bmatrix}
+	 v(k)\\
+	 \theta(k)\\
+	 \omega(k)
+	\end{bmatrix}
+}
+=
+\begin{bmatrix}
+ -\frac{\beta_{x}}{m} & 0 & 0\\
+ 0 & 0 & 1\\
+ 0 & 0 & - \frac{\beta_{y}}{I}\\
+\end{bmatrix}
+\begin{bmatrix}
+v(k-1)\\
+\theta(k-1)\\
+\omega(k-1)
+\end{bmatrix}
++
+\begin{bmatrix}
+\frac{1}{m} & 0\\
+0 & 0\\
+0 & \frac{1}{I}\\
+\end{bmatrix}
+\begin{bmatrix}
+F(k)\\
+T(k)
+\end{bmatrix}
+\label{eq:ssmodel}
+\end{align}
 
 \subsection{Optimal pole assignment}
 To achieve an optimal response of the system, an optimal pole placement strategy have been used. This is done by minimizing the cost function in equation \vref{eq:optf}. The optimal pole placement is then computed by solving the Algebraic Ricatti Equation. 
@@ -298,7 +306,8 @@ The control loop reads the data from the LLI communication and invokes the contr
 
 The control function of the Ship Object processes the data sent by the LLI. The data is a 9-by-2 matrix, which consists of the measurement values and the validity of the measurements. A measurement is considered valid, if its validity value is 1.
 
-$$M_{[9,2]} =
+\begin{align}
+M_{[9,2]} =
   \begin{pmatrix}
    M_1 & V_1 \\
    M_2 & V_2 \\
@@ -310,18 +319,18 @@ $$M_{[9,2]} =
    M_8 & V_8 \\
    M_9 & V_9
   \end{pmatrix}
-$$
+\end{align}
 
 We can process this matrix to an array of measurements,
 
-$$M_{1..9} = 
+\begin{align}M_{1..9} = 
 	\begin{bmatrix}
 	x, \dot{x}, \ddot{x}, y, \dot{y}, \ddot{y}, \theta, \omega, \dot{\omega}
-	\end{bmatrix}$$
+	\end{bmatrix}\end{align}
 
 and a diagonal matrix of validities, which modifies the \emph{Kalman Gain} matrix, in order to avoid the update of states with invalid or outdated measurement data.
 
-$$
+\begin{align}
 V_{[9,9]} =
   \begin{pmatrix}
    V_1 & 0 & \cdots & 0 \\
@@ -329,7 +338,7 @@ V_{[9,9]} =
    \vdots  & \vdots  & \ddots & \vdots  \\
    0 & 0 & \cdots & V_9
   \end{pmatrix}
-$$
+\end{align}
 
 The Kalman Filter works in the \emph{Body Frame}, but the GPS Measurements are passed to the HLI in the \emph{Local Frame}. Therefore some measurement values must be transformed.
 

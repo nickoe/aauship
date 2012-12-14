@@ -1,14 +1,15 @@
 %% Continous Time Simulation:
 clc; clear all; clf;
 
-ts = 0.1;
+ts = 1;
 
 
 
-betaX = 0.4462;
-betaW = 0.0784;
+
 m = 12;
 I = (1/12)*m*(0.25*0.25+1.05*1.05);
+betaX = 8.9/m;
+betaW = 3.77/I;
 % The discrete state space model of the system is described below:
 % System Dynamics:
 A = [-betaX 0 0;...

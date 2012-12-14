@@ -44,15 +44,15 @@ gpsY = GPS(:,2);
 
 %% Number of Samples:
 ts = 0.1; % Sampling time
-N = 5000; % Then it fits with the Simulink Simulation!
+N = 1000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
 I = (1/12)*m*(0.25*0.25+1.05*1.05); % The ships inertia
 
-betaX = 0.4462;
-betaY = 0.8;
-betaW = 0.0784;
+betaX = 8.9/m;
+betaY = 84/m;
+betaW = 3.77/I;
 
 GPS_freq = 10;
 
@@ -247,18 +247,18 @@ end
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        %Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
-       Wn(:,n) = [randn(4,1);randn(1,1);randn(4,1)].*SqM';
+       Wn(:,n) = [randn(4,1);0;randn(4,1)].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
-     Qz(:,:,n) = diag([0 0 55 0 0 55 0 0 20]); %
+     Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
      Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
         Y(:,n) = Hn * Y(:,n-1) +Z(:,n); % xk
         X(:,n) = An * Y(:,n) + Wn(:,n); % zk
     Ypred(:,n) = Hn * Yupdate(:,n-1); % xk -
-    Xpred(:,n) = An * Ypred(:,n) + Z(:,n); 
+    Xpred(:,n) = An * Ypred(:,n); 
   Rpred(:,:,n) = Hn * Rupdate(:,:,n-1) * Hn' + Qz(:,:,n); % Pk-
       B(:,:,n) = (Rpred(:,:,n) * An') / (An * Rpred(:,:,n) * An' + Qw(:,:,n)); % K
 %                if gpsA(n,:) == [0 0];
@@ -910,7 +910,8 @@ for n = 2:N;
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
  packLost(:,n) = rand(9,1)<0.9; % Looses 10 percent of the packages. 
-             if sC == GPS_freq;
+      BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
+             if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
              else                
@@ -919,7 +920,6 @@ for n = 2:N;
                    BL(:,4,n) = zeros(9,1);
                    BL(:,5,n) = zeros(9,1);
              end
-     BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
  YupdateL(:,n) = YpredL(:,n)+BL(:,:,n)*(XL(:,n)-XpredL(:,n));
 RupdateL(:,:,n) = (eye(9)-BL(:,:,n)*An)*RpredL(:,:,n);
             sL = sL + 1;
@@ -1261,7 +1261,7 @@ h20 = figure(20);
 subplot(2,1,1)
 plot(diff_pos(:,1),'b'); hold on
 plot(diff_posD(:,1),'r');
-%plot(diff_posL(:,1),'m');
+plot(diff_posL(:,1),'m');
 plot(diff_posK(:,1),'g'); hold off
 title('Error in X-Position');
 legend('Monorate','Multirate','Lost Packages','Multirate NI')
@@ -1269,7 +1269,7 @@ grid on
 subplot(2,1,2)
 plot(diff_pos(:,2),'b'); hold on
 plot(diff_posD(:,2),'r');
-%plot(diff_posL(:,2),'m');
+plot(diff_posL(:,2),'m');
 plot(diff_posK(:,2),'g'); hold off
 title('Error in Y-Position');
 legend('Monorate','Multirate','Lost Packages','Multirate NI')
@@ -1278,10 +1278,10 @@ grid on
 h21 = figure(21);
 plot(diff_abs,'b'); hold on
 plot(diff_absD,'r');
-%plot(diff_absL,'m');
+plot(diff_absL,'m');
 plot(diff_absK,'g'); hold off
 title('Absolute Position Error');
-legend('Monorate','Multirate (zero K)','Multirate (normal K)');
+legend('Monorate','Multirate (zero K)','Lost Packages','Multirate (normal K)');
 xlabel('Sample [n]');
 ylabel('Distance [m]');
 grid on
