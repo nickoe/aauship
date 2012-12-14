@@ -46,7 +46,7 @@ class O_Ship:
         self.NextSWP_No = 0;
         self.NextSWP_validity = 0;
         
-        self.FollowDistance = 8
+        self.FollowDistance = 10
         
         self.v = 0
         self.omega = 0
@@ -157,6 +157,12 @@ class O_Ship:
                     Nm = self.Waypoints.get_SingleWayPoint(n - i);
                     Nt = self.Waypoints.get_SingleWayPoint(n);
                     Np = self.retpos;
+                    
+                elif n-i < 0:
+                    
+                    Nm = self.Pos
+                    Nt = self.Waypoints.get_SingleWayPoint(n);
+                    Np = self.Waypoints.get_SingleWayPoint(n + 1);
                     
                 else:
                     
@@ -446,7 +452,9 @@ class O_Ship:
         
         L = numpy.matrix([[K, K],[K*C1, K*C2]])
         L_inv = numpy.linalg.inv(L)
-        N = numpy.sqrt(numpy.array(L_inv*motor))
+        numpy.sign
+        N = numpy.sqrt(numpy.array(numpy.abs(L_inv*motor)))*numpy.sign(L_inv*motor)
+        
         return list([N[0], N[1]])
     
     def Return(self, retpos):

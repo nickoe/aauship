@@ -44,23 +44,23 @@ AAUSHIP = Ship.O_Ship(Startpos)
 EMBEDDED OPTIONAL STEP 2/A
 Waypoint planning
 '''
-
+'''
 decimation = 20
 safety = 10
 coast = coast - numpy.max(coast) - 10* safety
 
 AAUSHIP.Plan_WP(coast, decimation, safety)
-
+'''
 '''
 EMBEDDED OPTIONAL STEP 2/B
 Waypoint ADDING
 '''
-'''
+
 X = numpy.array([0,100,200,300,400,500,600,700])
 Y = numpy.array([10,11,12,13,14,15,16,17])
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
-'''
+
 '''
 NON-CRITICAL SIMULATION STEP 2
 '''
@@ -72,7 +72,7 @@ EMBEDDED STEP 3
 Set first target WP (should be 0 or 1)
 '''
 
-AAUSHIP.FlushPath(1)
+AAUSHIP.FlushPath(-1)
 
 
 
@@ -82,7 +82,7 @@ Control loop initializations and logging
 '''
 i = 0
 
-ni = 10000
+ni = 100
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
