@@ -4,10 +4,11 @@
 \usepackage{times}
 \usepackage{amsmath,amsfonts,amssymb} % God matematik
 \usepackage{a0poster}
-%\usepackage{graphicx}
+\usepackage{graphicx}
 \usepackage{pst-node,graphicx}
 \usepackage[utf8]{inputenc} % ÆØÅ pakken
 \usepackage[T1]{fontenc}
+%\usepackage[pdftex,bookmarks=true,bookmarksnumbered=true]{hyperref}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -27,14 +28,39 @@
 Greenland has in excess of 30.000 kilometers of coastal line with outdated maps. This poses a danger as cruise ships currently navigate these waters carrying as many as 5000 passengers. If such a ship were to hit a rock and capsize, the nearest rescue station along the eastern coast of Greenland can be as many as 1000 kilometers away, and the infrastructure in these areas, can not cope with a sudden increase in population of 
 \paragraph{Problem}
 Is it possible to estimate the states of a ship using a centralized control strategy and a 9.6kbps radio link?
-\paragraph{Path Planner}
-Some text about the path planning software goes here, and it will be good. Remember some pictures! 
+
+\paragraph{Path Optimization}
+The path planner divides the path into straight and turning subsegments. The interesting part of this, is the turning subsegments. The turning segments are each defined by a threshold $\varepsilon_\text{max}$ which defines which algorithm to use dependent on the curvature of the path. The sub-waypoints are computed using the normalized Fresnel integral functions $C_F$ and $S_F$ in equation (\ref{eq:fresnel}) generating an Euler spiral in and out of the turn. 
+\begin{align}
+C_F(x) = \int_0^x cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x sin(t^2)dt
+\label{eq:fresnel}
+\end{align}
+This allows for the ship to as much momentum as possible. If the curvature is below the threshold $\varepsilon < \varepsilon_\text{max}$ the algorithm only computes 3 key sub-waypoints which are defined as:
+\begin{align}
+A_\text{3} = (-X_1,Y_1),\, C_\text{3} = (0,\frac{y_d}{cos(\varepsilon)}),\, E_\text{3} = (X_1,Y_1)
+\end{align}
+$X_1$ and $Y_1$ are calculated by:
+\begin{align}
+X_1 = x_d \cdot cos(\varepsilon) + y_d \cdot sin(\varepsilon),\,\,\,\, Y_1 = X_1 \cdot tan(\varepsilon)
+\end{align}
+$x_d$ and $y_d$ are the variables calculated by the normalized Fresnel integrals, and contains the factor $\eta$ that allows the ship to preserve energy whilst turning:
+\begin{align}
+x_d = \frac{\pi}{\eta}\cdot C_F(\varepsilon),\,\,\, y_d = \frac{\pi}{\eta}\cdot S_F(\varepsilon),\,\,\, \eta = \frac{\text{max}\{\dot{\alpha}\}}{v^2}
+\end{align}
+Where $\dot{\alpha}$ the amount of jerk the ship experiences. If however the angle is above the threshold, $\varepsilon > \varepsilon_\text{max}$ more waypoints are added, and the coordinates become:
+\begin{align}
+A_\text{5} &= (-X_1,Y_1),\, B_\text{5} = (-X_2,Y_2),\, C_\text{5} = (0,Y_R)\\
+D_\text{5} &= (X_2,Y_2),\, E_\text{5} = (X_1,Y_1)
+\end{align}
+The coordinate computation is augmented to allow for the computation of the 5 key sub-waypoints.
+\begin{align}
+
+\end{align}
+
 }
 %% Column 2
 \rput{Center}{\special{ps: 0.2 .setopacityalpha}\includegraphics[width=1.9\textwidth]{img/background.pdf}} % Background image
-\col{ 
-\paragraph{Theory}
-The path planner has been based Euler spirals, to define the smalles possible angle with which the ship is able to turn. The Euler spirals are generated planning the track ahead of the ship which generates the most effective turning curve which reduces the amount of fluctuation in the engines. 
+\col{
 \paragraph{Ship model}
 The state model of the ship is based on a modified 3-degree of freedom state model by \cite{sorensen} - which is given as: 
 \begin{align}
@@ -64,17 +90,17 @@ $\beta_x$ and $\beta_\omega$ are the linearized skin frictional drag the ship ex
 \paragraph{State estimation}
 The state model for the Kalman filter is derived as:
 \begin{align}
-\Phi_{x,y,\omega}(k) = \begin{bmatrix}
+\vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
 1 & t_s & \frac{t_s^2}{2}\\
 0 & 1 & t_s\\
 0 & \frac{-\beta_{x,y,\omega}}{m} & 0
 \end{bmatrix}
 \end{align}
-Where $\Phi$ contains 3 identical diagonal entries, each corresponding to a different input signal, thus:
+Where $\vec{\Phi}$ contains 3 identical diagonal entries, each corresponding to a different input signal, thus:
 \begin{align}
-\Phi = diag\{\Phi_x,\Phi_y,\Phi_\omega\}
+\vec{\Phi} = diag\{\vec{\Phi}_x,\vec{\Phi}_y,\vec{\Phi}_\omega\}
 \end{align}
-As the radio link does not contain any redundancy, a lost packet will be handled by the Kalman filter, by reducing the gain of the filter to zero. If packet verification fails, the filter uses a gain mask $\Lambda$ to zero the gains. This mask is defined as:
+As the radio link does not contain any redundancy, a lost packet will be handled by the Kalman filter, by reducing the gain of the filter to zero. If packet verification fails, the filter uses a gain mask $\vec{\Lambda}$ to zero the gains. This mask is post multiplied onto the Kalman gain $\bar{\vec{K}}$ and is defined as:
 \begin{align}
 \vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
 \end{align}
@@ -89,10 +115,11 @@ Where the individual $\lambda$s are given as:
 \end{align} 
 The filter also needs to sort out the different sampling rate aboard the ship. The two main sensors, IMU and GPS, sample at 10 Hz and 1 Hz respectively - which also defines a mask to multiply onto the Kalman filter. This mask puts the gain to zero for the GPS if there is no new sample available. Figure \vref{fig:trends} depicts the absolute error between the true and estimated path for the 3 cases described above. 
 
-\begin{figure} % Figure input
-\includegraphics[size=\textwidth]{img/10percent}
-  \caption{Simulation of the system where the blue represents a mono-rate filter, the red a filter with zero-gaining when no measurements are available, the green where no zero-gaining takes place, and finally the purple where there is a 10 percent loss rate on the Kalman filter.}
-\label{fig:trends}
+\begin{figure}
+	\centering % Figure input
+	\includegraphics[size=\textwidth]{img/10percent}
+  	\caption{Simulation of the system where the blue represents a mono-rate filter, the red a filter with zero-gaining when no measurements are available, the green where no zero-gaining takes place, and finally the purple where there is a 10 percent loss rate on the Kalman filter.}
+	\label{fig:trends}
 \end{figure}
 }
 %% Column 3
