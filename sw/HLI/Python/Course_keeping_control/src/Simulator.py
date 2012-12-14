@@ -67,12 +67,24 @@ class Simulator:
         self.B = numpy.matrix([[K1, K2],[K3, -K4],[0., 0.]])
         '''
         
-        self.A = numpy.matrix([[9.5636083e-001, 0, 0], [0, 1, 9.9609022e-002], [0, 0, 9.9219065e-001]])
+        self.Ts = 1
         
-        self.B = numpy.matrix([[8.1501513e-003, 0], [0, 4.2806514e-003], [0, 8.5501307e-002]])
+        if self.Ts == 1:
+            self.A = numpy.matrix([[9.5636083e-001, 0, 0], [0, 1, 9.6180466e-001], [0, 0, 9.2459451e-001]])
+            
+            self.B = numpy.matrix([[6.7224012e-002, 0], [0, 4.1818496e-001], [0, 8.2558340e-001]])
+            
+            self.C = numpy.matrix([[1, 0, 0], [0, 1, 0]])
         
-        self.C = numpy.matrix([[1, 0, 0], [0, 1, 0]])
+        elif self.Ts == 0.1:
+            self.A = numpy.matrix([[6.4005575e-001, 0, 0], [0, 1, 9.9609022e-002], [0, 0, 9.9219065e-001]])
+            
+            self.B = numpy.matrix([[8.1501513e-003, 0], [0, 4.2806514e-003], [0, 8.5501307e-002]])
+            
+            self.C = numpy.matrix([[1, 0, 0], [0, 1, 0]])
         
+        else:
+            print('Timestep error')
         '''
         self.A = A
         self.B = B
@@ -84,7 +96,7 @@ class Simulator:
         
         self.x = numpy.matrix([[0.],[0],[0.]])
         
-        self.Ts = 0.1
+        
         
         '''
         alpha_v = 1

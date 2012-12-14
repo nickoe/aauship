@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 import ObjectLibrary as OL
 import FunctionLibrary as FL
-import Ship
+import Ship_nofilter as Ship
 import Simulator as S
 import KalmanFilter as KF
 

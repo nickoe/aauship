@@ -155,21 +155,21 @@ class Filter:
         
         self.BD = (self.RpredD*numpy.transpose(self.An))*numpy.linalg.inv(self.An*self.RpredD*numpy.transpose(self.An)+self.Qw);
         Validity_M = numpy.diag([numpy.sum(inputV[0]), numpy.sum(inputV[1]), numpy.sum(inputV[2]), numpy.sum(inputV[3]), numpy.sum(inputV[4]), numpy.sum(inputV[5]), numpy.sum(inputV[6]), numpy.sum(inputV[7]), numpy.sum(inputV[8])])
-        self.BD = self.BD
+        self.BD = self.BD * Validity_M
         
-        
+        '''
         if self.sC == self.GPS_freq:
             self.BD = self.BD;
             self.sC = 0;
             
         else:       
-            '''Pos'''
+            
             self.BD[:,0] = numpy.zeros([9,1])
             self.BD[:,3] = numpy.zeros([9,1])
-            '''Speed'''
+            
             self.BD[:,1] = numpy.zeros([9,1])
             self.BD[:,4] = numpy.zeros([9,1])
-           
+        '''   
             
         
         self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);

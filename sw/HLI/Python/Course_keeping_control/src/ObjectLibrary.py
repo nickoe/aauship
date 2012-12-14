@@ -462,7 +462,7 @@ class O_StraightPath:
         Bx = self.B.get_Pos_X();
         By = self.B.get_Pos_Y();
         
-        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Ay-By])) * definition * 10;
+        SubWP_No = numpy.linalg.norm(numpy.array([Ax-Bx,Ay-By])) * definition * 0.01;
         '''
         If the path is vertical, the X and Y axes must be swapped before the
         polynom fitting and populating, then switched back to return the

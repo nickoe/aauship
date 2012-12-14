@@ -46,7 +46,7 @@ class O_Ship:
         self.NextSWP_No = 0;
         self.NextSWP_validity = 0;
         
-        self.FollowDistance = 2
+        self.FollowDistance = 8
         
         self.v = 0
         self.omega = 0
@@ -66,9 +66,9 @@ class O_Ship:
         The control matrices
         '''
         
-        self.N = numpy.matrix([[2.1366547e+001, 1.5569542e-016], [ 8.3542070e-016, 2.2764131]])
+        self.N = numpy.matrix([[1.2196566e+001, -2.2165773e-016], [ 2.9639884e-017, 9.6263068e-001]])
         
-        self.F = numpy.matrix([[1.6012147e+001, 1.5569542e-016, 3.3824418e-016], [8.3542070e-016, 2.2764131e+000, 2.2219859e+000]])
+        self.F = numpy.matrix([[6.8421661e+000, -2.2165773e-016, -9.5435368e-017], [2.9639884e-017, 9.6263068e-001, 1.4310741e+000]])
         
         self.states = numpy.matrix([[0],[0],[0],[0],[0]])
         
@@ -176,8 +176,8 @@ class O_Ship:
         
         self.Path = OL.O_LocalPath(gamma, self.Sigma_max, self.Kappa_max);
         
-        definition = 20;
-        self.Path.FitPath(definition/4);
+        definition = 30;
+        self.Path.FitPath(definition/8);
         self.Path.PositionPoly(Nm, Nt, Np);
 
         '''fitline'''
@@ -342,80 +342,32 @@ class O_Ship:
         Reads systems states from sensors (processed data)
         '''
         
-        x = input_m[0,0]
-        xd = input_m[1,0]
-        xdd = input_m[2,0]
-        y = input_m[3,0]
-        yd = input_m[4,0]
-        ydd = input_m[5,0]
-        theta = input_m[6,0]
-        omega = input_m[7,0]
-        angacc = input_m[8,0]
+        x = numpy.sum(input_m[0,0])
+        xd = numpy.sum(input_m[1,0])
+        xdd = numpy.sum(input_m[2,0])
+        y = numpy.sum(input_m[3,0])
+        yd = numpy.sum(input_m[4,0])
+        ydd = numpy.sum(input_m[5,0])
+        theta = numpy.sum(input_m[6,0])
+        omega = numpy.sum(input_m[7,0])
+        angacc = numpy.sum(input_m[8,0])
         
-        Measured_Pos = OL.O_PosData(x, y, 1, 1)
-        
-        BodyXY = FL.NEDtoBody(Measured_Pos, self.Pos, theta)
-        
-        
-        
-        PathFrameXY = list([BodyXY[0] + numpy.sum(self.states[0]), BodyXY[1] + numpy.sum(self.states[1])])
-        
-        Measured_Speed = OL.O_PosData(xd, yd, 1, 1)
-        BodySpeed = FL.NEDtoBody(Measured_Speed, OL.O_PosData(0,0,1,1), theta)
-    
-    
-        '''
-        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
-        '''
-        Wn = numpy.matrix([[PathFrameXY[0]], [xd], [xdd], [BodyXY[1]], [0], [ydd], [theta], [omega], [angacc]])
-        #print Wn
-        
-        prev_fx = numpy.sum(self.states[0])
-        prev_fy = numpy.sum(self.states[1])
-        
-        '''Kalman'''
-        
-        Validity_matrix = input_m[:,1]
-        self.states = self.Filter.FilterStep(input_f, Wn, Validity_matrix)
+        '''No Kalman'''
 
         self.Ts = 0.1
-        self.v = numpy.sum(self.states[2])
-        self.omega = numpy.sum(self.states[4])
-        self.Theta = math.atan2(math.sin(numpy.sum(self.states[3])), math.cos(numpy.sum(self.states[3])))
+        self.v = xd
+        self.omega = omega
+        self.Theta = math.atan2(math.sin(theta), math.cos(theta))
          
         self.x = numpy.matrix([[self.v],[self.Theta],[omega]])
         
+        self.Pos.get_Pos_X()
         
-        curpos = self.Pos.get_Pos()
-        '''
-        x_next = numpy.sum(self.Ts * self.v * math.sin(self.Theta) + curpos[0])
-        y_next = numpy.sum(self.Ts * self.v * math.cos(self.Theta) + curpos[1])
-        self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
+        x_next = 0.7 * x + 0.3 * self.Pos.get_Pos_X()
+        y_next = 0.7 * y + 0.3 * self.Pos.get_Pos_Y()
         
-        0 Yd 1 Y 2 V 3 Th 4 Om
-        '''
-        
-        
-        
-        V = numpy.sum(self.states[2])
-        X = numpy.sum(self.states[0])
-        Y = numpy.sum(self.states[1])
-        Th = numpy.sum(self.states[3])
-        self.Theta = math.atan2(math.sin(numpy.sum(self.states[3])), math.cos(numpy.sum(self.states[3])))
-        #self.Theta = theta
-        Th = theta
-        #self.states[1] = PathFrameXY[1]
-        
-        self.correction = Y
-        
-        
-        
-        x_next = ((X - prev_fx) * math.sin(Th)) + curpos[0] + self.correction * 0.005* math.cos(Th)
-        y_next = ((X - prev_fx) * math.cos(Th)) + curpos[1] - self.correction * 0.005* math.sin(Th)
-        #print x_next, y_next
-        #x_next = ((V * self.Ts) * math.sin(Th)) + curpos[0] + self.correction * 0.1* math.cos(Th)
-        #y_next = ((V * self.Ts) * math.cos(Th)) + curpos[1] - self.correction * 0.1* math.sin(Th)
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
     def get_Thera_r(self):
