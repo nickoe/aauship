@@ -286,6 +286,54 @@ The latter in equation \vref{eq:refg} can be combined, and gives the following:
 \begin{align}
 \vec{u} = -\vec{F}_{opt}\vec{x} + \bar{\vec{N}}\vec{r}
 \end{align}
+
+
 \section{Implementation of control loop}
-The control loop is implemented in Python and is run on the HLI. 
+
+The control loop is implemented in Python and is run on the HLI.
+
+The control loop reads the data from the LLI communication and invokes the control function of the Ship Object at every timestep.
+
+(Figure!)
+
+The control function of the Ship Object processes the data sent by the LLI. The data is a 9-by-2 matrix, which consists of the measurement values and the validity of the measurements. A measurement is considered valid, if its validity value is 1.
+
+$$M_{[9,2]} =
+  \begin{pmatrix}
+   M_1 & V_1 \\
+   M_2 & V_2 \\
+   M_3 & V_3 \\
+   M_4 & V_4 \\
+   M_5 & V_5 \\
+   M_6 & V_6 \\
+   M_7 & V_7 \\
+   M_8 & V_8 \\
+   M_9 & V_9
+  \end{pmatrix}
+$$
+
+We can process this matrix to an array of measurements,
+
+$$M_{1..9} = 
+	\begin{bmatrix}
+	x, \dot{x}, \ddot{x}, y, \dot{y}, \ddot{y}, \theta, \omega, \dot{\omega}
+	\end{bmatrix}$$
+
+and a diagonal matrix of validities, which modifies the \emph{Kalman Gain} matrix, in order to avoid the update of states with invalid or outdated measurement data.
+
+$$
+V_{[9,9]} =
+  \begin{pmatrix}
+   V_1 & 0 & \cdots & 0 \\
+   0 & V_8 & \cdots & 0 \\
+   \vdots  & \vdots  & \ddots & \vdots  \\
+   0 & 0 & \cdots & V_9
+  \end{pmatrix}
+$$
+
+The Kalman Filter works in the \emph{Body Frame}, but the GPS Measurements are passed to the HLI in the \emph{Local Frame}. Therefore some measurement values must be transformed.
+
+The Position input of the Kalman Filter uses a hybrid frame, called \emph{Path Frame}. This frame fixes the orientation of the ship to 0, but the x and y positions can vary. Therefore after transforming the measured GPS position from the \emph{Local Frame} to the \emph{Body Frame}, the \emph{Path Frame} must be updated with the \emph{Body Frame} positions, not completely replaced. The initial position of the \emph{Path Frame} is $P_{x,y} = (0, 0)$, where $x$ and $y$ represents the distance traveled \emph{forward} and \emph{sideways} in the \emph{Body Frame}.
+
+\includegraphics[width = \textwidth]{img/ControlStrategyFigures/PathFrame.png}
 
