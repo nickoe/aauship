@@ -3,8 +3,8 @@ import packetparser
 import Queue
 import time
 import csv
-accf = open("accdata00185.csv", 'w')
-gpsf = open("gpsdata00185.txt", 'a')
+accf = open("accdata00204.csv", 'w')
+gpsf = open("gpsdata00204.txt", 'a')
 qu = Queue.Queue()
 receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,qu)
 receiver.start()

@@ -2,7 +2,7 @@ from math import sqrt, sin, cos, pi, floor
 import numpy
 def wgs842ecef(lat,lon,h=None):
 	if h == None:
-		h = 0
+		h = 0	
 	a = 6378137.0
 	e = 0.0818
 	N = a / sqrt(1-e**2*sin(lat))
@@ -30,7 +30,7 @@ def nmea2decimal(lat,latsign,lon,lonsign):
 	if (lonsign == 'W'):
 		lon = -lon
 	pos = [lat, lon]
-	majorangle = [floor(pos[0]/100), floor(pos[0]/100)]
+	majorangle = [floor(pos[0]/100), floor(pos[1]/100)]
 	minorangle = [(pos[0] - majorangle[0]*100)/60,(pos[1] - majorangle[1]*100)/60]
 	#print "Major: " + str(majorangle)
 	#print "Minor: " + str(minorangle)

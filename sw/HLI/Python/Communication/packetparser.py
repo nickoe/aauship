@@ -5,6 +5,7 @@ import numpy
 from pynmea import nmea
 from math import pi, atan
 import gpsfunctions
+import time
 class packetParser():
 	def __init__(self,accelfile,gpsfile,measstate):
 		self.GPS = {0: 'Latitude', 1: 'Longtitude', 2: 'Velocity'}
@@ -13,7 +14,7 @@ class packetParser():
 		self.DevID = {0: 'GPS', 1: 'IMU'}
 		self.accelburst = [0,0,0,0,0,0,0]
 		self.accellog = accelfile
-		self.accelwriter = csv.writer(self.accellog)
+	#	self.accelwriter = csv.writer(self.accellog)
 		self.prevtime = 0
 		self.excount = 0
 		#self.accelburst = 0
@@ -23,14 +24,14 @@ class packetParser():
 		self.gpsdata = [0,0,0,0,0,0,0,0]
 		#Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
 		self.gpslog = gpsfile
-		self.writer = csv.writer(self.accellog)
+	#	self.writer = csv.writer(self.accellog)
 		#self.gpswriter = csv.writer(self.gpslog)
 		#print "Stdsqewarted!"
 		self.state = numpy.zeros((9,2))
 		self.mergedata = False
 		
-		self.centerlat = 0
-		self.centerlon = 0
+		self.centerlat = 57.015179789287792*pi/180
+		self.centerlon = 9.985062449450744*pi/180
 		self.rot = gpsfunctions.get_rot_matrix(self.centerlat,self.centerlon)
 		
 		
@@ -68,6 +69,7 @@ class packetParser():
 						ADC
 						'''
 						#types = ['ADC','Ymag', 'Xmag', 'Yacc', 'Xacc', 'Zgyro']
+						#self.accellog.write("".join(packet['Data']) + "\r\n")
 						measurements = []
 						for i in range(len(packet['Data'])):
 							if ((i & 1) == 1):
@@ -78,33 +80,37 @@ class packetParser():
 									val = struct.unpack('h', "".join(tempval))
 								except:
 									pass
+								self.accellog.write(str(val[0]) + ", ")
 								measurements.append(val[0])
 								#print val[0]
 						#print measurements[5]
-						
+						self.accellog.write(str(time.time()) + "\r\n")
 						if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value
 							#Calculate heading from magnetometer:
+							
 							heading = 0
-							if measurements[3] > 0:
-								heading = (90 - atan(measurements[4]/measurements[3])*180/pi)*pi/180
-							elif measurements[3] < 0:
-								heading = (270 - atan(measurements[4]/measurements[3])*180/pi)*pi/180
+							if -measurements[3] > 0:
+								heading = (90 - atan(float(-measurements[4])/float(-measurements[3]))*180/pi)*pi/180
+							elif -measurements[3] < 0:
+								heading = (270 - atan(float(-measurements[4])/float(-measurements[3]))*180/pi)*pi/180
 							else:
-								if measurements[4] < 0:
+								if -measurements[4] < 0:
 									heading = pi
 								else:
 									heading = 0
-							#print heading
+									
+							heading = 2*pi-heading
+							#print "[" + str(measurements[4]) + ", " + str(measurements[3]) + "]\t Theta: " + str(heading)
 							
-							accx = measurements[1] * self.accconst
+							accx = -measurements[1] * self.accconst
 							accy = -measurements[2] * self.accconst
 							gyroz = measurements[0] * self.gyroconst
 							
 							
-							self.state[2] = [accx,		0]
-							self.state[5] = [accy,		0]
-							self.state[6] = [heading,	0]
-							self.state[7] = [gyroz,		0]
+							self.state[2] = [accx,		1]
+							self.state[5] = [accy,		1]
+							self.state[6] = [heading,	1]
+							self.state[7] = [gyroz,		1]
 							#print self.state
 							for i in range(numpy.size(self.state,0)):
 								for j in range(numpy.size(self.state,1)):
@@ -168,7 +174,8 @@ class packetParser():
 			elif (ord(packet['DevID']) == 30):
 				if(ord(packet['MsgID']) == 6):
 				
-					print str("".join(packet['Data']))
+					#print str("".join(packet['Data']))
+					self.gpslog.write("".join(packet['Data']) + "\r\n")
 					content = "".join(packet['Data']).split(',')
 					# The GPRMC packet contain the following information:
 					# [0] Timestamp
@@ -181,7 +188,9 @@ class packetParser():
 					#print content[6]
 					speed = float(content[6]) * 0.514444444
 					#print str(speed) + " m/s"
-					[latdec, londec] = gpsfunctions.nmea2decimal(float(content[2]),content[3],float(content[4]),content[5])
+					[latdec, londec] = (gpsfunctions.nmea2decimal(float(content[2]),content[3],float(content[4]),content[5]))
+					latdec = latdec*pi/180
+					londec = londec*pi/180
 					if self.centerlat == 0 and self.centerlon == 0:
 						self.rot=gpsfunctions.get_rot_matrix(float(latdec),float(londec))
 						self.centerlat = float(latdec)
@@ -190,12 +199,11 @@ class packetParser():
 					
 					pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
 					
-					print pos
+					#print pos
 					
 					self.state[0] = [float(pos[0,0]),		1]
 					self.state[1] = [speed, 1]
 					self.state[3] = [float(pos[1,0]), 	1]
-					
 					
 				'''	
 					

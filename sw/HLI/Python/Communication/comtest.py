@@ -5,20 +5,26 @@ import time
 import csv
 import numpy
 import os
+from math import pi
 
-import Ship
+import Ship_nofilter as Ship
 import ObjectLibrary as OL
 
+Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
+swp = open("measurements/swp141212.txt",'w')
 Startpos = OL.O_PosData(0, 0, 0, 1)
-AAUSHIP = Ship.O_Ship(Startpos)
+AAUSHIP = Ship.O_Ship(Startpos,swp)
 
 '''
 EMBEDDED OPTIONAL STEP 2/B
 Waypoint ADDING
 '''
 
-X = numpy.array([0,1,2,3,4,5,6,7])
-Y = numpy.array([10,11,12,13,14,15,16,17])
+#X = numpy.array([0,1,2,3,4,5,6,7])
+#Y = numpy.array([10,11,12,13,14,15,16,17])
+X = numpy.array([0,35.0543,35.5730,58.8078])
+Y = numpy.array([0,-0.5753,26.0082,25.5482])
+
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
 
@@ -26,7 +32,7 @@ AAUSHIP.SetWaypoints(WPC)
 EMBEDDED STEP 3
 Set first target WP (should be 0 or 1)
 '''
-AAUSHIP.FlushPath(1)
+AAUSHIP.FlushPath(-1)
 
 '''
 EMBEDDED STEP 5
@@ -43,8 +49,8 @@ Control loop
 
 
 
-accf = open("accdata121212.csv", 'w')
-gpsf = open("gpsdata121212.txt", 'a')
+accf = open("measurements/accdata141212.csv", 'w')
+gpsf = open("measurements/gpsdata141212.txt", 'w')
 qu = Queue.Queue()
 kalqueue = Queue.Queue()
 to = 0.1665
@@ -66,6 +72,7 @@ print "message sent"
 motor = numpy.matrix([[0],[0]])
 sendControl = 0
 running = True
+sign = 1
 p = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
 p2 = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
 print p
@@ -76,13 +83,13 @@ try:
 				
 				try:
 					
-					
 					p = qu.get(False)
 					if ord(p['DevID']) != 255:
+						#print "\r" + str(p),
 						#print p
 						pass
 					if ord(p['DevID']) == 30 and ord(p2['DevID']) == 255:
-						print "Handling GPS Data!"
+					#	print "Handling GPS Data!1"
 						p2 = p
 						n = 0
 						while n < 3:
@@ -98,14 +105,18 @@ try:
 						motor = AAUSHIP.Control_Step()
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
+					#	print measuredstates
 					
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 30:
-						print "Handling GPS Data!"
+					#	print "Handling GPS Data!2"
+					#	print p
+					#	print p2
 						parser.parse(p)
 						parser.parse(p2)
 						motor = AAUSHIP.Control_Step()
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
+						#print measuredstates
 						
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 20:
 						parser.parse(p2)
@@ -119,18 +130,29 @@ try:
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						
-					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 2:
+					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
+						#print sendControl
 						sendControl = 0
+						#print sendControl
 						#print str(count)
 						count += 1
 						sp = receiver.constructPacket(str(count)+"\r\n",10,19)
 						receiver.sendPacket(sp)
-    					tosend = AAUSHIP.FtoM(motor)
-    					#print chr(27) + "[2J"
-    					print motor
-    					print tosend
-    					print measuredstates
-    					print ""
+						tosend = AAUSHIP.FtoM(motor)
+						#print sendControl
+						#print "Sent data"
+						#print chr(27) + "[2J"
+						#print motor
+						#print "LastWP: \t" +  str(AAUSHIP.LastWP)
+						#print "Theta_r: \t" + str(AAUSHIP.get_Thera_r())
+						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
+						#print "NextWP: \t" + str(AAUSHIP.NextSWP.get_Pos())
+						#print "Pos: \t\t" + str(AAUSHIP.Pos.get_Pos())
+						sign = -sign
+						#print tosend
+						receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
+						#print measuredstates
+						#print ""
 						
 					p2 = p
 					
@@ -223,6 +245,8 @@ while True:
 '''
 accf.close()
 gpsf.close()
+Kalmanfile.close()
+swp.close()
 print "done"
 
 quit()	

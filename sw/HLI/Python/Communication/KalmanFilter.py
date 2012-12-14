@@ -13,7 +13,7 @@ class Filter:
     def __init__(self):
     
         ''' Number of Samples:'''
-        ts = 0.1; ''' Sampling time'''
+        ts = 0.05; ''' Sampling time'''
         
         ''' System Parameters:'''
         m = 12.; ''' The ships mass'''

@@ -18,7 +18,7 @@ import KalmanFilter as KF
 #############################################
 '''   
 class O_Ship:
-    def __init__(self, init_position):
+    def __init__(self, init_position,log):
         '''
         Initializes the parameters of the ship
         - Parameters to calculate proper turn paths
@@ -61,6 +61,8 @@ class O_Ship:
         self.Filter = KF.Filter()
         
         self.correction = 0
+        
+        self.log = log
         
         '''
         The control matrices
@@ -267,8 +269,9 @@ class O_Ship:
                 if len(self.SegmentCoords)>0 and self.NextSWP_No < len(self.SegmentCoords[0]):
                     self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
                     if self.mark == 0:
-                        plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o') 
-                        self.mark = 1
+						self.log.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + "\r\n")
+						plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o') 
+						self.mark = 1
                 
                 else:
                     '''

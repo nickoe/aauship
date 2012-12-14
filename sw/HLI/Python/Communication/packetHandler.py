@@ -144,6 +144,11 @@ class packetHandler(threading.Thread):
 		print str(self.errorcount)
 		self.connection.close()	#Close connection
 		
+	def setMotor(self,n1,n2):
+		print "sending:"
+		self.connection.write(struct.pack('>bbbbhhbb',0x24,0x04,0x0A,0x13,n1,n2,0x13,0x37))
+		print "Sent:" + str(n1) + "\t" + str(n2)
+		
 	def CheckSum(self,packet):
 		crc = 0xFFFF
 		#print packet

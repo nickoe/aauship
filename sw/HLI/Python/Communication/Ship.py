@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import FunctionLibrary as FL
 import ObjectLibrary as OL
 import KalmanFilter as KF
+import time
 
 '''
 #############################################
@@ -18,7 +19,7 @@ import KalmanFilter as KF
 #############################################
 '''   
 class O_Ship:
-    def __init__(self, init_position):
+    def __init__(self, init_position, logfile):
         '''
         Initializes the parameters of the ship
         - Parameters to calculate proper turn paths
@@ -26,6 +27,7 @@ class O_Ship:
         - Initial start waypoint
         - Navigation parameters (FollowDistance)
         '''
+        self.log = logfile
         self.Pos = init_position
         
         self.retpos = self.Pos
@@ -367,9 +369,11 @@ class O_Ship:
         '''
         Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
         '''
-        Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [xdd], [BodyXY[1]], [BodySpeed[1]], [ydd], [theta], [omega], [angacc]])
+        Wn = numpy.matrix([[PathFrameXY[0]], [xd], [xdd], [BodyXY[1]], [0], [ydd], [theta], [omega], [angacc]])
+        #print Wn
         
-        Y_prev = numpy.sum(self.states[1])
+        prev_fx = numpy.sum(self.states[0])
+        prev_fy = numpy.sum(self.states[1])
         
         '''Kalman'''
         
@@ -392,8 +396,11 @@ class O_Ship:
         
         0 Yd 1 Y 2 V 3 Th 4 Om
         '''
+        
+        
+        
         V = numpy.sum(self.states[2])
-        Yd = numpy.sum(self.states[1])
+        X = numpy.sum(self.states[0])
         Y = numpy.sum(self.states[1])
         Th = numpy.sum(self.states[3])
         self.Theta = math.atan2(math.sin(numpy.sum(self.states[3])), math.cos(numpy.sum(self.states[3])))
@@ -405,9 +412,13 @@ class O_Ship:
         
         
         
-        x_next = (V * math.sin(Th)) * self.Ts + curpos[0] + self.correction * 0.1* math.cos(Th)
-        y_next = (V * math.cos(Th)) * self.Ts + curpos[1] - self.correction * 0.1* math.sin(Th)
+        x_next = ((X - prev_fx) * math.sin(Th)) + curpos[0] + self.correction * 0.005* math.cos(Th)
+        y_next = ((X - prev_fx) * math.cos(Th)) + curpos[1] - self.correction * 0.005* math.sin(Th)
+        #print x_next, y_next
+        #x_next = ((V * self.Ts) * math.sin(Th)) + curpos[0] + self.correction * 0.1* math.cos(Th)
+        #y_next = ((V * self.Ts) * math.cos(Th)) + curpos[1] - self.correction * 0.1* math.sin(Th)
         print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        self.log.write(str(x_next) + ', ' + str(y_next) + ', ' + str(numpy.sum(self.states[2])) + ', ' + str(numpy.sum(self.states[3])) + ', ' + str(numpy.sum(self.states[4])) + ", " + str(time.time()) + "\r\n")
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
     def get_Thera_r(self):

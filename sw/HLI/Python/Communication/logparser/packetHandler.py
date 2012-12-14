@@ -14,7 +14,7 @@ class seriald:
 
 	class Serial:
 		def __init__(self,serialport,speed):
-			self.f = open("LOG00185.txt",'rb')
+			self.f = open("LOG00204.txt",'rb')
 			self.l = 0;
 			#self.array = []
 			#l = 0
