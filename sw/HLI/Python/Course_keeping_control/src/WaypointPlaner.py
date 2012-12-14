@@ -56,8 +56,9 @@ EMBEDDED OPTIONAL STEP 2/B
 Waypoint ADDING
 '''
 
-X = numpy.array([0,100,200,300,400,500,600,700])
-Y = numpy.array([10,11,12,13,14,15,16,17])
+Y = numpy.array([0,35.0543, 35.5730, 58.8078])
+X = numpy.array([0, -0.5753, 26.0082, 25.5482])
+plt.plot(Y,X)
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
 
@@ -150,6 +151,8 @@ while i < ni:
     measurement_matrix = numpy.transpose(numpy.matrix(numpy.array([[GPS_X, numpy.sum(states[0]), BodyAcc[0], GPS_Y, 0, BodyAcc[1], Theta, Omega, Alpha],[1, 1, 0, 1, 1, 0, 1, 1, 1]])))
     AAUSHIP.ReadStates(measurement_matrix, motor)
     
+    AAUSHIP.FtoM(motor)
+    
     #print AAUSHIP.FtoM(motor)
     
     '''Logging'''
@@ -160,7 +163,7 @@ while i < ni:
     x1[i] = pos[1]
     x2[i] = states[0]
     i += 1
-    print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
+    #print('SX', pos[0], 'SY', pos[1], 'SV', numpy.sum(states[0]), 'ST', numpy.sum(states[1]), 'SO', numpy.sum(states[2]))
     xx1[i] = numpy.sum(motor[0])/5
     xx2[i] = numpy.sum(AAUSHIP.states[2])
     xx3[i] = numpy.sum(states[0])

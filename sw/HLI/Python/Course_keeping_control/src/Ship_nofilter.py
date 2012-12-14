@@ -33,8 +33,8 @@ class O_Ship:
         self.NextSWP = self.Pos
         
         self.Speed = 0;
-        self.Sigma_max = 0.3;
-        self.Kappa_max = 0.3;
+        self.Sigma_max = 1;
+        self.Kappa_max = 1;
         
         self.counter1 = 0;
         
@@ -46,7 +46,7 @@ class O_Ship:
         self.NextSWP_No = 0;
         self.NextSWP_validity = 0;
         
-        self.FollowDistance = 10
+        self.FollowDistance = 4
         
         self.v = 0
         self.omega = 0
@@ -171,7 +171,7 @@ class O_Ship:
                     Np = self.Waypoints.get_SingleWayPoint(n + 1);
                 
             except IndexError:
-
+                #print 'szopo'
                 return(-1);
 
             
@@ -372,7 +372,7 @@ class O_Ship:
         x_next = 0.7 * x + 0.3 * self.Pos.get_Pos_X()
         y_next = 0.7 * y + 0.3 * self.Pos.get_Pos_Y()
         
-        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
@@ -452,8 +452,8 @@ class O_Ship:
         
         L = numpy.matrix([[K, K],[K*C1, K*C2]])
         L_inv = numpy.linalg.inv(L)
-        numpy.sign
-        N = numpy.sqrt(numpy.array(numpy.abs(L_inv*motor)))*numpy.sign(L_inv*motor)
+        temp = numpy.array(L_inv*motor)
+        N = numpy.sqrt(numpy.abs(temp))*numpy.sign(temp)
         
         return list([N[0], N[1]])
     

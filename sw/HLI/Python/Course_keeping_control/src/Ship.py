@@ -158,6 +158,12 @@ class O_Ship:
                     Nt = self.Waypoints.get_SingleWayPoint(n);
                     Np = self.retpos;
                     
+                elif n-i < 0:
+                    
+                    Nm = self.Pos
+                    Nt = self.Waypoints.get_SingleWayPoint(n);
+                    Np = self.Waypoints.get_SingleWayPoint(n + 1);
+                    
                 else:
                     
                     Nm = self.Waypoints.get_SingleWayPoint(n - i);
