@@ -1,7 +1,7 @@
 %% Continous Time Simulation:
 clc; clear all; clf;
 
-ts = 0.05;
+ts = 1/3;
 
 m = 12;
 I = (1/12)*m*(0.25*0.25+1.05*1.05);
@@ -41,46 +41,46 @@ Nxf = N_f(1:3,:);
 Nuf = N_f(4:5,:);
 N = Nuf + F*Nxf;
 
-sim('contsim')
-h1 = figure(1);
-plot(output(:,1)); hold on
-plot(output(:,2),'g');
-plot(reference(:,1),'k--')
-plot(reference(:,2),'k--')
-hold off
-grid on
-title('Velocity and Angle plot')
-xlabel('Time [s]')
-ylabel('Velocity [m/s] and Angle [rad]')
-
-h2 = figure(2);
-K = 0.05^4*0.5*1000;
-theta = pi/16;
-C1 = 0.5*sin(theta);
-C2 = 0.5*sin(-theta);
-
-L = [K K;K*C1 K*C2];
-for n = 1:numel(output(:,1)');
-    rev(:,n) = L\input(n,:)';
-    sy(:,n) =[sign(rev(1,n))*sqrt(abs(rev(1,n)));sign(rev(2,n))*sqrt(abs(rev(2,n)))];
-end
-eng1 = smooth(sy(1,:),11);
-eng2 = smooth(sy(2,:),11);
-
-plot(sy(1,:)); hold on
-plot(sy(2,:),'r'); 
-hold off
-grid on
-title('Engine Input - Continous');
-legend('Engine 1','Engine 2');
-xlabel('Time [s]');
-ylabel('Revolutions [rps]');
-
-h3 = figure(3);
-plot(eng1,'blue'); hold on
-plot(eng2,'m');
-hold off
-grid on
+% %sim('contsim')
+% h1 = figure(1);
+% plot(output(:,1)); hold on
+% plot(output(:,2),'g');
+% plot(reference(:,1),'k--')
+% plot(reference(:,2),'k--')
+% hold off
+% grid on
+% title('Velocity and Angle plot')
+% xlabel('Time [s]')
+% ylabel('Velocity [m/s] and Angle [rad]')
+% 
+% h2 = figure(2);
+% K = 0.05^4*0.5*1000;
+% theta = pi/16;
+% C1 = 0.5*sin(theta);
+% C2 = 0.5*sin(-theta);
+% 
+% L = [K K;K*C1 K*C2];
+% for n = 1:numel(output(:,1)');
+%     rev(:,n) = L\input(n,:)';
+%     sy(:,n) =[sign(rev(1,n))*sqrt(abs(rev(1,n)));sign(rev(2,n))*sqrt(abs(rev(2,n)))];
+% end
+% eng1 = smooth(sy(1,:),11);
+% eng2 = smooth(sy(2,:),11);
+% 
+% plot(sy(1,:)); hold on
+% plot(sy(2,:),'r'); 
+% hold off
+% grid on
+% title('Engine Input - Continous');
+% legend('Engine 1','Engine 2');
+% xlabel('Time [s]');
+% ylabel('Revolutions [rps]');
+% 
+% h3 = figure(3);
+% plot(eng1,'blue'); hold on
+% plot(eng2,'m');
+% hold off
+% grid on
 
 %% Computation of System without fluctuation in the engines:
  eng_input = [eng1 eng2]';
@@ -99,49 +99,49 @@ N_fd = inv(A_nfd)*B_nfd;
 Nxfd = N_f(1:3,:);
 Nufd = N_f(4:5,:);
 sysD_N = Nufd + sysD_F*Nxfd;
-sim('discsim')
-
-h4 = figure(4);
-plot(outputD(:,1)); hold on
-plot(outputD(:,2),'g');
-plot(referenceD(:,1),'k--')
-plot(referenceD(:,2),'k--')
-hold off
-grid on
-title('Velocity and Angle plot - Discrete')
-xlabel('Sample [n]')
-ylabel('Velocity [m/s] and Angle [rad]')
-
-for nDn = 1:numel(outputD(:,1)');
-    revDn(:,nDn) = L\inputD_non(nDn,:)';
-    syDn(:,nDn) =[sign(revDn(1,nDn))*sqrt(abs(revDn(1,nDn)));sign(revDn(2,nDn))*sqrt(abs(revDn(2,nDn)))];
-end
-
-h4 = figure(5);
-subplot(2,1,1)
-plot(syDn(1,:)); hold on
-plot(syDn(2,:),'r'); 
-hold off
-grid on
-title('Engine Input - Discrete - Non Filtered');
-legend('Engine 1','Engine 2');
-%xlabel('Sample [n]');
-ylabel('Revolutions [rps]');
-
-for nD = 1:numel(outputD(:,1)');
-    revD(:,nD) = L\inputD(nD,:)';
-    syD(:,nD) =[sign(revD(1,nD))*sqrt(abs(revD(1,nD)));sign(revD(2,nD))*sqrt(abs(revD(2,nD)))];
-end
-
-subplot(2,1,2)
-plot(syD(1,:)); hold on
-plot(syD(2,:),'r'); 
-hold off
-grid on
-title('Engine Input - Discrete - Filtered');
-legend('Engine 1','Engine 2');
-xlabel('Sample [n]');
-ylabel('Revolutions [rps]');
+% sim('discsim')
+% 
+% h4 = figure(4);
+% plot(outputD(:,1)); hold on
+% plot(outputD(:,2),'g');
+% plot(referenceD(:,1),'k--')
+% plot(referenceD(:,2),'k--')
+% hold off
+% grid on
+% title('Velocity and Angle plot - Discrete')
+% xlabel('Sample [n]')
+% ylabel('Velocity [m/s] and Angle [rad]')
+% 
+% for nDn = 1:numel(outputD(:,1)');
+%     revDn(:,nDn) = L\inputD_non(nDn,:)';
+%     syDn(:,nDn) =[sign(revDn(1,nDn))*sqrt(abs(revDn(1,nDn)));sign(revDn(2,nDn))*sqrt(abs(revDn(2,nDn)))];
+% end
+% 
+% h4 = figure(5);
+% subplot(2,1,1)
+% plot(syDn(1,:)); hold on
+% plot(syDn(2,:),'r'); 
+% hold off
+% grid on
+% title('Engine Input - Discrete - Non Filtered');
+% legend('Engine 1','Engine 2');
+% %xlabel('Sample [n]');
+% ylabel('Revolutions [rps]');
+% 
+% for nD = 1:numel(outputD(:,1)');
+%     revD(:,nD) = L\inputD(nD,:)';
+%     syD(:,nD) =[sign(revD(1,nD))*sqrt(abs(revD(1,nD)));sign(revD(2,nD))*sqrt(abs(revD(2,nD)))];
+% end
+% 
+% subplot(2,1,2)
+% plot(syD(1,:)); hold on
+% plot(syD(2,:),'r'); 
+% hold off
+% grid on
+% title('Engine Input - Discrete - Filtered');
+% legend('Engine 1','Engine 2');
+% xlabel('Sample [n]');
+% ylabel('Revolutions [rps]');
 
 %% Computation of actual position:
 % Computation is done, as the "new" position is equal to the last position

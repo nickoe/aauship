@@ -4,8 +4,8 @@ clc; clear all; close all; clear java;
 % for lunde = 1:15
 %     clf(lunde)
 % end
-run('./contsimu.m');
-% load inputD.mat; % Loads system input file from contsimu.m
+%run('./contsimu.m');
+load inputD.mat; % Loads system input file from contsimu.m
 inputD = inputD';
 close all;
 IMU = load('accdata00185.csv');
@@ -43,7 +43,7 @@ gpsY = GPS(:,2);
 % matrix):
 
 %% Number of Samples:
-ts = 0.1; % Sampling time
+ts = 0.05; % Sampling time
 N = 5000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
@@ -54,7 +54,7 @@ betaX = 8.9/m;
 betaY = 84/m;
 betaW = 3.77/I;
 
-GPS_freq = 10;
+GPS_freq = 20;
 
 %% Actual drag forces linearized:
 % betaX = 
@@ -62,13 +62,13 @@ GPS_freq = 10;
 % betaW = 
 
 %% System Definition:
-Hn = [1 ts (ts^2)/2 0 0 0 0 0 0;... % The X position
+Hn = [1 ts 0 0 0 0 0 0 0;... % The X position
       0 1 ts 0 0 0 0 0 0;... % The X velocity
       0 -betaX 0 0 0 0 0 0 0;... % The X acceleration is a sum of forward motion (F_forward - F_drag)
-      0 0 0 1 ts (ts^2)/2 0 0 0;... % The Y Position
+      0 0 0 1 ts 0 0 0 0;... % The Y Position
       0 0 0 0 1 ts 0 0 0;... % The Y Velocity
       0 0 0 0 -betaY 0 0 0 0;... % The Y acceleration is a sum of the sideways motion (F_ymotion (wind?) - F_dragY)
-      0 0 0 0 0 0 1 ts (ts^2)/2;... % The angle
+      0 0 0 0 0 0 1 ts 0;... % The angle
       0 0 0 0 0 0 0 1 ts;... % The angular velocity
       0 0 0 0 0 0 0 -betaW 0]; % The angular acceleration is a sum of the drag an induced torque!
  
@@ -247,7 +247,7 @@ end
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        %Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
-       Wn(:,n) = [randn(4,1);0;randn(3,1);randn(1,1)].*SqM';
+       Wn(:,n) = [randn(3,1);randn(1,1);0;randn(3,1);randn(1,1)].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
@@ -477,8 +477,8 @@ for n = 2:N;
                           sC = 0;
              else                
                    BD(:,1,n) = zeros(9,1);
-                   BD(:,2,n) = zeros(9,1);
-                   BD(:,4,n) = zeros(9,1);
+                   BD(2,2,n) = 0;
+                   BD(4,4,n) = 0;
                    BD(:,5,n) = zeros(9,1);
              end
  YupdateD(:,n) = YpredD(:,n)+BD(:,:,n)*(XD(:,n)-XpredD(:,n));
@@ -912,8 +912,8 @@ for n = 2:N;
                           sL = 0;
              else                
                    BL(:,1,n) = zeros(9,1);
-                   BL(:,2,n) = zeros(9,1);
-                   BL(:,4,n) = zeros(9,1);
+                   BL(2,2,n) = 0;
+                   BL(2,4,n) = 0;
                    BL(:,5,n) = zeros(9,1);
              end
      BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
