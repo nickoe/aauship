@@ -101,7 +101,7 @@ class Filter:
         self.RupdateD = numpy.matrix(numpy.zeros([9,9]))
         self.RupdateD_prev = numpy.matrix(numpy.zeros([9,9]))
         
-        3self.sC = 0; ''' Sample counter - used to only include the 10th GPS sample.'''
+        self.sC = 0; ''' Sample counter - used to only include the 10th GPS sample.'''
         
         self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
         
