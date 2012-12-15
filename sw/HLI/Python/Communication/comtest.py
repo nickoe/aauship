@@ -7,7 +7,8 @@ import numpy
 import os
 from math import pi
 
-import Ship_nofilter as Ship
+#import Ship_nofilter as Ship
+import Ship
 import ObjectLibrary as OL
 
 Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
@@ -63,6 +64,7 @@ receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,0.02,qu)
 receiver.start()
 
 measuredstates = numpy.zeros((9,2))
+tempm = measuredstates
 parser = packetparser.packetParser(accf,gpsf,measuredstates)
 bla = True
 timeout = 1000
@@ -80,6 +82,7 @@ running = True
 sign = 1
 p = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
 p2 = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
+GPSFIX = False
 print p
 try:
 	
@@ -94,6 +97,8 @@ try:
 						#print p
 						pass
 					if ord(p['DevID']) == 30 and ord(p2['DevID']) == 255:
+						
+						GPSFIX = True
 					#	print "Handling GPS Data!1"
 						p2 = p
 						n = 0
@@ -113,11 +118,14 @@ try:
 					#	print measuredstates
 					
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 30:
-					#	print "Handling GPS Data!2"
+						GPSFIX = True
+					#	print "blaH"
+					##	print "Handling GPS Data!2"
 					#	print p
 					#	print p2
 						parser.parse(p)
 						parser.parse(p2)
+						tempm = measuredstates
 						#print measuredstates[0]
 						motor = AAUSHIP.Control_Step()
 						AAUSHIP.ReadStates(measuredstates, motor)
@@ -139,9 +147,11 @@ try:
 						
 					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
 						print chr(27) + "[2J"
-						if measuredstates[0][1] == 1:
-							print "blaH"
-						
+						#if measuredstates[0][1] == 1:
+						#	print "blaH"
+						if GPSFIX == True:
+							print "GPS FIX!"
+						GPSFIX = False
 						#print sendControl
 						sendControl = 0
 						#print sendControl
@@ -159,8 +169,12 @@ try:
 						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
 						print "NextWP (E,N): \t" + str(AAUSHIP.NextSWP.get_Pos())
 						print "Pos (E,N): \t" + str(AAUSHIP.Pos.get_Pos())
+						print "MeasPos: \t" + str(AAUSHIP.get_mp())
 						print "Vel: \t" + str(AAUSHIP.get_vel())
-						sign = -sign
+						#print tempm
+						#sign = -sign
+						#print tosend
+						
 						#print motor[1,0]
 						controllog.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + "\r\n")
 						#print tosend

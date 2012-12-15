@@ -200,11 +200,12 @@ class packetParser():
 					
 					
 					pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
-					
+					#print pos
 					#print pos
 					self.state[0] = [float(pos[0,0]),		1]
 					self.state[1] = [speed, 1]
 					self.state[3] = [float(pos[1,0]), 	1]
+					
 					
 				'''	
 					

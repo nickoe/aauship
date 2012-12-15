@@ -19,7 +19,7 @@ import time
 #############################################
 '''   
 class O_Ship:
-    def __init__(self, init_position, logfile):
+    def __init__(self, init_position, logfile, log):
         '''
         Initializes the parameters of the ship
         - Parameters to calculate proper turn paths
@@ -64,6 +64,9 @@ class O_Ship:
         
         self.correction = 0
         
+        self.mp = OL.O_PosData(0,0,1,1)
+        self.MP = []
+        self.flip = 1
         '''
         The control matrices
         '''
@@ -355,7 +358,6 @@ class O_Ship:
         angacc = input_m[8,0]
         
         Measured_Pos = OL.O_PosData(x, y, 1, 1)
-        
         BodyXY = FL.NEDtoBody(Measured_Pos, self.Pos, theta)
         
         
@@ -378,13 +380,18 @@ class O_Ship:
         '''Kalman'''
         
         Validity_matrix = input_m[:,1]
+        
+        if input_m[0,1] == 1:
+        	self.flip = -self.flip
+	        self.MP = [input_m[0][0],input_m[3][0], self.flip]
+	    
         self.states = self.Filter.FilterStep(input_f, Wn, Validity_matrix)
 
         self.Ts = 0.1
         self.v = numpy.sum(self.states[2])
         self.omega = numpy.sum(self.states[4])
         self.Theta = math.atan2(math.sin(numpy.sum(self.states[3])), math.cos(numpy.sum(self.states[3])))
-         
+        
         self.x = numpy.matrix([[self.v],[self.Theta],[omega]])
         
         
@@ -417,7 +424,7 @@ class O_Ship:
         #print x_next, y_next
         #x_next = ((V * self.Ts) * math.sin(Th)) + curpos[0] + self.correction * 0.1* math.cos(Th)
         #y_next = ((V * self.Ts) * math.cos(Th)) + curpos[1] - self.correction * 0.1* math.sin(Th)
-        print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
+        #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.log.write(str(x_next) + ', ' + str(y_next) + ', ' + str(numpy.sum(self.states[2])) + ', ' + str(numpy.sum(self.states[3])) + ', ' + str(numpy.sum(self.states[4])) + ", " + str(time.time()) + "\r\n")
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
@@ -497,8 +504,15 @@ class O_Ship:
         
         L = numpy.matrix([[K, K],[K*C1, K*C2]])
         L_inv = numpy.linalg.inv(L)
-        N = numpy.sqrt(numpy.array(L_inv*motor))
-        return list([N[0], N[1]])
+        temp = numpy.array(L_inv*motor)
+        N = numpy.sqrt(numpy.abs(temp))*numpy.sign(temp)
+        return N
+        
+    def get_vel(self):
+    	return self.v
+    
+    def get_mp(self):
+    	return self.MP
     
     def Return(self, retpos):
         

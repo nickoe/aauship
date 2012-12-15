@@ -38,7 +38,7 @@ class Filter:
               0 0 0 0 0 0 0 -betaW 0]; % The angular acceleration is a sum of the drag an induced torque!
         '''
         
-        self.Hn = numpy.matrix([[1, ts, (math.pow(ts,2))/2, 0, 0, 0, 0, 0, 0], [0, 1, ts, 0, 0, 0, 0, 0, 0], [0, -betaX, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, ts, (math.pow(ts,2))/2, 0, 0, 0], [0, 0, 0, 0, 1, ts, 0, 0, 0], [0, 0, 0, 0, -betaY, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, ts, (math.pow(ts,2))/2], [0, 0, 0, 0, 0, 0, 0, 1, ts], [0, 0, 0, 0, 0, 0, 0, -betaW, 0]])
+        self.Hn = numpy.matrix([[1, ts, 0, 0, 0, 0, 0, 0, 0], [0, 1, ts, 0, 0, 0, 0, 0, 0], [0, -betaX, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, ts, 0, 0, 0, 0], [0, 0, 0, 0, 1, ts, 0, 0, 0], [0, 0, 0, 0, -betaY, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, ts, 0], [0, 0, 0, 0, 0, 0, 0, 1, ts], [0, 0, 0, 0, 0, 0, 0, -betaW, 0]])
               
         self.An = numpy.eye(9); ''' An eye matrix, as all the outputs scales equally - everything is in metric units!'''
         
@@ -68,13 +68,13 @@ class Filter:
         # variance, that are estimated in Appendix #XX. 
         self.varXpos = 0.979 * 1
         self.varXvel = 0.00262 * 1
-        self.varXacc = 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
+        self.varXacc = 1.5# 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
         
         self.varYpos = 1.12 * 1
         self.varYvel = 0.0001 * 1
-        self.varYacc = 4.8815e-5 # m/s^2; or 4.9801*10^-6 G
+        self.varYacc = 1.6 #4.8815e-5 # m/s^2; or 4.9801*10^-6 G
         
-        self.varWpos = 8.23332e-5 # computed from the conversion found in HoneyWell datasheet
+        self.varWpos = 1e-6#8.23332e-5 # computed from the conversion found in HoneyWell datasheet
         self.varWvel = 2e-6
         self.varWacc = 2.3559e-5 # m/s^2 or 2.4035*10^-6 G
         
@@ -127,7 +127,7 @@ class Filter:
         
         self.Z = self.Bn*inputD
             
-        self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]))*ts;
+        self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]));
         
         ''' self.YD = self.Hn*self.YD_prev+self.Z '''
         self.XD = Wn
