@@ -247,7 +247,7 @@ end
 %% Running Computation of the Monorate Kalman filter:
 for n = 2:N;
        %Wn(:,n) = [gpsA(n,1);randn(1,1);accX(n);gpsA(n,2);randn(1,1);accY(n);heaX(n);gyrZ(n);0];%[randn(4,1);randn(1,1);randn(4,1)].*SqM';
-       Wn(:,n) = [randn(3,1);randn(1,1);0;randn(3,1);randn(1,1)].*SqM';
+       Wn(:,n) = [randn(3,1);randn(1,1);0;randn(3,1);0].*SqM';
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];

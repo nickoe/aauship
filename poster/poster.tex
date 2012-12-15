@@ -29,42 +29,38 @@ Greenland has in excess of 30.000 kilometers of coastal line with outdated maps.
 Jeepers. 
 
 \paragraph{Path Optimization}
-The path planner divides the path into straight and turning subsegments. The interesting part of this, is the turning subsegments. The turning segments are each defined by a threshold $\varepsilon_\text{max}$ which defines which algorithm to use dependent on the curvature of the path. The sub-waypoints are computed using the normalized Fresnel integral functions $C_F$ and $S_F$ in equation (\ref{eq:fresnel}) generating an Euler spiral in and out of the turn. 
+The path planner divides the path into straight and turning subsegments. The interesting part of this, is the transition from a straight segment to a turning subsegments. These transitions are each defined by a threshold $\varepsilon_\text{max}$ which defines wether just a circle is enough, or the path would need to converge onto a circle curvature. The transitional curve can be defined as en Euler spiral, which is a function of the normalized Fresnel integral functions $C_F$ and $S_F$ given in equation (\ref{eq:fresnel}):
 \begin{align}
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-This allows for the ship to keep as much momentum as possible. If the curvature is below the threshold $\varepsilon < \varepsilon_\text{max}$ the algorithm only computes 3 key sub-waypoints as seen on figure \ref{fig:3points}:
+This transition allows for the ship to keep as much momentum as possible \cite{archibald} whilst transitting from a straight to a turning segment. If the curvature is below the threshold $\varepsilon < \varepsilon_\text{max}$ there needs to be no transitional phase, and the ship goes directly onto the curve - this is depicted on \ref{fig:3points}, if this is the case, only 3 sub-waypoints are computed for the turning phase:
 \begin{figure}
 	\centering % Figure input
 	\includegraphics[width=\threecolwidth]{img/3points}
   	\caption{Sub waypoint calculation when $\varepsilon < \varepsilon_\text{max}$}
 	\label{fig:3points}
 \end{figure}
-These waypoints are generated using the following calculations:
+The sub-waypoints are generated using the following calculations:
 \begin{align}
 A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
 \end{align}
-$X_1$ and $Y_1$ are calculated by:
+$X_1$ and $Y_1$ are defined as:
 \begin{align}
 X_1 = x_d \cdot \cos(\varepsilon) + y_d \cdot \sin(\varepsilon),\,\,\,\, Y_1 = X_1 \cdot 	\tan(\varepsilon)
 \end{align}
-$x_d$ and $y_d$ are the variables calculated by the normalized Fresnel integrals, and contains the factor $\eta$ that allows the ship to preserve energy whilst turning:
+$x_d$ and $y_d$ are the variables calculated by the normalized Fresnel integrals, and contains the factor $\eta$ that is a function of the highest amount of change in acceleration (jerk $j$) the ship experiences:
 \begin{align}
 x_d = \frac{\pi}{\eta}\cdot C_F(\varepsilon),\,\,\, y_d = \frac{\pi}{\eta}\cdot S_F(\varepsilon),\,\,\, \eta = \frac{\text{max}\{\dot{\alpha}\}}{v^2}
 \end{align}
-Where $\dot{\alpha}$ is the amount of jerk the ship experiences when turning. If however the angle is above the threshold, $\varepsilon > \varepsilon_\text{max}$ more waypoints are added, and the coordinates become as seen on figure \ref{fig:5points}:
+If however the angle $\varepsilon$ is above the threshold, $\varepsilon > \varepsilon_\text{max}$ more sub-waypoints are added due to the transition from a straight segment to a turning segment, this case is plotted on figure \ref{fig:5points}:
 \begin{figure}
 	\centering % Figure input
 	\includegraphics[width=\threecolwidth]{img/5points}
   	\caption{Something}
 	\label{fig:5points}
 \end{figure}
-More sub-waypoints are added to the system if a tighter path curvature is required, thus allowing the ship to still maintain its momentum:
-\begin{align}
-A_5 &= (-X_1,Y_1),\, B_5 = (-X_2,Y_2),\, C_5 = (0,Y_R)\\
-D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
-\end{align}
+This adds 2 extra waypoints, $B_5$ and $D_5$. The path inbetween is gien as a circle with centre in $O_5$ and radius $R_min$.  
 
 
 }
@@ -72,6 +68,11 @@ D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
 \rput{Center}{\includegraphics[width=1.9\textwidth]{img/background.pdf}} % Background image
 \col{
 \paragraph{}
+\begin{align}
+A_5 &= (-X_1,Y_1),\, B_5 = (-X_2,Y_2),\, C_5 = (0,Y_R)\\
+D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
+\end{align}
+
 The computation of these 5 sub-waypoints are carried out as follows:
 \begin{align}
 X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max}),\,\, P_X = X_R + y_d \cdot \sin(\varepsilon)\\
@@ -110,10 +111,10 @@ $\beta_x$ and $\beta_\omega$ are the linearized skin frictional drag the ship ex
 
 \paragraph{State estimation}
 To further improve the amount of 
-The state model for the Kalman filter computed to be - which 
+The ship is fitted with 2 sensors, a GPS and an IMU. The IMU measures the acceleration, the rotational velocity and the magnetic field strength for use in heading calculations. As The purpose is to achieve a better position estimate, the Kalman filter does not use the IMU to this, but instead the velocity measurement, as a double integration of the accelerometer data would yield a squared error, if the IMU is not level, which it is not certain to be. The discrete state model for the Kalman filter can hence be given as:
 \begin{align}
 \vec{\Phi} = diag\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\},\,\, \vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
-1 & t_s & \frac{t_s^2}{2}\\
+1 & t_s & 0\\
 0 & 1 & t_s\\
 0 & \frac{-\beta_{x,y,\omega}}{m} & 0
 \end{bmatrix}
@@ -134,13 +135,13 @@ Where the individual $\lambda$s are given as:
 \end{align} 
 The filter also needs to sort out the different sampling rate aboard the ship. The two main sensors, IMU and GPS, sample at 10 Hz and 1 Hz respectively - which also defines a mask to multiply onto the Kalman filter. This mask puts the gain to zero for the GPS if there is no new sample available. Figure \ref{fig:trends} depicts the absolute error between the true and estimated path for the 3 cases described above.
 
-As the filter only needs to estimate 3 states, 
-
+As the filter only needs to estimate $x,\dot{x},y,\dot{y}$ and $\theta$, an output matrix is post multiplied to generate the final state estimation $\hat{\vec{x}}$ which is fed to the controllers. 
 
 }
 %% Column 3
 \col{
 \paragraph{}
+Figure (fig: INSERT FIGURE) depicts the difference in the control signals using the estimates and the other when just using the measurements directly.
 \begin{figure}
 	\centering % Figure input
 	\includegraphics[width=\threecolwidth]{img/10percent}
@@ -149,7 +150,6 @@ As the filter only needs to estimate 3 states,
 \end{figure}
 \paragraph{Results}
 Results on lost packages. 
-\paragraph{Further results}
 Something else?
 \paragraph{Conclusion and extensions}
 We can from this conclude that there is a problem.
