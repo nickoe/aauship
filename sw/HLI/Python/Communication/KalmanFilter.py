@@ -20,10 +20,10 @@ class Filter:
         I = (1./12.)*m*(0.25*0.25+1.05*1.05); ''' The ships inertia'''
         
         
-        betaX = 0.4462;
-        betaY = 0.8;
-        betaW = 0.0784;
-        self.GPS_freq = 10;
+        betaX = 8.9/m;
+        betaY = 84/m;
+        betaW = 3.77/I;
+        #self.GPS_freq = 20;
         
         ''' System Definition:'''
         '''
@@ -79,7 +79,6 @@ class Filter:
         self.varWacc = 2.3559e-5 # m/s^2 or 2.4035*10^-6 G
         
         self.varYWacc = 2.4496*math.pow(10,-6); # rad/s^2
-        #SqM = numpy.matrix(numpy.sqrt(numpy.array([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc])))
         
         # Random number at each iteration with a given variance. 
         
@@ -88,21 +87,7 @@ class Filter:
         Wn = numpy.matrix(numpy.zeros([9,1]))
         self.Qz = numpy.matrix(numpy.zeros([9,9]))
         self.Qw = numpy.matrix(numpy.zeros([9,9]))
-        self.Y = numpy.matrix(numpy.zeros([9,1]))
-        self.X = numpy.matrix(numpy.zeros([9,1]))
-        self.Ypred = numpy.matrix(numpy.zeros([9,1]))
-        self.Xpred = numpy.matrix(numpy.zeros([9,1]))
-        self.Rpred = numpy.matrix(numpy.zeros([9,9]))
-        self.B = numpy.matrix(numpy.zeros([9,9]))
-        self.Yupdate = numpy.matrix(numpy.zeros([9,1]))
-        self.Rupdate = numpy.matrix(numpy.zeros([9,9]))
-        self.k_newpos = numpy.matrix(numpy.zeros([2,1]))
-        self.y_newpos = numpy.matrix(numpy.zeros([2,1]))
-        self.x_newpos = numpy.matrix(numpy.zeros([2,1]))
-        self.k_rot = numpy.matrix(numpy.zeros([2,2]))
-        self.y_rot = numpy.matrix(numpy.zeros([2,2]))
-        self.x_rot = numpy.matrix(numpy.zeros([2,2]))
-        
+
         ''' Resetting the parameters:'''
         self.YD = numpy.matrix(numpy.zeros([9,1]))
         self.YD_prev = numpy.matrix(numpy.zeros([9,1]))
@@ -115,13 +100,10 @@ class Filter:
         self.YupdateD_prev = numpy.matrix(numpy.zeros([9,1]))
         self.RupdateD = numpy.matrix(numpy.zeros([9,9]))
         self.RupdateD_prev = numpy.matrix(numpy.zeros([9,9]))
-        self.k_newposD = numpy.matrix(numpy.zeros([2,1]))
-        self.y_newposD = numpy.matrix(numpy.zeros([2,1]))
-        self.x_newposD = numpy.matrix(numpy.zeros([2,1]))
         
-        self.sC = 1; ''' Sample counter - used to only include the 10th GPS sample.'''
+        3self.sC = 0; ''' Sample counter - used to only include the 10th GPS sample.'''
         
-        self.Qz = numpy.diag([0, 0, 55, 0, 0, 55, 0, 0, 20])
+        self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
         
     
     def FilterStep(self, inputD, Wn, inputV):
@@ -145,38 +127,20 @@ class Filter:
         
         self.Z = self.Bn*inputD
             
-        self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]));
+        self.Qw = numpy.matrix(numpy.diag([self.varXpos, self.varXvel, self.varXacc, self.varYpos, self.varYvel, self.varYacc, self.varWpos, self.varWvel, self.varWacc]))*ts;
         
         ''' self.YD = self.Hn*self.YD_prev+self.Z '''
         self.XD = Wn
         self.YpredD = self.Hn*self.YupdateD_prev
-        self.XpredD = self.An*self.YpredD
+        self.XpredD = self.YpredD
         self.RpredD = self.Hn*self.RupdateD_prev*numpy.transpose(self.Hn)+self.Qz
         
         self.BD = (self.RpredD*numpy.transpose(self.An))*numpy.linalg.inv(self.An*self.RpredD*numpy.transpose(self.An)+self.Qw);
-        Validity_M = numpy.diag([numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0]), numpy.sum(inputV[0])])
-        self.BD = self.BD
-        
-        if self.sC == self.GPS_freq:
-            self.BD = self.BD;
-            self.sC = 0;
-            
-        else:       
-            '''Pos'''
-            self.BD[:,0] = numpy.zeros([9,1])
-            self.BD[:,3] = numpy.zeros([9,1])
-            '''Speed'''
-            self.BD[:,1] = numpy.zeros([9,1])
-            self.BD[:,4] = numpy.zeros([9,1])
-           
-            
-        
-        self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);
-        
-        
-        
+        Validity_M = numpy.diag([numpy.sum(inputV[0]), numpy.sum(inputV[1]), numpy.sum(inputV[2]), numpy.sum(inputV[3]), numpy.sum(inputV[4]), numpy.sum(inputV[5]), numpy.sum(inputV[6]), numpy.sum(inputV[7]), numpy.sum(inputV[8])])
+        self.BD = self.BD*Validity_M
+        self.YupdateD = self.YpredD+self.BD*(self.XD-self.XpredD);        
         self.RupdateD = (numpy.eye(9)-self.BD*self.An)*self.RpredD;
-        self.sC = self.sC + 1;
+ #      self.sC = self.sC + 1;
         
         return numpy.matrix([[1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0]]) * self.YupdateD
         
