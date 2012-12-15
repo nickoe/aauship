@@ -15,7 +15,7 @@ class seriald:
 	class Serial:
 		def __init__(self,serialport,speed,timeout):
 			#self.f = open("LOG00203.txt",'rb')
-			self.f = open("LOG00139.TXT",'rb')
+			self.f = open("LOG00206.TXT",'rb')
 			self.l = 0;
 			#self.array = []
 			#l = 0
@@ -47,7 +47,7 @@ class seriald:
 				self.open = False;
 			return c
 			#return self.array.pop(0)
-			
+
 			
 		def isOpen(self):	
 			return self.open
@@ -67,7 +67,7 @@ class packetHandler(threading.Thread):
 	def __init__(self,serialport,speed,time,queue):
 		self.connection = seriald.Serial(serialport,speed,timeout=time)	#Serial Connection
 		print self.connection
-		print self.connection.inWaiting()
+#		print self.connection.inWaiting()
 		self.myNewdata = []				#Array for storing new packets
 		self.q = queue					#Queue to share data between threads
 		self.errorcount = 0
@@ -119,7 +119,7 @@ class packetHandler(threading.Thread):
 					#print "Checkchar is correct!"
 					length=self.connection.read(1)	#The next char after start byte is the length
 					res = self.parser(length)	#Input the length into the parser function
-					#print res
+					#print resread(1
 					if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
 						#print "Valid packet"
 						#print res
