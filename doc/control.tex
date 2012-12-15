@@ -191,7 +191,7 @@ Since we only need to output the velocity and the angle, the output matrix $\vec
 
 \subsection{Discretizing for use with a particular timestep}
 
-The system described so far is continuous and needs to be discretized before being converted into an algorithm. Discretization is carried out in \MATLAB \ using the \texttt{c2d} command. This command takes the continous time state space model and the discretization time step - and outputs the discrete equivalent. The \textt{c2d} command uses a zero-order hold algorithm to discretize the system.
+The system described so far is continuous and needs to be discretized before being converted into an algorithm. Discretization is carried out in \MATLAB \ using the \texttt{c2d} command. This command takes the continous time state space model and the discretization time step - and outputs the discrete equivalent. The \texttt{c2d} command uses a zero-order hold algorithm to discretize the system.
 The zero order hold algorithm is defined as:
 \begin{align}
 \vec{x}(t)  = \sum_{n = -\infty}^{\infty} \vec{x}[n] \cdot \text{rect}\left(\frac{t-T/2 - nT}{T}\right)
