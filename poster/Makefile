@@ -12,10 +12,7 @@ WORKTARGET=worksheet
 FIGS_DIA=
 
 # Alle SVG-filer
-#FIGS_SVG=illustrations/cover.svg
-FIGS_SVG=img/vessel-block-overview.svg \
-img/reference_frames.svg
-
+#FIGS_SVG=
 # Alle EPS-filer (PS-illustrationer angivet i linien nedenunder)
 #FIGS_EPS= \
 
