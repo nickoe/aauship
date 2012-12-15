@@ -113,3 +113,24 @@ def NEDtoBody(Pos, ShipPos, Theta):
     BodyPoint =  numpy.matrix([[math.sin(Theta), math.cos(Theta)],[math.cos(Theta), -math.sin(Theta)]]) * RelPoint
     
     return list([numpy.sum(BodyPoint[0]),numpy.sum(BodyPoint[1])])
+
+def L_Frame_Y_Acc(x, y, z, G):
+    
+    '''
+    x: IMU X axis acceleration output
+    y: IMU Y axis acceleration output
+    z: IMU Z axis acceleration output
+    
+    G = |x| + |y| + |z| : Reference gravity acceleration in steady-state
+    
+    We are neglecting the roll and the possibility of positive (forward-down) pitch
+    '''
+    
+    S = numpy.linalg.norm([x, y, z])
+    
+    F = math.sqrt(S*S - G*G)
+    
+    if z < G:
+        return -F
+    else:
+        return F

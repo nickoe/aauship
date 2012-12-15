@@ -454,6 +454,11 @@ class O_Ship:
         self.EndPath = 0
         
     def FtoM(self, motor):
+        '''
+        Linear transformation from the general
+        Force and Torque controller output
+        to obtain the necessary engine PWMs.
+        '''
 
         K = math.pow(0.05,4)*0.5*1000;
         theta = math.pi/16;
@@ -468,5 +473,17 @@ class O_Ship:
         return list([N[0], N[1]])
     
     def Return(self, retpos):
+        '''
+        Sets the GPS posizion of default return,
+        after the navigation ran out of waypoints.
+        '''
         
         self.retpos = retpos
+    
+    def Set_SteadyG(self, x, y, z):
+        '''
+        Sets the reference accelerometer
+        data in steady position
+        '''
+        
+        self.RefG = numpy.linalg.norm([x, y, z])
