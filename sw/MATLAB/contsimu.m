@@ -1,10 +1,7 @@
 %% Continous Time Simulation:
 clc; clear all; clf;
 
-ts = 1;
-
-
-
+ts = 0.05;
 
 m = 12;
 I = (1/12)*m*(0.25*0.25+1.05*1.05);
