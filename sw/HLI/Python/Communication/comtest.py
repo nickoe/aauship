@@ -11,9 +11,9 @@ from math import pi
 import Ship
 import ObjectLibrary as OL
 
-Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
-swp = open("measurements/swp141212.txt",'w')
-controllog = open("measurements/controllog141212.txt",'w')
+Kalmanfile = open("kalmandata.txt",'w')
+swp = open("swp.txt",'w')
+controllog = open("controllog",'w')
 Startpos = OL.O_PosData(0, 0, 0, 1)
 AAUSHIP = Ship.O_Ship(Startpos,swp,Kalmanfile)
 
@@ -54,8 +54,8 @@ Control loop
 
 
 
-accf = open("measurements/accdata141212.csv", 'w')
-gpsf = open("measurements/gpsdata141212.txt", 'w')
+accf = open("accdata.csv", 'w')
+gpsf = open("gpsdata.txt", 'w')
 
 qu = Queue.Queue()
 kalqueue = Queue.Queue()

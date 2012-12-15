@@ -14,7 +14,8 @@ class seriald:
 
 	class Serial:
 		def __init__(self,serialport,speed,timeout):
-			self.f = open("LOG00203.txt",'rb')
+			#self.f = open("LOG00203.txt",'rb')
+			self.f = open("LOG00139.TXT",'rb')
 			self.l = 0;
 			#self.array = []
 			#l = 0
@@ -64,7 +65,7 @@ class seriald:
 class packetHandler(threading.Thread):
 	
 	def __init__(self,serialport,speed,time,queue):
-		self.connection = serial.Serial(serialport,speed,timeout=time)	#Serial Connection
+		self.connection = seriald.Serial(serialport,speed,timeout=time)	#Serial Connection
 		print self.connection
 		print self.connection.inWaiting()
 		self.myNewdata = []				#Array for storing new packets
