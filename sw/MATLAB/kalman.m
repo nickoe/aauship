@@ -44,7 +44,7 @@ gpsY = GPS(:,2);
 
 %% Number of Samples:
 ts = 0.05; % Sampling time
-N = 5000; % Then it fits with the Simulink Simulation!
+N = 10000; % Then it fits with the Simulink Simulation!
 
 %% System Parameters:
 m = 12; % The ships mass
@@ -80,10 +80,10 @@ An = eye(9); % An eye matrix, as all the outputs scales equally - everything is 
 % driving noise Z(n) is then equal to: 
 varXpos = 0.979; % m
 varXvel = 0.00262; % m/s
-varXacc = 4.9451e-5; %  m/s^2 or 5.045*10^-6 G 
+varXacc = 5.9451e-5; %  m/s^2 or 5.045*10^-6 G 
 
 varYpos = 1.12; % m
-varYvel = 4.8815e-5; % m/s
+varYvel = 0.000000001; % m/s
 varYacc = 4.8815e-5; % m/s^2; or 4.9801*10^-6 G
 
 varWpos = 8.23332e-5; % computed from the conversion found in HoneyWell datasheet
@@ -251,10 +251,10 @@ for n = 2:N;
        %Wn([1 4],n) = inv([cos(Y(7,n-1)) -sin(Y(7,n-1));sin(Y(7,n-1)) cos(Y(7,n-1))])*Wn([1 4],n-1);
        %Wn([2 5],n) = [Y(2,n-1)*cos(Y(7,n-1));Y(2,n-1)*sin(Y(7,n-1))];
        %Wn([3 6],n) = [Y(3,n-1)*cos(Y(7,n-1));Y(6,n-1)*sin(Y(7,n-1))];
-     Qz(:,:,n) = diag([0 0 55 0 0 0 0 0 20]); %
+     Qz(:,:,n) = diag([0 0 55 0 0 15 0 0 20]); %
    %covari(n,:) = autocorr(Z(:,n));
      %Qw(:,:,n) = bsxfun(@minus,toeplitz(covari(n,:)),Z(:,n).*normpdf(Z(:,n),5.3544,50^2+pi^2));
-     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+     Qw(:,:,n) = diag([varXpos varXvel 1.2 varYpos varYvel 1.5 varWpos varWvel varWacc]);
         Y(:,n) = Hn * Y(:,n-1) + Z(:,n); % xk
         X(:,n) = An * Y(:,n) + Wn(:,n); % zk
     Ypred(:,n) = Hn * Yupdate(:,n-1); % xk -
@@ -465,9 +465,20 @@ for n = 2:N;
             %sC = isinteger(n/10) % Sensor Count, used to zero out unsampled system inputs. 
       % Wn(:,n) = randn(9,1).*SqM';
      %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
-     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]).*ts;
+     %Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
        YD(:,n) = Hn*YD(:,n-1)+Z(:,n);
        XD(:,n) = An*YD(:,n)+Wn(:,n);
+              if sC == GPS_freq;
+                 XD(1,n) = XD(1,n);
+                 XD(2,n) = XD(2,n);
+                 XD(4,n) = XD(4,n);
+                 XD(5,n) = XD(5,n);
+             else
+                 XD(1,n) = XD(1,n-1);
+                 XD(2,n) = XD(2,n-1);
+                 XD(4,n) = XD(4,n-1);
+                 XD(5,n) = XD(5,n-1);
+             end
    YpredD(:,n) = Hn*YupdateD(:,n-1);
    XpredD(:,n) = An*YpredD(:,n);
  RpredD(:,:,n) = Hn*RupdateD(:,:,n-1)*Hn'+Qz(:,:,n);
@@ -478,8 +489,8 @@ for n = 2:N;
              else                
                    BD(:,1,n) = zeros(9,1);
                    BD(2,2,n) = 0;
-                   BD(4,4,n) = 0;
-                   BD(:,5,n) = zeros(9,1);
+                   BD(:,4,n) = zeros(9,1);
+                   BD(2,5,n) = 0;
              end
  YupdateD(:,n) = YpredD(:,n)+BD(:,:,n)*(XD(:,n)-XpredD(:,n));
 RupdateD(:,:,n) = (eye(9)-BD(:,:,n)*An)*RpredD(:,:,n);
@@ -684,7 +695,7 @@ sK = 1; % Sample counter - used to only include the 10th GPS sample.
 for n = 2:N;
       % Wn(:,n) = randn(9,1).*SqM';
      %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
-     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+     %Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
        YK(:,n) = Hn*YK(:,n-1)+Z(:,n);
        XK(:,n) = An*YK(:,n)+Wn(:,n);
              if sK == GPS_freq;
@@ -899,22 +910,34 @@ for n = 2:N;
             %sC = isinteger(n/10) % Sensor Count, used to zero out unsampled system inputs. 
       % Wn(:,n) = randn(9,1).*SqM';
      %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)');     
-     Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+     %Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+ packLost(:,n) = rand(9,1)<0.95; 
        YL(:,n) = Hn*YL(:,n-1)+Z(:,n);
        XL(:,n) = An*YL(:,n)+Wn(:,n);
+              if sL == GPS_freq && packLost(2,n) == 1;
+                 XL(1,n) = XL(1,n);
+                 XL(2,n) = XL(2,n);
+                 XL(4,n) = XL(4,n);
+                 XL(5,n) = XL(5,n);
+             else
+                 XL(1,n) = XL(1,n-1);
+                 XL(2,n) = XL(2,n-1);
+                 XL(4,n) = XL(4,n-1);
+                 XL(5,n) = XL(5,n-1);
+             end
    YpredL(:,n) = Hn*YupdateL(:,n-1);
    XpredL(:,n) = An*YpredL(:,n);
  RpredL(:,:,n) = Hn*RupdateL(:,:,n-1)*Hn'+Qz(:,:,n);
      BL(:,:,n) = (RpredL(:,:,n)*An')/(An*RpredL(:,:,n)*An'+Qw(:,:,n));
- packLost(:,n) = rand(9,1)<0.9; % Looses 10 percent of the packages. 
+ % Looses 10 percent of the packages. 
              if sL == GPS_freq;
                    BL(:,:,n) = BL(:,:,n);
                           sL = 0;
              else                
                    BL(:,1,n) = zeros(9,1);
                    BL(2,2,n) = 0;
-                   BL(2,4,n) = 0;
-                   BL(:,5,n) = zeros(9,1);
+                   BL(:,4,n) = zeros(9,1);
+                   BL(5,5,n) = 0;
              end
      BL(:,:,n) = BL(:,:,n)*diag(packLost(:,n));
  YupdateL(:,n) = YpredL(:,n)+BL(:,:,n)*(XL(:,n)-XpredL(:,n));
@@ -1086,6 +1109,75 @@ xlabel('Position [m]')
 ylabel('Position [m]')
 grid on
 
+%% Plot of Lost packages without taking care of it:
+%% Kalman Filtering with Lost Packages - zeroing the input!:
+% The Kalman gain is used to see if a packet is lost during the
+% transmission, and if one is lost / corrupted, the gain should be set to
+% zero, as this will make the system rely on estimates. 
+% Resetting the parameters:
+YLL = zeros(9,N);
+XLL = zeros(9,N);
+YpredLL = zeros(9,N);
+XpredLL = zeros(9,N);
+RpredLL = zeros(9,9,N);
+BLL = zeros(9,9,N);
+YupdateLL = zeros(9,N);
+RupdateLL = zeros(9,9,N);
+k_newposLL = zeros(2,N);
+y_newposLL = zeros(2,N);
+x_newposLL = zeros(2,N);
+k_rotLL = zeros(2,2,N);
+y_rotLL = zeros(2,2,N);
+x_rotLL = zeros(2,2,N);
+packLostL = zeros(9,N);
+
+sLL = 1;
+
+for n = 2:N;
+            %sC = isinteger(n/10) % Sensor Count, used to zero out unsampled system inputs. 
+      % Wn(:,n) = randn(9,1).*SqM';
+     %Qz(:,:,n) = cov(Z(:,n-1)*Z(:,n)'); 
+ packLostL(:,n) = packLost(:,n);   % Looses 5 percent of the packages. 
+      %Qw(:,:,n) = diag([varXpos varXvel varXacc varYpos varYvel varYacc varWpos varWvel varWacc]);
+       YLL(:,n) = Hn*YLL(:,n-1)+Z(:,n);
+       XLL(:,n) = An*YLL(:,n)+Wn(:,n);
+%       XLL(:,n) = XLL(:,n).*packLostL(:,n);
+              if sLL == GPS_freq && packLostL(2,n) == 1;
+                 XLL(1,n) = XLL(1,n);
+                 XLL(2,n) = XLL(2,n);
+                 XLL(4,n) = XLL(4,n);
+                 XLL(5,n) = XLL(5,n);
+             else
+                 XLL(1,n) = XLL(1,n-1);
+                 XLL(2,n) = XLL(2,n-1);
+                 XLL(4,n) = XLL(4,n-1);
+                 XLL(5,n) = XLL(5,n-1);
+              end
+       YpredLL(:,n) = Hn*YupdateLL(:,n-1);
+   XpredLL(:,n) = An*YpredLL(:,n);
+ RpredLL(:,:,n) = Hn*RupdateLL(:,:,n-1)*Hn'+Qz(:,:,n);
+     BLL(:,:,n) = (RpredLL(:,:,n)*An')/(An*RpredLL(:,:,n)*An'+Qw(:,:,n));
+             if sLL == GPS_freq;
+                   BLL(:,:,n) = BLL(:,:,n);
+                          sLL = 0;
+             else                
+                   BLL(:,1,n) = zeros(9,1);
+                   BLL(2,2,n) = 0;
+                   BLL(:,4,n) = zeros(9,1);
+                   BLL(2,5,n) = 0;
+             end
+ YupdateLL(:,n) = YpredLL(:,n)+BLL(:,:,n)*(XLL(:,n)-XpredLL(:,n));
+RupdateLL(:,:,n) = (eye(9)-BLL(:,:,n)*An)*RpredLL(:,:,n);
+            sLL = sLL + 1;
+% Below - rotation udpate, so the route can be plotted:
+  k_rotLL(:,:,n) = [cos(YupdateLL(7,n-1)) -sin(YupdateLL(7,n-1));sin(YupdateLL(7,n-1)) cos(YupdateLL(7,n-1))];
+ k_newposLL(:,n) = k_newposLL(:,n-1) + k_rotLL(:,:,n)*[YupdateLL(2,n-1);YupdateLL(5,n-1)].*ts; % k_newposD(:,n-1)
+  y_rotLL(:,:,n) = [cos(YLL(7,n-1)) -sin(YLL(7,n-1));sin(YLL(7,n-1)) cos(YLL(7,n-1))];
+ y_newposLL(:,n) = y_newposLL(:,n-1) + y_rotLL(:,:,n)*[YLL(2,n-1);YLL(5,n-1)].*ts; 
+  x_rotLL(:,:,n) = [cos(XLL(7,n-1)) -sin(XLL(7,n-1));sin(XLL(7,n-1)) cos(XLL(7,n-1))];
+ x_newposLL(:,n) = y_newposLL(:,n) + y_rotLL(:,:,n)*[Wn(1,n);Wn(4,n)];
+end
+
 %% Calculation differente between Monorate and Multirate
 % The difference in X-position:
 diffX_pos = Y(1,:)' - Y_kal_pos_X;
@@ -1146,6 +1238,7 @@ diff_pos = y_newpos' - k_newpos';
 diff_posD = y_newposD' - k_newposD';
 diff_posK = y_newposK' - k_newposK';
 diff_posL = y_newposL' - k_newposL';
+diff_posLL = y_newposLL' - k_newposLL';
 
 % Absolute distance between Y and filtered
 for jj = 1:N
@@ -1153,6 +1246,7 @@ for jj = 1:N
     diff_absD(jj) = sqrt(((k_newposD(1,jj) - y_newposD(1,jj))^2)+((k_newposD(2,jj) - y_newposD(2,jj))^2));
     diff_absK(jj) = sqrt(((k_newposK(1,jj) - y_newposK(1,jj))^2)+((k_newposK(2,jj) - y_newposK(2,jj))^2));
     diff_absL(jj) = sqrt(((k_newposL(1,jj) - y_newposL(1,jj))^2)+((k_newposL(2,jj) - y_newposL(2,jj))^2));
+    diff_absLL(jj) = sqrt(((k_newposLL(1,jj) - y_newposLL(1,jj))^2)+((k_newposLL(2,jj) - y_newposLL(2,jj))^2));
 end
 
 %% Plot of the error between monorate and multirate:
@@ -1274,11 +1368,13 @@ grid on
 
 h21 = figure(21);
 plot(diff_abs,'b'); hold on
-plot(diff_absD,'r');
+%plot(diff_absD,'r');
 plot(diff_absL,'m');
-plot(diff_absK,'g'); hold off
+plot(diff_absLL,'cyan');
+%plot(diff_absK,'g'); 
+hold off
 title('Absolute Position Error');
-legend('Monorate','Multirate (zero K)','Lost Packages','Multirate (normal K)');
+legend('No Packet Loss','5% Packet Loss w/ Zero gain','5% Packet Loss w/ Zero input');
 xlabel('Sample [n]');
 ylabel('Distance [m]');
 grid on

@@ -24,56 +24,62 @@
 \begin{center}
 \col{
 \paragraph{Introduction}
-Greenland has in excess of 30.000 kilometers of coastal line with outdated maps. This poses a danger as cruise ships currently navigate these waters carrying as many as 5000 passengers. If such a ship were to hit a rock and capsize, the nearest rescue station along the eastern coast of Greenland can be as many as 1000 kilometers away, and the infrastructure in these areas are not able to handle such a disaster. Therefore a fast, inexpensive and reliable solution to measuring the coast line will be developed throughout this project? (the last sentence is stupid..). 
-\paragraph{Problem}
-Jeepers. 
+Seaborne measurements are often an expensive and time-consuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available.
+The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amount of traffic possible. This poster describes parts of the project, and presents results of measurements towards the end \cite{engineer}.
 
 \paragraph{Path Optimization}
-The path planner divides the path into straight and turning subsegments. The interesting part of this, is the transition from a straight segment to a turning subsegments. These transitions are each defined by a threshold $\varepsilon_\text{max}$ which defines wether just a circle is enough, or the path would need to converge onto a circle curvature. The transitional curve can be defined as en Euler spiral, which is a function of the normalized Fresnel integral functions $C_F$ and $S_F$ given in equation (\ref{eq:fresnel}):
+The path planning algorithm1 is based around the train-track transition problem originally solved in \cite{arthur}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
 \begin{align}
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-This transition allows for the ship to keep as much momentum as possible \cite{archibald} whilst transitting from a straight to a turning segment. If the curvature is below the threshold $\varepsilon < \varepsilon_\text{max}$ there needs to be no transitional phase, and the ship goes directly onto the curve - this is depicted on \ref{fig:3points}, if this is the case, only 3 sub-waypoints are computed for the turning phase:
-\begin{figure}
-	\centering % Figure input
-	\includegraphics[width=\threecolwidth]{img/3points}
-  	\caption{Sub waypoint calculation when $\varepsilon < \varepsilon_\text{max}$}
-	\label{fig:3points}
-\end{figure}
-The sub-waypoints are generated using the following calculations:
+The two normalized Fresnel integrals produces the Euler spiral. However, the ship moving along the track can only endure a limited amount of centripetal acceleration $a_centripetal$, which is a function of the speed of the vessel $v$ and the path curvature $\kappa$. The ship will have a limited angular acceleration $\dot{\kappa}_{max} = \alpha_{max}$, which results in a scaling $\eta$ of the Euler spiral given by the maximum centripetal acceleration:
+\begin{align}
+max\langle a_{centripetal}\rangle = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_{max}}{v^2_{max}}
+\end{align}
+The threshold $\varepsilon_{max}$ can be determined based on a function of the vehicles maximum angular acceleration change $\kappa_\text{max}$ and the maximum centripetal acceleration $a_{centripetal}$, thus:
+\begin{align}
+\varepsilon_{max} = \frac{\kappa^2_{max}}{2\eta}
+\end{align}
+If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages.
+The 3 key points are given by the coordinate sets and are depicted on figure (Fig. \ref{fig:3points}), and have coordinates given by:
 \begin{align}
 A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
 \end{align}
-$X_1$ and $Y_1$ are defined as:
-\begin{align}
-X_1 = x_d \cdot \cos(\varepsilon) + y_d \cdot \sin(\varepsilon),\,\,\,\, Y_1 = X_1 \cdot 	\tan(\varepsilon)
-\end{align}
-$x_d$ and $y_d$ are the variables calculated by the normalized Fresnel integrals, and contains the factor $\eta$ that is a function of the highest amount of change in acceleration (jerk $j$) the ship experiences:
-\begin{align}
-x_d = \frac{\pi}{\eta}\cdot C_F(\varepsilon),\,\,\, y_d = \frac{\pi}{\eta}\cdot S_F(\varepsilon),\,\,\, \eta = \frac{\text{max}\{\dot{\alpha}\}}{v^2}
-\end{align}
-If however the angle $\varepsilon$ is above the threshold, $\varepsilon > \varepsilon_\text{max}$ more sub-waypoints are added due to the transition from a straight segment to a turning segment, this case is plotted on figure \ref{fig:5points}:
 \begin{figure}
-	\centering % Figure input
-	\includegraphics[width=\threecolwidth]{img/5points}
-  	\caption{Something}
-	\label{fig:5points}
+	\begin{center}
+		\includegraphics[width=\threecolwidth]{img/3Points} % width of a column is 8.4 cm.
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
+		\label{fig:3points}
+	\end{center}
 \end{figure}
-This adds 2 extra waypoints, $B_5$ and $D_5$. The path inbetween is gien as a circle with centre in $O_5$ and radius $R_min$.  
-
+From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$.
+\begin{align}
+\varepsilon = \frac{\partial x}{\partial y}f(t) \to [x_d,y_d] = f^{-1}(\varepsilon)
+\end{align}
+Thus solving for $X_1$ and $Y_1$ gives the following expression as a function of $x_d$ and $y_d$:
+\begin{align}
+X_1 = x_d \cdot \cos(\varepsilon) + y_d \cdot \sin(\varepsilon),\,\, Y_1 = X_1 \cdot \tan(\varepsilon)
+\end{align}
 
 }
 %% Column 2
 \rput{Center}{\includegraphics[width=1.9\textwidth]{img/background.pdf}} % Background image
 \col{
 \paragraph{}
-\begin{align}
-A_5 &= (-X_1,Y_1),\, B_5 = (-X_2,Y_2),\, C_5 = (0,Y_R)\\
-D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
-\end{align}
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\threecolwidth]{img/5Points}    % The printed column  
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
+		\label{fig:5points}               
+	\end{center}                                 % accordingly.
+\end{figure}
 
-The computation of these 5 sub-waypoints are carried out as follows:
+If the angle grows larger than $\varepsilon_{max}$ the system has to compute five key points these are seen on figure (Fig. \ref{fig:5points}), due the ship transitting onto a curve and then back onto the Euler spiral ($\kappa_{Euler_{max}} = \kappa_{arc}$) This adds the extra waypoints $B_5$ and $D_5$ which defines the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_{max}}$. The coordinates of these waypoints are defined as:
+\begin{align}
+B_5 = (-X_2,Y_2),\,\, D_5 &= (X_2,Y_2)
+\end{align}
+Which is still a mirroring of points about the $x=0$ axis, as the entry angle is the same as the exit angle. The number of equations increases, and the individual coordinates for the key waypoints become:
 \begin{align}
 X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max}),\,\, P_X = X_R + y_d \cdot \sin(\varepsilon)\\
 X_1 &= P_X + x_d \cdot \cos(\varepsilon),\,\, Y_1 = X_1 \cdot \tan(\varepsilon)\\
@@ -81,79 +87,51 @@ P_Y &= Y_1 - x_d \cdot \sin(\varepsilon),\,\, Y_2 = P_Y + y_d \cdot \cos(\vareps
 O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2,\,\, R_Y = O_Y - R_\text{min}\\
 X_2 &= X_R
 \end{align}
-The above computes the optimal path for the ship to follow as well as one where it preserves as much energy as possible whilst sailing it. 
-
-\paragraph{Ship model}
-To develop a control algorithm to carry out the inputs computed by the path planning algorithm, a low-level controller is developed. This is based around the 3 degree-of-freedom state model developed for the ship. The state model has been derived to be: \cite{sorensen}:
-\begin{align}
-\dot{\begin{bmatrix}
-v\\
-\theta\\
-\omega
-\end{bmatrix}} = \begin{bmatrix}
-\frac{-\beta_x}{m} & 0 & 0\\
-0 & 0 & 1\\
-0 & 0 & \frac{-\beta_\omega}{I}
-\end{bmatrix}\begin{bmatrix}
-v\\
-\theta\\
-\omega
-\end{bmatrix} + \begin{bmatrix}
-\frac{1}{m} & 0\\
-0 & 0\\
-0 & \frac{1}{I}
-\end{bmatrix}\begin{bmatrix}
-F\\
-\tau
-\end{bmatrix}
-\end{align}
-$\beta_x$ and $\beta_\omega$ are the linearized skin frictional drag the ship expriences as it moves through the water. $F$ and $\tau$ are the forward force input and the torque generated by the difference in propeller revolutions. The discrete version of this is computed using the zero-order hold algorithm. The low-level control is carried out by reference tracking and optimal feedback control. 
 
 \paragraph{State estimation}
-To further improve the amount of 
-The ship is fitted with 2 sensors, a GPS and an IMU. The IMU measures the acceleration, the rotational velocity and the magnetic field strength for use in heading calculations. As The purpose is to achieve a better position estimate, the Kalman filter does not use the IMU to this, but instead the velocity measurement, as a double integration of the accelerometer data would yield a squared error, if the IMU is not level, which it is not certain to be. The discrete state model for the Kalman filter can hence be given as:
+To improve the measurements of the ship, a state estimator is implemented, this is based around the two 2 sensors mounted aboard the ship, a GPS and an IMU. The IMU measures the acceleration, the rotational velocity and the magnetic field strength for use in heading calculations. The GPS gives an absolute position reference for use in the control algorithms. The purpose of the estimator, is to give an estimate of $\hat{\vec{x}} = \begin{bmatrix}x & \dot{x} & y & \theta & \omega\end{bmatrix}^T$ the Kalman filter fuses the IMU and GPS measurements. As a double integration of the IMU results in a large error these measurements are not included in the position estimates directly, but a delayed version is used through the velocity measurements as these also include an absolute version of the velocity from the GPS. This results in the discrete state model for the Kalman filter in equation (\ref{eq:kalmana}):
 \begin{align}
 \vec{\Phi} = diag\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\},\,\, \vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
 1 & t_s & 0\\
 0 & 1 & t_s\\
 0 & \frac{-\beta_{x,y,\omega}}{m} & 0
 \end{bmatrix}
+\label{eq:kalmana}
 \end{align}
-
-As the radio link does not contain any redundancy, a lost packet will be handled by the Kalman filter, by reducing the gain of the filter to zero. If packet verification fails, the filter uses a gain mask $\vec{\Lambda}$ to zero the gains. This mask is post multiplied onto the Kalman gain $\bar{\vec{K}}$ and is defined as:
+The Kalman filter is implemented as a linear minimum mean square error filter - given by \cite{grewal} where the tuning of the filter, is done using the covariance matrices $\vec{Q}_k$ and $\vec{R}_k$. The input covariance matrix $\vec{R}_k$ has been computed using the following distributions of the force along the $x$- and $y$-axis, and the torque about the $z$-axis. Resulting in the following distributions:
 \begin{align}
-\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+\vec{F} \sim \mathcal{N}(\vec{\mu_F},\vec{\sigma}^2_F),\,\,\, \tau_z \sim \mathcal{N}(\mu_{\tau},\sigma^2_{\tau})
 \end{align}
-Where the individual $\lambda$s are given as:
+Where the parameters for the force is given as follows $\vec{\mu_F} = \begin{bmatrix}5.3544 & 0\end{bmatrix}^T$, $\vec{\sigma}^2_F = \begin{bmatrix}55 & 15\end{bmatrix}$ and the distribution parameters for the torque is $\mu_{\tau} = 0$ and $\sigma^2_{\tau} = 20$. Resulting in the static covariance matrix:
 \begin{align}
-\lambda = 
-\left\{
-  \begin{array}{l l}
-    1 & \quad \text{if measurement is valid}\\
-    0 & \quad \text{otherwise}
-  \end{array} \right.
-\end{align} 
-The filter also needs to sort out the different sampling rate aboard the ship. The two main sensors, IMU and GPS, sample at 10 Hz and 1 Hz respectively - which also defines a mask to multiply onto the Kalman filter. This mask puts the gain to zero for the GPS if there is no new sample available. Figure \ref{fig:trends} depicts the absolute error between the true and estimated path for the 3 cases described above.
-
-As the filter only needs to estimate $x,\dot{x},y,\dot{y}$ and $\theta$, an output matrix is post multiplied to generate the final state estimation $\hat{\vec{x}}$ which is fed to the controllers. 
-
+\vec{R}_k = diag\{0,0,\sigma^2_{F(1)},0,0,\sigma^2_{F(2)},0,0,\sigma^2_\tau\}
+\end{align}
 }
 %% Column 3
 \col{
 \paragraph{}
-Figure (fig: INSERT FIGURE) depicts the difference in the control signals using the estimates and the other when just using the measurements directly.
+The measurement covariance matrix $\vec{Q}_k$ are given as the variances of the sensors. These have been estimated by placing the sensor at a standstill, and then computing an estimate of these values. The distribution of the measurements are considered to be zero mean white noise processes which is defined as $\vec{v}_k \sim \mathcal{N}(\vec{\mu}_v,\vec{\sigma}^2_v)$, giving the covariance matrix as $\vec{Q}_k = diag\{\vec{\sigma}^2_v\}$. 
+
+\paragraph{Results}
+To verify if the computed state estimator works in accordance with the theory, the filter have been tested by walking around the university. Two tests have been performed, one where the system was given all the GPS measurements, the plot on figure (Fig. \ref{fig:path}a and Fig. \ref{fig:error}a) and one where the GPS signal was cut for one minute (Fig. \ref{fig:path}b and Fig. \ref{fig:error}b) thus relying only on the IMU measurements.
 \begin{figure}
 	\centering % Figure input
-	\includegraphics[width=\threecolwidth]{img/10percent}
-  	\caption{Simulation of the system where the blue represents a mono-rate filter, the red a filter with zero-gaining when no measurements are available, the green where no zero-gaining takes place, and finally the purple where there is a 10 percent loss rate on the Kalman filter.}
-	\label{fig:trends}
+	\includegraphics[width=\threecolwidth]{img/track}
+  	\caption{(a) is a plot of the system with all GPS samples present. (b) is a plot of the system with a 60 second loss of the GPS signal.}
+	\label{fig:path}
 \end{figure}
-\paragraph{Results}
-Results on lost packages. 
-Something else?
-\paragraph{Conclusion and extensions}
-We can from this conclude that there is a problem.
-\paragraph{Acknowledgements} A big thanks should be extended to Assistant Professor Carles Navarro Manchón for his help with tuning the Kalman filter. 
+\begin{figure}
+	\centering % Figure input
+	\includegraphics[width=\threecolwidth]{img/error}
+  	\caption{(a) is the error plot with all GPS samples present. (b) is a worst case plot of the error with a 60 second loss of GPS signal.}
+	\label{fig:error}
+\end{figure}
+
+
+\paragraph{Conclusion}
+The figures (Fig. \ref{fig:path} and Fig. \ref{fig:error}) illustrates that even though the ship looses GPS measurements for 1 minutes, the ship is still able to follow the path using the IMU data as a reference. The error is expected to be in this range, as the error grows exponentially, as it is a double integral of the acceleration. And as soon as the GPS comes back online, the estimates converges to the path.
+
+\paragraph{Acknowledgements} A big thanks should be extended to Assistant Professor Carles Navarro Manchón, Aalborg Unviversity, for his help with tuning the Kalman filter. 
 
 \references
 \bibliography{litterature}

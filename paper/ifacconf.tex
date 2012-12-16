@@ -82,16 +82,12 @@ The methods developed in this project - and the papers. 2
 
 \subsection{Path planning algorithm}
 
-The path planning algorithm is based around the train-track transition problem originally solved by Marie Alfred Cornu, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
+The path planning algorithm1 is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
 \begin{align}
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral.
-%This section from here
-%However, the benefit of using such a spiral is only present if the angle of the incoming ship is larger than some threshold $\varepsilon$. If $\varepsilon$ is smaller than the threshold, the path can be approximated by a smooth curve, which is computationally easier to handle, thus saving time before the control signals are sent back. Figure (\ref{fig:3points}) depicts how the system computes and places the sub-waypoints for when $\varepsilon$ is below $\varepsilon_{max}$, as this approximation only uses the curvature of a circle, only 3 sub-waypoints are generated.
-%to here is not true
-However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the Speed($v$) and Path Curvature($\kappa$). Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling ($\sigma$) of the Euler spiral:
+The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the Speed($v$) and Path Curvature($\kappa$). Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling ($\sigma$) of the Euler spiral:
 \begin{align}
 A_{C_{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \sigma = \frac{\alpha_{max}}{v^2_{max}}
 \end{align}
@@ -128,16 +124,14 @@ A_5 &= (-X_1,Y_1),\, B_5 = (-X_2,Y_2),\, C_5 = (0,Y_R)\\
 D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
 \end{align}
 Which is still a mirroring of points about the $x=0$ axis, as the entry angle is the same as the exit angle. The number of equations increases, and the individual coordinates can be computed by:
-\tiny
 \begin{align}
-X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max}) \\
-P_X &= X_R + y_d \cdot \sin(\varepsilon)\quad &, \quad &X_1 = P_X + x_d \cdot \cos(\varepsilon) \\
-Y_1 &= X_1 \cdot \tan(\varepsilon)\quad &, \quad &P_Y = Y_1 - x_d \cdot \sin(\varepsilon)\\
-Y_2 &= P_Y + y_d \cdot \cos(\varepsilon) \quad &, \quad &X_2 = X_R \\
-O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2\quad &, \quad &R_Y = O_Y - R_\text{min}
+X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max}),\,\, P_X = X_R + y_d \cdot \sin(\varepsilon)\\
+X_1 &= P_X + x_d \cdot \cos(\varepsilon),\,\, Y_1 = X_1 \cdot \tan(\varepsilon)\\
+P_Y &= Y_1 - x_d \cdot \sin(\varepsilon),\,\, Y_2 = P_Y + y_d \cdot \cos(\varepsilon)\\
+O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2,\,\, R_Y = O_Y - R_\text{min}\\
+X_2 &= X_R
 \end{align}
 
-\normalsize
 The resulting path in both cases can not be described explicitly, therefore a Hermite-polynom is fit to the key points. In addition, a predefined number of uniformly distributed sub-waypoints are generated on the path, based on the describing polynom. The resulting sub-waypoints are rotated and moved to their correct position in the Local-Frame, thus concluding most of the work of the local-planner. The paths between turns are straight lines, populated with the same preset density of sub-waypoints.
 
 \subsection{State estimation}
@@ -179,7 +173,15 @@ This ensures that when a measurement is invalid (the checksum is not true) the r
   \end{array} \right.
 \end{align} 
 This makes sure to zero out the measurement if a packet is corrupted instead of making the filter run on faulty data. The below figure is a simulation run in MATLAB which plots the absolute error of the position estimates of the ship for three different cases, one where the Kalman filter is running ideally with all packages available, one where the system looses 5 percent of the packages and another where the ship looses 5 percent, but gains these packages with 0 in the Kalman gain. 
-INSERT FIGURE!
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/abspos}    % The printed column  
+		\caption{Plot of the absolute position error, simulated using MATLAB and a sawtooth input to the control system running at }  % width of a column is 8.4 cm.
+		\label{fig:3points}               
+	\end{center}                                 % accordingly.
+\end{figure}
+
+
 As all the forces are acting on the ship in the inertial body fixed frame - the 
 
 \section{Math}
@@ -250,31 +252,10 @@ A special thank should be given to Assistant Professor Carles Navarro Manchòn, 
 
 \begin{thebibliography}{xx}
 
-\bibitem[Able(1956)]{Abl:56}
-B.C. Able.
-\newblock Nucleic acid content of microscope.
-\newblock \emph{Nature}, 135:\penalty0 7--9, 1956.
-
-\bibitem[Able et~al.(1954)Able, Tagg, and Rush]{AbTaRu:54}
-B.C. Able, R.A. Tagg, and M.~Rush.
-\newblock Enzyme-catalyzed cellular transanimations.
-\newblock In A.F. Round, editor, \emph{Advances in Enzymology}, volume~2, pages
-  125--247. Academic Press, New York, 3rd edition, 1954.
-
-\bibitem[Keohane(1958)]{Keo:58}
-R.~Keohane.
-\newblock \emph{Power and Interdependence: World Politics in Transitions}.
-\newblock Little, Brown \& Co., Boston, 1958.
-
-\bibitem[Powers(1985)]{Pow:85}
-T.~Powers.
-\newblock Is there a way out?
-\newblock \emph{Harpers}, pages 35--47, June 1985.
-
-\bibitem[Soukhanov(1992)]{Heritage:92}
-A.~H. Soukhanov, editor.
-\newblock \emph{{The American Heritage. Dictionary of the American Language}}.
-\newblock Houghton Mifflin Company, 1992.
+\bibitem[Talbot (1901)]{Art:1}
+Arthur N. Talbot,
+\newblock \emph{The Railway Transition Spiral}
+\newblock The Engeneering News Publishing Co., 1901
 
 \end{thebibliography}
 
