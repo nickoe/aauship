@@ -93,7 +93,7 @@ The functions two normalized Fresnel integrals produce the geometrical shape of 
 %to here is not true
 However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the Speed($v$) and Path Curvature($\kappa$). Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling ($\sigma$) of the Euler spiral:
 \begin{align}
-A_C_{max} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \sigma = \frac{\alpha_{max}}{v^2_{max}}
+A_{C_{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \sigma = \frac{\alpha_{max}}{v^2_{max}}
 \end{align}
 A threshold angle of turn ($\varepsilon_{max}$)can be determined based on the vehicle parameters above:
 \begin{align}
@@ -102,7 +102,7 @@ A threshold angle of turn ($\varepsilon_{max}$)can be determined based on the ve
 If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages.
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/3points} % width of a column is 8.4 cm.
+		\includegraphics[width=8.4cm]{img/3Points} % width of a column is 8.4 cm.
 		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
 		\label{fig:3points}
 	\end{center}
@@ -118,7 +118,7 @@ From where the individual coordinates can be computed by simple trigonometric eq
 Once the angle grows larger than $\varepsilon_{max}$ the system has to compute five key points, as the ship must transit onto a curve, and then back onto the Euler spiral ($\kappa_{Euler_{max}} = \kappa_{Arc}$) This adds the extra waypoints $B_5$ and $D_5$, the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_{max}}$. The waypoints are depicted on figure (\ref{fig:5points}), thus augmenting the waypoints to:
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/5points}    % The printed column  
+		\includegraphics[width=8.4cm]{img/5Points}    % The printed column  
 		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
 		\label{fig:3points}               
 	\end{center}                                 % accordingly.
@@ -238,7 +238,7 @@ Something else?
 A conclusion section is not required. Although a conclusion may review the main points of the paper, do not replicate the abstract as the conclusion. A conclusion might elaborate on the importance of the work or suggest applications and extensions. 
 
 \begin{ack}                               % Place acknowledgements
-A special thank should be given to Assistant Professor Carles Navarro Manch—n, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter.  % here.
+A special thank should be given to Assistant Professor Carles Navarro ManchÃ²n, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter.  % here.
 \end{ack}
 
 %\bibliographystyle{alpha}        % Include this if you use bibtex 
