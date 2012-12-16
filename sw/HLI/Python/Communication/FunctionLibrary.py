@@ -103,13 +103,17 @@ def Distance(A, B):
     return(a);
 
 def NEDtoBody(Pos, ShipPos, Theta):
-    
+    Th =  Theta#-math.pi/2
     Point = Pos.get_Pos()
     
     Ship = ShipPos.get_Pos()
     
     RelPoint = numpy.transpose(numpy.matrix(Point - Ship))
+    #RelPoint = numpy.transpose(numpy.matrix(Ship-Point))
     
-    BodyPoint =  numpy.matrix([[math.sin(Theta), math.cos(Theta)],[math.cos(Theta), -math.sin(Theta)]]) * RelPoint
+    Rot = numpy.transpose(numpy.matrix([[math.cos(Th),-math.sin(Th)],[math.sin(Th),math.cos(Th)]]))
     
+    oldRot =  numpy.transpose(numpy.matrix([[math.sin(Th), math.cos(Th)],[math.cos(Th), -math.sin(Th)]]))# * RelPoint
+    
+    BodyPoint = oldRot*RelPoint
     return list([numpy.sum(BodyPoint[0]),numpy.sum(BodyPoint[1])])

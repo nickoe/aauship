@@ -7,15 +7,18 @@ import numpy
 import os
 from math import pi
 
-#import Ship_nofilter as Ship
+import Ship_nofilter as Shipnf
 import Ship
 import ObjectLibrary as OL
 
 Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
 swp = open("measurements/swp141212.txt",'w')
 controllog = open("measurements/controllog141212.txt",'w')
+swpnf = open("measurements/swpnf141212.txt",'w')
+outputnf = open("measurements/outputnf.txt",'w')
 Startpos = OL.O_PosData(0, 0, 0, 1)
 AAUSHIP = Ship.O_Ship(Startpos,swp,Kalmanfile)
+AAUSHIP2 = Shipnf.O_Ship(Startpos,swpnf,outputnf)
 
 '''
 EMBEDDED OPTIONAL STEP 2/B
@@ -32,12 +35,14 @@ X = numpy.array([-28.917917253103049,42.596021647672877]) #Northing
 
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
+AAUSHIP2.SetWaypoints(WPC)
 
 '''
 EMBEDDED STEP 3
 Set first target WP (should be 0 or 1)
 '''
 AAUSHIP.FlushPath(-1)
+AAUSHIP2.FlushPath(-1)
 
 '''
 EMBEDDED STEP 5
@@ -114,6 +119,7 @@ try:
 						
 						motor = AAUSHIP.Control_Step()
 						AAUSHIP.ReadStates(measuredstates, motor)
+						tempm = measuredstates
 						sendControl += 1
 					#	print measuredstates
 					
@@ -131,6 +137,7 @@ try:
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						#print measuredstates
+						#tempm = measuredstates
 						
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 20:
 						parser.parse(p2)
@@ -147,10 +154,17 @@ try:
 						
 					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
 						print chr(27) + "[2J"
+						print measuredstates[0][1]
+						if measuredstates[0][1] == 1:
+							print measuredstates
+						
 						#if measuredstates[0][1] == 1:
 						#	print "blaH"
 						if GPSFIX == True:
 							print "GPS FIX!"
+							AAUSHIP2.ReadStates(tempm,motor)
+						else:
+							AAUSHIP2.ReadStates(measuredstates,motor)
 						GPSFIX = False
 						#print sendControl
 						sendControl = 0
@@ -169,8 +183,10 @@ try:
 						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
 						print "NextWP (E,N): \t" + str(AAUSHIP.NextSWP.get_Pos())
 						print "Pos (E,N): \t" + str(AAUSHIP.Pos.get_Pos())
+						print "NFPos (E,N): \t" + str(AAUSHIP2.Pos.get_Pos())
 						print "MeasPos: \t" + str(AAUSHIP.get_mp())
 						print "Vel: \t" + str(AAUSHIP.get_vel())
+						
 						#print tempm
 						#sign = -sign
 						#print tosend
