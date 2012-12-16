@@ -4,7 +4,6 @@ import time
 import datetime
 import Queue
 from math import pow
-#import crc16 as crc
 import struct
 
 running = True;
@@ -14,7 +13,8 @@ class seriald:
 
 	class Serial:
 		def __init__(self,serialport,speed):
-			self.f = open("LOG00204.txt",'rb')
+			#self.f = open("LOG00206.TXT",'rb')
+			self.f = open("LOG00141.TXT",'rb')
 			self.l = 0;
 			#self.array = []
 			#l = 0
@@ -37,9 +37,12 @@ class seriald:
 			'''print self.array[0]'''
 			c = self.f.read(1)
 			#print c
+			'''
 			if not c:
 				c = self.c.read(1)
-			if not c:
+			'''
+			if c == "":
+				print "Reached end of LOG file"
 				self.f.close()
 				self.open = False;
 			return c

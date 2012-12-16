@@ -24,7 +24,7 @@ class packetParser():
 		pass
 			
 	def parse(self,packet):
-		print packet
+		#print packet
 		try:
 			if(ord(packet['DevID']) == 20):
 				if(ord(packet['MsgID']) == 13):
@@ -53,6 +53,7 @@ class packetParser():
 								#print str(val[0])
 						self.accelburst[accelnr] = packet['Time']
 						if(abs(self.accelburst[accelnr-2]) > 1000):
+							print "Bad IMU measurements"
 							print packet
 							print self.accelburst
 						#print self.accelburst
@@ -69,8 +70,8 @@ class packetParser():
 				if(ord(packet['MsgID']) == 6):
 					self.gpspacket += 1
 					#print "GPS: " + str(self.gpspacket)
-					#print "".join(packet['Data']),
-					self.gpslog.write("".join(packet['Data']))
+					#print ','.join(''.join(packet['Data']).split(',')[1:8])	
+					#self.gpslog.write(','.join(''.join(packet['Data']).split(',')[1:8]) + '\n')
 					#self.gpswriter.writerow("".join(packet['Data']))
 					#print "Logged"
 					if("".join(packet['Data'][1:6]) == "GPGGA"):
@@ -88,7 +89,8 @@ class packetParser():
 						#self.gpswriter.writerow(gpsd)
 					
 					elif("".join(packet['Data'][1:6]) == "GPRMC"):
-						
+						if (packet['Data'][18] != 'V'):
+							self.gpslog.write(','.join(''.join(packet['Data']).split(',')[1:8]) + '\n')
 						gprmc = nmea.GPRMC()
 						tempstr = "".join(packet['Data'])
 						gprmc.parse(tempstr)
