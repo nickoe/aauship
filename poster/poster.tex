@@ -89,7 +89,7 @@ X_2 &= X_R
 \end{align}
 
 \paragraph{State estimation}
-To improve the measurements of the ship, a state estimator is implemented, this is based around the two 2 sensors mounted aboard the ship, a GPS and an IMU. The IMU measures the acceleration, the rotational velocity and the magnetic field strength for use in heading calculations. The GPS gives an absolute position reference for use in the control algorithms. The purpose of the estimator, is to give an estimate of $\hat{\vec{x}} = \begin{bmatrix}x & \dot{x} & y & \theta & \omega\end{bmatrix}^T$ the Kalman filter fuses the IMU and GPS measurements. As a double integration of the IMU results in a large error these measurements are not included in the position estimates directly, but a delayed version is used through the velocity measurements as these also include an absolute version of the velocity from the GPS. This results in the discrete state model for the Kalman filter in equation (\ref{eq:kalmana}):
+To improve the measurements of the ship, a state estimator is implemented, this is based around the two 2 sensors mounted aboard the ship, a GPS and an IMU. The IMU measures the acceleration, the rotational velocity and the magnetic field strength for use in heading calculations. The GPS gives an absolute position reference for use in the control algorithms. The purpose of the estimator, is to give an estimate of $\hat{\vec{x}} = \begin{bmatrix}x & \dot{x} & y & \theta & \omega\end{bmatrix}^T$ where a Kalman filter is used to fuse the IMU and GPS measurements. As a double integration of the IMU results in a large error these measurements are not included in the position estimates directly, but a delayed version is used through the velocity measurements as these also include an absolute version of the velocity from the GPS. This results in the discrete state model for the Kalman filter in equation (\ref{eq:kalmana}):
 \begin{align}
 \vec{\Phi} = \text{diag}\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\},\,\, \vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
 1 & t_s & 0\\
@@ -102,18 +102,19 @@ The Kalman filter is implemented as a linear minimum mean square error filter - 
 \begin{align}
 \vec{F} \sim \mathcal{N}(\vec{\mu_F},\vec{\sigma}^2_F),\,\,\, \tau_z \sim \mathcal{N}(\mu_{\tau},\sigma^2_{\tau})
 \end{align}
-Where the parameters for the force is given as follows $\vec{\mu_F} = \begin{bmatrix}5.3544 & 0\end{bmatrix}^T$, $\vec{\sigma}^2_F = \begin{bmatrix}55 & 15\end{bmatrix}$ and the distribution parameters for the torque is $\mu_{\tau} = 0$ and $\sigma^2_{\tau} = 20$. Resulting in the static covariance matrix:
+These parameters for the force is given as follows $\vec{\mu_F} = \begin{bmatrix}5.3544 & 0\end{bmatrix}^T$, $\vec{\sigma}^2_F = \begin{bmatrix}55 & 15\end{bmatrix}$ and the distribution parameters for the torque is $\mu_{\tau} = 0$ and $\sigma^2_{\tau} = 20$. Resulting in the static covariance matrix:
 \begin{align}
 \vec{R}_k = \text{diag}\{0,0,\sigma^2_{F(1)},0,0,\sigma^2_{F(2)},0,0,\sigma^2_\tau\}
 \end{align}
+The measurement covariance matrix $\vec{Q}_k$ is a measured estimate of the variances of the sensors.
 }
 %% Column 3
 \col{
 \paragraph{}
-The measurement covariance matrix $\vec{Q}_k$ are given as the variances of the sensors. These have been estimated by placing the sensor at a standstill, and then computing an estimate of these values. The distribution of the measurements are considered to be zero mean white noise processes which is defined as $\vec{v}_k \sim \mathcal{N}(\vec{\mu}_v,\vec{\sigma}^2_v)$, giving the covariance matrix as $\vec{Q}_k = \text{diag}\{\vec{\sigma}^2_v\}$. 
+The distribution of the measurements are considered to be zero mean white noise processes which is defined as $\vec{v}_k \sim \mathcal{N}(\vec{\mu}_v,\vec{\sigma}^2_v)$, giving the covariance matrix as $\vec{Q}_k = \text{diag}\{\vec{\sigma}^2_v\}$. 
 
 \paragraph{Results}
-To verify if the computed state estimator works in accordance with the theory, the filter have been tested by walking around the university. Two tests have been performed, one where the system was given all the GPS measurements, the plot on figure (Fig. \ref{fig:path}a and Fig. \ref{fig:error}a) and one where the GPS signal was cut for one minute (Fig. \ref{fig:path}b and Fig. \ref{fig:error}b) thus relying only on the IMU measurements.
+To verify if the computed state estimator works in accordance with the theory, the filter have been tested by walking around the university. Two tests have been performed, one where the system was given all the GPS measurements, the plot on figure \ref{fig:path}a and \ref{fig:error}a) and one where the GPS signal was cut for one minute on figure \ref{fig:path}b and \ref{fig:error}b thus relying only on the IMU measurements.
 \begin{figure}
 	\centering % Figure input
 	\includegraphics[width=\threecolwidth]{img/track}
@@ -129,7 +130,7 @@ To verify if the computed state estimator works in accordance with the theory, t
 
 
 \paragraph{Conclusion}
-The figures (Fig. \ref{fig:path} and Fig. \ref{fig:error}) illustrates that even though the ship looses GPS measurements for 1 minutes, the ship is still able to follow the path using the IMU data as a reference. The error is expected to be in this range, as the error grows exponentially, as it is a double integral of the acceleration. And as soon as the GPS comes back online, the estimates converges to the path.
+The figures \ref{fig:path} and \ref{fig:error} illustrates that even though the ship looses GPS measurements for 1 minutes, the ship is still able to follow the path using the IMU data as a reference. The error is expected to be in this range, as the error grows exponentially as it is a double integral of the acceleration and that the accelerometer might not have been completely level, thus increasing the bias of the measurement. And as soon as the GPS comes back online, the estimates converges to the path.
 
 \paragraph{Acknowledgements} A big thanks should be extended to Assistant Professor Carles Navarro Manchón, Aalborg Unviversity, for his help with tuning the Kalman filter. 
 
