@@ -50,6 +50,7 @@ sw/MATLAB/*.mat
 
 sw/MATLAB/pos.csv
 sw/MATLAB/pos-local.csv
+sw/MATLAB/biasesti.m
 sw/MATLAB/accdata00185.csv
 
 # LLI stuff
@@ -63,5 +64,12 @@ hw/*.000
 hw/lib/*.bak
 hw/lib/*.bck
 
+# HLI stuff
+sw/HLI/Python/Communication/*.TXT
+sw/HLI/Python/Communication/*.txt
+sw/HLI/Python/Communication/*.csv
+sw/HLI/Python/Communication/*.log
 
-sw/MATLAB/biasesti.m
+# Litterature
+litterature/*
+
