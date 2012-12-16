@@ -94,7 +94,7 @@ To improve the measurements of the ship, a state estimator is implemented, this 
 \vec{\Phi} = \text{diag}\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\},\,\, \vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
 1 & t_s & 0\\
 0 & 1 & t_s\\
-0 & \frac{-\beta_{x,y,\omega}}{m} & 0
+0 & \frac{-\beta_{x,y,\omega}}{m,m,I} & 0
 \end{bmatrix}
 \label{eq:kalmana}
 \end{align}
