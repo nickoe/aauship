@@ -28,6 +28,7 @@ class O_Ship:
         - Navigation parameters (FollowDistance)
         '''
         self.log = logfile
+        self.filterlog = log
         self.Pos = init_position
         
         self.retpos = self.Pos
@@ -372,7 +373,8 @@ class O_Ship:
         Wn = numpy.matrix([[PathFrameXY[0]], [BodySpeed[0]], [BodyAcc[0]], [PathFrameXY[1]], [BodySpeed[1]], [BodyAcc[1]], [theta], [omega], [angacc]])
         '''
         Wn = numpy.matrix([[PathFrameXY[0]], [xd], [xdd], [BodyXY[1]], [0], [ydd], [theta], [omega], [angacc]])
-        #print Wn
+       # print numpy.transpose(Wn)
+       #	print self.Pos
         
         prev_fx = numpy.sum(self.states[0])
         prev_fy = numpy.sum(self.states[1])
@@ -386,7 +388,8 @@ class O_Ship:
 	        self.MP = [input_m[0][0],input_m[3][0], self.flip]
 	    
         self.states = self.Filter.FilterStep(input_f, Wn, Validity_matrix)
-
+       # print self.states[0]
+       # print self.states[1]
         self.Ts = 0.1
         self.v = numpy.sum(self.states[2])
         self.omega = numpy.sum(self.states[4])
@@ -415,12 +418,22 @@ class O_Ship:
         Th = theta
         #self.states[1] = PathFrameXY[1]
         
-        self.correction = Y
+        if numpy.sum(Validity_matrix[0]):
+			self.correction = BodyXY[1]
+			
+			
+			
+			
+			
+			x_next = ((X - prev_fx) * math.sin(Th)) + curpos[0] + self.correction * math.cos(Th)
+			y_next = ((X - prev_fx) * math.cos(Th)) + curpos[1] - self.correction * math.sin(Th)
         
-        
-        
-        x_next = ((X - prev_fx) * math.sin(Th)) + curpos[0] + self.correction * 0.005* math.cos(Th)
-        y_next = ((X - prev_fx) * math.cos(Th)) + curpos[1] - self.correction * 0.005* math.sin(Th)
+        else:
+        	self.correction = 0
+        	
+        	y_next = ((X - prev_fx) * math.sin(Th)) + curpos[1] + self.correction * math.cos(Th)
+        	x_next = ((X - prev_fx) * math.cos(Th)) + curpos[0] - self.correction * math.sin(Th)
+        self.filterlog.write(str(float(self.Pos.get_Pos_X())) + ", " + str(float(self.Pos.get_Pos_Y())) + "\r\n")
         #print x_next, y_next
         #x_next = ((V * self.Ts) * math.sin(Th)) + curpos[0] + self.correction * 0.1* math.cos(Th)
         #y_next = ((V * self.Ts) * math.cos(Th)) + curpos[1] - self.correction * 0.1* math.sin(Th)

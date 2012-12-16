@@ -354,7 +354,7 @@ class O_Ship:
         Reads systems states from sensors (processed data)
         '''
         
-        y = numpy.sum(input_m[0,0])
+        x = numpy.sum(input_m[0,0])
         if(numpy.sum(input_m[1,1])) == 1:
         	xd =numpy.sum(input_m[1,0])
         else:
@@ -362,7 +362,7 @@ class O_Ship:
        # xd = self.virtvel
       #  self.virtvel += 0.001
         xdd = numpy.sum(input_m[2,0])
-        x = numpy.sum(input_m[3,0])
+        y = numpy.sum(input_m[3,0])
         yd = numpy.sum(input_m[4,0])
         ydd = numpy.sum(input_m[5,0])
         theta = numpy.sum(input_m[6,0])
@@ -387,8 +387,8 @@ class O_Ship:
             
         else:
         
-            x_next = xd * 0.1 * math.sin(theta) + self.Pos.get_Pos_X()
-            y_next = yd * 0.1 * math.cos(theta) + self.Pos.get_Pos_Y()
+            x_next = xd * 0.3 * math.sin(theta) + self.Pos.get_Pos_X()
+            y_next = yd * 0.3 * math.cos(theta) + self.Pos.get_Pos_Y()
             
         #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         

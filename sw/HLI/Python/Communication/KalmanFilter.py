@@ -66,8 +66,8 @@ class Filter:
         # W is the measurement noise on the system, this can be estimated to be
         # white gaussian noise, with zero mean (for most cases) and with a
         # variance, that are estimated in Appendix #XX. 
-        self.varXpos = 0.979 * 1
-        self.varXvel = 0.00262 * 1
+        self.varXpos = 0.979# * 0.00000000001
+        self.varXvel = 0.00262 * 10
         self.varXacc = 1.5# 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
         
         self.varYpos = 1.12 * 1
@@ -103,7 +103,7 @@ class Filter:
         
         self.sC = 0; ''' Sample counter - used to only include the 10th GPS sample.'''
         
-        self.Qz = numpy.diag([0, 0, 55, 0, 0, 0, 0, 0, 20])
+        self.Qz = numpy.diag([0, 0, 55, 0, 0, 15, 0, 0, 20])
         
     
     def FilterStep(self, inputD, Wn, inputV):
