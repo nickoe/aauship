@@ -1,3 +1,6 @@
+% IFAC International Federation of Automatic Control paper template. 
+% Created by: ?
+% Modified by: Rasmus Christensen, Aalborg University, Denmark 15/12/2012
 \documentclass{ifacconf}
 
 \usepackage{natbib}            % you should have natbib.sty
@@ -5,8 +8,10 @@
                                % document contains figures,
 %\usepackage[dvips]{epsfig}    % or this line, depending on which
                                % you prefer.
-\usepackage[utf8]{inputenc} % ÆØÅ pakken
+\usepackage[utf8]{inputenc} % So we can input Nicks name in the paper title!
 \usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb} % Added so we can do pretty math equations.
+
 % predefined environments
 %\begin{thm} ... \end{thm}		% Theorem
 %\begin{lem} ... \end{lem}		% Lemma
@@ -25,7 +30,7 @@
 
 \title{Centralized State Estimation of Distributed Maritime Autonomous Surface Oceanographers\thanksref{footnoteinfo}} % Title, preferably not more than 10 words.
 
-\thanks[footnoteinfo]{This work was supported in part by the National Technological Agency. (sponsor and financial support acknowledgment goes here). Paper titles should be written in uppercase and lowercase letters, not all uppercase.}
+\thanks[footnoteinfo]{Thanks to the  has been paid for in full by the School of Information Communication and Technology.}
 
 \author[First]{Rasmus L. Christensen} 
 \author[First]{Frederik Juul} 
@@ -34,9 +39,9 @@
 \author[First]{Tudor Muresan}
 \address[First]{Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tudor,attila\}@es.aau.dk)}                                            
           
-%\begin{keyword}                           % Five to ten keywords,  
-%Cicero; Catiline; orations.               % chosen from the IFAC 
-%\end{keyword}                             % keyword list or with the 
+\begin{keyword}                           % Five to ten keywords,  
+Path planning; Centralised control; Baud rates; State estimation; Marine systems; Master slave system;              % chosen from the IFAC 
+\end{keyword}                             % keyword list or with the 
                                           % help of the Automatica 
                                           % keyword wizard
 
@@ -62,18 +67,13 @@ Currently the main focus of autonomous vehicles have been on aerial, ground and 
 \begin{hypo} Is it possible to develop a centralized state estimator for use in the maritime environment using a small data link \end{hypo}
 
 \subsection{A subsection}
-Bifurcation: Plot of local maxima of $x$ with damping $a$ decreasing (Fig.~\ref{fig1}).
-
-To insert images in Word, position the cursor at the insertion point and either use Insert | Picture | From File or copy the image to the Windows clipboard and then Edit | Paste Special | Picture (with ìFloat over textî unchecked). 
-
-IFAC will not do any final formatting of your paper. Your manuscript should be ëcamera-ready.í Page limits vary from conference to conference. Please observe the conference page limits of the conference for which your paper is intended. {\bf Please do not modify margins. If you are creating a document on your own, please observe the margins as listed in Table 1}.
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[height=6cm]{img/10percent}    % The printed column  
-		\caption{Bifurcation: Plot of local maxima of $x$ with damping $a$ decreasing}  % 			width is 8.4 cm.
-		\label{fig1}                                 % Size the figures 
-	\end{center}                                 % accordingly.
+		\includegraphics[width=8.4cm]{img/10percent} % width of a column is 8.4 cm.
+		\caption{Bifurcation: Plot of local maxima of $x$ with damping $a$ decreasing}  
+		\label{fig:fig1}
+	\end{center}
 \end{figure}
 
 \section{Methods}
@@ -82,52 +82,134 @@ The methods developed in this project - and the papers. 2
 
 \subsection{Path planning algorithm}
 
-{\bf Please use this document as a ìtemplateî to prepare your manuscript. For submission guidelines, follow instructions on paper submission system as well as the Conference website.}
+The path planning algorithm is based around the train-track transition problem originally stated by SOMEBODY, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
+\begin{align}
+C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
+\label{eq:fresnel}
+\end{align}
+When two normalized Fresnel integrals are plotted simultaniously they produce the Euler spiral. However, the benefit of using such a spiral is only present if the angle of the incoming ship is larger than some threshold $\varepsilon$. If $\varepsilon$ is smaller than the threshold, the path can be approximated by a smooth curve, which is computationally easier to handle, thus saving time before the control signals are sent back. Figure (\ref{fig:3points}) depicts how the system computes and places the sub-waypoints for when $\varepsilon$ is below $\varepsilon_{max}$, as this approximation only uses the curvature of a circle, only 3 sub-waypoints are generated. 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/3points} % width of a column is 8.4 cm.
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_3$, $C_3$ and $E_3$}
+		\label{fig:3points}
+	\end{center}
+\end{figure}
+The 3 sub-waypoints are given by the coordinate sets:
+\begin{align}
+A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
+\end{align}
+From where the individual coordinates can be computed by simple trigonometric equations. As the coordinates are mirrored around $x=0$ the it is only required to do 2 coordinate computations - given as:
+\begin{align}
+X_1 = x_d(\varepsilon) \cdot \cos(\varepsilon) + y_d(\varepsilon) \cdot \sin(\varepsilon),\,\,\, Y_1 = X_1 \cdot 	\tan(\varepsilon)
+\end{align}
+Where $x_d(\varepsilon)$ and $y_d(\varepsilon)$ is the normalized Fresnel integral function of the angle $\varepsilon$ at which the ship is approaching the turn thus:
+\begin{align}
+x_d = \frac{\pi}{\eta}\cdot C_F(\varepsilon),\,\,\, y_d = \frac{\pi}{\eta}\cdot S_F(\varepsilon),\,\,\, \eta = \frac{\text{max}\{\dot{\alpha}\}}{v^2}
+\end{align}
+Once the angle grows larger than $\varepsilon_{max}$ the system has to compute extra sub-waypoints, as the ship must transit onto a curve, and then back onto a straight line once done turning. This adds the extra waypoints $B_5$ and $D_5$, as well as the circle around which the ship is turning. This circle has centre in $O_5$ and a radius of $R_{min}$. The waypoints are depicted on figure (\ref{fig:5points}), thus augmenting the waypoints to:
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/5points}    % The printed column  
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
+		\label{fig:3points}               
+	\end{center}                                 % accordingly.
+\end{figure}
+\begin{align}
+A_5 &= (-X_1,Y_1),\, B_5 = (-X_2,Y_2),\, C_5 = (0,Y_R)\\
+D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
+\end{align}
+Which is still a mirroring of points about the $x=0$ axis, as the entry angle is the same as the exit angle. The number of equations increases, and the individual coordinates can be computed by:
+\begin{align}
+X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max})\\
+P_X &= X_R + y_d \cdot \sin(\varepsilon)\\
+X_1 &= P_X + x_d \cdot \cos(\varepsilon)\\ 
+Y_1 &= X_1 \cdot \tan(\varepsilon)\\
+P_Y &= Y_1 - x_d \cdot \sin(\varepsilon)\\
+Y_2 &= P_Y + y_d \cdot \cos(\varepsilon)\\
+O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2\\
+R_Y &= O_Y - R_\text{min}\\
+X_2 &= X_R
+\end{align}
+The above equations conclude the development of the path planner. Other than that it generates straight lines on which the ship is to run.
 
-Note that conferences impose strict page limits, so it will be better for you to prepare your initial submission in the camera ready layout so that you will have a good estimate for the paper length. Additionally, the effort required for final submission will be minimal.
+Using a threshold to determine wether the turn can be made using just a circle approximation, or a transition onto a circle is needed (if the turn is too sharp). 
 
-Some words might be appropriate describing equation~(\ref{e1}), if 
-we had but time and space enough.
-\begin{equation} \label{e1}
-{{\partial F}\over {\partial t}} =
-D{{\partial^2 F}\over {\partial x^2}}.
-\end{equation}
-See \cite{Abl:56}, \cite{AbTaRu:54}, \cite{Keo:58} and \cite{Pow:85}.
+\subsection{State estimation}
+To give a better estimate of position and the attitude of the craft, a Kalman filter have been implemented to improve the accuracy of the sensors mounted aboard the ship. To develop a such, the discrete time state model of the ship have been derived to be:
+\begin{align}
+\vec{\Phi} = diag\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\}
+\end{align}
+Where the diagonal entries $\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega$ are given by the same equation, with different entries:
+\begin{align}
+\vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
+1 & t_s & 0\\
+0 & 1 & t_s\\
+0 & \frac{-\beta_{x,y,\omega}}{m,m,I} & 0
+\end{bmatrix}
+\end{align}
+Where $\beta_{x,y,\omega}$ denotes the skin frictional drag in the $x$,$y$ or $\omega$ direction respectively, $m$ is the mass of the craft, $I$ is the interia and $t_s$ is the sampling time of the filter. The states to be estimated for the controller are:
+\begin{align}
+^b\hat{\vec{x}_k} = \begin{bmatrix}
+x & \dot{x} & y & \dot{y} & \theta & \omega
+\end{bmatrix}^T
+\end{align}
+The observation model of the filter does however contain more measurements, and the measurements can be given as:
+\begin{align}
+\vec{v}_k = \begin{bmatrix}
+x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y} & \theta & \omega
+\end{bmatrix}^T
+\end{align}
+The implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\Lambda$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
+\begin{align}
+\\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+\end{align}
 
-\subsubsection{Control algorithm}
-This equation goes far beyond the celebrated theorem ascribed to the great Pythagoras by his followers.
-\begin{thm}
-The square of the length of the hypotenuse of a right triangle equals the sum of the squares 
-of the lengths of the other two sides.
-\end{thm}
-\begin{pf}
-The square of the length of the hypotenuse of a right triangle equals the sum of the squares 
-of the lengths of the other two sides.
-\end{pf}
-
+As all the forces are acting on the ship in the inertial body fixed frame - the 
 
 \section{Math}
-
-If you are using Word, use either the Microsoft Equation 
-Editor or the MathType add-on for equations in your paper (Insert | Object | Create New | Microsoft Equation or MathType Equation). ìFloat over textî should not be selected. Of course LaTeX manages equations through built-in macros.
+Some mathematics go here. 
 
 \section{Units}
 
 \section{Results}
 
-\subsection{Control verification}
+\subsection{Model of the ship}
+The model of the ASV is in continuos time given as the state space equation defined in (eq:\ref{eq:ss_cont}) - the model considers the motion of the ship with 3 degrees of freedom, movement in the x-direction, y-direction and rotation about the z-axis. 
+\begin{align}
+\dot{\begin{bmatrix}
+v\\
+\theta\\
+\omega
+\end{bmatrix}} = \begin{bmatrix}
+\frac{-\beta_v}{m} & 0 & 0\\
+0 & 0 & 1\\
+0 & 0 & \frac{-\beta_\omega}{I}
+\end{bmatrix} + \begin{bmatrix}
+\frac{1}{m} & 0\\
+0 & 0\\
+0 & \frac{1}{I}
+\end{bmatrix}
+\label{eq:ss_cont}
+\end{align}
+This model is sufficient as it is only the velocity and the angle that is desired to cont as the other states are uncontrollable by the ship in its current configuration. The control strategy is to track the input reference, and use an optimal feedback gain to reach the desired values. This is done as in REFERENCE! giving the following gains:
+\begin{align}
+F_opt &= \\
+N &= 
+\end{align}
+The above might be stupid to include? 
 
-Verification of the controllers.
+\subsection{Control verification}
+Running the system with just the controllers produces the following plot trying to follow a path around the parking lot. 
 
 \subsection{Path planning results}
-
-Results of the path planning algorithm
+Planning the path on a stretch of water in Aalborg produces the following results:
 
 \subsection{Kalman filtering verification}
-
-Combined test of the controller and the path planner.
+Filtering the above traced controller route with the Kalman filter, having the input to the system to zero, and post processing the data produces the following plot.
 
 \subsection{Combined test}
+Running the Kalman filter on the ship whilst in motion. As seen some packages are lost - to verify the simulator, a simulation have been run with the same amount of packages lost, and this produces the same result. 
 
 Something about the packet loss. 
 
