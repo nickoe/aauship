@@ -15,8 +15,8 @@
 \begin{document}
 \title{Centralized State Estimation of Distributed Maritime} % Line one of the title
 \titletwo{Autonomous Surface Oceanographers} % Line two of the title.
-\author{Rasmus L. Christensen, Federik Juul, Nick \O stergaard, Tudor Muresan, Attila Fodor}
-\address{Section for Control and Automation, Department of Electronic Systmes, Aalborg University, Denmark$^\dagger$}
+\author{Rasmus L. Christensen, Frederik Juul, Nick \O stergaard, Tudor Muresan, Attila Fodor}
+\address{Section for Control and Automation, Department of Electronic Systems, Aalborg University, Denmark$^\dagger$}
 \email{\{ralch,nickoe,fjuul,tudor,attila\}@es.aau.dk}
 
 \makeheader
@@ -28,32 +28,32 @@ Seaborne measurements are often an expensive and time-consuming task. They could
 The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amount of traffic possible. This poster describes parts of the project, and presents results of measurements towards the end \cite{engineer}.
 
 \paragraph{Path Optimization}
-The path planning algorithm1 is based around the train-track transition problem originally solved in \cite{arthur}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
+The path planning algorithm is based around the train-track transition problem originally solved in \cite{arthur}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus minimizing the amount of jerk $j$. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
 \begin{align}
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-The two normalized Fresnel integrals produces the Euler spiral. However, the ship moving along the track can only endure a limited amount of centripetal acceleration $a_centripetal$, which is a function of the speed of the vessel $v$ and the path curvature $\kappa$. The ship will have a limited angular acceleration $\dot{\kappa}_{max} = \alpha_{max}$, which results in a scaling $\eta$ of the Euler spiral given by the maximum centripetal acceleration:
+The two normalized Fresnel integrals produces the Euler spiral. However, the ship moving along the track can only endure a limited amount of centripetal acceleration $a_\text{centripetal}$, which is a function of the speed of the vessel $v$ and the path curvature $\kappa$. The ship will have a limited angular acceleration $\dot{\kappa}_\text{max} = \alpha_\text{max}$, which results in a scaling $\eta$ of the Euler spiral given by the maximum centripetal acceleration:
 \begin{align}
-max\langle a_{centripetal}\rangle = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_{max}}{v^2_{max}}
+\text{max}\langle a_\text{centripetal}\rangle = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_\text{max}}{v^2_\text{max}}
 \end{align}
-The threshold $\varepsilon_{max}$ can be determined based on a function of the vehicles maximum angular acceleration change $\kappa_\text{max}$ and the maximum centripetal acceleration $a_{centripetal}$, thus:
+The threshold $\varepsilon_\text{max}$ can be determined based on a function of the vehicles maximum angular acceleration change $\kappa_\text{max}$ and the maximum centripetal acceleration $a_\text{centripetal}$, thus:
 \begin{align}
-\varepsilon_{max} = \frac{\kappa^2_{max}}{2\eta}
+\varepsilon_\text{max} = \frac{\kappa^2_\text{max}}{2\eta}
 \end{align}
-If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages.
-The 3 key points are given by the coordinate sets and are depicted on figure (Fig. \ref{fig:3points}), and have coordinates given by:
+If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages. The 3 key points are given by the coordinate sets and are depicted on figure \ref{fig:3points}, where the coordinates are given by equation (\ref{eq:for1}).
 \begin{align}
-A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
+A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{\cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
+\label{eq:for1}
 \end{align}
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=\threecolwidth]{img/3Points} % width of a column is 8.4 cm.
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
 		\label{fig:3points}
 	\end{center}
 \end{figure}
-From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$.
+From here, the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the parameter $t$.
 \begin{align}
 \varepsilon = \frac{\partial x}{\partial y}f(t) \to [x_d,y_d] = f^{-1}(\varepsilon)
 \end{align}
@@ -70,12 +70,12 @@ X_1 = x_d \cdot \cos(\varepsilon) + y_d \cdot \sin(\varepsilon),\,\, Y_1 = X_1 \
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=\threecolwidth]{img/5Points}    % The printed column  
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$.}  % width of a column is 8.4 cm.
 		\label{fig:5points}               
 	\end{center}                                 % accordingly.
 \end{figure}
 
-If the angle grows larger than $\varepsilon_{max}$ the system has to compute five key points these are seen on figure (Fig. \ref{fig:5points}), due the ship transitting onto a curve and then back onto the Euler spiral ($\kappa_{Euler_{max}} = \kappa_{arc}$) This adds the extra waypoints $B_5$ and $D_5$ which defines the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_{max}}$. The coordinates of these waypoints are defined as:
+If the angle grows larger than $\varepsilon_\text{max}$ the system has to compute five key points, as seen on figure \ref{fig:5points}, due to the ship transitting onto a curve and then back onto the Euler spiral $\text{max}\{\kappa_\text{Euler}\} = \kappa_\text{arc}$. This adds the extra waypoints $B_5$ and $D_5$ which defines the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_\text{min} = \frac{1}{\kappa_\text{max}}$. The coordinates of these waypoints are defined as:
 \begin{align}
 B_5 = (-X_2,Y_2),\,\, D_5 &= (X_2,Y_2)
 \end{align}
@@ -91,7 +91,7 @@ X_2 &= X_R
 \paragraph{State estimation}
 To improve the measurements of the ship, a state estimator is implemented, this is based around the two 2 sensors mounted aboard the ship, a GPS and an IMU. The IMU measures the acceleration, the rotational velocity and the magnetic field strength for use in heading calculations. The GPS gives an absolute position reference for use in the control algorithms. The purpose of the estimator, is to give an estimate of $\hat{\vec{x}} = \begin{bmatrix}x & \dot{x} & y & \theta & \omega\end{bmatrix}^T$ the Kalman filter fuses the IMU and GPS measurements. As a double integration of the IMU results in a large error these measurements are not included in the position estimates directly, but a delayed version is used through the velocity measurements as these also include an absolute version of the velocity from the GPS. This results in the discrete state model for the Kalman filter in equation (\ref{eq:kalmana}):
 \begin{align}
-\vec{\Phi} = diag\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\},\,\, \vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
+\vec{\Phi} = \text{diag}\{\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega\},\,\, \vec{\Phi}_{x,y,\omega}(k) = \begin{bmatrix}
 1 & t_s & 0\\
 0 & 1 & t_s\\
 0 & \frac{-\beta_{x,y,\omega}}{m} & 0
@@ -104,13 +104,13 @@ The Kalman filter is implemented as a linear minimum mean square error filter - 
 \end{align}
 Where the parameters for the force is given as follows $\vec{\mu_F} = \begin{bmatrix}5.3544 & 0\end{bmatrix}^T$, $\vec{\sigma}^2_F = \begin{bmatrix}55 & 15\end{bmatrix}$ and the distribution parameters for the torque is $\mu_{\tau} = 0$ and $\sigma^2_{\tau} = 20$. Resulting in the static covariance matrix:
 \begin{align}
-\vec{R}_k = diag\{0,0,\sigma^2_{F(1)},0,0,\sigma^2_{F(2)},0,0,\sigma^2_\tau\}
+\vec{R}_k = \text{diag}\{0,0,\sigma^2_{F(1)},0,0,\sigma^2_{F(2)},0,0,\sigma^2_\tau\}
 \end{align}
 }
 %% Column 3
 \col{
 \paragraph{}
-The measurement covariance matrix $\vec{Q}_k$ are given as the variances of the sensors. These have been estimated by placing the sensor at a standstill, and then computing an estimate of these values. The distribution of the measurements are considered to be zero mean white noise processes which is defined as $\vec{v}_k \sim \mathcal{N}(\vec{\mu}_v,\vec{\sigma}^2_v)$, giving the covariance matrix as $\vec{Q}_k = diag\{\vec{\sigma}^2_v\}$. 
+The measurement covariance matrix $\vec{Q}_k$ are given as the variances of the sensors. These have been estimated by placing the sensor at a standstill, and then computing an estimate of these values. The distribution of the measurements are considered to be zero mean white noise processes which is defined as $\vec{v}_k \sim \mathcal{N}(\vec{\mu}_v,\vec{\sigma}^2_v)$, giving the covariance matrix as $\vec{Q}_k = \text{diag}\{\vec{\sigma}^2_v\}$. 
 
 \paragraph{Results}
 To verify if the computed state estimator works in accordance with the theory, the filter have been tested by walking around the university. Two tests have been performed, one where the system was given all the GPS measurements, the plot on figure (Fig. \ref{fig:path}a and Fig. \ref{fig:error}a) and one where the GPS signal was cut for one minute (Fig. \ref{fig:path}b and Fig. \ref{fig:error}b) thus relying only on the IMU measurements.
