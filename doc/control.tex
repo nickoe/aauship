@@ -17,7 +17,7 @@ This is an overview of the information flow for control in regard to the rest of
 
 In the First Stage the required heading of the ship is calculated that keeps the course closest to the planned waypoint.
 
-In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy of the first path is to navigate through all of these SWPs in a predefined order, one by one. (Navigation Figure) The heading of the ship is defined in NED coordinate system. The required heading is determined by the law of Cosines, based on the Position of the Ship and the Position of the next Sub-Waypoint.
+In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one. (Navigation Figure) The heading of the ship is defined in NED coordinate system. The required heading is determined by the Law of Cosines, based on the Position of the Ship and the Position of the next Sub-Waypoint.
 \begin{center}
 \includegraphics[scale = 0.4]{img/ControlStrategyFigures/Law_of_Cosines.png}
 \end{center}
@@ -33,15 +33,12 @@ If the conditions above are met, $\theta$ and $\theta_r(\theta)$ will always yie
 
 The overall navigation can be improved, if the Target SWPs are considered ``reached'' in a certain distance. Optimally this distance (Validity distance) should be somewhat longer than the minimum turning radius of the ship ($R_{min}$). If it is shorter, the ship might not be able to reach the SWP, if it is way longer, the ship will divert from its course in turns.
 
-%1. what is it
-\todo{description}
+\section{Control loop theory}
 
-%2. why are we using it
-
-
-The reason for which the State Space representation was chosen is because it is a very simple, yet powerful way of modeling linear systems, allowing us to adjust and manipulate its dynamics in a very wide range of situations. 
-
-%3. what are we using from it
+The inner control is implemented by a State-Space controller, based on the difference of the estimated and the reference states, speed and heading:
+\begin{align}
+Q = F(X-\hat{x}) \quad , \quad x = [v, \theta]^T
+\end{align}
 
 \subsection{Linearizing the outputs}
 
@@ -346,3 +343,32 @@ The Position input of the Kalman Filter uses a hybrid frame, called \emph{Path F
 
 \includegraphics[width = \textwidth]{img/ControlStrategyFigures/PathFrame.png}
 
+\section{Internal Measurement Unit}
+
+We are using an Internal Measurement Unit (IMU) to enhance the estimations and the control system by fusing the velocity data of the \emph{GPS} and the \emph{IMU} based on the accelerometer inputs.
+The IMU has the possibility to measure 6 degrees of freedom ($[\ddot{x}, \ddot{y}, \ddot{z}, \dot{Rot_x}, \dot{Rot_y}, \dot{Roz_z}]$). The IMU possesses significantly lower Signal-to-Noise Ratio (SNR) than the GPS velocity measurements. However, using the IMU only for the navigation is ill-considered, because of the small but substantial \emph{bias} of the \emph{Accelerometer} and \emph{Gyro}.
+\begin{align}
+\hat{x} = x + C(t) = \int \int \ddot{x} dt dt \\
+\hat{Rot_x} = Rot_x + C(t) = \int \dot{Rot_x} dt
+\end{align}
+
+Therefore we employ a Kalman filter, in order to implement the sensor fusion.
+
+\subsection{Challenges of the IMU signal-processing}
+
+The IMU is fixed to the body of the hull, so if the attitude of the Ship changes, so does the IMU. The data of the three accelerometers can be rotated to a fixed-attitude frame only if we possess the exact attitude data as well. But the attitude data over time will accumulate an unknown amount of offset error, because of (equation No. above).
+Since the GPS does not provide any information about the attitude of the ship, another sensor fusion is required, with a fixed outside point, like the Polaris star or the magnetic \emph{North point}.
+
+\subsection{Pitch or roll}
+
+For the control system implementation we employed a simpler solution: assuming the ship will either have no roll or pitch, we could chose to improve either the position estimation or the velocity estimation, based on the natural accelerometer data only.
+The \emph{Roll} and the \empg{Pitch} are caused by \emph{perpendicular} and \emph{paralell} external forces attacking the hull of the ship, in respect to the motion.
+The measurements during various development phases suggested, that the variance of the fixed GPS position is very low, so enhancing the calculated position based on external forces is not required. In addition we can assume, that the sideways and vertical motion in still water is neglectable.
+
+In the implementation, the sum of the acceleration vectors are calculated, and is compared to a reference gravity acceleration data:
+\begin{align}
+\sum S = \vec{\ddot{x}} + \vec{\ddot{y}} + \vec{\ddot{z}} \\
+F = \arccos{\frac{\sum S}{G}}
+\end{align}
+
+In stormy weather the need for a more complex IMU-processing is beyond doubt.
