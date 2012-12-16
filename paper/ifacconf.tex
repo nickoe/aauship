@@ -162,9 +162,19 @@ x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y} & \theta & \omega
 \end{align}
 The implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\Lambda$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
 \begin{align}
-\\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
 \end{align}
-This ensures that when a measurement is invalid (the checksum is not true) the receiver zeros out the gain, and runs the filter on the other sensors / estimates. 
+This ensures that when a measurement is invalid (the checksum is not true) the receiver zeros out the gain, and runs the filter on the other sensors / estimates. The individual $\lambda$s are thus given as:
+\begin{align}
+\lambda = 
+\left\{
+  \begin{array}{l l}
+    1 & \quad \text{if checksum is valid}\\
+    0 & \quad \text{otherwise}
+  \end{array} \right.
+\end{align} 
+This makes sure to zero out the measurement if a packet is corrupted instead of making the filter run on faulty data. The below figure is a simulation run in MATLAB which plots the absolute error of the position estimates of the ship for three different cases, one where the Kalman filter is running ideally with all packages available, one where the system looses 5 percent of the packages and another where the ship looses 5 percent, but gains these packages with 0 in the Kalman gain. 
+INSERT FIGURE!
 As all the forces are acting on the ship in the inertial body fixed frame - the 
 
 \section{Math}
