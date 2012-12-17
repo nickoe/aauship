@@ -88,3 +88,13 @@ sw/HLI/Python/Communication/*.log
 # Litterature
 litterature/*
 
+
+paper/ifacconf.aux
+
+paper/ifacconf.fdb_latexmk
+
+paper/ifacconf.log
+
+paper/ifacconf.pdf
+
+paper/ifacconf.fls
