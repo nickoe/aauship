@@ -49,7 +49,7 @@ The device ID (DevID) also serves as the priority of the packets, enabling more 
 %This is the list of all supported messages for the LLI interface. The messages is the interface to every thing that could be of interest for the HLI, i.e. sensor measurements and actuator control. The list of field descriptions in the following ommits the generic fields, with start character and checksum.
 The initial list of supported devices and message IDs is given in table \ref{tab:commands}. The initial devices are distributed evenly with 10 IDs between each device to allow for other new devices to be implemented with with lower, higher priority, IDs. The general functions of the LLI are implemented with the highest available priority, since it has the deadman switch implemented but a very low amount of regular activity.
 From the definition of the DevID and MsgID each packet can be identified as having to do with a given part of the system. This is the same throughout the system. For some parts of the system, such as the motors, it is not possible to see whether the packet is a set or a get command, from the initial data structure. To mediate this, a "Read thruster" command is implemented, and should be implemented for all future actuators or other devices which are not just passively feeding back data. This would be achieved by sending a "Read thruster" packet to the LLI from the HLI. The LLI will neglect the data part of this message, as it unnecessary to understand the intention of the package. It will then respond with the same MsgID and  DevID, but with the data is has read from the MotorSpeed register.
-To facilitate the Plug and Play nature of the system, the first 3 available MsgIDs are defined to have a set meaning. These are given in table \ref{firstmsgids}.
+To facilitate the Plug and Play nature of the system, the first 3 available MsgIDs are defined to have a set meaning. These are given in table \ref{tab:firstmsgids}.
 \begin{table}[h]
 \centering
 \begin{tabular}{ll}
@@ -60,7 +60,7 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 1 & Set options for device\\
 2 & Read options from device\\
 \bottomrule
-\label{firstmsgids}
+\label{tab:firstmsgids}
 \end{tabular}
 \end{table}
 If a packet with MsgID 0 is sent to a device, the device will respond with a list of all available MsgIDs, along with their definition. If a packet with MsgID 0 is sent to DevID 0, the General LLI, it will respond with a list of available devices. If these device definitions adhere to a strict protocol, it will be possible to automatically configure an LLI and HLI implementing this protocol. This protocol will not be defined in this project, but the feature will useful in checking and validating the configuration.
