@@ -13,9 +13,10 @@ This is an overview of the information flow for control in regard to the rest of
 
 \todo{Illustrate on figure~\vref{fig:vessel-block-overview} where RF comms is or maybe that should be on the block overvieww diagram without regard to contorl abstraction}
 
+\input{reference_frames}
 
-
-In the First Stage the required heading of the ship is calculated that keeps the course closest to the planned waypoint.
+\section{Control System}
+The stages on figure \vref{fig:vessel-block-overview} is explained here in detail. In the First Stage the required heading of the ship is calculated that keeps the course closest to the planned waypoint.
 
 In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one.
 \begin{figure}
@@ -374,7 +375,7 @@ Therefore we employ a Kalman filter, in order to implement the sensor fusion.
 
 \subsection{Challenges of the IMU signal-processing}
 
-The IMU is fixed to the body of the hull, so if the attitude of the Ship changes, so does the IMU. The data of the three accelerometers can be rotated to a fixed-attitude frame only if we possess the exact attitude data as well. But the attitude data over time will accumulate an unknown amount of offset error, because of (equation No. above).
+The IMU is fixed to the body of the hull, so if the attitude of the Ship changes, so does the \ac{IMU}. The data of the three accelerometers can be rotated to a fixed-attitude frame only if we possess the exact attitude data as well. But the attitude data over time will accumulate an unknown amount of offset error, because of (equation No. above).
 Since the GPS does not provide any information about the attitude of the ship, another sensor fusion is required, with a fixed outside point, like the Polaris star or the magnetic \emph{North point}.
 
 \subsection{Pitch or roll}
@@ -389,4 +390,4 @@ In the implementation, the sum of the acceleration vectors are calculated, and i
 F = \arccos{\frac{\sum S}{G}}
 \end{align}
 
-In stormy weather the need for a more complex IMU-processing is beyond doubt.
+In stormy weather the need for a more complex \ac{IMU} 	processing is beyond doubt.

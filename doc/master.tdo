@@ -1,16 +1,16 @@
 \contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ what speeds?}{7}{section*.11}
 \contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Expand each message row with rows of data fields}{14}{section*.26}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Remember 115200 baud, with 8N1, which mean that 80\% is the of that is the bit per secon}{14}{section*.29}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Note: Theese the x and y variables could be swapped in some of our software, because we started on that earlier than we defined theese frames.}{14}{section*.33}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Illustrate on figure\nobreakspace {}\vref {fig:vessel-block-overview} where RF comms is or maybe that should be on the block overvieww diagram without regard to contorl abstraction}{19}{section*.35}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert formulas for [F, T] -> [n1, n2] transformation here}{22}{section*.39}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert poles once final -lunde}{26}{section*.46}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert refference to feedback book, page 470}{26}{section*.48}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Magnetometer variances}{35}{section*.55}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Check that this is still correct}{36}{section*.56}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert reference to worksheet once its done -rlc}{41}{section*.61}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert name of matrix -rlc}{42}{section*.63}
-\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ ref chapter with considerations about worse estimates during turning}{51}{section*.73}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Remember 115200 baud, with 8N1, which mean that 80\% is the of that is the bit per secon}{14}{section*.30}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ ref chapter with considerations about worse estimates during turning}{15}{section*.31}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Illustrate on figure\nobreakspace {}\vref {fig:vessel-block-overview} where RF comms is or maybe that should be on the block overvieww diagram without regard to contorl abstraction}{21}{section*.33}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Note: Theese the x and y variables could be swapped in some of our software, because we started on that earlier than we defined theese frames.}{22}{section*.37}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert formulas for [F, T] -> [n1, n2] transformation here}{24}{section*.41}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert poles once final -lunde}{28}{section*.48}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert refference to feedback book, page 470}{29}{section*.50}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Magnetometer variances}{37}{section*.57}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Check that this is still correct}{38}{section*.58}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert reference to worksheet once its done -rlc}{43}{section*.63}
+\contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ insert name of matrix -rlc}{44}{section*.65}
 \contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ Look at making the appendix function work correctly}{77}{section*.85}
 \contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ change to GPS}{81}{section*.92}
 \contentsline {todo}{\color@box {}{orange}{\leavevmode {\color {orange}o}}\ change to GPS}{81}{section*.94}
