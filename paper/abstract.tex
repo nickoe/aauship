@@ -1,14 +1,22 @@
-\documentclass{article}
+\documentclass{memoir}
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc} % So we can input Nicks name in the paper title!
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amsfonts,amssymb} % Added so we can do pretty math equations.
+\usepackage{geometry}
+\geometry{left=5cm,top=1cm,right=5cm,bottom=4cm}
 \begin{document}
+
 \title{Centralized State Estimation of Distributed Maritime Autonomous Surface Oceanographers}
 %\subtitle{Extended Abstract}
-\author{Attila Fodor \and Frederik Juul \and Nick \O stergaard \and Rasmus L. Christensen \and Tudor Muresan}
+\author{Attila Fodor \and Frederik Juul \and Nick \O stergaard \and Rasmus L. Christensen** \and Tudor Muresan}
 \maketitle
+\begin{center}
+\vspace{-0.7cm}
+Group 12gr730
+\end{center}
+\thispagestyle{empty}
 \paragraph{Introduction}
 Seaborne measurements are often an expensive and timeconsuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available. The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amount of traffic possible. This project is concerned with designing autonomous surface vessels which can be controlled centrally. 
 
