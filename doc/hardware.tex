@@ -1,6 +1,6 @@
 \chapter{Hardware considerations}
 
-Because of the practical nature of the project, there are some things that have to be taken into account from a hardware point of view.
+Because of the practical nature of the project, a wide range of components had to be chosen. There are several things to be taken into consideration when designing a scale ship from scratch
 
 \section{LLI electronics}
 The \ac{LLI} electronics is a plug and play device that controls several smaller ship instances. It provides outputs to control the actuators and motors as well as basic sensor readings to the \ac{HLI}.
@@ -25,9 +25,13 @@ More detailed information about hardware layout~\vref{fig:lli-hw} and the hardwa
 
 \subsection{Energy calculations}
 	
-	Each battery is composed of 4 series connected cells with a nominal voltage of 3.7 V, making a total of 14.8 V. There will be 6 such batteries, each storing 3200 mAh worth of charge, which yields a total of $ 6 \cdot 14.8 \text{ V} \cdot 3.2\text{ Ah} = 284.16 \text{ Wh} $, around 1 MJ of energy.
+	Each battery is composed of 4 series connected cells with a nominal voltage of 3.7 V, making a total of 14.8 V per battery. There will be 6 such units, each storing 3200 mAh worth of charge, which yields a total of $ 6 \cdot 14.8 \text{ V} \cdot 3.2\text{ Ah} = 284.16 \text{ Wh} $, around 1 MJ of energy.
 	
-	There are two separate electrical circuits: a power circuit for the motors for which there are 5 dedicated batteries connected in parallel and the electronics circuit which is separated in order to avoid noise in the digital circuitry. These two are alloted 236.8 Wh and 47.36 Wh respectively.
+	There are two separate electrical circuits: a power circuit for the motors for which there are 4 dedicated batteries connected in parallel and 2 in the electronics circuit which is separated in order to avoid noise in the digital circuitry. These systems are alloted 198.44 Wh and 94.72 Wh respectively.
+	
+	If the batteries run at full power (draining a maximum of 80 Amps) the ship will be able to sail for 5 minutes, however, a scenario where the engine runs at full power with a brake on the propellers is extremely unlikely.
+	
+	Measurements show that the engines should be ran at a setting of 60 of the maximum range of 500 (discretized control steps) and that in this case they drain 2.5 A combined. This will give an operation time of 5.1 hours - thus giving quite a big range on the ships. Assuming a 1 m/s velocity kept constant for 2.5 hours, this gives a range of 9 kilometers forth and 9 kilometers back or being able to measure an area of 1 x 1 km in strips 100 meters apart and still have surplus power.
 	
 	\subsection{Battery care and charge meters}
 	
@@ -51,4 +55,6 @@ More detailed information about hardware layout~\vref{fig:lli-hw} and the hardwa
 	
 \section{Motors and propellers}
 
-The ship is equipped with two brushless Graupner Inline 750 14.8 V motors, each driving a horizontally mounted propeller. These are very powerful, as they are capable of working with 80 Amps of current. This makes the absolute maximum consumed power to be 1.1 kW per motor. Each of the motors are connected to a shaft and a brass propeller with a diameter of 5 cm.
+As the ship should be able to cope with rather powerful streams a powerful propulsion system had to be chosen. The main propulsion unit consists of 2 Grapuner Brushless 750 14.8 V 1200W engines - which together produce around 3 HP at maximum input. With these powerful engines we have a large dynamic range, that allows for fast acceleration and a fast maneuvering, as well as navigating in strong currents. 
+
+The propellers are 2 counterrotating Raboesch brass propellers with a diameter of 60 mm. 
