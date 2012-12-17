@@ -18,7 +18,7 @@ import KalmanFilter as KF
 #############################################
 '''   
 class O_Ship:
-    def __init__(self, init_position,log,statelog):
+    def __init__(self, init_position,statelog,swplog):
         '''
         Initializes the parameters of the ship
         - Parameters to calculate proper turn paths
@@ -26,6 +26,8 @@ class O_Ship:
         - Initial start waypoint
         - Navigation parameters (FollowDistance)
         '''
+        self.log = statelog
+        self.swplog = swplog
         self.Pos = init_position
         
         self.retpos = self.Pos
@@ -62,8 +64,8 @@ class O_Ship:
         
         self.correction = 0
         
-        self.log = log
-        self.statelog = statelog
+       # self.log = log
+       # self.statelog = statelog
         self.virtvel = 0
         '''
         The control matrices
@@ -272,7 +274,7 @@ class O_Ship:
                 if len(self.SegmentCoords)>0 and self.NextSWP_No < len(self.SegmentCoords[0]):
                     self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
                     if self.mark == 0:
-						self.log.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + "\r\n")
+						self.swplog.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + "\r\n")
 						plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o') 
 						self.mark = 1
                 
@@ -391,7 +393,8 @@ class O_Ship:
             y_next = yd * 0.3 * math.cos(theta) + self.Pos.get_Pos_Y()
             
         #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
-        
+        self.log.write(str(x_next) + ', ' + str(y_next) + ', ' + str(self.v) + ', ' + str(self.Theta) + ', ' + str(angacc) + ", " + str(time.time()) + "\r\n")
+
         self.Pos = OL.O_PosData(x_next, y_next, math.cos(self.x[1]), math.sin(self.x[1]))
         
     def get_Thera_r(self):

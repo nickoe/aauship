@@ -103,7 +103,7 @@ class Filter:
         
         self.sC = 0; ''' Sample counter - used to only include the 10th GPS sample.'''
         
-        self.Qz = numpy.diag([0, 0, 55, 0, 0, 15, 0, 0, 20])
+        self.Qz = numpy.diag([0, 0, 55, 0, 0, 55, 0, 0, 20])
         
     
     def FilterStep(self, inputD, Wn, inputV):

@@ -11,14 +11,35 @@ import Ship_nofilter as Shipnf
 import Ship
 import ObjectLibrary as OL
 
-Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
-swp = open("measurements/swp141212.txt",'w')
-controllog = open("measurements/controllog141212.txt",'w')
-swpnf = open("measurements/swpnf141212.txt",'w')
-outputnf = open("measurements/outputnf.txt",'w')
+'''LOGGING FOR BOTH'''
+receivinglog = open("meas/received.txt",'w')
+acclog = open("meas/acc.txt",'w')
+gpslog = open("meas/gps.txt",'w')
+
+'''LOGGING FOR THE SHIP WITH KALMAN FILTER'''
+
+Kswp = open("meas/Kalman/swp.txt",'w')
+Kcontrol = open("meas/Kalman/control.txt",'w')
+Kstate = open("meas/Kalman/state.txt",'w')
+
+
+'''LOGGING FOR THE SHIP WITHOUT KALMAN FILTER'''
+Nswp = open("meas/NoFilter/swp.txt",'w')
+Ncontrol = open("meas/NoFilter/control.txt",'w')
+Nstate = open("meas/NoFilter/state.txt",'w')
+
+
+
+
+
+#Kalmanfile = open("measurements/Kalmandata141212.txt",'w')
+#swp = open("measurements/swp141212.txt",'w')
+#controllog = open("measurements/controllog141212.txt",'w')
+#swpnf = open("measurements/swpnf141212.txt",'w')
+#outputnf = open("measurements/outputnf.txt",'w')
 Startpos = OL.O_PosData(0, 0, 0, 1)
-AAUSHIP = Ship.O_Ship(Startpos,swp,Kalmanfile)
-AAUSHIP2 = Shipnf.O_Ship(Startpos,swpnf,outputnf)
+AAUSHIP = Ship.O_Ship(Startpos,Kstate,Kswp)
+AAUSHIP2 = Shipnf.O_Ship(Startpos,Nstate,Nswp)
 
 '''
 EMBEDDED OPTIONAL STEP 2/B
@@ -30,8 +51,11 @@ Waypoint ADDING
 #Y = numpy.array([0,35.0543,35.5730,58.8078])
 #X = numpy.array([0,-0.5753,26.0082,25.5482])
 
-Y = numpy.array([33.866070951884211, 35.298945836124972]) #Easting
-X = numpy.array([-28.917917253103049,42.596021647672877]) #Northing
+#Y = numpy.array([33.866070951884211, 35.298945836124972]) #Easting
+#X = numpy.array([-28.917917253103049,42.596021647672877]) #Northing
+
+Y = numpy.array([0,2.5574,0.5683,-163120,-437704])
+X = numpy.array([0,-18.3388,-36.7722,-53.9444,-54.2330])
 
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
@@ -61,6 +85,7 @@ Control loop
 
 accf = open("measurements/accdata141212.csv", 'w')
 gpsf = open("measurements/gpsdata141212.txt", 'w')
+statelog = open("measurements/statelog141212.txt",'w')
 
 qu = Queue.Queue()
 kalqueue = Queue.Queue()
@@ -70,7 +95,7 @@ receiver.start()
 
 measuredstates = numpy.zeros((9,2))
 tempm = measuredstates
-parser = packetparser.packetParser(accf,gpsf,measuredstates)
+parser = packetparser.packetParser(acclog,gpslog,measuredstates)
 bla = True
 timeout = 1000
 p = receiver.constructPacket("",0,9)
@@ -116,8 +141,9 @@ try:
 							n += 1
 						parser.parse(p2)
 						parser.parse(p)
-						
+						motor2 = AAUSHIP2.Control_Step()
 						motor = AAUSHIP.Control_Step()
+						AAUSHIP2.ReadStates(measuredstates,motor)
 						AAUSHIP.ReadStates(measuredstates, motor)
 						tempm = measuredstates
 						sendControl += 1
@@ -134,6 +160,7 @@ try:
 						tempm = measuredstates
 						#print measuredstates[0]
 						motor = AAUSHIP.Control_Step()
+						
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						#print measuredstates
@@ -162,9 +189,7 @@ try:
 						#	print "blaH"
 						if GPSFIX == True:
 							print "GPS FIX!"
-							AAUSHIP2.ReadStates(tempm,motor)
-						else:
-							AAUSHIP2.ReadStates(measuredstates,motor)
+							#AAUSHIP2.ReadStates(tempm,motor)
 						GPSFIX = False
 						#print sendControl
 						sendControl = 0
@@ -187,12 +212,13 @@ try:
 						print "MeasPos: \t" + str(AAUSHIP.get_mp())
 						print "Vel: \t" + str(AAUSHIP.get_vel())
 						
+						
 						#print tempm
 						#sign = -sign
 						#print tosend
 						
 						#print motor[1,0]
-						controllog.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + "\r\n")
+						controllog.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + ", " + str(time.time()) +"\r\n")
 						#print tosend
 						receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
 						#print measuredstates
@@ -292,6 +318,7 @@ gpsf.close()
 Kalmanfile.close()
 swp.close()
 controllog.close()
+swpnf.close()
 print "done"
 
 quit()	

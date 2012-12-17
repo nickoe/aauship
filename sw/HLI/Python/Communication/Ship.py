@@ -19,7 +19,7 @@ import time
 #############################################
 '''   
 class O_Ship:
-    def __init__(self, init_position, logfile, log):
+    def __init__(self, init_position, statelog, swplog):
         '''
         Initializes the parameters of the ship
         - Parameters to calculate proper turn paths
@@ -27,8 +27,8 @@ class O_Ship:
         - Initial start waypoint
         - Navigation parameters (FollowDistance)
         '''
-        self.log = logfile
-        self.filterlog = log
+        self.log = statelog
+        self.swplog = swplog
         self.Pos = init_position
         
         self.retpos = self.Pos
@@ -267,6 +267,7 @@ class O_Ship:
                 if len(self.SegmentCoords)>0 and self.NextSWP_No < len(self.SegmentCoords[0]):
                     self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
                     if self.mark == 0:
+                    	self.swplog.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + "\r\n")
                         plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o') 
                         self.mark = 1
                 
@@ -303,6 +304,7 @@ class O_Ship:
             navigation procedure jumps to the next Sub-Waypoint
             '''
             valid = (FL.Distance(self.Pos, self.NextSWP) > self.FollowDistance);
+            self.swplog.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + ", " + str(time.time()) + "\r\n")
             
             if valid == 0 and self.WPsEnded == 1:
                 self.EndPath = 1
@@ -433,7 +435,7 @@ class O_Ship:
         	
         	y_next = ((X - prev_fx) * math.sin(Th)) + curpos[1] + self.correction * math.cos(Th)
         	x_next = ((X - prev_fx) * math.cos(Th)) + curpos[0] - self.correction * math.sin(Th)
-        self.filterlog.write(str(float(self.Pos.get_Pos_X())) + ", " + str(float(self.Pos.get_Pos_Y())) + "\r\n")
+        #self.filterlog.write(str(float(self.Pos.get_Pos_X())) + ", " + str(float(self.Pos.get_Pos_Y())) + "\r\n")
         #print x_next, y_next
         #x_next = ((V * self.Ts) * math.sin(Th)) + curpos[0] + self.correction * 0.1* math.cos(Th)
         #y_next = ((V * self.Ts) * math.cos(Th)) + curpos[1] - self.correction * 0.1* math.sin(Th)

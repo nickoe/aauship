@@ -30,11 +30,11 @@ class packetParser():
 		self.state = numpy.zeros((9,2))
 		self.mergedata = False
 		
-		self.centerlat = 57.015179789287792*pi/180
-		self.centerlon = 9.985062449450744*pi/180
+		self.centerlat = 57.02175678643284*pi/180
+		self.centerlon = 9.97691237031843*pi/180;
 		self.rot = gpsfunctions.get_rot_matrix(self.centerlat,self.centerlon)
 		
-		
+		self.gpsinvalid = 0
 		self.accconst = 0.003333333333333
 		self.gyroconst = 0.05*pi/180
 		
@@ -57,9 +57,9 @@ class packetParser():
 					if self.mergedata:
 						pass
 					self.mergedata = False
-					print "IMU!"
+					#print "IMU!"
 					try:
-						print "IMU"
+						#print "IMU"
 						'''The structure of the packet is 
 						Zgyro
 						X acc
@@ -265,9 +265,7 @@ class packetParser():
 						
 			elif (ord(packet['DevID']) == 30):
 				if(ord(packet['MsgID']) == 6):
-				
 					#print str("".join(packet['Data']))
-					self.gpslog.write("".join(packet['Data']) + "\r\n")
 					content = "".join(packet['Data']).split(',')
 					if content[0] == "$GPRMC" and content[2] == 'A':
 					
@@ -283,6 +281,15 @@ class packetParser():
 					# [6] Speed over ground
 					#print content[6]
 					if content[1] == 'A':
+						self.gpsinvalid += 1
+					
+					if 300 <= self.gpsinvalid <= 360:
+						content[1] = 'V'
+						#print "Gps invalid!"
+					
+					if content[1] == 'A' :
+					
+						self.gpslog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
 						#print content
 						speed = float(content[6]) * 0.514444444 #* 0 + 100
 						#print str(speed) + " m/s"
