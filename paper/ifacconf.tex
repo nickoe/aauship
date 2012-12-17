@@ -140,7 +140,7 @@ The navigation controller of the ship is a general reference heading calculator,
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[trim = 12cm 0mm 12cm 0mm, clip, width=8.4cm]{img/Navi}    % The printed column  
+		\includegraphics[width=8.4cm]{img/Navi}    % The printed column  
 		\caption{Part of the simulated path of the embedded system close to the shore along the sub-waypoints, during a regular oceanography task, based on GPS position measurements affected by white noise with 4m variance}  % width of a column is 8.4 cm.
 		\label{fig:navi}               
 	\end{center}                                 % accordingly.
@@ -186,7 +186,10 @@ And the input is given as $\vec{u} = \begin{bmatrix}F\ & \tau\end{bmatrix}^T$. A
 F&\sim \mathcal{N}(\vec{\mu}_F,\vec{\sigma}^2_F)\\
 \tau&\sim \mathcal{N}(\mu_\tau,\sigma^2_\tau)
 \end{align}
-Where the tuning through simulations have yielded the best results using $\vec{\mu}_F = \begin{bmatrix}5.4355 & 0\end{bmatrix}^T$. The first entry is because to the ship is for most of the time moving along at 1 m/s and that is the estimated force required to thrust the ship forward at 1 m/s with the frictional drag the ship experiences. The latter is the force in the $y$-direction which is given as a zero-mean process as the ship is not expected to move sideways. The torque is also given as a zero-mean process as the ship for most of the time is moving straight.
+Where the tuning through simulations have yielded the best results using $\vec{\mu}_F = \begin{bmatrix}5.4355 & 0\end{bmatrix}^T$. The first entry is because to the ship is for most of the time moving along at 1 m/s and that is the estimated force required to thrust the ship forward at 1 m/s with the frictional drag the ship experiences. The latter is the force in the $y$-direction which is given as a zero-mean process as the ship is not expected to move sideways. The torque is also given as a zero-mean process as the ship for most of the time is moving straight. The covariance matrix for the input, can thus be given as the covariance of $\vec{B}\vec{u}$ which gives the following:
+\begin{align}
+\vec{R}_k = 
+\end{align}
 
 The implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\\vec{Lambda}$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
 \begin{align}
@@ -243,7 +246,28 @@ This model is sufficient as it is only the velocity and the angle that is desire
 F_opt &= \\
 N &= 
 \end{align}
-The above might be stupid to include? 
+
+A little about the way we get from a force input to an engine output:
+As the controller outputs a force $F$ and a torque $\tau$ the controller must convert these to a set-point for the revolutions. The force of the forward motion of the ship is given as a function of the number of revolutions of the propeller $n$. The function is defined by \cite{cyber} as:
+\begin{align}
+F_1 = C_1 \cdot |n_1| \cdot n_1\\
+F_2 = C_1 \cdot |n_2| \cdot n_2
+\end{align}
+Where $C_1 = \rho \cdot K_T \cdot D^4$, which are constants. The two propellers thus produce a total force as a function of their individual rotational velocities. The torque produced by the propellers can be described as the distance to the propeller and the angle out here. The angle is measured to be $\theta = \frac{pi}{16}$, thus giving the torque $\tau$ as a function of the starboard and port engines:
+\begin{align}
+\tau_1 = F_1 \cdot \sin(\theta)\\
+\tau_2 = F_2 \cdot \sin(-\theta)\\
+\end{align}
+As the two engines both produce a force and a torque, given the same revolutions, the matrix equation $\vec{A}\vec{x} = \vec{b}$ can be solved to give:
+\begin{align}
+\begin{bmatrix}
+n_1\\
+n_2
+\end{bmatrix} = \begin{bmatrix}
+
+\end{bmatrix}
+\end{align}
+
 
 \subsection{Control verification}
 Running the system with just the controllers produces the following plot trying to follow a path around the parking lot. 
@@ -290,6 +314,11 @@ Arthur N. Talbot,
 Istv\'a n Koml\'{o}si \& B\'a lint Kiss, % Name of the author
 \newblock \emph{Mobilis robotok auton\'{o}m navig\'aci\'{o}ja mozg\'{o} akad\'alyok elker\"ul\'es\'evel} % The name of the thesis
 \newblock Budapest University of Technology and Economics, 2011 % The publisher
+
+\bibitem[S\o rensen (2005)]{cyber}
+Asgeir J. S\o rensen,
+\newblock \emph{Marine Cybernetics, Modelling and Control - Lecture Notes}
+\newblock Department of Marine Cybernetics, Norwegian University of Science and Technology, 2005
 
 \end{thebibliography}
 
