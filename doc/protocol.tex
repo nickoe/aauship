@@ -60,8 +60,9 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 1 & Set options for device\\
 2 & Read options from device\\
 \bottomrule
-\label{tab:firstmsgids}
 \end{tabular}
+\caption{Msgid}
+\label{tab:firstmsgids}
 \end{table}
 If a packet with MsgID 0 is sent to a device, the device will respond with a list of all available MsgIDs, along with their definition. If a packet with MsgID 0 is sent to DevID 0, the General LLI, it will respond with a list of available devices. If these device definitions adhere to a strict protocol, it will be possible to automatically configure an LLI and HLI implementing this protocol. This protocol will not be defined in this project, but the feature will useful in checking and validating the configuration.
 
@@ -112,7 +113,6 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	x& Set PWM output 1 and 2 & 19 & 4 & Engine 1 and 2\\
 	& Read PWM output 1 and 2 & 20 & 4 & Engine 1 and 2\\ 
 	\midrule
-	\label{tab:commands}
 	\end{tabular}
 \end{table}
 \newpage
