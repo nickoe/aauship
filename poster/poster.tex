@@ -17,7 +17,7 @@
 \titletwo{Autonomous Surface Oceanographers} % Line two of the title.
 \author{Rasmus L. Christensen, Frederik Juul, Nick \O stergaard, Tudor Muresan, Attila Fodor}
 \address{Section for Control and Automation, Department of Electronic Systems, Aalborg University, Denmark$^\dagger$}
-\email{\{ralch,nickoe,fjuul,tudor,attila\}@es.aau.dk}
+\email{\{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk}
 
 \makeheader
 %% Column 1
@@ -25,7 +25,7 @@
 \col{
 \paragraph{Introduction}
 Seaborne measurements are often an expensive and time-consuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available.
-The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amount of traffic possible. This poster describes parts of the project, and presents results of measurements towards the end \cite{engineer}.
+The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amount of traffic possible. This poster describes parts of the development of such a vessel, and presents results of measurements towards the end \cite{engineer}.
 
 \paragraph{Path Optimization}
 The path planning algorithm is based around the train-track transition problem originally solved in \cite{arthur}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus minimizing the amount of jerk $j$. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
@@ -33,9 +33,9 @@ The path planning algorithm is based around the train-track transition problem o
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-The two normalized Fresnel integrals produces the Euler spiral. However, the ship moving along the track can only endure a limited amount of centripetal acceleration $a_\text{centripetal}$, which is a function of the speed of the vessel $v$ and the path curvature $\kappa$. The ship will have a limited angular acceleration $\dot{\kappa}_\text{max} = \alpha_\text{max}$, which results in a scaling $\eta$ of the Euler spiral given by the maximum centripetal acceleration:
+When plotted, the two normalized Fresnel integrals produces the Euler spiral. However, the ship moving along the track can only endure a limited amount of centripetal acceleration $a_\text{centripetal}$, which is a function of the speed of the vessel $v$ and the path curvature $\kappa$. The ship will have a limited angular acceleration $\dot{\kappa}_\text{max} = \alpha_\text{max}$, which results in a scaling $\eta$ of the Euler spiral given by the maximum centripetal acceleration:
 \begin{align}
-\text{max}\langle a_\text{centripetal}\rangle = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_\text{max}}{v^2_\text{max}}
+\text{max}\{a_\text{centripetal}\} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_\text{max}}{v^2_\text{max}}
 \end{align}
 The threshold $\varepsilon_\text{max}$ can be determined based on a function of the vehicles maximum angular acceleration change $\kappa_\text{max}$ and the maximum centripetal acceleration $a_\text{centripetal}$, thus:
 \begin{align}
@@ -43,13 +43,13 @@ The threshold $\varepsilon_\text{max}$ can be determined based on a function of 
 \end{align}
 If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages. The 3 key points are given by the coordinate sets and are depicted on figure \ref{fig:3points}, where the coordinates are given by equation (\ref{eq:for1}).
 \begin{align}
-A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{\cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
+A_3 = (-X_1,Y_1),\, C_3 = \left(0,\frac{y_d}{\cos(\varepsilon)}\right),\, E_3 = (X_1,Y_1)
 \label{eq:for1}
 \end{align}
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=\threecolwidth]{img/3Points} % width of a column is 8.4 cm.
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$.}
 		\label{fig:3points}
 	\end{center}
 \end{figure}
@@ -114,7 +114,7 @@ The measurement covariance matrix $\vec{Q}_k$ is a measured estimate of the vari
 The distribution of the measurements are considered to be zero mean white noise processes which is defined as $\vec{v}_k \sim \mathcal{N}(\vec{\mu}_v,\vec{\sigma}^2_v)$, giving the covariance matrix as $\vec{Q}_k = \text{diag}\{\vec{\sigma}^2_v\}$. 
 
 \paragraph{Results}
-To verify if the computed state estimator works in accordance with the theory, the filter have been tested by walking around the university. Two tests have been performed, one where the system was given all the GPS measurements, the plot on figure \ref{fig:path}a and \ref{fig:error}a) and one where the GPS signal was cut for one minute on figure \ref{fig:path}b and \ref{fig:error}b thus relying only on the IMU measurements.
+To verify if the computed state estimator works in accordance with the theory, the filter have been tested by walking around the university. Two tests have been performed, one where the system was given all the GPS measurements, the plot on figure \ref{fig:path}a and \ref{fig:error}a and one where the GPS signal was cut for one minute on figure \ref{fig:path}b and \ref{fig:error}b thus relying only on the IMU measurements.
 \begin{figure}
 	\centering % Figure input
 	\includegraphics[width=\threecolwidth]{img/track}
@@ -130,7 +130,7 @@ To verify if the computed state estimator works in accordance with the theory, t
 
 
 \paragraph{Conclusion}
-The figures \ref{fig:path} and \ref{fig:error} illustrates that even though the ship looses GPS measurements for 1 minutes, the ship is still able to follow the path using the IMU data as a reference. The error is expected to be in this range, as the error grows exponentially as it is a double integral of the acceleration and that the accelerometer might not have been completely level, thus increasing the bias of the measurement. And as soon as the GPS comes back online, the estimates converges to the path.
+The figures \ref{fig:path} and \ref{fig:error} illustrates that even though the ship looses GPS measurements for 6 seconds, the ship is still able to follow the path using the IMU data as a reference. The error is expected to be in this range, as the error grows exponentially as it is a double integral of the acceleration and that the accelerometer might not have been completely level, thus increasing the bias of the measurement. As soon as the GPS comes back online, the estimates converges to the actual path.
 
 \paragraph{Acknowledgements} A big thanks should be extended to Assistant Professor Carles Navarro Manchón, Aalborg Unviversity, for his help with tuning the Kalman filter. 
 
