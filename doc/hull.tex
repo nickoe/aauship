@@ -16,35 +16,35 @@ The electronic design of the bow thruster controller can be found in subsection 
 
 The hull of the ship follows a soft-chined displacement design, because in normal operating conditions the static buoyancy will dominate over dynamic. This shape affected less by the currents of the sea, and more by the wind. According to the data series of the British Oceanographic Data Centre\footnote[1]{https://www.bodc.ac.uk/data/online$\_$delivery/nodb/search/} near the shores of Greenland the drift caused by the steady currents is generally higher than the wind with a more randomly distributed blowing direction.
 
-\begin{figure}[hullshape]
+\begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{img/render/rendermontage.png}
 	\caption{The shape of the hull}
-	\label{fig:vessel-block-overview}
+	\label{fig:hullshape}
 \end{figure}
 
 The ship is outfitted with powerful main engines, so the vessel can perform fast and precise maneuvering without the bow thruster. Though these engines provide a lot of dynamic range, the ship hull was not designed for high speed \ref{jumping}. The problem is caused by the size and power of the propellers. At slower speeds the effect ceases \ref{jumping}.
-Mirroring the setup and reversing the rotation movement would solve the pushing problem, but instead the back of the ship is pushed upwards, and air is sucked between the propellers. Instead, an additional vertical fin has been installed above the propellers, which keeps the water from being pushed upwards. As a positive side effect, the water after the hull is significantly less disturbed, thus the drag has been reduced as well. This has a positive effect on the range through the battery life \ref{fin}.
+Mirroring the setup and reversing the rotation movement would solve the pushing problem, but instead the back of the ship is pushed upwards, and air is sucked between the propellers. Instead, an additional vertical fin has been installed above the propellers, which keeps the water from being pushed upwards. As a positive side effect, the water after the hull is significantly less disturbed, thus the drag has been reduced as well. This has a positive effect on the range through the battery life \ref{fig:fin}.
 
-\begin{figure}[jumping]
+\begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{Pictures/VerticalJumpingTele.jpg}
 	\caption{An excessive and unregulated bouncing can be experienced at high speeds.}
-	\label{fig:vessel-block-overview}
+	\label{fig:jumping}
 \end{figure}
 
-\begin{figure}[waterpushup]
+\begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{Pictures/forward.jpg}
 	\caption{The power of the two engines force the water upwards between the propellers, therefore pushing the back of the ship down}
-	\label{fig:vessel-block-overview}
+	\label{fig:waterpushup}
 \end{figure}
 
 \begin{figure}[fin]
 	\centering
-	\includegraphics[width=\textwidth]{Pictures/Fin.jpg}
+	\includegraphics[width=\textwidth]{Pictures/fin.jpg}
 	\caption{The rotating propellers with the fin mounted above them. The engine power is set in the normal operation range}
-	\label{fig:vessel-block-overview}
+	\label{fig:fin}
 \end{figure}
 
 \section{Parts list}
