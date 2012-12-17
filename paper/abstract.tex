@@ -6,13 +6,21 @@
 \usepackage{amsmath,amsfonts,amssymb} % Added so we can do pretty math equations.
 \begin{document}
 \title{Centralized State Estimation of Distributed Maritime Autonomous Surface Oceanographers}
+%\subtitle{Extended Abstract}
 \author{Attila Fodor \and Frederik Juul \and Nick \O stergaard \and Rasmus L. Christensen \and Tudor Muresan}
 \maketitle
-\section*{Abstract}
-                        % Abstract of not more than 400 words.
-This paper considers the subject of running a centralized controller for the purpose of navigating a small Autonomous Surface Vehicle (ASV). The centralized controller is using a Kalman filter as a state predictor to improve the precision of the navigational aids mounted aboard. The work presents the design of the motion control system as well as the development of a protocol used to push through as much data on a standard 9.6 kbps data link simplex link.
+\paragraph{Introduction}
+Seaborne measurements are often an expensive and timeconsuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available. The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amount of traffic possible. This project is concerned with designing autonomous surface vessels which can be controlled centrally. 
 
-The performance for the algorithms developed in this project, have been tested in Limfjorden in Aalborg, and towards the end, results of these tests are shown. Hello.
+\paragraph{Path Optimization}
+To lower the amount of angular jerk experienced by the ship, a path planning algorithm was developed which uses two Euler spirals to plan turns required by the ship. An Euler spiral is created by constantly applying a torque to the ship, making the acceleration constant and thus reducing the amount of jerk. 
+
+\paragraph{State Estimation}
+To allow for the ships to accurately estimate its position in between gps samples, a Kalman filter was developed. A method was developed which allowed the filter to work with different sampling rates and made it robust to packet loss. This allows the boat to estimate it position primarily from the very dependable and high frequency IMU samples, while using the GPS input to correct the absolute position whenever it was available.
+
+\paragraph{Results}
+From experiments it was determined that the estimate diverges a maximum of 25 meters from the actual path when tested during a turn where the GPS was turned off for 60 seconds. These results are however the product of a lot of different uncontrollable parameters. If the accelerometer was tilted slightly this creates a bias on the measurements, which in turn creates a higher estimated velocity. This makes for a worse estimate, as the ship is measured to accelerate more that it actually does, and so the position is estimated to be further in the measured direction than is actually the case. If the IMU is slightly rotated to the side, the estimated heading has a bias, which makes the estimate propagate in a slightly wrong direction. If these two biases were removed the estimate would be better.
+
 
 
 \end{document}
