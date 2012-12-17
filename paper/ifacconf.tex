@@ -189,7 +189,7 @@ As all the measurements are independent, the covariance matrix is given as:
 \begin{align}
 \vec{Q}_k = \text{diag}\{\vec{\sigma}^2_{v}\}
 \end{align}
-Where $\vec{\sigma}^2_{v} = \begin{bmatrix}\sigma^2_x & \sigma^2_{\dot{x}} & \sigma^2_{\dot{x}} & \sigma^2_y & \sigma^2_{\dot{y}} & \sigma^2_{{\ddot{y}}} & \sigma^2_\theta & \sigma^2_\omega & \sigma^2_\alpha \end{bmatrix}^T$. As the velocity output of the GPS device $\dot{x}$ is an absolute value, the estimate of this is a bit different as this cannot be assumed to be a normal distribution, as it does not contain any negative values. To estimate the variance of $\dot{x}$ the unbiased sample variance formula is used, which computes the variance, even though the samples only consist of absolute values. 
+Where $\vec{\sigma}^2_{v} = \begin{bmatrix}\sigma^2_x & \sigma^2_{\dot{x}} & \sigma^2_{{\ddot{x}}} & \sigma^2_y & \sigma^2_{\dot{y}} & \sigma^2_{{\ddot{y}}} & \sigma^2_\theta & \sigma^2_\omega & \sigma^2_\alpha \end{bmatrix}^T$. As the velocity output of the GPS device $\dot{x}$ is an absolute value, the estimate of this is a bit different as this cannot be assumed to be a normal distribution, as it does not contain any negative values. To estimate the variance of $\dot{x}$ the unbiased sample variance formula is used, which computes the variance, even though the samples only consist of absolute values. 
 
 The actual implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\vec{\Lambda}$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
 \begin{align}
