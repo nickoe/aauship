@@ -17,7 +17,15 @@ This is an overview of the information flow for control in regard to the rest of
 
 In the First Stage the required heading of the ship is calculated that keeps the course closest to the planned waypoint.
 
-In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one. (Navigation Figure) The heading of the ship is defined in NED coordinate system. The required heading is determined by the Law of Cosines, based on the Position of the Ship and the Position of the next Sub-Waypoint.
+In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one.
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{img/ControlStrategyFigures/Navi}    % The printed column  
+		\caption{Part of the simulated path of the embedded system close to the shore along the sub-waypoints, during a regular oceanography task}  % width of a column is 8.4 cm.
+		\label{fig:3points}               
+	\end{center}                                 % accordingly.
+\end{figure}
+The heading of the ship is defined in NED coordinate system. The required heading is determined by the Law of Cosines, based on the Position of the Ship and the Position of the next Sub-Waypoint.
 \begin{center}
 \includegraphics[scale = 0.4]{img/ControlStrategyFigures/Law_of_Cosines.png}
 \end{center}

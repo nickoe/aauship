@@ -27,7 +27,7 @@ f = open('log', 'w')
 SIMULATION STEP 1
 Read / Generate coast, initialize simulator
 '''
-coastlength = 2000
+coastlength = 600
 Sim = S.Simulator()
 
 coast = Sim.SimulateCoast(coastlength)
@@ -46,24 +46,24 @@ AAUSHIP = Ship.O_Ship(Startpos, f)
 EMBEDDED OPTIONAL STEP 2/A
 Waypoint planning
 '''
-'''
+
 decimation = 20
 safety = 10
 coast = coast - numpy.max(coast) - 10* safety
 
 AAUSHIP.Plan_WP(coast, decimation, safety)
-'''
+
 '''
 EMBEDDED OPTIONAL STEP 2/B
 Waypoint ADDING
 '''
-
+'''
 Y = numpy.array([0,35.0543, 35.5730, 58.8078])
 X = numpy.array([0, -0.5753, 26.0082, 25.5482])
 plt.plot(Y,X)
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
-
+'''
 '''
 NON-CRITICAL SIMULATION STEP 2
 '''
@@ -85,7 +85,7 @@ Control loop initializations and logging
 '''
 i = 0
 
-ni = 10000
+ni = 100000
 x0 = numpy.zeros(ni)
 x1 = numpy.zeros(ni)
 x2 = numpy.zeros(ni)
@@ -173,7 +173,7 @@ while i < ni:
 '''
 End of voyage
 '''
-plt.plot(x3,x4,'k')
+#plt.plot(x3,x4,'k')
 plt.plot(x0,x1,'r')
 plt.show()
 #plt.plot(x2)

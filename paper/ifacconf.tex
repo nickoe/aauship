@@ -134,6 +134,21 @@ X_2 &= X_R
 
 The resulting path in both cases can not be described explicitly, therefore a Hermite-polynom is fit to the key points. In addition, a predefined number of uniformly distributed sub-waypoints are generated on the path, based on the describing polynom. The resulting sub-waypoints are rotated and moved to their correct position in the Local-Frame, thus concluding most of the work of the local-planner. The paths between turns are straight lines, populated with the same preset density of sub-waypoints.
 
+\subsection{Navigation}
+
+The navigation controller of the ship is a general reference heading calculator, which outputs the required direction of movement to reach the next waypoint. In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one. The heading of the ship is defined in NED\footnote[1]{[North, East, Down]} coordinate system. The required heading is determined based on the Position of the Ship and the Position of the next Sub-Waypoint.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[trim = 12cm 0mm 12cm 0mm, clip, width=8.4cm]{img/Navi}    % The printed column  
+		\caption{Simulation of navigation and control}  % width of a column is 8.4 cm.
+		\tiny
+		\description{Part of the simulated path of the embedded system close to the shore along the sub-waypoints, during a regular oceanography task, based on GPS position measurements affected by white noise with 4m variance}
+		\normalsize
+		\label{fig:3points}               
+	\end{center}                                 % accordingly.
+\end{figure}
+
 \subsection{State estimation}
 To give a better estimate of position and the attitude of the craft, a Kalman filter have been implemented to improve the accuracy of the sensors mounted aboard the ship. To develop a such, the discrete time state model of the ship have been derived to be:
 \begin{align}

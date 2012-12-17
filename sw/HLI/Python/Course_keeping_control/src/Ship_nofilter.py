@@ -33,8 +33,8 @@ class O_Ship:
         self.NextSWP = self.Pos
         
         self.Speed = 0;
-        self.Sigma_max = 1;
-        self.Kappa_max = 1;
+        self.Sigma_max = 0.5;
+        self.Kappa_max = 0.5;
         
         self.counter1 = 0;
         
@@ -46,7 +46,7 @@ class O_Ship:
         self.NextSWP_No = 0;
         self.NextSWP_validity = 0;
         
-        self.FollowDistance = 4
+        self.FollowDistance = 2
         
         self.v = 0
         self.omega = 0
@@ -270,7 +270,7 @@ class O_Ship:
                     self.NextSWP = OL.O_PosData(self.SegmentCoords[0, self.NextSWP_No], self.SegmentCoords[1, self.NextSWP_No], float('NaN'), float('NaN'))
                     if self.mark == 0:
 						self.log.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + "\r\n")
-						plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), marker = 'o') 
+						plt.plot(self.NextSWP.get_Pos_X(), self.NextSWP.get_Pos_Y(), 'b', marker = 'o') 
 						self.mark = 1
                 
                 else:
@@ -325,7 +325,7 @@ class O_Ship:
         # RUN CONTROL ALGORITHM HERE
         '''
        
-        Ref = numpy.matrix([[1], [self.x[1]-delta]])
+        Ref = numpy.matrix([[6], [self.x[1]-delta]])
 
         
         N = -self.F * self.x + self.N * Ref
