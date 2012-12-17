@@ -21,12 +21,22 @@ In order to efficiently and accurately navigate along the path, a set of Sub-Way
 \begin{center}
 \includegraphics[scale = 0.4]{img/ControlStrategyFigures/Law_of_Cosines.png}
 \end{center}
-Problems rise and corrections are necessary, if the heading of the ship $\theta$ is $\theta < -\pi$ or $\theta < \pi$. The heading of the ship is calculated based on the Gyro sensor and the heading can have any value in the form of: $$\theta = [-{\pi} ; \pi ] \pm 2 \cdot k \cdot \pi$$. Before invoking the control procedure, all of the heading angles must be transformed into the $[-\pi ; \pi]$ interval.
+Problems rise and corrections are necessary, if the heading of the ship $\theta$ is $\theta < -\pi$ or $\theta < \pi$. The heading of the ship is calculated based on the Gyro sensor and the heading can have any value in the form of: 
+\begin{align}
+\theta = [-{\pi} ; \pi ] \pm 2 \cdot k \cdot \pi
+\end{align}
+Before invoking the control procedure, all of the heading angles must be transformed into the $[-\pi ; \pi]$ interval.
 This procedure causes a possible error though.
 
 \includegraphics[width=\textwidth]{img/ControlStrategyFigures/Headings.png}
 
-The required heading or the heading of the ship must be transformed into a different representation, where $$|\theta_{r}-\theta| < \pi$$. To keep a consistent heading representation, first the deviation angle $$\theta = \pi_{r}-\pi$$ is calculated, than transformed to the $[-\pi;\pi]$ interval and finally, with $\delta$ we can transform $\theta_{r}$ to $$\theta_{r}(\theta) = \theta + \delta$$.
+The required heading or the heading of the ship must be transformed into a different representation, where $$|\theta_{r}-\theta| < \pi$$. To keep a consistent heading representation, first the deviation angle 
+\begin{align}
+\theta = \pi_{r}-\pi
+\end{align} is calculated, than transformed to the $[-\pi;\pi]$ interval and finally, with $\delta$ we can transform $\theta_{r}$ to 
+\begin{align}
+\theta_{r}(\theta) = \theta + \delta
+\end{align}
 If the conditions above are met, $\theta$ and $\theta_r(\theta)$ will always yield values that result in correct controller output.
 
 \subsection{Subwaypoint Validity}

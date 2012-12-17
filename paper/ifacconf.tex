@@ -115,7 +115,7 @@ Once the angle grows larger than $\varepsilon_{max}$ the system has to compute f
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/5Points}    % The printed column  
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and only 3 sub-waypoints are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and 5 key points are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
 		\label{fig:3points}               
 	\end{center}                                 % accordingly.
 \end{figure}
@@ -147,7 +147,7 @@ Where the diagonal entries $\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega$ are 
 0 & \frac{-\beta_{x,y,\omega}}{m,m,I} & 0
 \end{bmatrix}
 \end{align}
-Where $\beta_{x,y,\omega}$ denotes the skin frictional drag in the $x$,$y$ or $\omega$ direction respectively, $m$ is the mass of the craft, $I$ is the interia and $t_s$ is the sampling time of the filter. The states to be estimated for the controller are:
+Where $\beta_{x,y,\omega}$ denotes the skin frictional drag in the $x$,$y$ or $\omega$ direction respectively, $m$ is the mass of the craft, $I$ is the inertia and $t_s$ is the sampling time of the filter. The states to be estimated for the controller are:
 \begin{align}
 ^b\hat{\vec{x}_k} = \begin{bmatrix}
 x & \dot{x} & y & \dot{y} & \theta & \omega

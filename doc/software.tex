@@ -35,19 +35,13 @@ The additional simulator module is an extension of the \emph{Ship Object}. In Si
 
 \includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/SimModel.png}
 
-Because of the predefined objectives above, the flowchart of the simulated and the actual task only slightly differs (Appendix)
-
-%\includegraphics[width = \textwidth]{img/HLIFigures/System-Simulation_Interactions.png}
-
-%The differences are kept on the right side of the Flowchart:
-
-%\includegraphics[width = \textwidth]{img/HLIFigures/System-World_Interactions.png}
+Because of the predefined objectives above, the flowchart of the simulated and the actual task has only minor differences. (Appendix)
 
 \section{Course keeping control}
 
 The Course-keeping control is responsible for keeping the ship on-course during Autonomous navigation.
 
-The general idea is to have a state-space control algorithm in infinite loop as the main task. The control parameterization is based on the ship model, measurements and identification.
+The general strategy is to have a state-space control algorithm in infinite loop as the main task. The control parameterization is based on the ship model, measurements and identification.
 The program controls the ship along the specified path. If there is no next sub-\emph{Waypoint} or local path specified, the HLI calls the path planning methods for the next \emph{Waypoint}, then the procedure starts again from the beginning. If there are no more \emph{Waypoints}, the ship returns to the first \emph{Waypoint}, or to the starting coordinates specified in a subfunction of the Ship class.
 
 \includegraphics[width = \textwidth]{img/HLIFigures/SWPNavigationConcept.png}
@@ -73,6 +67,7 @@ The need for a basic \emph{Waypoint}-planner is essential, but optimizing it was
 \section{Local Planner}
 
 The Local planner is responsible for planning a segment of the path, in order to supply the controller with a series of Sub-\emph{Waypoints}. The Local path should result in a set of points, which are lined up smoothly enough for the ship to sail through them with the reference speed.
+The path planning algorithm is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. A series of key points are generated in the turn, which determine a path that meets the above requirements \citep{Art:2}. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
 
 The path can be divided to a straight line and a turning sub-path. The combination of a straight path and a turn is a Path Segment. The local planner calculates a Path Segment from the current position to the end of the turn at the next Turning \emph{Waypoint} (Footnote: If three \emph{Waypoints} are in a line, the angle at the second is $\pi$, therefore it is not a turning \emph{Waypoint}), based on the \emph{Waypoint} after the Turning \emph{Waypoint} as well.
 
@@ -80,59 +75,92 @@ The path can be divided to a straight line and a turning sub-path. The combinati
 
 Calculating the smooth set of points for the turn:
 The initial idea was to use a pre-generated Euler-spiral or simple arc line, the program determines the required arc length and applies linear transformations to resize and rotate the path coordinates, thus creating a smooth path.
-The initial idea was dropped after the following considerations:
+This notion was dropped after the following considerations:
 \begin{itemize}
-\item Storing the full path coordinates is memory-consuming. Also, the path has either low resolution or the linear transformation would be CPU-heavy
+\item Storing the full list of path coordinates is memory-consuming. Also, the path has either low resolution or the linear transformation would be CPU-heavy
 \item The path would be smooth but would not have optimal parameters \ldots
 \end{itemize}
 
-The new idea is originated from: Koml\'osi Istv\'an: Mobilis robotok auton\'om navig\'aci\'oja mozg\'o akad\'alyok elker\"ul\'es\'evel (English version: Istv\'an Koml\'osi and B\'alint Kiss: Motion planning for multiple mobile robots using time-scaling).
+The new theory is originated from: Koml\'osi Istv\'an: Mobilis robotok auton\'om navig\'aci\'oja mozg\'o akad\'alyok elker\"ul\'es\'evel (English version: Istv\'an Koml\'osi and B\'alint Kiss: Motion planning for multiple mobile robots using time-scaling).
 The concept is to determine the maximum possible path curvature that the robot can handle. This is based on the Sigma and Kappa values of the Ship, where sigma is a function of the maximum speed of Torque change, and kappa is the maximum curvature of the path at a given speed. The local path is generated in a specific way that the robot will always turn with the maximum possible curvature at the current speed, thus staying the closest to the \emph{Waypoint} without losing speed. There is a threshold turn-angle, which determines if the robot requires only two identical Euler-spiral paths to turn or an arc path that has the maximum curvature, with two Euler spiral paths leading in or out.
+
+\begin{align}
+C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
+\label{eq:fresnel}
+\end{align}
+The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the Speed($v$) and Path Curvature($\kappa$). Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling ($\sigma$) of the Euler spiral:
+\begin{align}
+A_{C_{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \sigma = \frac{\alpha_{max}}{v^2_{max}}
+\end{align}
+A threshold angle of turn ($\varepsilon_{max}$)can be determined based on the vehicle parameters above:
+\begin{align}
+\varepsilon_{max} = \frac{\kappa^2_{max}}{2\sigma}
+\end{align}
+
 In order to create the path the algorithm calculates 5 or 3 (depending on the threshold) key points and fits a Hermite-poly onto them. From this point on the local path in the given range is determined by these points only, thus saving memory and CPU time, while calculating a better path.
-\begin{center}
-\includegraphics[width = \textwidth]{img/LocalPlannerFigures/3Points.png}
-The calculation of the 3 key-points if $\epsilon < \epsilon_{max}$ (no circular path component is needed)
 
-$$ \sigma = \frac{\beta_max}{v^2} $$
-$$x_d = \frac{\pi}{\sigma} * C_F(\epsilon)$$
-$$y_d = \frac{\pi}{\sigma} * S_F(\epsilon)$$
 
+If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages.
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{img/LocalPlannerFigures/3Points.pdf}
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
+		\label{fig:3points}
+	\end{center}
+\end{figure}
+
+The 3 key points are given by the coordinate sets:
+\begin{align}
+A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
+\end{align}
+
+From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$. 
+\begin{align}
+\varepsilon = \frac{\textrm{dx }F(t)}{\textrm{dy}} \quad \to \quad [x_d,y_d] = F^{-1}(\varepsilon)
+\sigma = \frac{\beta_max}{v^2} 
+x_d = \frac{\pi}{\sigma} * C_F(\epsilon)
+y_d = \frac{\pi}{\sigma} * S_F(\epsilon)
+\end{align}
+Where $C_F$ and $S_F$ are the normalized Fresnel-integral functions.
+\begin{align}
+X_1 = x_d * cos(\epsilon) + y_d * sin(\epsilon)
+Y_1 = X_1 * tan(\epsilon)
+A = (-X_1, Y_1)
+C = (0, \frac{y_d}{cos(\epsilon)})
+E = (X_1, Y_1)
+\end{align}
+Once the angle grows larger than $\varepsilon_{max}$ the system has to compute five key points, as the ship must transit onto a curve, and then back onto the Euler spiral ($\kappa_{Euler_{max}} = \kappa_{Arc}$) This adds the extra waypoints $B_5$ and $D_5$, the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_{max}}$. The waypoints are depicted on figure (\ref{fig:5points}), thus augmenting the waypoints to:
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{img/LocalPlannerFigures/5Points.pdf}    % The printed column  
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and 5 key points are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
+		\label{fig:5points}               
+	\end{center}                            
+\end{figure}
+\begin{align}
+ \sigma = \frac{\beta_max}{v^2} 
+x_d = \frac{\pi}{\sigma} * C_F(\epsilon)
+y_d = \frac{\pi}{\sigma} * S_F(\epsilon)
+\end{align}
 Where $C_F$ and $S_F$ are the normalized Fresnel-integral functions.
 
-$$X_1 = x_d * cos(\epsilon) + y_d * sin(\epsilon)$$
-$$Y_1 = X_1 * tan(\epsilon)$$
-
-$$A = (-X_1, Y_1)$$
-$$C = (0, \frac{y_d}{cos(\epsilon)})$$
-$$E = (X_1, Y_1)$$
-
-\includegraphics[width = \textwidth]{img/LocalPlannerFigures/5Points.png}
-The calculation of the 5 key-points if $\epsilon > \epsilon_{max}$ (a circular path component is needed)
-
-$$ \sigma = \frac{\beta_max}{v^2} $$
-$$x_d = \frac{\pi}{\sigma} * C_F(\epsilon)$$
-$$y_d = \frac{\pi}{\sigma} * S_F(\epsilon)$$
-
-Where $C_F$ and $S_F$ are the normalized Fresnel-integral functions.
-
-$$X_R = R_{min} * sin(\epsilon - \epsilon_{max})$$
-$$P_X = X_R + y_d * sin(\epsilon)$$
-$$X_1 = P_X + x_d * cos(\epsilon)$$
-$$Y_1 = X_1 * tan(\epsilon)$$
-$$P_y = Y_1 - x_d * sin(\epsilon)$$
-$$Y_2 = P_y + y_d * cos(\epsilon)$$
-$$O_Y = R_{min} * cos(\epsilon-\epsilon_{max) + Y_2}$$
-$$R_Y = O_Y - R_{min}$$
-$$X_2 = X_R$$
-
-$$A = (-X_1, Y_1)$$
-$$B = (-X_2, Y_2)$$
-$$C = (0, Y_R)$$
-$$D = (X_2, Y_2)$$
-$$E = (X_1, Y_1)$$
-
-\end{center}
-The Hermite-polinom is used to populate the path with a number of points, depending on the predefined conditions. The resulting set of points is transformed to its correct place by a transformation matrix in the Local Frame, around the Turning \emph{Waypoint}.
+\begin{align}
+X_R = R_{min} * sin(\epsilon - \epsilon_{max})
+P_X = X_R + y_d * sin(\epsilon)
+X_1 = P_X + x_d * cos(\epsilon)
+Y_1 = X_1 * tan(\epsilon)
+P_y = Y_1 - x_d * sin(\epsilon)
+Y_2 = P_y + y_d * cos(\epsilon)
+O_Y = R_{min} * cos(\epsilon-\epsilon_{max) + Y_2}
+R_Y = O_Y - R_{min}
+X_2 = X_R
+A = (-X_1, Y_1)
+B = (-X_2, Y_2)
+C = (0, Y_R)
+D = (X_2, Y_2)
+E = (X_1, Y_1)
+\end{align}
+The resulting path in both cases can not be described explicitly, therefore a Hermite-polynom is fit to the key points. In addition, a predefined number of uniformly distributed sub-waypoints are generated on the path, based on the describing polynom. The resulting sub-waypoints are rotated and moved to their correct position in the Local-Frame, thus concluding most of the work of the local-planner. The paths between turns are straight lines, populated with the same preset density of sub-waypoints.
 
 \includegraphics[width = \textwidth]{img/LocalPlannerFigures/PositioningTurn.png}
 
