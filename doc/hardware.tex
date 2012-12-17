@@ -1,11 +1,11 @@
 \chapter{Hardware considerations}
 
-Because of the practical nature of the project, there are some things that have to be into account from a hardware point of view.
+Because of the practical nature of the project, there are some things that have to be taken into account from a hardware point of view.
 
 \section{LLI electronics}
-The \ac{LLI} electronics is a plug and play device that controls several smaller ship instances. It provides outputs to control the actuators, and basic sensor readings to the \ac{HLI}.
+The \ac{LLI} electronics is a plug and play device that controls several smaller ship instances. It provides outputs to control the actuators and motors as well as basic sensor readings to the \ac{HLI}.
 
-The \ac{LLI} has been designed to allow for the above functionality. As described in section~\vref{sec:platform} the \ac{LLI} is an embedded platform, for which an Atmel AVR microcontroller has been choosen. The main control board is an Arduino Mega 2560, and a shield interface to all peripherials has been designed~\vref{chap:schema}.
+The \ac{LLI} has been designed to allow for the above functionality. As described in section~\vref{sec:platform} the \ac{LLI} is an embedded platform, for which an Atmel AVR microcontroller has been chosen. The main control board is an Arduino Mega 2560, and a shield interface to all peripherals has been designed~\vref{chap:schema}.
 
 The final LLI supports the following features:
 \begin{description}
@@ -44,11 +44,11 @@ More detailed information about hardware layout~\vref{fig:lli-hw} and the hardwa
 	
 	The bow thruster controller is a circuit whose function is to provide power to the bow thruster, under the control of the \ac{LLI}. This uses a L298 H-bridge connected to a logic gate, so that it can be driven with just two signals: direction and \ac{PWM}.
 	
-	Another use of this circuit is to provide a lossless voltage level conversion from the batteries' nominal 14.8V to the motor's 7.2V rated voltage. %That means that the maximum theoretical duty cycle of the PWM bow thruster control signal is $ 14.8 / 7.2 = 48 \% $. This, however, is not the actual value that will be used, due to the fall time of the L298 chip, which is pretty big at the 1kHz PWM frequency. By using an oscilloscope to measure the True RMS value of the electronic circuit's output, it was empirically determined that the maximum pulse width value is \colorbox{yellow}{What was this value?}. 
-	The motor used to drive the bow thruster also has a minimum starting voltage. The PWM minimum duty cycle was empirically determined to be \colorbox{yellow}{What was it??}.
+	Another use of this circuit is to provide a lossless voltage level conversion from the batteries' nominal 14.8V to the motor's 7.2V rated voltage. That means that the maximum theoretical duty cycle of the PWM bow thruster control signal is $ 14.8 / 7.2 = 48 \% $. This, however, is not the actual value that will be used, due to the fall time of the L298 chip, which is pretty big at the 1kHz PWM frequency. By using an oscilloscope to measure the True RMS value of the electronic circuit's output, it was empirically determined that the maximum pulse width value is 33\%. 
+	The motor used to drive the bow thruster also has a minimum starting voltage for which the PWM minimum duty cycle was empirically determined to be around 5\% in this case.
 	
-	\ref{appendices:bow thruster schematic}. Since the L298 chip has two H bridges inside it, the designed board \ref{appendices:bow thruster schematic} includes the circuitry and parts for the two controllers, since it would provide redundancy in case one of them is overloaded or otherwise stops functioning.
+	Since the L298 chip has two H bridges inside it, the designed board which can be viewed in the appendix \vref{appendices:bow thruster schematic} includes the circuitry and parts for the two controllers, since it would provide redundancy in case one of them is overloaded or otherwise stops functioning.
 	
-\section{Motors}
+\section{Motors and propellers}
 
-The ship is equipped with two brushless Graupner Inline 750 14.8 V motors, each driving a horizontally mounted propeller.
+The ship is equipped with two brushless Graupner Inline 750 14.8 V motors, each driving a horizontally mounted propeller. These are very powerful, as they are capable of working with 80 Amps of current. This makes the absolute maximum consumed power to be 1.1 kW per motor. Each of the motors are connected to a shaft and a brass propeller with a diameter of 5 cm.
