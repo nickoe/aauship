@@ -141,11 +141,8 @@ The navigation controller of the ship is a general reference heading calculator,
 \begin{figure}
 	\begin{center}
 		\includegraphics[trim = 12cm 0mm 12cm 0mm, clip, width=8.4cm]{img/Navi}    % The printed column  
-		\caption{Simulation of navigation and control}  % width of a column is 8.4 cm.
-		\tiny
-		\description{Part of the simulated path of the embedded system close to the shore along the sub-waypoints, during a regular oceanography task, based on GPS position measurements affected by white noise with 4m variance}
-		\normalsize
-		\label{fig:3points}               
+		\caption{Part of the simulated path of the embedded system close to the shore along the sub-waypoints, during a regular oceanography task, based on GPS position measurements affected by white noise with 4m variance}  % width of a column is 8.4 cm.
+		\label{fig:navi}               
 	\end{center}                                 % accordingly.
 \end{figure}
 
@@ -171,10 +168,27 @@ x & \dot{x} & y & \dot{y} & \theta & \omega
 The observation model of the filter does however contain more measurements, and the measurements can be given as:
 \begin{align}
 \vec{v}_k = \begin{bmatrix}
-x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y} & \theta & \omega
+x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y} & \theta & \omega & \alpha
 \end{bmatrix}^T
 \end{align}
-The implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\Lambda$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
+To tune the filter the covariance matrices $\vec{R}_k$ and $\vec{Q}_k$ are a function of the measurement distribution and the input distribution. The input to the system is given as:
+\begin{align}
+\vec{w}_k = \vec{B}\vec{u}
+\end{align}
+Where $\vec{B}$  is an augmented version of the system input matrix defined in INSERT REFERENCE! and $\vec{u}$ is the inputs to the system given as a force $F$ and a torque $\tau$. $\vec{B}$ is given as 
+\begin{align}
+\vec{B} = \begin{bmatrix}
+0 & 0 & \frac{1}{m} & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{I} \end{bmatrix}^T
+\end{align} 
+And the input is given as $\vec{u} = \begin{bmatrix}F\ & \tau\end{bmatrix}^T$. As $\vec{B}$ is a static matrix, it is only the distribution of the force $F$ and the torque $\tau$ that is of interest. The distribution of the force are split into an $x$-component and a $y$ component, as the ship is also expected to move in the $y$-direction. The distributions of the force is givne as white Guassian noise processes, thus stating:
+\begin{align}
+F&\sim \mathcal{N}(\vec{\mu}_F,\vec{\sigma}^2_F)\\
+\tau&\sim \mathcal{N}(\mu_\tau,\sigma^2_\tau)
+\end{align}
+Where the tuning through simulations have yielded the best results using $\vec{\mu}_F = \begin{bmatrix}5.4355 & 0\end{bmatrix}^T$. The first entry is because to the ship is for most of the time moving along at 1 m/s and that is the estimated force required to thrust the ship forward at 1 m/s with the frictional drag the ship experiences. The latter is the force in the $y$-direction which is given as a zero-mean process as the ship is not expected to move sideways. The torque is also given as a zero-mean process as the ship for most of the time is moving straight.
+
+The implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\\vec{Lambda}$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
 \begin{align}
 \vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
 \end{align}
