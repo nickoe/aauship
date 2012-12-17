@@ -37,7 +37,7 @@
 \author{Nick \O stergaard}
 \author{Attila Fodor}
 \author{Tudor Muresan}
-\address{Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk)}                                            
+\address{Section of Automation and Control, Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk)}                                            
           
 \begin{keyword}                           % Five to ten keywords,  
 Path planning; Centralised control; Baud rates; State estimation; Marine systems; Master slave system;              % chosen from the IFAC 
@@ -60,7 +60,7 @@ The coastal areas around Greenland are another area which could benefit from sea
 
 One way to reduce the cost of such maritime measurements would be to develop small autonomous drones to carry out the task. These should be controlled by a mothership to enable easy scalability and coordination. Further, they should communicate using a simple data link to preserve bandwidth and limit power consumption. The system should be robust to dataloss and measurementnoise which can be expected from low cost sensors. This can be achieved through sensor fusion.
 
-Currently the main focus of autonomous vehicles have been on aerial, ground and underwater vehicles, while there is close to no research going on about small autonomous surface vessels. An example of such a vessel is the Stingray ASV developed by Isreali Based Elbit Systems. The purpose of this vehicle is somewhat military related, while the purpose of measuring the coastal areas around Greenland are primarily humanitarian.
+Currently the main focus of autonomous vehicles have been on aerial, ground and underwater vehicles, while there is close to no research going on about small autonomous surface vessels. An example of such a vessel is the Stingray ASV developed by Isreali Based Elbit Systems. 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/stingray.jpg} % width of a column is 8.4 cm.
@@ -69,7 +69,15 @@ Currently the main focus of autonomous vehicles have been on aerial, ground and 
 	\end{center}
 \end{figure}
 
-Figure \ref{fig:stingray} depicts an already existing autonomous surface vehicle, primarily developed as an aid in SAR (search-and-rescue) missions, but can also be equipped with other sensory equipment, which can be used to map the sea bed, or measure the amount of radiation in coastal areas. The scope of this project is however to develop a smaller vehicle, which in turn could function as part of a measuring swarm, controlled by a mother ship, thus making measuring missions more efficient and less time consuming.
+Figure \ref{fig:stingray} depicts an already existing autonomous surface vehicle, primarily developed as an aid in SAR (search-and-rescue) missions, but can also be equipped with other sensory equipment, which can be used to map the sea bed, or measure the amount of radiation in coastal areas. The scope of this project is however to develop a smaller vehicle, which in turn could function as part of a measuring swarm, controlled by a mother ship, thus making measuring missions more efficient and less time consuming. As the price of such a swarm system for measurement purposes would be high if systems like the Stingray is to be used, the suggestion of this project, is to develop a small cost-efficient vessel. Throughout this project, a prototype vessel AAUSHIP.01 have been developed, taking into account the hull design, choosing electronics and so forth. This paper will only describe the development of the estimation and control algorithms. Figure \ref{fig:ship}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/stingray.jpg} % width of a column is 8.4 cm.
+		\caption{AAUSHIP.01 - a prototype of an autonomous maritime surface oceanographer.}  
+		\label{fig:ship}
+	\end{center}
+\end{figure}
 
 \subsection{Problem statement}
 \begin{hypo} Is it possible to develop a centralized state estimator for use in the maritime environment using a small data link \end{hypo}
@@ -85,11 +93,11 @@ The path planning algorithm is based around the train-track transition problem o
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the Speed($v$) and Path Curvature($\kappa$). Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling ($\sigma$) of the Euler spiral:
+The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the speed $v$ and path curvature $\kappa$. Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling $\sigma$ of the Euler spiral:
 \begin{align}
 A_{C_{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \sigma = \frac{\alpha_{max}}{v^2_{max}}
 \end{align}
-A threshold angle of turn ($\varepsilon_{max}$)can be determined based on the vehicle parameters above:
+A threshold angle of turn $\varepsilon_{max}$ can be determined based on the vehicle parameters above:
 \begin{align}
 \varepsilon_{max} = \frac{\kappa^2_{max}}{2\sigma}
 \end{align}
@@ -285,14 +293,7 @@ Thus giving the engine set-points as a function of the force of the system. The 
 
 
 \subsection{Controller verification}
-Running the system with just the controllers produces the following plot trying to follow a path around the parking lot. 
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=8.4cm]{img/abspos}    % The printed column  
-		\caption{CONTROLLER VERIFICATION}  % width of a column is 8.4 cm.
-		\label{fig:3points}               
-	\end{center}                                 % accordingly.
-\end{figure}
+As the waters around Aalborg froze over before final tests of the controller could be conducted. The verification of the controllers are let out, and are to be tested once the waters around Aalborg clears out. 
 
 \subsection{Path planning results}
 Planning the path on a stretch of water in Aalborg produces the following results:
@@ -305,12 +306,21 @@ Planning the path on a stretch of water in Aalborg produces the following result
 \end{figure}
 
 \subsection{Kalman filtering verification}
-Filtering the above traced controller route with the Kalman filter, having the input to the system to zero, and post processing the data produces the following plot.
+To test if the Kalman filter works as intended, the filter was tuned, and the navigation box of the ship was carried on a track. When the track was turning, the GPS was turned off for 60 seconds, allowing the ship only to rely on the Kalman estimates (which was based on the IMU). As seen on the two figures, the estimates follows the curvature nicely, and once the GPS comes back online, the estimates converges towards it. 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/abspos}    % The printed column  
-		\caption{KALMAN FILTERING VERIFICATION}  % width of a column is 8.4 cm.
-		\label{fig:3points}               
+		\includegraphics[width=8.4cm]{img/track}    % The printed column  
+		\caption{Kalman filtering verification, where the ship is to track the red crosses. (a) depicts the ship when the GPS is online at all times. (b) is when the GPS is turned off for 60 seconds.}  % width of a column is 8.4 cm.
+		\label{fig:track}               
+	\end{center}                                 % accordingly.
+\end{figure}
+As seen on figure \ref{fig:track} the Kalman filter behaves as expected. If the errors are plotted (seen on figure \ref{fig:error}), the convergence of the track becomes more clear, as it jumps from about 15 metres down to approximately zero. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/error}    % The printed column  
+		\caption{Kalman filtering, plot of the absolute position error. (a) depicts the error when the GPS is online at all times. (b) is when the GPS is offline for 60 seconds.}  % width of a column is 8.4 cm.
+		\label{fig:error}               
 	\end{center}                                 % accordingly.
 \end{figure}
 
