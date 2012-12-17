@@ -82,7 +82,7 @@ The methods developed in this project - and the papers. 2
 
 \subsection{Path planning algorithm}
 
-The path planning algorithm is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
+The path planning algorithm is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. A series of key points are generated in the turn, which determine a path that meets the above requirements \citep{Art:2}. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
 \begin{align}
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
@@ -107,7 +107,7 @@ The 3 key points are given by the coordinate sets:
 \begin{align}
 A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
 \end{align}
-From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$.
+From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$. 
 \begin{align}
 \varepsilon = \frac{\textrm{dx }F(t)}{\textrm{dy}} \quad \to \quad [x_d,y_d] = F^{-1}(\varepsilon)
 \end{align}
@@ -128,7 +128,7 @@ Which is still a mirroring of points about the $x=0$ axis, as the entry angle is
 X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max}),\,\, P_X = X_R + y_d \cdot \sin(\varepsilon)\\
 X_1 &= P_X + x_d \cdot \cos(\varepsilon),\,\, Y_1 = X_1 \cdot \tan(\varepsilon)\\
 P_Y &= Y_1 - x_d \cdot \sin(\varepsilon),\,\, Y_2 = P_Y + y_d \cdot \cos(\varepsilon)\\
-O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2,\,\, R_Y = O_Y - R_\text{min}\\
+O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2,\,\, Y_R = O_Y - R_\text{min}\\
 X_2 &= X_R
 \end{align}
 
@@ -257,10 +257,10 @@ Arthur N. Talbot,
 \newblock \emph{The Railway Transition Spiral}
 \newblock The Engeneering News Publishing Co., 1901
 
-\bibitem[Talbot (1901)]{Art:1} % The name shown in the report, and the lable \cite{Art:1}
-Arthur N. Talbot, % Name of the author
-\newblock \emph{The Railway Transition Spiral} % The name of the thesis
-\newblock The Engeneering News Publishing Co., 1901 % The publisher
+\bibitem[K\'oml\'osi-Kiss (2011)]{Art:2} % The name shown in the report, and the lable \cite{Art:1}
+Istv\'a n Koml\'{o}si \& B\'a lint Kiss, % Name of the author
+\newblock \emph{Mobilis robotok auton\'{o}m navig\'aci\'{o}ja mozg\'{o} akad\'alyok elker\"ul\'es\'evel} % The name of the thesis
+\newblock Budapest University of Technology and Economics, 2011 % The publisher
 
 \end{thebibliography}
 

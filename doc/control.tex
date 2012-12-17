@@ -362,7 +362,7 @@ Since the GPS does not provide any information about the attitude of the ship, a
 \subsection{Pitch or roll}
 
 For the control system implementation we employed a simpler solution: assuming the ship will either have no roll or pitch, we could chose to improve either the position estimation or the velocity estimation, based on the natural accelerometer data only.
-The \emph{Roll} and the \empg{Pitch} are caused by \emph{perpendicular} and \emph{paralell} external forces attacking the hull of the ship, in respect to the motion.
+The \emph{Roll} and the \emph{Pitch} are caused by \emph{perpendicular} and \emph{paralell} external forces attacking the hull of the ship, in respect to the motion.
 The measurements during various development phases suggested, that the variance of the fixed GPS position is very low, so enhancing the calculated position based on external forces is not required. In addition we can assume, that the sideways and vertical motion in still water is neglectable.
 
 In the implementation, the sum of the acceleration vectors are calculated, and is compared to a reference gravity acceleration data:
