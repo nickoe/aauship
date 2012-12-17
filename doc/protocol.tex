@@ -4,7 +4,7 @@
 \section{Standard format of messages}
 %To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwidth which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
 
-To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section ~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has several different outputs, which needs to be processed independent of each other. Because of this, they are broken into separate packages, each with their own ID and checksum. This simplifies parsing and allows the protocol to easily be expanded to other sensors and actuators which were not included in the original design. A short, single state packet limits the effect of a flipped bit, since only a single state has been lost, compared to a packet containing all information.
+To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section ~\vref{sec:PacketLoss}. For instance, the \ac{IMU} has several different outputs, which needs to be processed independent of each other. Because of this, they are broken into separate packages, each with their own ID and checksum. This simplifies parsing and allows the protocol to easily be expanded to other sensors and actuators which were not included in the original design. A short, single state packet limits the effect of a flipped bit, since only a single state has been lost, compared to a packet containing all information.
 
 As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be variable. However, there are some fixed elements, which is possible to decide now. The number of sensors/actuators connected to the \ac{LLI} can by design not be more than 256, which makes way for a 1-byte device resolution. As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. In addition to this header a length byte is contained to describe the length of the data field, to make it easier to parse. Lastly a \ac{CRC} checksum is added on the end to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure. Everything other than the data field is fixed length as described in table~\vref{tab:general}. 
 The data field can be either binary or ASCII, depending on the source. It is desired to limit the amount of calculations necessary at the LLI, seeing as the power of the HLI is many times greater, as well as the implementation being simpler.
@@ -68,7 +68,7 @@ If a packet with MsgID 0 is sent to a device, the device will respond with a lis
 
 An x in the first column indicates that funcitonality is implemented on \ac{LLI}.
 
-\begin{table}[h]
+\begin{sidewaystable}[h]
 \centering
 	\begin{tabular}{llrrl}
 	\toprule
@@ -79,16 +79,27 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& List available devices & 0 & Up to 255 & Return a message for every available device\\
 	& Set options & 1 & Up to 255 & Option bytes\\
 	& Read Options & 2 & Up to 255 & Option bytes\\
-	& Deadman Switch & 3 & 1 & On or off signal for actuators \\
+	& Deadman Switch & 3 & 1 & On or off signal for actuators auto zero \\
 	& Status & 4 & Up to 255 & Statuses of sensors and actuators \\
 	x& Ping & 5 & 0 & Empty \\
 	x& Pong & 6 & 0 & Empty \\
 	& ACK & 7 & 0 & Empty \\
 	& NACK & 8 & 0 & Empty \\
-	& Build Info & 9 & Up to 255 & Commit, target, date\\
+	x& Build Info & 9 & Up to 255 & Commit, target, date\\
 	& Surge & 10 & 1 & Speed\\
 	& Turn & 11 & 1 & Turning velocity\\
 	\bottomrule
+	\end{tabular}
+\end{sidewaystable}
+\newpage
+
+
+\begin{sidewaystable}[h]
+\centering
+	\begin{tabular}{llrrl}
+	\toprule
+	& \textbf{Message Name} & \textbf{MsgID} & \textbf{Data Size} & \textbf{Contains}\\
+	\midrule
 	\multicolumn{5}{l}{\textbf{10: Actuators}}\\
 	\midrule
 	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
@@ -114,10 +125,10 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Read PWM output 1 and 2 & 20 & 4 & Engine 1 and 2\\ 
 	\midrule
 	\end{tabular}
-\end{table}
+\end{sidewaystable}
 \newpage
 
-\begin{table}[h]
+\begin{sidewaystable}[h]
 \centering
 	\begin{tabular}{llrrl}
 	\toprule
@@ -140,9 +151,9 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	\midrule
 	\label{tab:commands}
 	\end{tabular}
-\end{table}
+\end{sidewaystable}
 \newpage
-\begin{table}[h!]
+\begin{sidewaystable}[h!]
 \centering
 	\begin{tabular}{lllll}
 	\toprule
@@ -156,6 +167,7 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Velocity & 3 & 2 & Velocity\\
 	& Latitude & 4 & 4 & Latitude\\
 	& Longitude & 5 & 4 & Longitude\\
+	x& Reduced RMC & 30 & 6 & Cut of RMC sentence with the main part\\
 	\midrule
 	\multicolumn{5}{l}{\textbf{40: Temperature}}\\
 	\midrule
@@ -174,89 +186,7 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Voltage & 3 & Up to 255 & Voltage\\
 	\bottomrule
 	\end{tabular}
-\end{table}
+\end{sidewaystable}
 
-The protocol is implemented as a class on the HLI
-
-
-\section{General messages}
-
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llll}
-		\toprule
-		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
-		\midrule
-		Deadman switch & 0 & 1 & Turn on or off actuators and wait for manual control \\
-		Status of system & 1 & Up to 255 & Statuses of sensors and actuators \\
-		Ping & 2 & Empty \\
-		Pong & 3& Empty \\
-		ACK & 4 & Empty\\
-		NACK & 5 & Empty\\
-		Build info & 6 & Up to 255 & Commit, target, date\\
-		Surge & 7 & 1 & Speed\\
-		Turn & 8 & 1 &\\
-		\bottomrule
-	\end{tabular}
-	\caption{Byte field description of general messages (devid 0)}
-	\label{tab:ack}
-\end{table}
-
-\todo{Expand each message row with rows of data fields}
-
-\section{Actuator messages}
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llll}
-		\toprule
-		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
-		\midrule
-		Actuators ON/OFF & 0 & 1 & Bit mask representing which actuators should be of and on\\
-		Set right thruster & 1 & 2 & Speed (main thruster of only one) \\
-		Set left thruster & 2 & 2 & Speed \\
-		Set bow thruster & 3 & 2 & Speed \\
-		\bottomrule
-	\end{tabular}
-	\caption{Byte field description of actuator messages (devid 1)}
-	\label{tab:ack}
-\end{table}
-
-\section{Sensor messages}
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llll}
-		\toprule
-		\textbf{Message name}  & \textbf{msgid} & \textbf{data size} & \textbf{Action}\\
-		\midrule
-		Acclerometer & 0 & 1 & \\
-		Gyrometer & 1 & 2 & \\
-		Magnetometer & 2 & 2 &  \\
-		GPS & 3 & 2 & GPGGA data \\
-		\bottomrule
-	\end{tabular}
-	\caption{Byte field description of sensor messages (devid 3)}
-	\label{tab:ack}
-\end{table}
-
-
-
-
-STATUS
-gps
-vsupply
-under\_way
-actuators\_on
-autopilot\_on
-cpu\_usage
-
-ACTUATORS\_OFF
-
-ACTUATORS\_ON
-
-MARK\_HOME
-
-GET\_POSITION
-
-REPORT\_POSITION
-
+The protocol is implemented as a class on the HLI.
 
