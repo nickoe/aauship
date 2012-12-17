@@ -32,12 +32,12 @@
 
 \thanks[footnoteinfo]{Thanks to the  has been paid for in full by the School of Information Communication and Technology.}
 
-\author[First]{Rasmus L. Christensen} 
-\author[First]{Frederik Juul} 
-\author[First]{Nick \O stergaard}
-\author[First]{Attila Fodor}
-\author[First]{Tudor Muresan}
-\address[First]{Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk)}                                            
+\author{Rasmus L. Christensen} 
+\author{Frederik Juul} 
+\author{Nick \O stergaard}
+\author{Attila Fodor}
+\author{Tudor Muresan}
+\address{Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk)}                                            
           
 \begin{keyword}                           % Five to ten keywords,  
 Path planning; Centralised control; Baud rates; State estimation; Marine systems; Master slave system;              % chosen from the IFAC 
@@ -56,7 +56,7 @@ The performance for the algorithms developed in this project, have been tested i
 
 \section{Introduction}
 Seaborne measurements are often an expensive and time-consuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available.
-The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amounts of traffic possible. If a ship would need to get very close to the shores, up to date maps of the area would also be a requirement. This need is acknowledged and is considered important for the flourishing greenlandic industrialization by the government of Denmark, but the project does not have sufficient funding.
+The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amounts of traffic possible. If a ship would need to get very close to the shores, up to date maps of the area would also be a requirement. This need is acknowledged and is considered important for the flourishing greenlandic industrialization by the government of Denmark, but the project does not have sufficient funding. \cite{engineer}.
 
 One way to reduce the cost of such maritime measurements would be to develop small autonomous drones to carry out the task. These should be controlled by a mothership to enable easy scalability and coordination. Further, they should communicate using a simple data link to preserve bandwidth and limit power consumption. The system should be robust to dataloss and measurementnoise which can be expected from low cost sensors. This can be achieved through sensor fusion.
 
@@ -69,7 +69,7 @@ Currently the main focus of autonomous vehicles have been on aerial, ground and 
 	\end{center}
 \end{figure}
 
-Figure \ref{fig:stingray} is an already existing autonomous surface vehicle, primarily developed as an aid in SAR (search and rescue) missions, but can also be equipped with other sensory equipment, which can be used to map the sea bed, or measure the amount of radiation in coastal areas. The scope of this project is however to develop a smaller vehicle, which in turn could function as part of a measuring swarm, controlled by a mother ship, thus making measuring missions more efficient and less time consuming.
+Figure \ref{fig:stingray} depicts an already existing autonomous surface vehicle, primarily developed as an aid in SAR (search-and-rescue) missions, but can also be equipped with other sensory equipment, which can be used to map the sea bed, or measure the amount of radiation in coastal areas. The scope of this project is however to develop a smaller vehicle, which in turn could function as part of a measuring swarm, controlled by a mother ship, thus making measuring missions more efficient and less time consuming.
 
 \subsection{Problem statement}
 \begin{hypo} Is it possible to develop a centralized state estimator for use in the maritime environment using a small data link \end{hypo}
@@ -346,6 +346,12 @@ A special thank should be given to Assistant Professor Carles Navarro Manchòn, 
                                  % Elsevier at the time of printing.
 
 \begin{thebibliography}{xx}
+
+\bibitem[Ingeni\o ren(2012)]{engineer}
+Birgitte Marfelt,
+\newblock Ingeni\o ren
+\newblock \emph{Tom pengekasse bremser søkort omkring Gr\o nland}
+\newblock Mediehuset Ingeniøren, 2012
 
 \bibitem[Talbot(1901)]{Art:1}
 Arthur N. Talbot,
