@@ -8,7 +8,7 @@ However, to further strengthen the structure, inlays are made by slicing a box a
 To get a better understanding of ship dynamics a rapid prototyping technique has been used, where 3D models of the ship have been printed - and if it didn't live up to our demands (visually deciding if the design was flawed), a revised model was then printed. Using an iterative process - the final design was reached.
 
 \section{Bow thruster}
-The ship design includes a bow thruster, which can be used to perform precision maneuvers in tight spaces. This component is not currently mounted on the ship nor is it included in our control algorithms, because it has little or no effect on the ship when used at higher speeds. If included, it would be controlled by the \ac{LLI} with a direction and a \ac{PWM} signal. 
+The ship design includes a bow thruster, which can be used to perform precision maneuvers in tight spaces. This component is not currently mounted on the ship nor is it included in our control algorithms, because it has little or no effect on the ship when used at a speed than exceeds the normal operating boundaries, because the dynamic buoyancy will lift the front of the ship above the water. If included, it would be controlled by the \ac{LLI} with a direction and a \ac{PWM} signal. 
 
 The electronic design of the bow thruster controller can be found in subsection \ref{subsec:bow thruster controller}: Bow thruster controller.
 
