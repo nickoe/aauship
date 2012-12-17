@@ -74,7 +74,11 @@ class O_Ship:
         
         self.N = numpy.matrix([[2.1366547e+001, 1.5569542e-016], [ 8.3542070e-016, 2.2764131]])
         
+        self.N = numpy.matrix([[19.5956,0],[0,2.2743]]) # ts = 0.33
+        
         self.F = numpy.matrix([[1.6012147e+001, 1.5569542e-016, 3.3824418e-016], [8.3542070e-016, 2.2764131e+000, 2.2219859e+000]])
+        
+        self.F = numpy.matrix([[10.6956, 0, 0],[0, 2.2743, 0.6681]]) # ts = 0.33
         
         self.states = numpy.matrix([[0],[0],[0],[0],[0]])
         
@@ -304,7 +308,7 @@ class O_Ship:
             navigation procedure jumps to the next Sub-Waypoint
             '''
             valid = (FL.Distance(self.Pos, self.NextSWP) > self.FollowDistance);
-            self.swplog.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + ", " + str(time.time()) + "\r\n")
+            #self.swplog.write(str(self.NextSWP.get_Pos_X()) + ", " + str(self.NextSWP.get_Pos_Y()) + ", " + str(time.time()) + "\r\n")
             
             if valid == 0 and self.WPsEnded == 1:
                 self.EndPath = 1
@@ -350,10 +354,10 @@ class O_Ship:
         Reads systems states from sensors (processed data)
         '''
         
-        x = input_m[0,0]
+        y = input_m[0,0]
         xd = input_m[1,0]
         xdd = input_m[2,0]
-        y = input_m[3,0]
+        x	 = input_m[3,0]
         yd = input_m[4,0]
         ydd = input_m[5,0]
         theta = input_m[6,0]
@@ -433,8 +437,8 @@ class O_Ship:
         else:
         	self.correction = 0
         	
-        	y_next = ((X - prev_fx) * math.sin(Th)) + curpos[1] + self.correction * math.cos(Th)
-        	x_next = ((X - prev_fx) * math.cos(Th)) + curpos[0] - self.correction * math.sin(Th)
+        	x_next = ((X - prev_fx) * math.sin(Th)) + curpos[0]
+        	y_next = ((X - prev_fx) * math.cos(Th)) + curpos[1]
         #self.filterlog.write(str(float(self.Pos.get_Pos_X())) + ", " + str(float(self.Pos.get_Pos_Y())) + "\r\n")
         #print x_next, y_next
         #x_next = ((V * self.Ts) * math.sin(Th)) + curpos[0] + self.correction * 0.1* math.cos(Th)

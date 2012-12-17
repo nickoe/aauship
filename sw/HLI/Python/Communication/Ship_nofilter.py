@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import FunctionLibrary as FL
 import ObjectLibrary as OL
 import KalmanFilter as KF
-
+import time
 '''
 #############################################
 # General Ship class
@@ -72,10 +72,12 @@ class O_Ship:
         '''
         
        # self.N = numpy.matrix([[1.2196566e+001, -2.2165773e-016], [ 2.9639884e-017, 9.6263068e-001]])
-        self.N = numpy.matrix([[14.1834, 0],[0,1.8752]])
+       # self.N = numpy.matrix([[14.1834, 0],[0,1.8752]])
+        self.N = numpy.matrix([[19.5956,0],[0,2.2743]]) # ts = 0.33
         
        # self.F = numpy.matrix([[6.8421661e+000, -2.2165773e-016, -9.5435368e-017], [2.9639884e-017, 9.6263068e-001, 1.4310741e+000]])
-        self.F = numpy.matrix([[5.2835,0,0],[0,1.8752,0.5713]])
+        #self.F = numpy.matrix([[5.2835,0,0],[0,1.8752,0.5713]])
+        self.F = numpy.matrix([[10.6956, 0, 0],[0, 2.2743, 0.6681]]) # ts = 0.33
         
         self.states = numpy.matrix([[0],[0],[0],[0],[0]])
         
@@ -356,7 +358,7 @@ class O_Ship:
         Reads systems states from sensors (processed data)
         '''
         
-        x = numpy.sum(input_m[0,0])
+        y = numpy.sum(input_m[0,0])
         if(numpy.sum(input_m[1,1])) == 1:
         	xd =numpy.sum(input_m[1,0])
         else:
@@ -364,7 +366,7 @@ class O_Ship:
        # xd = self.virtvel
       #  self.virtvel += 0.001
         xdd = numpy.sum(input_m[2,0])
-        y = numpy.sum(input_m[3,0])
+        x = numpy.sum(input_m[3,0])
         yd = numpy.sum(input_m[4,0])
         ydd = numpy.sum(input_m[5,0])
         theta = numpy.sum(input_m[6,0])
@@ -374,7 +376,7 @@ class O_Ship:
 
         self.Ts = 0.05
         self.v = xd
-        self.statelog.write(str(self.v) + "\r\n")
+       # self.statelog.write(str(self.v) + "\r\n")
         self.omega = omega
         self.Theta = math.atan2(math.sin(theta), math.cos(theta))
          
@@ -384,13 +386,13 @@ class O_Ship:
         
         if numpy.sum(input_m[0,1]):
             
-            x_next = 0.7 * x + 0.3 * self.Pos.get_Pos_X()
-            y_next = 0.7 * y + 0.3 * self.Pos.get_Pos_Y()
+            x_next = (1-self.Ts) * x + self.Ts * self.Pos.get_Pos_X()
+            y_next = (1-self.Ts) * y + self.Ts * self.Pos.get_Pos_Y()
             
         else:
         
-            x_next = xd * 0.3 * math.sin(theta) + self.Pos.get_Pos_X()
-            y_next = yd * 0.3 * math.cos(theta) + self.Pos.get_Pos_Y()
+            x_next = xd * self.Ts * math.sin(theta) + self.Pos.get_Pos_X()
+            y_next = xd * self.Ts * math.cos(theta) + self.Pos.get_Pos_Y()
             
         #print('FX', x_next, 'FY', y_next, 'FV', numpy.sum(self.states[2]), 'FT', numpy.sum(self.states[3]), 'FO', numpy.sum(self.states[4]))
         self.log.write(str(x_next) + ', ' + str(y_next) + ', ' + str(self.v) + ', ' + str(self.Theta) + ', ' + str(angacc) + ", " + str(time.time()) + "\r\n")

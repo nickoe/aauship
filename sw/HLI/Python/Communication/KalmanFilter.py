@@ -67,8 +67,8 @@ class Filter:
         # white gaussian noise, with zero mean (for most cases) and with a
         # variance, that are estimated in Appendix #XX. 
         self.varXpos = 0.979# * 0.00000000001
-        self.varXvel = 0.00262 * 10
-        self.varXacc = 1.5# 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
+        self.varXvel = 0.00262 * 100
+        self.varXacc = 1# 4.9451e-5 #  m/s^2 or 5.045*10^-6 G 
         
         self.varYpos = 1.12 * 1
         self.varYvel = 0.0001 * 1

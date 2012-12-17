@@ -54,8 +54,8 @@ Waypoint ADDING
 #Y = numpy.array([33.866070951884211, 35.298945836124972]) #Easting
 #X = numpy.array([-28.917917253103049,42.596021647672877]) #Northing
 
-Y = numpy.array([0,2.5574,0.5683,-163120,-437704])
-X = numpy.array([0,-18.3388,-36.7722,-53.9444,-54.2330])
+Y = numpy.array([0,2.5574,0.5683,-16.3120,-40.7704]) #Easting
+X = numpy.array([0,-18.3388,-36.7722,-53.9444,-54.2330]) #Northing
 
 WPC = numpy.array([X,Y])
 AAUSHIP.SetWaypoints(WPC)
@@ -83,9 +83,9 @@ Control loop
 
 
 
-accf = open("measurements/accdata141212.csv", 'w')
-gpsf = open("measurements/gpsdata141212.txt", 'w')
-statelog = open("measurements/statelog141212.txt",'w')
+#accf = open("measurements/accdata141212.csv", 'w')
+#gpsf = open("measurements/gpsdata141212.txt", 'w')
+#statelog = open("measurements/statelog141212.txt",'w')
 
 qu = Queue.Queue()
 kalqueue = Queue.Queue()
@@ -95,7 +95,7 @@ receiver.start()
 
 measuredstates = numpy.zeros((9,2))
 tempm = measuredstates
-parser = packetparser.packetParser(acclog,gpslog,measuredstates)
+parser = packetparser.packetParser(acclog,gpslog,measuredstates,receivinglog)
 bla = True
 timeout = 1000
 p = receiver.constructPacket("",0,9)
@@ -107,6 +107,7 @@ stopping = False
 count = 0
 print "message sent"
 motor = numpy.matrix([[0],[0]])
+motor2 = numpy.matrix([[0],[0]])
 sendControl = 0
 running = True
 sign = 1
@@ -122,6 +123,7 @@ try:
 				try:
 					
 					p = qu.get(False)
+					#receivinglog.write(str(p['DevID']) + "," + str(p['MsgID']) + "," + str("".join(p['Data'])) + "\r\n")
 					if ord(p['DevID']) != 255:
 						#print "\r" + str(p),
 						#print p
@@ -159,8 +161,10 @@ try:
 						parser.parse(p2)
 						tempm = measuredstates
 						#print measuredstates[0]
+						motor2 = AAUSHIP.Control_Step()
 						motor = AAUSHIP.Control_Step()
 						
+						AAUSHIP2.ReadStates(measuredstates,motor)
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						#print measuredstates
@@ -169,13 +173,17 @@ try:
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 20:
 						parser.parse(p2)
 						#print measuredstates[0]
+						motor2 = AAUSHIP2.Control_Step()
 						motor = AAUSHIP.Control_Step()
+						AAUSHIP2.ReadStates(measuredstates,motor)
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 255:
 						parser.parse(p2)
+						motor2 = AAUSHIP2.Control_Step()
 						motor = AAUSHIP.Control_Step()
+						AAUSHIP2.ReadStates(measuredstates,motor)
 						AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						
@@ -196,19 +204,24 @@ try:
 						#print sendControl
 						#print str(count)
 						count += 1
+						#motor2 = AAUSHIP2.Control_Step()
+						#AAUSHIP2.ReadStates(measuredstates,motor)
+						
 						sp = receiver.constructPacket(str(count)+"\r\n",10,19)
 						receiver.sendPacket(sp)
 						tosend = AAUSHIP.FtoM(motor)
+						tosend2 = AAUSHIP2.FtoM(motor2)
 						#print sendControl
 						#print "Sent data"
 						
 						print motor
+						print motor2
 						#print "LastWP: \t" +  str(AAUSHIP.LastWP)
 						print "Theta_r: \t" + str(AAUSHIP.get_Thera_r()*180/pi)
 						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
-						print "NextWP (E,N): \t" + str(AAUSHIP.NextSWP.get_Pos())
-						print "Pos (E,N): \t" + str(AAUSHIP.Pos.get_Pos())
-						print "NFPos (E,N): \t" + str(AAUSHIP2.Pos.get_Pos())
+						print "NextWP (N,E): \t" + str(AAUSHIP.NextSWP.get_Pos())
+						print "Pos (N,E): \t" + str(AAUSHIP.Pos.get_Pos())
+						print "NFPos (N,E): \t" + str(AAUSHIP2.Pos.get_Pos())
 						print "MeasPos: \t" + str(AAUSHIP.get_mp())
 						print "Vel: \t" + str(AAUSHIP.get_vel())
 						
@@ -218,7 +231,9 @@ try:
 						#print tosend
 						
 						#print motor[1,0]
-						controllog.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + ", " + str(time.time()) +"\r\n")
+						Kcontrol.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + ", " + str(time.time()) +"\r\n")
+						Ncontrol.write(str(tosend2[0][0]) + ", " + str(tosend2[1][0]) + ", " + str(motor2[0,0]) + ", " + str(motor2[1,0]) + ", " + str(time.time()) +"\r\n")
+						
 						#print tosend
 						receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
 						#print measuredstates
@@ -313,12 +328,25 @@ while True:
 	except:
 		break
 '''
-accf.close()
-gpsf.close()
-Kalmanfile.close()
-swp.close()
-controllog.close()
-swpnf.close()
+#accf.close()
+#gpsf.close()
+#Kalmanfile.close()
+#swp.close()
+#controllog.close()
+#swpnf.close()
+
+receivinglog.close()
+acclog.close()
+gpslog.close()
+
+Kswp.close()
+Kcontrol.close()
+Kstate.close()
+
+Nswp.close()
+Ncontrol.close()
+Nstate.close()
+
 print "done"
 
 quit()	

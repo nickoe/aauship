@@ -7,13 +7,14 @@ from math import pi, atan
 import gpsfunctions
 import time
 class packetParser():
-	def __init__(self,accelfile,gpsfile,measstate):
+	def __init__(self,accelfile,gpsfile,measstate,fulllog):
 		self.GPS = {0: 'Latitude', 1: 'Longtitude', 2: 'Velocity'}
 		self.IMU = {0: 'Acceleration X', 1: 'Acceleration Y', 2: 'Acceleration Z', 3: 'Gyroscope X', 4: 'Gyroscope Y', 5: 'GyroscopeZ', 6: 'MagnetometerX', 7: 'MagnetometerY', 8: 'MagnetometerZ', 9: 'Temperature'}
 		self.MsgID = {0: self.GPS, 1: self.IMU}
 		self.DevID = {0: 'GPS', 1: 'IMU'}
 		self.accelburst = [0,0,0,0,0,0,0]
 		self.accellog = accelfile
+		self.fulllog = fulllog
 	#	self.accelwriter = csv.writer(self.accellog)
 		self.prevtime = 0
 		self.excount = 0
@@ -50,7 +51,7 @@ class packetParser():
 					#print "IMU: " + str(self.accelburst)
 					
 					
-					print "IMU"
+					#print "IMU"
 					meas = numpy.zeros((9,2))
 					accelnr = 0
 					order = [7,1,4,6,6]
@@ -81,11 +82,13 @@ class packetParser():
 								except:
 									pass
 								self.accellog.write(str(val[0]) + ", ")
+								self.fulllog.write(str(val[0]) + ", ")
 								measurements.append(val[0])
 								#print val[0]
 						#print measurements[5]
-						print measurements
+						#print measurements
 						self.accellog.write(str(time.time()) + "\r\n")
+						self.fulllog.write(str(time.time()) + "\r\n")
 						if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value
 							#Calculate heading from magnetometer:
 							
@@ -107,7 +110,7 @@ class packetParser():
 							
 							accx = -measurements[2] * self.accconst
 							accy = -measurements[1] * self.accconst
-							gyroz = measurements[0] * self.gyroconst
+							gyroz = -measurements[0] * self.gyroconst
 							
 							
 							self.state[2] = [accx,		1]
@@ -122,7 +125,7 @@ class packetParser():
 							
 							#print chr(27) + "[2J"
 							#print self.measureddata
-							self.state = numpy.zeros((9,2))
+							self.state[:,1] = 0
 							
 						'''
 					
@@ -186,6 +189,7 @@ class packetParser():
 							except:
 								pass
 							self.accellog.write(str(val[0]) + ", ")
+							self.fulllog.write(str(val[0]) + ", ")
 							tmeasurements.append(val[0])
 							#print val[0]
 					#print measurements[5]
@@ -224,6 +228,7 @@ class packetParser():
 					measurements.append(tmeasurements[11])
 					print measurements
 					self.accellog.write(str(time.time()) + "\r\n")
+					self.fulllog.write(str(time.time()) + "\r\n")
 					if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value
 						#Calculate heading from magnetometer:
 						
@@ -246,6 +251,7 @@ class packetParser():
 						accx = -measurements[2] * self.accconst
 						accy = -measurements[1] * self.accconst
 						gyroz = measurements[0] * self.gyroconst
+						
 						
 						
 						self.state[2] = [accx,		1]
@@ -280,16 +286,18 @@ class packetParser():
 					# [5] E or W (E)
 					# [6] Speed over ground
 					#print content[6]
-					if content[1] == 'A':
+					'''
+					if content[1] == 'A' :
 						self.gpsinvalid += 1
 					
-					if 300 <= self.gpsinvalid <= 360:
+					if 42 <= self.gpsinvalid <= 67:
 						content[1] = 'V'
-						#print "Gps invalid!"
-					
+						print "Gps invalid!"
+					'''
 					if content[1] == 'A' :
 					
 						self.gpslog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
+						self.fulllog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
 						#print content
 						speed = float(content[6]) * 0.514444444 #* 0 + 100
 						#print str(speed) + " m/s"
