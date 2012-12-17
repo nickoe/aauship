@@ -11,20 +11,31 @@ The HLI consists of 3 main modules and an additional simulator module, which is 
 The main module of the software is the Ship Class and its function definitions.
 The Ship Class itself represents an emph{actor} in the system. A Ship Object has individual dynamic model, controller and objective. Each Ship Object can plan its own waypoints, navigate trough them using their own sensor data and log informations.
 
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \includegraphics[width = 0.5\textwidth]{img/HLIFigures/ActorModel/Actor-model0.png}
-\end{center}
+\caption{Actor Model}
+\label{fig:actor_model0}
+\end{figure}
 
 A Ship Object requires auxillary Classes and Functions. The two side-modules of the system are the ObjectLibrary and FunctionLibrary. These Libraries store Classes and Functions, which are not directly connected to the physical behaviour of the ship, but provide an essential support for the Path Planning and Navigation control.
 
+\begin{figure}[htbp]
+\centering
 \includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/Actor-model1.png}
-
+\caption{Actor Model}
+\label{fig:actor_model1}
+\end{figure}
 
 Each ship calculates its own \emph{Waypoints}, depending on their individual capabilities and inputs.
 There is a possibility for the ships to communicate trough a wireless channel with each other directly or trough a nearby mothership/computer, in order to share position data (to avoid collisions), or distribute the Path Planning tasks for enhanced computation power.
 
+\begin{figure}[htbp]
+\centering
 \includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/Actor-model2.png}
-
+\caption{Actor Model}
+\label{fig:actor_model2}
+\end{figure}
 
 The additional simulator module is an extension of the \emph{Ship Object}. In Simulation mode, to each \emph{Ship} belongs a \emph{Simulator}, simulating its interface communication and dynamic behaviour. The design of the simulator was led by two objectives:
 \begin{itemize}
@@ -33,7 +44,12 @@ The additional simulator module is an extension of the \emph{Ship Object}. In Si
 \item The simulator must be completely independent from the simulated system, except for the actuator values of the Ship.
 \end{itemize}
 
+\begin{figure}[htbp]
+\centering
 \includegraphics[width = \textwidth]{img/HLIFigures/ActorModel/SimModel.png}
+\caption{Simulation overview}
+\label{fig:sim_model}
+\end{figure}
 
 Because of the predefined objectives above, the flowchart of the simulated and the actual task has only minor differences. (Appendix)
 
@@ -44,7 +60,12 @@ The Course-keeping control is responsible for keeping the ship on-course during 
 The general strategy is to have a state-space control algorithm in infinite loop as the main task. The control parameterization is based on the ship model, measurements and identification.
 The program controls the ship along the specified path. If there is no next sub-\emph{Waypoint} or local path specified, the HLI calls the path planning methods for the next \emph{Waypoint}, then the procedure starts again from the beginning. If there are no more \emph{Waypoints}, the ship returns to the first \emph{Waypoint}, or to the starting coordinates specified in a subfunction of the Ship class.
 
+\begin{figure}[htbp]
+\centering
 \includegraphics[width = \textwidth]{img/HLIFigures/SWPNavigationConcept.png}
+\caption{Concept of sub waypoint for navigation and the radis speceficaiton.}
+\label{fig:swp_concept}
+\end{figure}
 
 Using Sub-\emph{Waypoints} instead of a full path line makes the navigation much easier. In open water there is significant sideways-motion caused by wind, ocean currents and waves, so staying perfectly true to a predefined path line is extremely difficult.
 Instead, by using a series of Sub-\emph{Waypoints}, the navigation of the ship resembles to a series of Buoys guiding trough hazardous waters. The Ship approaches each Sub-\emph{Waypoint} in a predefined order and turns to the next, when the ''buoy´´ is close enough.
@@ -55,11 +76,16 @@ The characteristics of the navigation and course can be varied only by changing 
 The \emph{Waypoint}-planning system provides the basic routing for the autonomous navigation system.
 The purpose of the \emph{Waypoint}-planning is to set key coordinates that the ship must approach, either for strictly defined reasons or to keep the ship away from forbidden or dangerous areas (like the coast or an island)
 
-There are two possibilities to set a collection of \emph{Waypoints}: The operator can either manually set them, based on the GPS coordinates of the \emph{Waypoints}, or by inputting a coastline data series is a specified data type. The coast input format is a series of perpendicular distances measured from a line parallel to the coast. The coast input can be generated based on freely available map data (Openstreetmap).
+There are two possibilities to set a collection of \emph{Waypoints}: The operator can either manually set them, based on the GPS coordinates of the \emph{Waypoints}, or by inputting a coastline data series is a specified data type. The coast input format is a series of perpendicular distances measured from a line parallel to the coast. The coast input can be generated based on freely available map data (OpenStreetMap).
 The automatic \emph{Waypoint} planner divides the coast to smaller parts, based on the required oceanography definition. For each segment a minimum approach distance is calculated, and the \emph{Waypoint} planner defines a set of \emph{Waypoints} along the path in a snake way, or in any other predefined setting. The figure below shows a simulation of an oceanography task using automatic \emph{Waypoint} planning. All values in meters.
 After the ship visited all of the \emph{Waypoints}, it returns to the first \emph{Waypoint}, or to a specified return position.
 
-\includegraphics[width = \textwidth]{img/LocalPlannerFigures/Auto_WP_Planning.png}
+\begin{figure}
+\centering
+\includegraphics[width = 0.8\textwidth]{img/LocalPlannerFigures/Auto_WP_Planning.png}
+\caption{An example of the waypoint palnners output. The blue line simulates a random generated coastline whilst the border of the plot illustrates a bounding box for the area needed to be covered.}
+\label{fig:wp_planner}
+\end{figure}
 
 Why are we using it?
 The need for a basic \emph{Waypoint}-planner is essential, but optimizing it was not a high priority task. To test the prototype, a series of manually set \emph{Waypoints} are adequate.
@@ -71,7 +97,12 @@ The path planning algorithm is based around the train-track transition problem o
 
 The path can be divided to a straight line and a turning sub-path. The combination of a straight path and a turn is a Path Segment. The local planner calculates a Path Segment from the current position to the end of the turn at the next Turning \emph{Waypoint} (Footnote: If three \emph{Waypoints} are in a line, the angle at the second is $\pi$, therefore it is not a turning \emph{Waypoint}), based on the \emph{Waypoint} after the Turning \emph{Waypoint} as well.
 
+\begin{figure}[htbp]
+\centering
 \includegraphics[width = \textwidth]{img/LocalPlannerFigures/StraightRoute.png}
+\caption{Illustration on how the Sub-\emph{Waypoints} would approximate the \emph{Waypoints} in corners, and become a straight line between \emph{Waypoints} outside the range.}
+\label{fig:straight}
+\end{figure}
 
 Calculating the smooth set of points for the turn:
 The initial idea was to use a pre-generated Euler-spiral or simple arc line, the program determines the required arc length and applies linear transformations to resize and rotate the path coordinates, thus creating a smooth path.
