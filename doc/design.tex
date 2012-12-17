@@ -24,3 +24,33 @@ The hardware layout can be seen in figure~\vref{fig:lli-hw} and the hardware sch
 The ship design includes a bow thruster, which can be used to perform precision maneuvers in tight spaces. This component is not currently included in our control algorithms, because it has little or no effect on the ship when used at speeds above \todo{what speeds?}. It will be controlled by the \ac{LLI} with a direction and a \ac{PWM} signal. 
 
 The electronic design of the bow thruster controller can be found in subsection \ref{subsec:bow thruster controller}: Bow thruster controller.
+
+\section{Ship hull}
+
+The hull of the ship follows a soft-chined displacement design, because in normal operating conditions the static buoyancy will dominate over dynamic. This shape affected less by the currents of the sea, and more by the wind. According to the data series of the British Oceanographic Data Centre\footnote[1]{https://www.bodc.ac.uk/data/online$\_$delivery/nodb/search/} near the shores of Greenland the drift caused by the steady currents is generally higher than the wind with a more randomly distributed blowing direction.
+The ship is outfitted with powerful main engines, so the vessel can perform fast and precise maneuvering without the bow thruster. Though these engines provide a lot of dynamic range, the ship hull was not designed for high speed.
+
+\begin{figure}[jumping]
+	\centering
+	\includegraphics[width=\textwidth]{Pictures/VerticalJumpingTele.jpg}
+	\caption{An excessive and unregulated bouncing can be experienced at high speeds.}
+	\label{fig:vessel-block-overview}
+\end{figure}
+
+The problem is caused by the size and power of the propellers. At slower speeds the effect ceases.
+
+\begin{figure}[waterpushup]
+	\centering
+	\includegraphics[width=\textwidth]{Pictures/Forward.jpg}
+	\caption{The power of the two engines force the water upwards between the propellers, therefore pushing the back of the ship down}
+	\label{fig:vessel-block-overview}
+\end{figure}
+
+Mirroring the setup and reversing the rotation movement would solve the pushing problem, but instead the back of the ship is pushed upwards, and air is sucked between the propellers. Instead, an additional vertical fin has been installed above the propellers, which keeps the water from being pushed upwards. As a positive side effect, the water after the hull is significantly less disturbed, thus the drag has been reduced as well. This has a positive effect on the range through the battery life.
+
+\begin{figure}[fin]
+	\centering
+	\includegraphics[width=\textwidth]{Pictures/Fin.jpg}
+	\caption{The rotating propellers with the fin mounted above them}
+	\label{fig:vessel-block-overview}
+\end{figure}
