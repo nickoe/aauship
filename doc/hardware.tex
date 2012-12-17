@@ -2,36 +2,53 @@
 
 Because of the practical nature of the project, there are some things that have to be into account from a hardware point of view.
 
+\section{LLI electronics}
+The \ac{LLI} electronics is a plug and play device that controls several smaller ship instances. It provides outputs to control the actuators, and basic sensor readings to the \ac{HLI}.
+
+The \ac{LLI} has been designed to allow for the above functionality. As described in section~\vref{sec:platform} the \ac{LLI} is an embedded platform, for which an Atmel AVR microcontroller has been choosen. The main control board is an Arduino Mega 2560, and a shield interface to all peripherials has been designed~\vref{chap:schema}.
+
+The final LLI supports the following features:
+\begin{description}
+\item[Serial]\hfill \\ interface to the \ac{HLI} with a baud rate of 115200 bps
+\item[PWM]\hfill \\ outputs for actuators
+\item[I$^2$C]\hfill \\ option for aux communication
+\item[Analog]\hfill \\ inputs for various sensors
+\item[Relay driver]\hfill \\ output
+\item[5V]\hfill \\ regulated output
+\end{description}
+
+More detailed information about hardware layout~\vref{fig:lli-hw} and the hardware schematic~\vref{chap:schema} can be found in the appendix.
+
 \section{Lithium Polymer batteries}
 
-	Lithium Polymer batteries have been chosen for powering the boat motors as well as for all the electronics because they offer a very high specific energy and energy density and can be charged in a very short period of time. 
+	Lithium Polymer batteries have been chosen for powering the boat motors as well as for all the electronics, because they offer a very high specific energy and energy density, and can be charged in a relatively short period of time. 
 
-	\subsection{Energy calculations}
+\subsection{Energy calculations}
 	
-	Each battery is composed of 4 series connected cells with a nominal voltage of 3.7 V, making a total of 14.8 V. There will be 6 such batteries, each storing 3200 mAh worth of charge. That yields a total of $ 6 \cdot 14.8 \text{ V} \cdot 3.2\text{ Ah} = 284.16 \text{ Wh} $ or around 1 MJ of energy.
+	Each battery is composed of 4 series connected cells with a nominal voltage of 3.7 V, making a total of 14.8 V. There will be 6 such batteries, each storing 3200 mAh worth of charge, which yields a total of $ 6 \cdot 14.8 \text{ V} \cdot 3.2\text{ Ah} = 284.16 \text{ Wh} $, around 1 MJ of energy.
 	
 	There are two separate electrical circuits: a power circuit for the motors for which there are 5 dedicated batteries connected in parallel and the electronics circuit which is separated in order to avoid noise in the digital circuitry. These two are alloted 236.8 Wh and 47.36 Wh respectively.
 	
 	\subsection{Battery care and charge meters}
 	
-	Due to the delicate nature of Li-Po batteries, it is absolutely required to never over-charge or over-discharge them because there is a high risk of permanent damage to the batteries. If the temperatures continue to raies, there is even a risk of fire and/or explosion. In order to prevent this, we are using a dedicated Li-Po charger with an included balancer, which ensures that none of the cells in the batteries go above the absolute maximum of 4.2 V while charging.
+	Due to the delicate nature of Li-Po batteries, it is absolutely required to never over-charge or over-discharge them because there is a high risk of permanent damage to the batteries. If the temperature continues to raise, there is even a risk of fire and/or explosion. In order to prevent this, we are using a dedicated Li-Po charger with an included balancer, which ensures that none of the cells in the batteries go above the absolute maximum of 4.2 V while charging.
 	
 	The problem of over-discharge is solved in the power circuit due to the fact that the brushless motor controller has a safety switch which does not allow any cell to drop below 3 V, which would cause permanent damage to the batteries, as they cannot recover after being over-discharged. 
 	
-	This is not the case, though, with the electronic circuit, which can drain the batteries more than the maximum limit. In order to prevent this from happening, we should eventually implement a couple of battery level monitors which should be integrated in the \ac{LLI} module and which can compute the battery levels and allow the user to retrieve the boat in order to charge it. They should also include a master kill switch which has the purpose of protecting the batteries.
+	The electronic circuit can drain the batteries more than the maximum limit though. In order to prevent this from happening, we implemented a couple of battery level monitors that are integrated in the \ac{LLI} module and, which can compute the battery levels, thus allow the user to retrieve the boat in order to charge it. They should also include a master kill switch that can save the batteries as well.
 
 \section{Electronics design}
 
 	\subsection{Bow thruster controller}
 	\label{subsec:bow thruster controller}
 	
-	The bow thruster controller is a circuit whose function is to provide power to the bow thruster, under the control of the \ac{LLI}. This usees a L298 H-bridge connected to a logic gate, so that it can be driven with just two signals: direction and \ac{PWM}.
+	The bow thruster controller is a circuit whose function is to provide power to the bow thruster, under the control of the \ac{LLI}. This uses a L298 H-bridge connected to a logic gate, so that it can be driven with just two signals: direction and \ac{PWM}.
 	
-	Another use of this circuit is to provide a lossless voltage level conversion from the batteries' nominal 14.8V to the motor's 7.2V rated voltage. That means that the maximum theoretical duty cycle of the PWM bow thruster control signal is $ 14.8 / 7.2 = 48 \% $. This, however, is not the actual value that will be used, due to the fall time of the L298 chip, which is pretty big at the 1kHz PWM frequency. By using an oscilloscope to measure the True RMS value of the electronic circuit's output, it was empirically determined that the maximum pulse width value is \colorbox{yellow}{What was this value?}. 
+	Another use of this circuit is to provide a lossless voltage level conversion from the batteries' nominal 14.8V to the motor's 7.2V rated voltage. %That means that the maximum theoretical duty cycle of the PWM bow thruster control signal is $ 14.8 / 7.2 = 48 \% $. This, however, is not the actual value that will be used, due to the fall time of the L298 chip, which is pretty big at the 1kHz PWM frequency. By using an oscilloscope to measure the True RMS value of the electronic circuit's output, it was empirically determined that the maximum pulse width value is \colorbox{yellow}{What was this value?}. 
 	The motor used to drive the bow thruster also has a minimum starting voltage. The PWM minimum duty cycle was empirically determined to be \colorbox{yellow}{What was it??}.
 	
-	The schematic of this electronic circuit is attached here \ref{appendices:bow thruster schematic}. Since the L298 chip has two H bridges inside it, the designed board actually includes the circuitry and parts for two controllers, since it was easily included and would provide redundancy in case one of them is overloaded or otherwise stops functioning.
+	\ref{appendices:bow thruster schematic}. Since the L298 chip has two H bridges inside it, the designed board \ref{appendices:bow thruster schematic} includes the circuitry and parts for the two controllers, since it would provide redundancy in case one of them is overloaded or otherwise stops functioning.
 	
 \section{Motors}
 
-The ship will be equipped with two brushless Graupner Inline 750 14.8 V motors, each driving a propeller. 
+The ship is equipped with two brushless Graupner Inline 750 14.8 V motors, each driving a horizontally mounted propeller.
