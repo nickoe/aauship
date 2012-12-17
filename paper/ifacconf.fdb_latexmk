@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1355679941 "ifacconf.tex" "ifacconf.pdf" "ifacconf" 1355679942
+["pdflatex"] 1355734742 "ifacconf.tex" "ifacconf.pdf" "ifacconf" 1355734743
   "/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2012/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2012/texmf-dist/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1136768653 3584 2d666ecf6d466d8b007246bc2f94d9da ""
@@ -104,9 +104,9 @@
   "/usr/local/texlive/2012/texmf-var/web2c/pdftex/pdflatex.fmt" 1348061275 3691572 81401160ce04235b8b7e74be3d3ef708 ""
   "/usr/local/texlive/2012/texmf.cnf" 1341108668 572 7ea7194897937febeb63145e1c3a1f03 ""
   "/usr/local/texlive/2012/texmf/web2c/texmf.cnf" 1336865692 31299 729e216d9b945005c0d4b079c0500bc9 ""
-  "ifacconf.aux" 1355679942 2845 26df0e1be155bac04bbefb7a18179f41 ""
+  "ifacconf.aux" 1355734743 2887 c778ad2e3366087964782f153e0fbee9 ""
   "ifacconf.cls" 1348825870 65466 6c03c44a1da48052d5e0e068cc8cd8a0 ""
-  "ifacconf.tex" 1355679938 15926 f1e97f088610fa08f41a0c2e7d955ea0 ""
+  "ifacconf.tex" 1355734707 16200 0f124f314fca3c8b4a6685b2ab43cdc2 ""
   "img/10percent.pdf" 1355340464 286638 c32c6394c7df31935cf75cb76ce51009 ""
   "img/3Points.pdf" 1355666000 16094 6821b48984d8008b05dfac84e9e3ff4f ""
   "img/5Points.pdf" 1355666000 35090 69e313bcaa2223d80d321c611c5f62da ""

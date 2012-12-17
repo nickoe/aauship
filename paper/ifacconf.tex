@@ -82,7 +82,7 @@ The methods developed in this project - and the papers. 2
 
 \subsection{Path planning algorithm}
 
-The path planning algorithm1 is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
+The path planning algorithm is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, thus keeping the amount of jerk $j$ as close to zero as possible. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
 \begin{align}
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
@@ -256,6 +256,11 @@ A special thank should be given to Assistant Professor Carles Navarro Manchòn, 
 Arthur N. Talbot,
 \newblock \emph{The Railway Transition Spiral}
 \newblock The Engeneering News Publishing Co., 1901
+
+\bibitem[Talbot (1901)]{Art:1} % The name shown in the report, and the lable \cite{Art:1}
+Arthur N. Talbot, % Name of the author
+\newblock \emph{The Railway Transition Spiral} % The name of the thesis
+\newblock The Engeneering News Publishing Co., 1901 % The publisher
 
 \end{thebibliography}
 
