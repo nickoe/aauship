@@ -250,22 +250,31 @@ N &=
 A little about the way we get from a force input to an engine output:
 As the controller outputs a force $F$ and a torque $\tau$ the controller must convert these to a set-point for the revolutions. The force of the forward motion of the ship is given as a function of the number of revolutions of the propeller $n$. The function is defined by \cite{cyber} as:
 \begin{align}
-F_1 = C_1 \cdot |n_1| \cdot n_1\\
-F_2 = C_1 \cdot |n_2| \cdot n_2
+F_1 &= C_1 \cdot |n_1| \cdot n_1\\
+F_2 &= C_1 \cdot |n_2| \cdot n_2
 \end{align}
 Where $C_1 = \rho \cdot K_T \cdot D^4$, which are constants. The two propellers thus produce a total force as a function of their individual rotational velocities. The torque produced by the propellers can be described as the distance to the propeller and the angle out here. The angle is measured to be $\theta = \frac{pi}{16}$, thus giving the torque $\tau$ as a function of the starboard and port engines:
 \begin{align}
-\tau_1 = F_1 \cdot \sin(\theta)\\
-\tau_2 = F_2 \cdot \sin(-\theta)\\
+\tau_1 &= F_1 \cdot \sin(\theta)\\
+\tau_2 &= F_2 \cdot \sin(-\theta)\\
 \end{align}
 As the two engines both produce a force and a torque, given the same revolutions, the matrix equation $\vec{A}\vec{x} = \vec{b}$ can be solved to give:
 \begin{align}
 \begin{bmatrix}
-n_1\\
-n_2
+n_1^2\\
+n_2^2
 \end{bmatrix} = \begin{bmatrix}
-
+C_1 & C_1\\
+C_1 \cdot \sin(\theta) & C_1 \cdot \sin(-\theta)
+\end{bmatrix}^{-1}\begin{bmatrix}
+F_\text{desired}\\
+\tau_\text{desired}
 \end{bmatrix}
+\end{align}
+Whats left to do is to solve for $n_1$ and $n_2$. These can be solved by:
+\begin{align}
+n_1 = 
+n_2 = 
 \end{align}
 
 
