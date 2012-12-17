@@ -4,7 +4,7 @@
 \section{Standard format of messages}
 %To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section~\vref{sec:lli-bandwith}. For instance, the \ac{IMU} has serveral different outputs, and receiving them all in one big stream might increase the load on the network, so splitting these up could free up some bandwidth which could be used for other (and more important) tasks. \todo{How can the last statement be true?}
 
-To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section ~\vref{sec:PacketLoss}. For instance, the \ac{IMU} has several different outputs, which need to be processed independent of each other. Because of this, they are broken into separate packages, each with their own ID and checksum. This simplifies parsing and allows the protocol to easily be expanded to other sensors and actuators which were not included in the original design. A short, single state packet limits the effect of a flipped bit, since only a single state has been lost, compared to a packet containing all information.
+To develop a suiting protocol for AAUSHIP1, the data to be sent via this is looked at in more detail in section ~\vref{sec:PacketLoss}. For instance, the \ac{IMU} has several different outputs, which need to be processed independently of each other. Because of this, they are broken into separate packages, each with their own ID and checksum. This simplifies parsing and allows the protocol to easily be expanded to other sensors and actuators which were not included in the original design. A short, single state packet limits the effect of a flipped bit, since only a single state has been lost, compared to a packet containing all information.
 
 As both the \ac{IMU} and \ac{GPS} is sending packets of varying size, the data field in the protocol should be able to accommodate this variation. However, there are some fixed elements, on which it is possible to decide now. The number of sensors/actuators connected to the \ac{LLI} was decided by design not to be more than 256, which makes way for a 1-byte device resolution. As each device might contain several outputs (as seen from the \ac{IMU}) each device ID is then given an additional byte for message IDs. In addition to this header a length byte is contained to describe the length of the data field, to make it easier to parse. Lastly a \ac{CRC} checksum is added on the end to verify the content. Figure~\vref{fig:bytefield} depicts the packet structure. Everything other than the data field is fixed length as described in table~\vref{tab:general}. 
 The data field can be either binary or ASCII, depending on the source. It is desired to limit the amount of calculations necessary at the LLI, seeing as the computational power of the HLI is many times greater, as well as the implementation being simpler due to the higher level scripting language being used (Python).
@@ -24,7 +24,7 @@ The data field can be either binary or ASCII, depending on the source. It is des
 
 The packet bytes are little endian (MSB first), which is consistent throughout the packet. The data field is arranged as always being a full number of bytes, to simplify transmission and receiving. This conforms to the RS232 standard.
 
-\begin{table}[htbp],
+\begin{table}[h],
 	\centering
 	\begin{tabular}{llll}
 		\toprule
@@ -66,7 +66,7 @@ To facilitate the Plug and Play nature of the system, the first 3 available MsgI
 \end{table}
 If a packet with MsgID 0 is sent to a device, the device will respond with a list of all available MsgIDs, along with their definition. If a packet with MsgID 0 is sent to DevID 0, the General LLI, it will respond with a list of available devices. If these device definitions adhere to a strict protocol, it will be possible to automatically configure an LLI and HLI implementing this protocol. This protocol will not be defined in this project, but the feature will useful in checking and validating the configuration.
 
-An x in the first column indicates that funcitonality is implemented on \ac{LLI}.
+An x in the first column indicates that funcitonality is implemented on \ac{LLI}. The allocated functions is listed in tables \vref{tab:msg1}, \vref{tab:msg2}, \vref{tab:msg3} and \vref{tab:msg4}.
 
 \begin{sidewaystable}[h]
 \centering
@@ -90,6 +90,8 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Turn & 11 & 1 & Turning velocity\\
 	\bottomrule
 	\end{tabular}
+\caption{}
+\label{tab:msg1}
 \end{sidewaystable}
 \newpage
 
@@ -125,6 +127,8 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Read PWM output 1 and 2 & 20 & 4 & Engine 1 and 2\\ 
 	\midrule
 	\end{tabular}
+\caption{}
+\label{tab:msg2}
 \end{sidewaystable}
 \newpage
 
@@ -132,6 +136,8 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 \centering
 	\begin{tabular}{llrrl}
 	\toprule
+	& \textbf{Message Name} & \textbf{MsgID} & \textbf{Data Size} & \textbf{Contains}\\
+	\midrule
 	\multicolumn{5}{l}{\textbf{20: IMU}}\\
 	\midrule
 	& List available commands & 0 & Up to 255 & Return a message for every available MsgID\\
@@ -151,6 +157,8 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	\midrule
 	\label{tab:commands}
 	\end{tabular}
+\caption{}
+\label{tab:msg3}
 \end{sidewaystable}
 \newpage
 \begin{sidewaystable}[h!]
@@ -186,7 +194,8 @@ An x in the first column indicates that funcitonality is implemented on \ac{LLI}
 	& Voltage & 3 & Up to 255 & Voltage\\
 	\bottomrule
 	\end{tabular}
+\caption{}
+\label{tab:msg4}
 \end{sidewaystable}
 
 The protocol is implemented as a class on the HLI.
-
