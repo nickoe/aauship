@@ -1,8 +1,9 @@
 \chapter{Modelling of Twin Screw Ship}
 When modelling the forces affecting a \ac{TSS} there few parameters which affect the movement of the ship. These are the forces applied by the motors, as well as the placement of the motors. For calculating these contributions simple trigonometric functions can be used. This gives the resulting forces in the boats X and Y directions, as well as the torque generated.
-\begin{figure}
-\includegraphics{img/boatmodel.pdf}[h]
+\begin{figure}[htbp]
+\includegraphics[angle=90]{img/boatmodel.pdf}[h]
 \caption{By controlling FL and FR, it is possible to control the translational and rotational forces of the ship. The division of these forces is dependant on the angle of attack, $\theta$.}
+\label{fig:forces}
 \end{figure}
 First we see that the boat is mirrored along it's X axis. From this we can set $\theta = \theta_L = \theta_R$ and $\phi = \phi_L = \phi_R$.  Now we have the forces, $F_L$ and $F_R$, as the controllable input to our system. These will be divided as into $F_X$, $F_Y$ and $\tau$, which are the variables that we wish to control. This division takes the form as seen in equation \eqref{Forceequation}.
 
