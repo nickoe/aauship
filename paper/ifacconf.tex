@@ -215,7 +215,7 @@ This ensures that when a measurement is invalid (the checksum is not true) the r
 This makes sure to zero out the Kalman gain $\bar{\vec{K}}$ if a packet is corrupted instead of making the filter run on faulty data. When this is implemented, the system handles packet loss by making the filter run on estimates for the next sample, rather than running on a faulty measurement.
 
 \subsection{Modelling and Controls}
-The model of the ASV is in continuos time given as the state space equation defined in (eq:\ref{eq:ss_cont}) - the model considers the motion of the ship with 3 degrees of freedom, movement in the $x$-direction, $y$-direction and rotation about the z-axis $\omega$. 
+The model of the ASV is in continuos time given as the state space equation defined in (\ref{eq:ss_cont}) - the model considers the motion of the ship with 3 degrees of freedom, movement in the $x$-direction, $y$-direction and rotation about the z-axis $\omega$. 
 \begin{align}
 \dot{\begin{bmatrix}
 v\\
@@ -286,10 +286,10 @@ F_\text{desired}\\
 \end{align}
 Whats left to do is to solve for $n_1$ and $n_2$. These can be solved by:
 \begin{align}
-n_1 = \frac{n_1}{\text{abs}\{n_1\}} \cdot \sqrt{\text{abs}\{n_1\}}\\
-n_2 = \frac{n_2}{\text{abs}\{n_2\}} \cdot \sqrt{\text{abs}\{n_2\}}
+n_1 = \frac{n_1^2}{\text{abs}\{n_1^2\}} \cdot \sqrt{n_1^2}\\
+n_2 = \frac{n_2^2}{\text{abs}\{n_2^2\}} \cdot \sqrt{n_2^2}
 \end{align}
-Thus giving the engine set-points as a function of the force of the system. The first term $\frac{n_1}{\text{abs}\{n_1\}}$ gives the sign of the engine input, wether this should be negative or positive is defined here. The last term computes the actual revolution to be sent. 
+Thus giving the engine set-points as a function of the force of the system. The first term $\frac{n^2}{\text{abs}\{n^2\}}$ gives the sign of the engine input, wether this should be negative or positive is defined here. The last term computes the actual revolution to be sent. 
 
 
 \subsection{Controller verification}
