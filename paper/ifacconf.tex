@@ -47,7 +47,7 @@ Path planning; centralized control; baud rates; state estimation; marine systems
 
 
 \begin{abstract}                          % Abstract of not more than 250 words.
-This paper considers the subject of running a centralized controller for the purpose of navigating a small Autonomous Surface Vehicle (ASV). The centralized controller is using a Kalman filter as a state predictor to improve the precision of the navigational aids mounted aboard. The work presents the design of the motion control system as well as the development of a protocol used to push through as much data on a standard 9.6 kbps simplex data link.
+This paper considers the subject of running a centralized controller for the purpose of navigating a small Autonomous Surface Vehicle (ASV). The centralized controller is using a Kalman filter as a state predictor to improve the precision of the navigational aids mounted aboard. This work presents the design of the motion control system as well as an estimator designed to cope with packet losses. 
 \end{abstract}
 
 \end{frontmatter}
@@ -349,6 +349,8 @@ Throughout the tests the IMU have been assumed to always be level, which is hard
 \section{Conclusion}
 To sum up the project, a state estimator have been developed to improve on the GPS estimates allowing for a better precision if the GPS is offline. To plan the path the ship is to traverse a path planner have also been implemented showing good results. 
 
+A final test of the combined system have not been conducted, as the waters around Aalborg have been frozen solid. 
+
 \begin{ack}                               % Place acknowledgements
 A special thank should be given to Assistant Professor Carles Navarro Manchòn, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter.  % here.
 \end{ack}
@@ -397,8 +399,6 @@ U.S. Department of Energy,
 Defense Update, 2005, Issue 2,
 \newblock \emph{Stingray, Unmanned Surface Vehcile (USV), Elbit Systems}
 \newblock Defense Update
-
-defense}
 
 \end{thebibliography}
 \end{document}
