@@ -22,7 +22,8 @@ From this it can be seen that a system implementing this form of Kalman filterin
 It can also be seen that there are two ways to generate a better estimate -- reduce the probability of packetloss or increase the sampling rate.
 If we assume a fixed samplingrate we can estimate $p$ and, in many cases, decrease it by increasing the signal strength. If an estimate of $p$ is achieved, the actual sampling rate can be calculated by giving a desired effective sampling rate and calculating the necessary requirement.
 
- As seen in \todo{ref chapter with considerations about worse estimates during turning} the estimates become worse when the ship is turning. This can be mediated by turning up the signal strength to reduce the probability of packet loss, and therefore increasing the effective average sampling rate. 
+%As seen in  the estimates become worse when the ship is turning. This can be mediated by turning up the signal strength to reduce the probability of packet loss, and therefore increasing the effective average sampling rate. 
+%\todo{ref chapter with considerations about worse estimates during turning}
 
 The packetloss can be handled by having a matrix with the index on the diagonal corresponding to a given type of sample being either 1 or 0, depending on whether a sample is available. Multiplying this with the Kalman gain matrix, B, will set the corresponding column to 0, which is what is desired.
 
