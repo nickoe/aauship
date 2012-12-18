@@ -293,7 +293,14 @@ Thus giving the engine set-points as a function of the force of the system. The 
 
 
 \subsection{Controller verification}
-As the waters around Aalborg froze over before final tests of the controller could be conducted. The verification of the controllers are let out, and are to be tested once the waters around Aalborg clears out. 
+As the waters around Aalborg froze over before final tests of the controller could be conducted. The verification of the controllers are let out, and are to be tested once the waters around Aalborg clears out. However, a test of the controllers have been carried out on land, but as the control box has the functionality implemented, this have been used to produce the following plot. As seen the engines do actually react to the path input, and tries to make the ship turn. Figure \ref{fig:control} depicts the inputs to the engines, to make the ship follow the force and torque reference given by the controllers.
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/motorinput}    % The printed column  
+		\caption{Controller test, as seen the engine input changes according to the reference signal. }
+		\label{fig:control}               
+	\end{center}                                 % accordingly.
+\end{figure}
 
 \subsection{Path planning results}
 Planning the path on a stretch of water in Aalborg produces the following results:
@@ -324,17 +331,15 @@ As seen on figure \ref{fig:track} the Kalman filter behaves as expected. If the 
 	\end{center}                                 % accordingly.
 \end{figure}
 
-\subsection{Combined test}
-Running the Kalman filter on the ship whilst in motion. As seen some packages are lost - to verify the simulator, a simulation have been run with the same amount of packages lost, and this produces the same result. 
+\subsection{Test of Estimate vs. No Estimate}
+This test have been carried out to see wether the Kalman filter estimates are better than the raw measurements. As seen on figure \ref{fig:kalaman} the Kalman is better at estiamting its position when no GPS sample is present. Thus giving the system a higher tolerance towards noise. 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/abspos}    % The printed column  
-		\caption{COMBINED TEST}  % width of a column is 8.4 cm.
-		\label{fig:3points}               
+		\includegraphics[width=8.4cm]{img/kalmanestimate}    % The printed column  
+		\caption{Test of the Kalman filter versus regular measurments. As seen on the figure, the Kalman estimate follows the actual path closer than the measurements.}  % width of a column is 8.4 cm.
+		\label{fig:kalaman}               
 	\end{center}                                 % accordingly.
 \end{figure}
-
-Something about the packet loss. 
 
 \subsection{Discussion}
 
@@ -384,16 +389,4 @@ Gene F. Franklin, J. David Powell and Abbas Emami-Naeini,
 \newblock Pearson Prentice Hall, 2009
 
 \end{thebibliography}
-
-
-
-
-
-
-
-
-\appendix
-\section{A summary of Latin grammar}    % Each appendix must have a short title.
-\section{Some Latin vocabulary}         % Sections and subsections are supported  
-                                        % in the appendices.
 \end{document}
