@@ -256,12 +256,11 @@ To achieve an optimal response of the system, an optimal pole placement strategy
 \mathcal{J}(u)=\int_{0}^{\infty} (\vec{x}^T \vec{Q} \vec{x} + \vec{u}^T \vec{R} \vec{u}) dt
 \label{eq:optf}
 \end{align}
-Again, this is done in \MATLAB, and gives poles in:
-\todo{insert poles once final -lunde}
+Again, this is done in \MATLAB, and gives feedback gain:
 \begin{align}
 \vec{F}_{opt} = \begin{bmatrix}
-0 & 0 & 0\\
-0 & 0 & 0
+10.6956 & 0 & 0\\
+0 & 2.2743 & 0.6681
 \end{bmatrix}
 \end{align}
 This changes the input of the system to $\vec{u} = -\vec{F}_{opt}\vec{x}$, however, this does not take into account that we can end up with a steady state error. Therefore a reference gain is introduced. 
@@ -286,7 +285,7 @@ The gain $N$ is now introduced as a scaling factor on the reference signal, to m
 \vec{I}
 \end{bmatrix}
 \end{align}
-Thus, solving for $\begin{bmatrix} \vec{N}_x\\ \vec{N}_u \end{bmatrix}$ gives the following: \todo{insert refference to feedback book, page 470}
+Thus, solving for $\begin{bmatrix} \vec{N}_x\\ \vec{N}_u \end{bmatrix}$ gives the following:
 \begin{align}
 \begin{bmatrix}
 \vec{N}_x\\
@@ -309,6 +308,13 @@ Thus the final control signal changing the input $\vec{u}$ to:
 The latter in equation \vref{eq:refg} can be combined, and gives the following:
 \begin{align}
 \vec{u} = -\vec{F}_{opt}\vec{x} + \bar{\vec{N}}\vec{r}
+\end{align}
+Thus giving the gain $N$
+\begin{align}
+\vec{N} = \begin{bmatrix}
+19.5956 & 0\\
+0 & 2.2743
+\end{bmatrix}
 \end{align}
 
 
