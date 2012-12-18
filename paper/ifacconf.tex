@@ -32,10 +32,10 @@
 
 \thanks[footnoteinfo]{The prototype of AAUSHIP.01 and all components has been paid for in full by the School of Information Communication and Technology, Aalborg University.}
 
-\author{Rasmus L. Christensen} 
-\author{Frederik Juul} 
-\author{Nick \O stergaard}
-\author{Attila Fodor}
+\author{Rasmus L. Christensen,} 
+\author{Frederik Juul,} 
+\author{Nick \O stergaard,}
+\author{Attila Fodor,}
 \author{Tudor Muresan}
 \address{Section of Automation and Control, Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk)}                                            
           
@@ -53,21 +53,23 @@ This paper considers the subject of running a centralized controller for the pur
 \end{frontmatter}
 
 \section{Introduction}
-Seaborne measurements are often an expensive and time-consuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available.
+Seaborne measurements are often an expensive and time-consuming task. They could however in many cases have a large impact on the area where they are obtained. At the Fukushima accident in 2011 the area of effect in the water and the safety margin was primarily based on estimates, as only few measurements were available. \cite{energy}.
 The coastal areas around Greenland are another area which could benefit from seaborne measurements as up to date maps are not available. This causes the ships which need to pass near the coast to have a higher safety margin, which in turn lowers the amounts of traffic possible. If a ship would need to get very close to the shores, up to date maps of the area would also be a requirement. This need is acknowledged and is considered important for the flourishing greenlandic industrialization by the government of Denmark, but the project does not have sufficient funding. \cite{engineer}.
 
 One way to reduce the cost of such maritime measurements would be to develop small autonomous drones to carry out the task. These should be controlled by a mothership to enable easy scalability and coordination. Further, they should communicate using a simple data link to preserve bandwidth and limit power consumption. The system should be robust to dataloss and measurementnoise which can be expected from low cost sensors. This can be achieved through sensor fusion.
 
-Currently the main focus of autonomous vehicles have been on aerial, ground and underwater vehicles, while there is close to no research going on about small autonomous surface vessels. An example of such a vessel is the Stingray ASV developed by Isreali Based Elbit Systems. 
+Currently the main focus of autonomous vehicles have been on aerial, ground and underwater vehicles, while there is close to no research going on about small autonomous surface vessels. An example of such a vessel is the Stingray ASV developed by Isreali based Elbit Systems. 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/stingray.jpg} % width of a column is 8.4 cm.
-		\caption{The autonomous surface vehicle Stingray by Israeli based Elbit Systems in action.}  
+		\caption{The autonomous surface vehicle Stingray by Israeli based Elbit Systems in action \cite{defense}.}  
 		\label{fig:stingray}
 	\end{center}
 \end{figure}
 
-Figure \ref{fig:stingray} depicts an already existing autonomous surface vehicle, primarily developed as an aid in SAR (search-and-rescue) missions, but can also be equipped with other sensory equipment, which can be used to map the sea bed, or measure the amount of radiation in coastal areas. The scope of this project is however to develop a smaller vehicle, which in turn could function as part of a measuring swarm, controlled by a mother ship, thus making measuring missions more efficient and less time consuming. As the price of such a swarm system for measurement purposes would be high if systems like the Stingray is to be used, the suggestion of this project, is to develop a small cost-efficient vessel. Throughout this project, a prototype vessel AAUSHIP.01 have been developed, taking into account the hull design, choosing electronics and so forth. This paper will only describe the development of the estimation and control algorithms. Figure \ref{fig:ship} depicts the prototype used in the project. This ship is fitted with two 1200W engines which are run as a differential system, making the ship turn by reducing the input on one engine and reducing it on the other, and vice-versa. 
+Figure \ref{fig:stingray} depicts the Stingray. It is primarily developed as an aid in the battle agains pirates and for SAR (search and rescue) missions, but can also be equipped with other sensory equipment, which can be used to map the sea bed, or measure the amount of radiation in coastal areas. 
+
+The scope of this project is however to develop a smaller vehicle, which in turn could function as part of a measuring swarm, controlled by a mother ship, thus making measuring missions more efficient and less time consuming. As the price of such a swarm system for measurement purposes would be high if systems like the Stingray is to be used, the suggestion of this project, is to develop a small cost-efficient vessel. Throughout this project, a prototype vessel AAUSHIP.01 have been developed, taking into account the hull design, choosing electronics and so forth. This paper will only describe the development of the estimation and control algorithms. Figure \ref{fig:ship} depicts the prototype used in the project. This ship is fitted with two 1200W engines which are run as a differential system (making it a ship without rudders), making the ship turn by reducing the input on one engine and reducing it on the other, and vice-versa. 
 
 \begin{figure}
 	\begin{center}
@@ -78,11 +80,11 @@ Figure \ref{fig:stingray} depicts an already existing autonomous surface vehicle
 \end{figure}
 
 \subsection{Problem statement}
-\begin{hypo} Is it possible to develop a centralized state estimator for use in the maritime environment using a small data link \end{hypo}
+Is it possible to develop a centralized state estimator for use in the maritime environment using a small data link?
 
 \section{Methods}
 
-The methods of the project are described in this section. To develop a fully autonomous craft, capable of navigating around in coastal areas, first a Path planning algorithm have been designed. The purpose of this is for the user to choose an area to measure, and then have the algorithm to plan the path, and then set the ship into the water and begin measuring. The second part describes the development of a Kalman filter estimator used to enhance the precision of the craft - this is both to be used as a reference for where the measurement was taken, but also as an aid for the ship to be able to navigate more precisely. Both of the methods will have results posted towards the end of the paper. 
+The methods of the project are described in this section. To develop a fully autonomous craft, capable of navigating around in coastal areas, first a path planning algorithm have been designed. The purpose of this is for the user to choose an area to cover, the algorithm then plans the path, and then set the ship into the water and begin measuring. The second part describes the development of a Kalman estimator used to enhance the precision of the craft - this is both to be used as a reference for where the measurement was taken, but also as an aid for the ship to be able to navigate more precisely. Both of the methods will have results posted towards the end of the paper. 
 
 \subsection{Path planning algorithm}
 
@@ -91,36 +93,36 @@ The path planning algorithm is based around the train-track transition problem o
 C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
 \label{eq:fresnel}
 \end{align}
-The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the speed $v$ and path curvature $\kappa$. Vehicles have limited acceleration of heading $\dot{\kappa}_{max} = \alpha_{max}$ as well, which results in a necessary scaling $\sigma$ of the Euler spiral:
+The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the speed $v$ and path curvature $\kappa$. Vehicles have limited angular acceleration $\dot{\kappa}_\text{max} = \alpha_\text{max}$ as well, which results in a necessary scaling $\eta$ of the Euler spiral:
 \begin{align}
-A_{C_{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \sigma = \frac{\alpha_{max}}{v^2_{max}}
+A_{C_\text{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_\text{max}}{v^2_\text{max}}
 \end{align}
-A threshold angle of turn $\varepsilon_{max}$ can be determined based on the vehicle parameters above:
+A threshold angle of turn $\varepsilon_\text{max}$ can be determined based on the vehicle parameters above:
 \begin{align}
-\varepsilon_{max} = \frac{\kappa^2_{max}}{2\sigma}
+\varepsilon_\text{max} = \frac{\kappa^2_\text{max}}{2\eta}
 \end{align}
 If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages.
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/3Points} % width of a column is 8.4 cm.
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
 		\label{fig:3points}
 	\end{center}
 \end{figure}
 The 3 key points are given by the coordinate sets:
 \begin{align}
-A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
+A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{\cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
 \end{align}
 From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$. 
 \begin{align}
 \varepsilon = \frac{\textrm{dx }F(t)}{\textrm{dy}} \quad \to \quad [x_d,y_d] = F^{-1}(\varepsilon)
 \end{align}
-Once the angle grows larger than $\varepsilon_{max}$ the system has to compute five key points, as the ship must transit onto a curve, and then back onto the Euler spiral ($\kappa_{Euler_{max}} = \kappa_{Arc}$) This adds the extra waypoints $B_5$ and $D_5$, the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_{max}}$. The waypoints are depicted on figure (\ref{fig:5points}), which augments the waypoint calculations to:
+Once the angle grows larger than $\varepsilon_\text{max}$ the system has to compute five key points, as the ship must transit onto a curve, and then back onto an Euler spiral ($\kappa_{Euler_\text{max}} = \kappa_{arc}$) This adds the extra waypoints $B_5$ and $D_5$, the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_\text{max}}$. The waypoints are depicted on figure \ref{fig:5points}, which augments the waypoint calculations to:
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/5Points}    % The printed column  
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_{max}$, the path is approximated by a curve and 5 key points are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
-		\label{fig:3points}               
+		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is approximated by a curve and 5 key points are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
+		\label{fig:5points}               
 	\end{center}                                 % accordingly.
 \end{figure}
 \begin{align}
@@ -140,7 +142,7 @@ The resulting path in both cases can not be described explicitly, therefore a He
 
 \subsection{Navigation}
 
-The navigation controller of the ship is a general reference heading calculator, which outputs the required direction of movement to reach the next waypoint. In order to efficiently and accurately navigate along the path, a set of Sub-Waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one. The heading of the ship is defined in NED\footnote[1]{[North, East, Down]} coordinate system. The required heading is determined based on the Position of the Ship and the Position of the next sub-waypoint.
+The navigation controller of the ship is a reference heading calculator, which outputs the required direction of movement to reach the next waypoint. In order to efficiently and accurately navigate along the path, a set of sub-waypoints is calculated for each route between two Waypoints. The main control strategy is to navigate through all of these SWPs in a predefined order, one by one. The heading of the ship is defined in NED\footnote[1]{[North, East, Down]} coordinate system. The required heading is determined based on the position of the ship and the position of the next sub-waypoint.
 
 \subsection{State estimation}
 To give a better estimate of position and the attitude of the craft, a Kalman filter have been implemented to improve the accuracy of the sensors mounted aboard the ship. To develop a such, the discrete time state model of the ship have been derived to be:
@@ -156,13 +158,13 @@ Where the diagonal entries $\vec{\Phi} _x,\vec{\Phi} _y,\vec{\Phi} _\omega$ are 
 \end{bmatrix}
 \label{eq:kal}
 \end{align}
-In equation (\ref{eq:kal}), $\beta_{x,y,\omega}$ denotes the skin frictional acceleration drag in the $x$,$y$ and $\omega$ direction respectively, $m$ is the mass of the craft, $I$ is the inertia and $t_s$ is the sampling time of the filter. The states to be estimated for the controller are:
+In equation (\ref{eq:kal}), $\beta_{x,y,\omega}$ denotes the skin frictional acceleration drag in the $x$,$y$ and $\omega$ direction respectively, $m$ is the mass of the craft, $I$ is the inertia and $t_s$ is the sampling time of the filter. The acceleration of the craft $\ddot{x}$,$\ddot{y}$ and $\alpha$ are omitted as the error grows exponentially which have produced bad results. The states to be estimated for the controller are:
 \begin{align}
 ^b\hat{\vec{x}_k} = \begin{bmatrix}
 x & \dot{x} & y & \dot{y} & \theta & \omega
 \end{bmatrix}^T
 \end{align}
-The observation model of the filter does however contain more measurements, and the measurements can be given as:
+The observation model of the filter does however contain more measurements, and the measurements are given as:
 \begin{align}
 \vec{v}_k = \begin{bmatrix}
 x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y} & \theta & \omega & \alpha
@@ -172,18 +174,18 @@ To tune the filter the covariance matrices $\vec{R}_k$ and $\vec{Q}_k$ are a fun
 \begin{align}
 \vec{w}_k = \vec{B}\vec{u}
 \end{align}
-Where $\vec{B}$ is an augmented version of the system input matrix defined in INSERT REFERENCE! and $\vec{u}$ is the inputs to the system given as a force $F$ and a torque $\tau$. $\vec{B}$ is given as 
+Where $\vec{B}$ is an augmented version of the system input matrix defined in (\ref{eq:ss_cont}) and $\vec{u}$ is the inputs to the system given as a force $F$ and a torque $\tau$. $\vec{B}$ is given as 
 \begin{align}
 \vec{B} = \begin{bmatrix}
 0 & 0 & \frac{1}{m} & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{I} \end{bmatrix}^T
 \end{align} 
-And the input is given as $\vec{u} = \begin{bmatrix}F\ & \tau\end{bmatrix}^T$. As $\vec{B}$ is a static matrix, it is only the distribution of the force $F$ and the torque $\tau$ that is of interest. The distribution of the force are split into an $x$-component and a $y$-component, as the ship is also expected to move in the $y$-direction. The distributions of the force is givne as white Guassian noise processes, thus stating:
+And the input is given as $\vec{u} = \begin{bmatrix}F\ & \tau\end{bmatrix}^T$. As $\vec{B}$ is a static matrix, it is only the distribution of the force $F$ and the torque $\tau$ that is of interest. The distribution of the force affecting the ship can be split into an $x$- and $y$-component, as the ship is also expected to move slightly sideways. The distributions of the force is given as white Guassian noise processes, thus stating:
 \begin{align}
 F&\sim \mathcal{N}(\vec{\mu}_F,\vec{\sigma}^2_F)\\
 \tau&\sim \mathcal{N}(\mu_\tau,\sigma^2_\tau)
 \end{align}
-Where the tuning through simulations have yielded the best results using $\vec{\mu}_F = \begin{bmatrix}5.4355 & 0\end{bmatrix}^T$. The first entry is because to the ship is for most of the time moving along at 1 m/s and that is the estimated force required to thrust the ship forward at 1 m/s with the frictional drag the ship experiences. The latter is the force in the $y$-direction which is given as a zero-mean process as the ship is not expected to move sideways. The torque is also given as a zero-mean process as the ship for most of the time is moving straight. The covariance matrix for the input, can thus be given as the covariance of $\vec{B}\vec{u}$ which gives the following:
+Where the tuning through simulations have yielded the best results using $\vec{\mu}_F = \begin{bmatrix}5.4355 & 0\end{bmatrix}^T$. The first entry is because to the ship is for most of the time moving along at 1 m/s and that is the estimated force required to thrust the ship forward at 1 m/s with the frictional drag the ship experiences. The latter is the force in the $y$-direction which is given as a zero-mean process as the ship generally is expected not to move sideways. The torque is also given as a zero-mean process as the ship for most of the time is moving straight. The covariance matrix for the input, can thus be given as the covariance of $\vec{B}\vec{u}$ which gives the following:
 \begin{align}
 \vec{R}_k = \text{diag}\{0,0,\sigma^2_{F(1,1)},0,0,\sigma^2_{F(2,1)},0,0,\sigma^2_\tau\}
 \end{align}
@@ -195,7 +197,7 @@ As all the measurements are independent, the covariance matrix is given as:
 \begin{align}
 \vec{Q}_k = \text{diag}\{\vec{\sigma}^2_{v}\}
 \end{align}
-Where $\vec{\sigma}^2_{v} = \begin{bmatrix}\sigma^2_x & \sigma^2_{\dot{x}} & \sigma^2_{{\ddot{x}}} & \sigma^2_y & \sigma^2_{\dot{y}} & \sigma^2_{{\ddot{y}}} & \sigma^2_\theta & \sigma^2_\omega & \sigma^2_\alpha \end{bmatrix}^T$. As the velocity output of the GPS device $\dot{x}$ is an absolute value, the estimate of this is a bit different as this cannot be assumed to be a normal distribution, as it does not contain any negative values. To estimate the variance of $\dot{x}$ the unbiased sample variance formula is used, which computes the variance, even though the samples only consist of absolute values. 
+Where $\vec{\sigma}^2_{v} = \begin{bmatrix}\sigma^2_x & \sigma^2_{\dot{x}} & \sigma^2_{{\ddot{x}}} & \sigma^2_y & \sigma^2_{\dot{y}} & \sigma^2_{{\ddot{y}}} & \sigma^2_\theta & \sigma^2_\omega & \sigma^2_\alpha \end{bmatrix}^T$. As the velocity output of the GPS device $\dot{x}$ is an absolute value, the estimate of this is a bit different as the distribution when still is not equal to the distribution when moving. To estimate the variance of $\dot{x}$ the unbiased sample variance formula is used, which computes the variance, even though the samples only consist of absolute values. 
 
 The actual implementation of the filter is an altered version of an Linear Minimum Mean Square Error filter - the alteration lies in the Kalman gain, where a matrix mask $\vec{\Lambda}$ is post multiplied. This matrix mask is to zero out the measurements that are invalid. This matrix mask is defined as:
 \begin{align}
@@ -210,7 +212,7 @@ This ensures that when a measurement is invalid (the checksum is not true) the r
     0 & \quad \text{otherwise}
   \end{array} \right.
 \end{align} 
-This makes sure to zero out the Kalman gain $\bar{\vec{K}}$ if a packet is corrupted instead of making the filter run on faulty data. When this is implemented, the system handles not present measurements by making the filter run on estimates for the next sample, rather than running on a faulty measurement.
+This makes sure to zero out the Kalman gain $\bar{\vec{K}}$ if a packet is corrupted instead of making the filter run on faulty data. When this is implemented, the system handles packet loss by making the filter run on estimates for the next sample, rather than running on a faulty measurement.
 
 \subsection{Modelling and Controls}
 The model of the ASV is in continuos time given as the state space equation defined in (eq:\ref{eq:ss_cont}) - the model considers the motion of the ship with 3 degrees of freedom, movement in the $x$-direction, $y$-direction and rotation about the z-axis $\omega$. 
@@ -259,15 +261,15 @@ _\mathcal{D}N &=  \begin{bmatrix}
 0 & 2.2743
 \end{bmatrix}\label{eq:ndisc}
 \end{align}
-As the controller outputs a desired force $F$ and a torque $\tau$ dependent on the reference angle $\theta$ and velocity $\theta$. This output must be converted to a set-point number of revolutions, as this is the input to the low-level system handling the engines. The force of the forward motion of the ship is given as a function of the number of revolutions of the propeller $n$, this relation is defined by \cite{cyber} to be:
+As the controller outputs a desired force $F$ and a torque $\tau$ dependent on the reference angle $\theta$ and velocity $\dot{x}$. This output must be converted to a set-point number of revolutions, as this is the input to the low-level system handling the engines. The force of the forward motion of the ship is given as a function of the number of revolutions of the propeller $n$, this relation is defined by \cite{cyber} to be:
 \begin{align}
 F_1 &= C_1 \cdot \text{abs}\{n_1\} \cdot n_1\\
 F_2 &= C_1 \cdot \text{abs}\{n_2\} \cdot n_2
 \end{align}
-Where $C_1 = \rho \cdot K_T \cdot D^4$, which are constant for both the engines. The two propellers thus produce a total force as a sum of these functions. The torque produced by the propellers can be described as $F$ multiplied with the distance to the propeller.
+Where $C_1 = \rho \cdot K_T \cdot D^4$, which are constant for both the engines. The two propellers thus produce a total force as a sum of these functions. The torque produced by the propellers can be described as $F$ multiplied with the distance to the propeller $l$ and the angle of attack on the ship. This angle is the same for both engines (with opposite sign), as they are mounted symmetrically around the centre.
 \begin{align}
-\tau_1 &= F_1 \cdot \sin(\theta_\text{stbd.engine})\\
-\tau_2 &= F_2 \cdot \sin(\theta_\text{port.engine})
+\tau_1 &= F_1 \cdot l \cdot \sin(\theta_\text{stbd.})\\
+\tau_2 &= F_2 \cdot l \cdot \sin(\theta_\text{port})
 \end{align}
 As the two engines both produce a force and a torque, as a function of the same revolutions, the matrix equation $\vec{x} = \vec{A}^{-1}\vec{b}$ can be solved for the number of revolutions the engines need to produce as in (\ref{eq:solver}):
 \begin{align}
@@ -276,7 +278,7 @@ n_1^2\\
 n_2^2
 \end{bmatrix} = \begin{bmatrix}
 C_1 & C_1\\
-C_1 \cdot \sin(\theta) & C_1 \cdot \sin(-\theta)
+C_1 \cdot \sin(\theta_\text{stbd.}) & C_1 \cdot \sin(\theta_\text{port})
 \end{bmatrix}^{-1}\begin{bmatrix}
 F_\text{desired}\\
 \tau_\text{desired}
@@ -291,7 +293,7 @@ Thus giving the engine set-points as a function of the force of the system. The 
 
 
 \subsection{Controller verification}
-As the waters around Aalborg froze over before final tests of the controller could be conducted. The verification of the controllers are let out, and are to be tested once the waters around Aalborg clears out. However, a test of the controllers have been carried out on land, but as the control box has the functionality implemented, this have been used to produce the following plot. As seen the engines do actually react to the path input, and tries to make the ship turn. Figure \ref{fig:control} depicts the inputs to the engines, to make the ship follow the force and torque reference given by the controllers.
+As the waters around Aalborg froze over before final tests of the controller could be conducted. The verification of the controllers are let out, and are to be tested once the waters around Aalborg clears out. However, a test of the controllers have been carried out on land, but as the control box has the functionality implemented, this have been used to produce figure \ref{fig:control}. As seen the engines do actually react to the path input, and tries to make the ship turn. Figure \ref{fig:control} depicts the inputs to the engines, to make the ship follow the force and torque reference given by the controllers.
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/motorinput}    % The printed column  
@@ -301,7 +303,7 @@ As the waters around Aalborg froze over before final tests of the controller cou
 \end{figure}
 
 \subsection{Path planning results}
-Planning the path on a stretch of water in Aalborg produces the following results:
+A test of the path planner was carried out, by generating a random shoreline, and then test if the planner produces a route which follows the general shape. Figure \ref{fig:navi} illustrates the test, and verifies that the path planner can be used to follow the shore line. 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=8.4cm]{img/Navi}    % The printed column  
@@ -340,10 +342,12 @@ This test have been carried out to see wether the Kalman filter estimates are be
 \end{figure}
 
 \subsection{Discussion}
-Perhaps a discussion?
+To further improve on the system, the Kalman filter should be extended to allow for the acceleration data also to be included in the position estimates, thus increasing the precision further when the GPS is offline. To make this feasible the bias of the IMU should be included in the model. Another feature of the Kalman filter would be to estimate the wind and current bias, which would cause the ship to veer off course. 
+
+Throughout the tests the IMU have been assumed to always be level, which is hard to realize, so a slight bias is added, and with a linear Kalman filter which is hard compensate for as the IMU needs to always have the same bias.
 
 \section{Conclusion}
-To sum up the project, a state estimator have been developed to improve on the GPS estimates. Such an estimator have been developed, and it have been seen that the estimates are better than what the GPS measures, and the box is able to give a better estimate 
+To sum up the project, a state estimator have been developed to improve on the GPS estimates allowing for a better precision if the GPS is offline. To plan the path the ship is to traverse a path planner have also been implemented showing good results. 
 
 \begin{ack}                               % Place acknowledgements
 A special thank should be given to Assistant Professor Carles Navarro Manchòn, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter.  % here.
@@ -383,6 +387,18 @@ Asgeir J. S\o rensen,
 Gene F. Franklin, J. David Powell and Abbas Emami-Naeini,
 \newblock \emph{Feedback Control of Dynamic Systems, 5th ed.}
 \newblock Pearson Prentice Hall, 2009
+
+\bibitem[Department of Energy(2012)]{energy}
+U.S. Department of Energy,
+\newblock \emph{Radiological Assesment or effects from Fukushim Daiichi Nuclear Power Plant}
+\newblock U.S. Department of Energy
+
+\bibitem[Defense Update(2005)]{defense}
+Defense Update, 2005, Issue 2,
+\newblock \emph{Stingray, Unmanned Surface Vehcile (USV), Elbit Systems}
+\newblock Defense Update
+
+defense}
 
 \end{thebibliography}
 \end{document}
