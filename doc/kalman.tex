@@ -86,7 +86,7 @@ As the \ac{KF} is given as a vector \ac{KF}, the covariance matrices is to be co
 \begin{align}
 Cov(\vec{X},\vec{X}) = \text{E}\langle[\vec{X} - \vec{\mu}_X][\vec{X} - \vec{\mu}_X]^\text{T}\rangle
 \end{align}
-The covariance matrix is used to tune the \ac{KF}, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector \ac{KF} there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \todo{insert reference to worksheet once its done -rlc} the distributions of the input signal $\vec{u}(k)$ can be seen as:
+The covariance matrix is used to tune the \ac{KF}, and weighs the different inputs according to the noise they experience. An assumption is to keep this constant. For the vector \ac{KF} there are two noises added to the system, one depicts the measurement noise, and the other the system noise. The system noise is in this project considered the input to the system. This can therefore be seen as the covariance of the input signals to the ship. As seen in \vref{ch:noise} the distributions of the input signal $\vec{u}(k)$ can be seen as:
 \begin{align}
 F \sim \mathcal{N}(5.3544,55)\\
 \tau \sim \mathcal{N}(0,20)
