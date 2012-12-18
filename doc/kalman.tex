@@ -1,10 +1,10 @@
 \chapter{State Estimation}
-To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs to combine theese depending variance and different sample rate to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data directly.
+To give a better position estimate which can be fed to the controller as well, the different data collected from the sensors mounted are put through a \ac{KF}. This filter takes the different measurements as inputs and combines them even though they have different variances and sample rates in order to give a better estimate of the position, rather than the quite noisy measurements taken using just the raw \ac{GPS} data directly.
 
 To develop such a filter, the model of the ship is to be computed, as well as a mapping of the different inputs and outputs to the system. The model of the forward and sidewards case (surge and sway) are the same as for the discrete system.
 
 \subsection{State model}
-The state model is used as a base for computing the influence the different inputs have on the system. The below formula is a general description for the state model of the system. 
+The state model is used as a base for computing the influence the different inputs have on the system. The below formula is a general description for the state space model of the system. 
 \begin{align}
 \vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)
 \end{align}
@@ -14,7 +14,7 @@ $\vec{\Phi}(k)$ is the state matrix\\
 $\vec{x}(k-1)$ is the last input to the system\\
 $\vec{w}(k)$ is the driving noise (the system input)
 \end{ffk}
-In this case, the driving noise $\vec{w}(n)$ will be the inputs to the system, which can then be used to estimate the different states. The states to be estimated is the velocity $\dot{x}$, the angular velocity $\omega$ and the angle of the vessel in the local frame $\theta$. The driving noise (or input) can be defined as the $\vec{B}$ matrix in the state system, multiplied with the different inputs given to the system, namely $n_1$ and $n_2$. When inserted, the formula for the state model becomes:
+In this case, the driving noise $\vec{w}(n)$ will be considered to be the input to the system, which can then be used to estimate the different states. The states to be estimated are the velocity $\dot{x}$, the angular velocity $\omega$ and the angle of the vessel in the local frame $\theta$. The driving noise (or input) can be defined as the $\vec{B}$ matrix in the state system, multiplied with the different inputs given to the system, namely $n_1$ and $n_2$. When inserted, the formula for the state model becomes:
 \begin{align}
 \vec{x}(k) = \vec{\Phi}(k)\vec{x}(k-1) + \vec{w}(k)
 \end{align}
