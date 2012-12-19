@@ -1,0 +1,72 @@
+\beamer@endinputifotherversion {3.21pt}
+\headcommand {\slideentry {0}{0}{1}{1/1}{}{0}}
+\headcommand {\beamer@framepages {1}{1}}
+\headcommand {\slideentry {0}{0}{2}{2/2}{}{0}}
+\headcommand {\beamer@framepages {2}{2}}
+\headcommand {\sectionentry {1}{Introduction}{3}{Introduction}{0}}
+\headcommand {\beamer@sectionpages {1}{2}}
+\headcommand {\beamer@subsectionpages {1}{2}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{3}{Purpose}}\headcommand {\beamer@subsectionpages {3}{2}}
+\headcommand {\slideentry {1}{1}{1}{3/5}{Purpose}{0}}
+\headcommand {\beamer@framepages {3}{5}}
+\headcommand {\sectionentry {2}{Path planning}{6}{Path planning}{0}}
+\headcommand {\beamer@sectionpages {3}{5}}
+\headcommand {\beamer@subsectionpages {3}{5}}
+\headcommand {\slideentry {2}{0}{2}{6/6}{}{0}}
+\headcommand {\beamer@framepages {6}{6}}
+\headcommand {\slideentry {2}{0}{3}{7/7}{}{0}}
+\headcommand {\beamer@framepages {7}{7}}
+\headcommand {\slideentry {2}{0}{4}{8/8}{}{0}}
+\headcommand {\beamer@framepages {8}{8}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{9}{Waypoint generation}}\headcommand {\beamer@subsectionpages {6}{8}}
+\headcommand {\slideentry {2}{1}{1}{9/9}{Waypoint generation}{0}}
+\headcommand {\beamer@framepages {9}{9}}
+\headcommand {\slideentry {2}{1}{2}{10/10}{Waypoint generation}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{11}{Verification}}\headcommand {\beamer@subsectionpages {9}{10}}
+\headcommand {\slideentry {2}{2}{1}{11/11}{Verification}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\sectionentry {3}{Modeling and Control}{12}{Modeling and Control}{0}}
+\headcommand {\beamer@sectionpages {6}{11}}
+\headcommand {\beamer@subsectionpages {11}{11}}
+\headcommand {\slideentry {3}{0}{2}{12/12}{}{0}}
+\headcommand {\beamer@framepages {12}{12}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{13}{Theory}}\headcommand {\beamer@subsectionpages {12}{12}}
+\headcommand {\slideentry {3}{1}{1}{13/13}{Theory}{0}}
+\headcommand {\beamer@framepages {13}{13}}
+\headcommand {\slideentry {3}{1}{2}{14/14}{Theory}{0}}
+\headcommand {\beamer@framepages {14}{14}}
+\headcommand {\slideentry {3}{1}{3}{15/15}{Theory}{0}}
+\headcommand {\beamer@framepages {15}{15}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{16}{Verification}}\headcommand {\beamer@subsectionpages {13}{15}}
+\headcommand {\slideentry {3}{2}{1}{16/16}{Verification}{0}}
+\headcommand {\beamer@framepages {16}{16}}
+\headcommand {\slideentry {3}{2}{2}{17/17}{Verification}{0}}
+\headcommand {\beamer@framepages {17}{17}}
+\headcommand {\sectionentry {4}{State estimation}{18}{State estimation}{0}}
+\headcommand {\beamer@sectionpages {12}{17}}
+\headcommand {\beamer@subsectionpages {16}{17}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{18}{Theory}}\headcommand {\beamer@subsectionpages {18}{17}}
+\headcommand {\slideentry {4}{1}{1}{18/18}{Theory}{0}}
+\headcommand {\beamer@framepages {18}{18}}
+\headcommand {\slideentry {4}{1}{2}{19/19}{Theory}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{20}{Verification}}\headcommand {\beamer@subsectionpages {18}{19}}
+\headcommand {\slideentry {4}{2}{1}{20/20}{Verification}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\slideentry {4}{2}{2}{21/21}{Verification}{0}}
+\headcommand {\beamer@framepages {21}{21}}
+\headcommand {\sectionentry {5}{Final test}{22}{Final test}{0}}
+\headcommand {\beamer@sectionpages {18}{21}}
+\headcommand {\beamer@subsectionpages {20}{21}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{22}{Kalman estimator}}\headcommand {\beamer@subsectionpages {22}{21}}
+\headcommand {\slideentry {5}{1}{1}{22/22}{Kalman estimator}{0}}
+\headcommand {\beamer@framepages {22}{22}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{23}{Controller}}\headcommand {\beamer@subsectionpages {22}{22}}
+\headcommand {\slideentry {5}{2}{1}{23/23}{Controller}{0}}
+\headcommand {\beamer@framepages {23}{23}}
+\headcommand {\beamer@partpages {1}{23}}
+\headcommand {\beamer@subsectionpages {23}{23}}
+\headcommand {\beamer@sectionpages {22}{23}}
+\headcommand {\beamer@documentpages {23}}
+\headcommand {\def \inserttotalframenumber {21}}

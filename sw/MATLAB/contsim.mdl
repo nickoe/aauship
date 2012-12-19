@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.14"
+    ComputedModelVersion    "1.19"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -30,7 +30,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [37.0, 600.0, 1228.0, 753.0]
+      Location		      [37.0, 84.0, 1228.0, 753.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -56,7 +56,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1194.0, 579.0]
 	ZoomFactor		[1.34]
-	Offset			[0.0, 0.0]
+	Offset			[-21.228219813375347, 0.0]
       }
     }
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Lunde"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Nov 28 16:35:30 2012"
-  RTWModifiedTimeStamp	  276021327
-  ModelVersionFormat	  "1.%<AutoIncrement:14>"
+  LastModifiedDate	  "Wed Dec 19 22:41:20 2012"
+  RTWModifiedTimeStamp	  277857678
+  ModelVersionFormat	  "1.%<AutoIncrement:19>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -172,7 +172,7 @@ Model {
 	  $ObjectID		  8
 	  Version		  "1.12.1"
 	  StartTime		  "0.0"
-	  StopTime		  "1000"
+	  StopTime		  "100"
 	  AbsTol		  "auto"
 	  FixedStep		  "0.1"
 	  InitialStep		  "auto"
@@ -794,15 +794,6 @@ Model {
       VectorParams1D	      on
     }
     Block {
-      BlockType		      Step
-      Time		      "1"
-      Before		      "0"
-      After		      "1"
-      SampleTime	      "-1"
-      VectorParams1D	      on
-      ZeroCross		      on
-    }
-    Block {
       BlockType		      Sum
       IconShape		      "rectangular"
       Inputs		      "++"
@@ -831,7 +822,7 @@ Model {
   }
   System {
     Name		    "contsim"
-    Location		    [37, 600, 1265, 1353]
+    Location		    [37, 84, 1265, 837]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -845,7 +836,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "134"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "60"
+    SIDHighWatermark	    "61"
     Block {
       BlockType		      Gain
       Name		      "A"
@@ -856,18 +847,6 @@ Model {
       Gain		      "A"
       Multiplication	      "Matrix(K*u)"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
-    }
-    Block {
-      BlockType		      Sum
-      Name		      "Add"
-      SID		      "53"
-      Ports		      [4, 1]
-      Position		      [105, 117, 120, 308]
-      ZOrder		      -2
-      Inputs		      "++++"
-      InputSameDT	      off
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
     }
@@ -963,44 +942,14 @@ Model {
       Frequency		      "0.1"
     }
     Block {
-      BlockType		      Step
-      Name		      "Step"
-      SID		      "54"
-      Position		      [25, 130, 55, 160]
-      ZOrder		      -22
-      Time		      "0"
-      After		      "3.14"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step1"
-      SID		      "55"
-      Position		      [50, 175, 80, 205]
-      ZOrder		      -22
-      Time		      "20"
-      After		      "-3.14"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step2"
-      SID		      "56"
-      Position		      [25, 220, 55, 250]
-      ZOrder		      -22
-      Time		      "40"
-      After		      "-3.14/2"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step3"
-      SID		      "57"
-      Position		      [50, 265, 80, 295]
-      ZOrder		      -22
-      Time		      "60"
-      After		      "3.14/2"
-      SampleTime	      "0"
+      BlockType		      SignalGenerator
+      Name		      "Signal\nGenerator1"
+      SID		      "61"
+      Ports		      [0, 1]
+      Position		      [20, 100, 50, 130]
+      ZOrder		      1
+      Amplitude		      "2"
+      Frequency		      "0.01"
     }
     Block {
       BlockType		      Sum
@@ -1174,35 +1123,10 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Step1"
+      SrcBlock		      "Signal\nGenerator1"
       SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step3"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      4
-    }
-    Line {
-      SrcBlock		      "Step2"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      3
-    }
-    Line {
-      SrcBlock		      "Add"
-      SrcPort		      1
-      Points		      [0, -100]
       DstBlock		      "Mux"
       DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step"
-      SrcPort		      1
-      DstBlock		      "Add"
-      DstPort		      1
     }
     Line {
       SrcBlock		      "Signal\nGenerator"

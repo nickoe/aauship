@@ -1,0 +1,16 @@
+\beamer@endinputifotherversion {3.21pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Purpose}{3}{0}{1}
+\beamer@sectionintoc {2}{Path planning}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Waypoint generation}{9}{0}{2}
+\beamer@subsectionintoc {2}{2}{Verification}{11}{0}{2}
+\beamer@sectionintoc {3}{Modeling and Control}{12}{0}{3}
+\beamer@subsectionintoc {3}{1}{Theory}{13}{0}{3}
+\beamer@subsectionintoc {3}{2}{Verification}{16}{0}{3}
+\beamer@sectionintoc {4}{State estimation}{18}{0}{4}
+\beamer@subsectionintoc {4}{1}{Theory}{18}{0}{4}
+\beamer@subsectionintoc {4}{2}{Verification}{20}{0}{4}
+\beamer@sectionintoc {5}{Final test}{22}{0}{5}
+\beamer@subsectionintoc {5}{1}{Kalman estimator}{22}{0}{5}
+\beamer@subsectionintoc {5}{2}{Controller}{23}{0}{5}
