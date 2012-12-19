@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.9.19)  19 DEC 2012 23:17
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.9.19)  19 DEC 2012 23:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1284,11 +1284,25 @@ Package pdftex.def Info: img/background.pdf used on input line 134.
 ]
 File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 150.
+Package pdftex.def Info: img/background.pdf used on input line 134.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
 [8
 
-] <img/3Points.pdf, id=289, 958.86159pt x 230.94594pt>
+]
+File: img/background.pdf Graphic file (type pdf)
+<use img/background.pdf>
+Package pdftex.def Info: img/background.pdf used on input line 134.
+(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
+[9
+
+]
+File: img/background.pdf Graphic file (type pdf)
+<use img/background.pdf>
+Package pdftex.def Info: img/background.pdf used on input line 150.
+(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
+[10
+
+] <img/3Points.pdf, id=329, 958.86159pt x 230.94594pt>
 File: img/3Points.pdf Graphic file (type pdf)
 <use img/3Points.pdf>
 Package pdftex.def Info: img/3Points.pdf used on input line 173.
@@ -1297,9 +1311,9 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 173.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[9
+[11
 
- <./img/3Points.pdf>] <img/5Points.pdf, id=311, 962.82268pt x 466.15715pt>
+ <./img/3Points.pdf>] <img/5Points.pdf, id=351, 962.82268pt x 466.15715pt>
 File: img/5Points.pdf Graphic file (type pdf)
 <use img/5Points.pdf>
 Package pdftex.def Info: img/5Points.pdf used on input line 192.
@@ -1312,9 +1326,9 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 192.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[10
+[12
 
- <./img/5Points.pdf>] <img/Auto_WP_Planning.png, id=334, 561.5379pt x 552.8655p
+ <./img/5Points.pdf>] <img/Auto_WP_Planning.png, id=374, 561.5379pt x 552.8655p
 t>
 File: img/Auto_WP_Planning.png Graphic file (type png)
 <use img/Auto_WP_Planning.png>
@@ -1330,21 +1344,21 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 208.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[11
+[13
 
  <./img/Auto_WP_Planning.png>]
 File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 222.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[12
+[14
 
 ]
 File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 255.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[13
+[15
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1363,16 +1377,16 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 281.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[14
+[16
 
 ]
 File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 304.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[15
+[17
 
-] <img/reftrack.pdf, id=441, 490.80968pt x 400.47618pt>
+] <img/reftrack.pdf, id=481, 490.80968pt x 400.47618pt>
 File: img/reftrack.pdf Graphic file (type pdf)
 <use img/reftrack.pdf>
 Package pdftex.def Info: img/reftrack.pdf used on input line 315.
@@ -1385,9 +1399,9 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 315.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[16
+[18
 
- <./img/reftrack.pdf>] <img/eng_inp.pdf, id=485, 487.9008pt x 395.87798pt>
+ <./img/reftrack.pdf>] <img/eng_inp.pdf, id=526, 487.9008pt x 395.87798pt>
 File: img/eng_inp.pdf Graphic file (type pdf)
 <use img/eng_inp.pdf>
 Package pdftex.def Info: img/eng_inp.pdf used on input line 326.
@@ -1400,7 +1414,7 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 326.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[17
+[19
 
  <./img/eng_inp.pdf>]
 Overfull \vbox (14.52034pt too high) detected at line 361
@@ -1410,16 +1424,16 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 361.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[18
+[20
 
 ]
 File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 377.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[19
+[21
 
-] <img/track.pdf, id=573, 411.87175pt x 326.55402pt>
+] <img/track.pdf, id=613, 411.87175pt x 326.55402pt>
 File: img/track.pdf Graphic file (type pdf)
 <use img/track.pdf>
 Package pdftex.def Info: img/track.pdf used on input line 388.
@@ -1432,9 +1446,9 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 388.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[20
+[22
 
- <./img/track.pdf>] <img/error.pdf, id=615, 390.96063pt x 319.69438pt>
+ <./img/track.pdf>] <img/error.pdf, id=656, 390.96063pt x 319.69438pt>
 File: img/error.pdf Graphic file (type pdf)
 <use img/error.pdf>
 Package pdftex.def Info: img/error.pdf used on input line 398.
@@ -1443,9 +1457,9 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 398.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[21
+[23
 
- <./img/error.pdf>] <img/kalmanestimate.pdf, id=654, 484.78717pt x 319.17645pt>
+ <./img/error.pdf>] <img/kalmanestimate.pdf, id=694, 484.78717pt x 319.17645pt>
 File: img/kalmanestimate.pdf Graphic file (type pdf)
 <use img/kalmanestimate.pdf>
 Package pdftex.def Info: img/kalmanestimate.pdf used on input line 411.
@@ -1454,9 +1468,9 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 411.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[22
+[24
 
- <./img/kalmanestimate.pdf>] <img/motorinput.pdf, id=707, 406.51875pt x 326.218
+ <./img/kalmanestimate.pdf>] <img/motorinput.pdf, id=747, 406.51875pt x 326.218
 75pt>
 File: img/motorinput.pdf Graphic file (type pdf)
 <use img/motorinput.pdf>
@@ -1466,7 +1480,7 @@ File: img/background.pdf Graphic file (type pdf)
 <use img/background.pdf>
 Package pdftex.def Info: img/background.pdf used on input line 422.
 (pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[23
+[25
 
  <./img/motorinput.pdf>]
 \tf@nav=\write6
@@ -1484,20 +1498,20 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 425.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 425.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 425.
 Package rerunfilecheck Info: File `aalborgtheme.out' has not changed.
-(rerunfilecheck)             Checksum: C23EE74F3B9A4663EC572DF7D6734955;799.
+(rerunfilecheck)             Checksum: 0EC84282DDE0E9C83295C3C9FA8163AB;800.
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 425.
  ) 
 Here is how much of TeX's memory you used:
- 18987 strings out of 493488
- 358475 string characters out of 3141326
- 437519 words of memory out of 3000000
- 21724 multiletter control sequences out of 15000+200000
+ 18995 strings out of 493488
+ 358627 string characters out of 3141326
+ 437626 words of memory out of 3000000
+ 21728 multiletter control sequences out of 15000+200000
  56415 words of font info for 67 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 53i,21n,65p,411b,1077s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 53i,21n,65p,411b,1083s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/lo
 cal/texlive/2012/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/20
 12/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2012/texmf-d
@@ -1516,10 +1530,10 @@ m/lmsso8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/lm/lmsy10.p
 fb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/lo
 cal/texlive/2012/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texliv
 e/2012/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb>
-Output written on aalborgtheme.pdf (23 pages, 1698167 bytes).
+Output written on aalborgtheme.pdf (25 pages, 1704225 bytes).
 PDF statistics:
- 825 PDF objects out of 1000 (max. 8388607)
- 678 compressed objects within 7 object streams
- 71 named destinations out of 1000 (max. 500000)
+ 869 PDF objects out of 1000 (max. 8388607)
+ 719 compressed objects within 8 object streams
+ 75 named destinations out of 1000 (max. 500000)
  210 words of extra memory for PDF output out of 10000 (max. 10000000)
 
