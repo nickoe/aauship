@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.9.19)  19 DEC 2012 23:22
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=latex 2012.9.19)  20 DEC 2012 08:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -16,8 +16,8 @@ kurmanji, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk,
  polish, portuguese, romanian, romansh, russian, sanskrit, serbian, serbianc, s
 lovak, slovenian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, 
 welsh, loaded.
-(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamer.cls (/usr/local/tex
-live/2012/texmf-dist/tex/latex/beamer/beamerbasercs.sty
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamer.cls
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasercs.sty
 Package: beamerbasercs 2012/08/31 (rcs-revision efcce0278bdb)
 )
 Document Class: beamer 2011/09/12 development version 3.21 A class for typesett
@@ -27,6 +27,7 @@ Package: beamerbasemodes 2012/04/15 (rcs-revision cc6557182d97)
 \beamer@tempbox=\box26
 \beamer@tempcount=\count79
 \c@beamerpauses=\count80
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasedecode.sty
 Package: beamerbasedecode 2010/05/01 (rcs-revision efa082c6111d)
 \beamer@slideinframe=\count81
@@ -34,9 +35,10 @@ Package: beamerbasedecode 2010/05/01 (rcs-revision efa082c6111d)
 )
 \beamer@commentbox=\box27
 \beamer@modecount=\count83
-) (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
+Package ifpdf Info: pdfTeX in PDF mode is not detected.
 )
 \headheight=\dimen102
 \headdp=\dimen103
@@ -80,20 +82,25 @@ Package ifpdf Info: pdfTeX in PDF mode is detected.
 \beamer@coveringdepth=\count99
 \beamer@sectionadjust=\count100
 \beamer@tocsectionnumber=\count101
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseoptions.sty
 Package: beamerbaseoptions 2010/04/27 (rcs-revision 982469101dd6)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 ))
 \beamer@paperwidth=\skip42
 \beamer@paperheight=\skip43
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
+
 (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ifvtex.sty
 Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
-) (/usr/local/texlive/2012/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count102
@@ -108,32 +115,33 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layouthoffset=\dimen125
 \Gm@layoutvoffset=\dimen126
 \Gm@dimlist=\toks15
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/base/size10.clo
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (/us
-r/local/texlive/2012/texmf-dist/tex/latex/graphics/graphicx.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/graphics.cfg
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 91.
-(/usr/local/texlive/2012/texmf-dist/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
-) (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
-)
-\Gread@gobject=\count105
+Package graphics Info: Driver file: dvips.def on input line 91.
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
 ))
 \Gin@req@height=\dimen127
 \Gin@req@width=\dimen128
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (/us
-r/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.te
 x
 \pgfutil@everybye=\toks16
@@ -142,8 +150,8 @@ x
 \pgfutil@abb=\box34
 (/usr/local/texlive/2012/texmf-dist/tex/latex/ms/everyshi.sty
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
-)) (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.te
-x
+))
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
 Package: pgfrcs 2010/10/25 v2.10 (rcs-revision 1.24)
 ))
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
@@ -166,22 +174,24 @@ ode.tex
 \pgf@yc=\dimen136
 \w@pgf@writea=\write3
 \r@pgf@reada=\read1
-\c@pgf@counta=\count106
-\c@pgf@countb=\count107
-\c@pgf@countc=\count108
-\c@pgf@countd=\count109
+\c@pgf@counta=\count105
+\c@pgf@countb=\count106
+\c@pgf@countc=\count107
+\c@pgf@countd=\count108
+
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
 )
-Package pgfsys Info: Driver file for pgf: pgfsys-pdftex.def on input line 900.
+Package pgfsys Info: Driver file for pgf: pgfsys-dvips.def on input line 900.
 
-(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.d
-ef
-File: pgfsys-pdftex.def 2009/05/22  (rcs-revision 1.26)
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvips.de
+f
+File: pgfsys-dvips.def 2008/04/03  (rcs-revision 1.20)
 
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-p
-df.def
-File: pgfsys-common-pdf.def 2008/05/19  (rcs-revision 1.10)
+ostscript.def
+File: pgfsys-common-postscript.def 2008/10/01  (rcs-revision 1.22)
+\pgf@objectcount=\count109
 )))
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
 code.tex
@@ -194,12 +204,12 @@ code.tex
 File: pgfsysprotocol.code.tex 2006/10/16  (rcs-revision 1.4)
 )) (/usr/local/texlive/2012/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
-Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Driver file: dvips.def on input line 225.
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
 Package xcolor Info: Model `RGB' extended on input line 1353.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
 Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
@@ -210,9 +220,9 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 )
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
 Package: pgfcore 2010/04/11 v2.10 (rcs-revision 1.7)
-(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (/usr
-/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex (/usr/
-local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen137
 \pgfmath@count=\count112
@@ -236,8 +246,8 @@ code.tex)
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round
 .code.tex)
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.
-code.tex))) (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathflo
-at.code.tex
+code.tex)))
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count113
 ))
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
@@ -332,20 +342,24 @@ File: pgfcoretransparency.code.tex 2008/01/17  (rcs-revision 1.2)
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.
 code.tex
 File: pgfcorepatterns.code.tex 2009/07/02  (rcs-revision 1.3)
-))) (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/xxcolor.sty
+)))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/xxcolor.sty
 Package: xxcolor 2003/10/24 ver 0.1
 \XC@nummixins=\count116
 \XC@countmixins=\count117
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/hyperref.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2012/05/13 v6.82q Hypertext links for LaTeX
+
 (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
 Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
+
 
 (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
 Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
-Package hobsub Info: Skipping package `infwarerr' (already loaded).
-Package hobsub Info: Skipping package `ltxcmds' (already loaded).
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 Package hobsub Info: Skipping package `ifvtex' (already loaded).
@@ -363,7 +377,7 @@ Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
+Package pdftexcmds Info: \pdfdraftmode is ignored in DVI mode.
 Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
 Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
 )
@@ -379,16 +393,19 @@ Package atveryend Info: \enddocument detected (standard20110627).
 Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
 Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
 Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 )
 \@linkdim=\dimen161
 \Hy@linkcounter=\count118
 \Hy@pagecounter=\count119
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2012/05/13 v6.82q Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count120
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
@@ -403,6 +420,7 @@ Package hyperref Info: Backreferencing OFF on input line 4082.
 Package hyperref Info: Implicit mode OFF; no redefinition of LaTeX internals.
 Package hyperref Info: Bookmarks ON on input line 4300.
 \c@Hy@tempcnt=\count121
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
@@ -422,21 +440,31 @@ LaTeX Info: Redefining \ref on input line 5843.
 LaTeX Info: Redefining \pageref on input line 5847.
 \Hy@abspage=\count123
 
+
 Package hyperref Message: Stopped early.
 
 )
 
-Package hyperref Message: Driver (autodetected): hpdftex.
+Package hyperref Message: Driver (default): hdvips.
 
-(/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2012/05/13 v6.82q Hyperref driver for pdfTeX
+(/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/hdvips.def
+File: hdvips.def 2012/05/13 v6.82q Hyperref driver for dvips
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/pdfmark.def
+File: pdfmark.def 2012/05/13 v6.82q Hyperref definitions for pdfmark specials
+\pdf@docset=\toks23
+\pdf@box=\box40
+\pdf@toks=\toks24
+\pdf@defaulttoks=\toks25
 \Fld@listcount=\count124
 \c@bookmark@seq@number=\count125
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
-)) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaserequires.sty
+)))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaserequires.sty
 Package: beamerbaserequires 2010/05/01  (rcs-revision efa082c6111d)
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasecompatibility.st
@@ -444,46 +472,54 @@ y
 Package: beamerbasecompatibility 2012/05/01  (rcs-revision 67c48b3b652d)
 ) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasefont.sty
 Package: beamerbasefont 2012/08/29  (rcs-revision 73834bc85e0c)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2009/06/22 v3.00
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
-\@emptytoks=\toks23
+\@emptytoks=\toks26
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
-))) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetranslator.s
-ty
+)))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetranslator.sty
 Package: beamerbasetranslator 2010/06/11  (rcs-revision 85fd1cc7fc42)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/translator/translator.sty
 Package: translator 2010/06/12 ver 1.10
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/translator/translator-lang
-uage-mappings.tex))) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beame
-rbasemisc.sty
+uage-mappings.tex)))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasemisc.sty
 Package: beamerbasemisc 2012/02/24  (rcs-revision 2ff5461be705)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetwoscreens.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetwoscreens.sty
 Package: beamerbasetwoscreens 2010/05/01  (rcs-revision efa082c6111d)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseoverlay.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseoverlay.sty
 Package: beamerbaseoverlay 2012/04/03  (rcs-revision 45744d9ae88b)
 \beamer@argscount=\count126
 \beamer@lastskipcover=\skip44
 \beamer@trivlistdepth=\count127
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetitle.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetitle.sty
 Package: beamerbasetitle 2010/09/21  (rcs-revision f0446ed0b6ae)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasesection.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasesection.sty
 Package: beamerbasesection 2012/05/30  (rcs-revision 22ff49def670)
 \c@lecture=\count128
 \c@part=\count129
 \c@section=\count130
 \c@subsection=\count131
 \c@subsubsection=\count132
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseframe.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseframe.sty
 Package: beamerbaseframe 2012/05/31  (rcs-revision 5fc3b3dbfeba)
-\beamer@framebox=\box40
-\beamer@frametitlebox=\box41
-\beamer@zoombox=\box42
+\beamer@framebox=\box41
+\beamer@frametitlebox=\box42
+\beamer@zoombox=\box43
 \beamer@zoomcount=\count133
 \beamer@zoomframecount=\count134
 \beamer@frametextheight=\dimen164
@@ -492,43 +528,48 @@ Package: beamerbaseframe 2012/05/31  (rcs-revision 5fc3b3dbfeba)
 \beamer@framebottomskip=\skip46
 \beamer@frametopskipautobreak=\skip47
 \beamer@framebottomskipautobreak=\skip48
-\beamer@envbody=\toks24
+\beamer@envbody=\toks27
 \c@framenumber=\count136
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseverbatim.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseverbatim.sty
 Package: beamerbaseverbatim 2012/08/30  (rcs-revision dfdb135076b3)
 \beamer@verbatimfileout=\write4
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseframesize.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseframesize.sty
 Package: beamerbaseframesize 2011/09/12  (rcs-revision 70f9d8411e54)
-\beamer@splitbox=\box43
+\beamer@splitbox=\box44
 \beamer@autobreakcount=\count137
 \beamer@autobreaklastheight=\dimen165
-\beamer@frametitletoks=\toks25
-\beamer@framesubtitletoks=\toks26
+\beamer@frametitletoks=\toks28
+\beamer@framesubtitletoks=\toks29
 )
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseframecomponents.
 sty
 Package: beamerbaseframecomponents 2012/03/07  (rcs-revision 9f094699ce15)
-\beamer@footins=\box44
+\beamer@footins=\box45
 ) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasecolor.sty
 Package: beamerbasecolor 2010/06/06  (rcs-revision d1a9b48be06d)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasenotes.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasenotes.sty
 Package: beamerbasenotes 2010/05/01  (rcs-revision efa082c6111d)
-\beamer@frameboxcopy=\box45
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetoc.sty
+\beamer@frameboxcopy=\box46
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetoc.sty
 Package: beamerbasetoc 2012/02/28  (rcs-revision 138681b92320)
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetemplates.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetemplates.sty
 Package: beamerbasetemplates 2010/05/01  (rcs-revision efa082c6111d)
-\beamer@sbttoks=\toks27
+\beamer@sbttoks=\toks30
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseauxtemplates.sty
 Package: beamerbaseauxtemplates 2012/05/01  (rcs-revision 67c48b3b652d)
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaseboxes.sty
 Package: beamerbaseboxes 2012/05/13  (rcs-revision 56972908a390)
-\bmb@box=\box46
-\bmb@colorbox=\box47
-\bmb@boxshadow=\box48
-\bmb@boxshadowball=\box49
-\bmb@boxshadowballlarge=\box50
+\bmb@box=\box47
+\bmb@colorbox=\box48
+\bmb@boxshadow=\box49
+\bmb@boxshadowball=\box50
+\bmb@boxshadowballlarge=\box51
 \bmb@temp=\dimen166
 \bmb@dima=\dimen167
 \bmb@dimb=\dimen168
@@ -539,33 +580,40 @@ Package: beamerbaseboxes 2012/05/13  (rcs-revision 56972908a390)
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbaselocalstructure.s
 ty
 Package: beamerbaselocalstructure 2012/05/25  (rcs-revision 5ff5e8ed7c0e)
-(/usr/local/texlive/2012/texmf-dist/tex/latex/tools/enumerate.sty
+ (/usr/local/texlive/2012/texmf-dist/tex/latex/tools/enumerate.sty
 Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
-\@enLab=\toks28
+\@enLab=\toks31
 )
 \c@figure=\count138
 \c@table=\count139
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasenavigation.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasenavigation.sty
 Package: beamerbasenavigation 2012/04/03  (rcs-revision 42a0f21a412d)
 \beamer@section@min@dim=\dimen171
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetheorems.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasetheorems.sty
 Package: beamerbasetheorems 2010/06/06  (rcs-revision 7e7cc5e53e9d)
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2000/07/18 v2.13 AMS math features
 \@mathmargin=\skip51
+
 For additional information on amsmath, use the `?' option.
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks29
+\@emptytoks=\toks32
 \ex@=\dimen172
-)) (/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsbsy.sty
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen173
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsopn.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count140
@@ -578,8 +626,8 @@ LaTeX Info: Redefining \overline on input line 307.
 LaTeX Info: Redefining \ldots on input line 379.
 LaTeX Info: Redefining \dots on input line 382.
 LaTeX Info: Redefining \cdots on input line 467.
-\Mathstrutbox@=\box51
-\strutbox@=\box52
+\Mathstrutbox@=\box52
+\strutbox@=\box53
 \big@size=\dimen174
 LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
@@ -588,37 +636,39 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 \dotsspace@=\muskip11
 \c@parentequation=\count147
 \dspbrk@lvl=\count148
-\tag@help=\toks30
+\tag@help=\toks33
 \row@=\count149
 \column@=\count150
 \maxfields@=\count151
-\andhelp@=\toks31
+\andhelp@=\toks34
 \eqnshift@=\dimen175
 \alignsep@=\dimen176
 \tagshift@=\dimen177
 \tagwidth@=\dimen178
 \totwidth@=\dimen179
 \lineht@=\dimen180
-\@envbody=\toks32
+\@envbody=\toks35
 \multlinegap=\skip52
 \multlinetaggap=\skip53
-\mathdisplay@stack=\toks33
+\mathdisplay@stack=\toks36
 LaTeX Info: Redefining \[ on input line 2666.
 LaTeX Info: Redefining \] on input line 2667.
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/amscls/amsthm.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2009/07/02 v2.20.1
-\thm@style=\toks34
-\thm@bodyfont=\toks35
-\thm@headfont=\toks36
-\thm@notefont=\toks37
-\thm@headpunct=\toks38
+\thm@style=\toks37
+\thm@bodyfont=\toks38
+\thm@headfont=\toks39
+\thm@notefont=\toks40
+\thm@headpunct=\toks41
 \thm@preskip=\skip54
 \thm@postskip=\skip55
 \thm@headsep=\skip56
-\dth@everypar=\toks39
+\dth@everypar=\toks42
 )
 \c@theorem=\count152
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasethemes.sty
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/beamerbasethemes.sty
 Package: beamerbasethemes 2010/05/01  (rcs-revision efa082c6111d)
 ))
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/themes/theme/beamerthemede
@@ -644,14 +694,15 @@ emedefault.sty
 Package: beamerouterthemedefault 2010/06/17  (rcs-revision d02a7cf4d8ae)
 ))) (./beamerthemeAalborg.sty
 Package: beamerthemeAalborg 2012/01/17 v0.1.1 The Aalborg Beamer Theme
-(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (/usr/
-local/texlive/2012/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 Package: pgf 2008/01/15 v2.10 (rcs-revision 1.12)
 
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.cod
 e.tex
 File: pgfmoduleshapes.code.tex 2010/09/09  (rcs-revision 1.13)
-\pgfnodeparttextbox=\box53
+\pgfnodeparttextbox=\box54
 )
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.
 tex
@@ -666,15 +717,16 @@ Package: pgfcomp-version-0-65 2007/07/03 v2.10 (rcs-revision 1.7)
 (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
 -1-18.sty
 Package: pgfcomp-version-1-18 2007/07/23 v2.10 (rcs-revision 1.1)
-)) (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (/usr
-/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (/usr/local/
-texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (/usr/loca
-l/texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)
+) (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
 Package: pgffor 2010/03/23 v2.10 (rcs-revision 1.18)
 \pgffor@iter=\dimen185
 \pgffor@skip=\dimen186
-\pgffor@stack=\toks40
-\pgffor@toks=\toks41
+\pgffor@stack=\toks43
+\pgffor@toks=\toks44
 ))
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.cod
 e.tex
@@ -692,8 +744,8 @@ File: pgflibraryplothandlers.code.tex 2010/05/31 v2.10 (rcs-revision 1.15)
 \tikz@lastysaved=\dimen191
 \tikzleveldistance=\dimen192
 \tikzsiblingdistance=\dimen193
-\tikz@figbox=\box54
-\tikz@tempbox=\box55
+\tikz@figbox=\box55
+\tikz@tempbox=\box56
 \tikztreelevel=\count154
 \tikznumberofchildren=\count155
 \tikznumberofcurrentchild=\count156
@@ -711,7 +763,8 @@ File: pgfmodulematrix.code.tex 2010/08/24  (rcs-revision 1.4)
 (/usr/local/texlive/2012/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
 s/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2008/06/17 v2.10 (rcs-revision 1.2)
-))) (/usr/local/texlive/2012/texmf-dist/tex/latex/tools/calc.sty
+)))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count162
 \calc@Bcount=\count163
@@ -723,7 +776,8 @@ LaTeX Info: Redefining \setlength on input line 76.
 LaTeX Info: Redefining \addtolength on input line 77.
 \calc@Ccount=\count164
 \calc@Cskip=\skip59
-) (./beamerinnerthemeAalborg.sty
+)
+(./beamerinnerthemeAalborg.sty
 Package: beamerinnerthemeAalborg 2012/01/17 v0.1.1 The Aalborg Beamer Theme
 \beamer@titlepagewidth=\skip60
 ) (./beamerouterthemeAalborg.sty
@@ -731,18 +785,22 @@ Package: beamerouterthemeAalborg 2012/01/17 v0.1.1 The Aalborg Beamer Theme
 \beamer@width=\skip61
 \beamer@height=\skip62
 \beamer@barwidth=\skip63
-) (./beamercolorthemeAalborg.sty
+)
+(./beamercolorthemeAalborg.sty
 Package: beamercolorthemeAalborg 2012/01/17 v0.1.1 The Aalborg Beamer Theme
-)) (/usr/local/texlive/2012/texmf-dist/tex/latex/base/inputenc.sty
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2008/03/30 v1.1d Input encoding file
-\inpenc@prehook=\toks42
-\inpenc@posthook=\toks43
+\inpenc@prehook=\toks45
+\inpenc@posthook=\toks46
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/t1enc.dfu
 File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
@@ -892,6 +950,7 @@ File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/ot1enc.dfu
 File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
@@ -922,6 +981,7 @@ File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/omsenc.dfu
 File: omsenc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
@@ -947,10 +1007,13 @@ Now handling font encoding PD1 ...
    defining Unicode char U+2026 (decimal 8230)
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
-)) (/usr/local/texlive/2012/texmf-dist/tex/generic/babel/babel.sty
+))
+(/usr/local/texlive/2012/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2008/07/08 v3.8m The Babel package
+
 (/usr/local/texlive/2012/texmf-dist/tex/generic/babel/english.ldf
 Language: english 2005/03/30 v3.3o English support from the babel system
+
 (/usr/local/texlive/2012/texmf-dist/tex/generic/babel/babel.def
 File: babel.def 2008/07/08 v3.8m Babel common definitions
 LaTeX Info: Redefining \textlatin on input line 82.
@@ -960,12 +1023,15 @@ LaTeX Info: Redefining \textlatin on input line 82.
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
-)) (/usr/local/texlive/2012/texmf-dist/tex/latex/base/fontenc.sty
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
-)) (/usr/local/texlive/2012/texmf-dist/tex/latex/lm/lmodern.sty
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/lm/lmodern.sty
 Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
@@ -1006,8 +1072,8 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 
 
 Package pgf Warning: File "tu-logo" not found when defining image "logo2".
-(pgf)                Tried all extensions in ".pdf:.jpg:.jpeg:.png:" on input l
-ine 62.
+(pgf)                Tried all extensions in ".epsi:.eps:.ps:" on input line 62
+.
 
 
 Package pgf Warning: Missing width for image "logo2" ("tu-logo") in draft mode.
@@ -1036,13 +1102,13 @@ LaTeX Font Info:    ... okay on input line 79.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 79.
 LaTeX Font Info:    ... okay on input line 79.
 LaTeX Font Info:    Try loading font information for T1+lmss on input line 79.
-(/usr/local/texlive/2012/texmf-dist/tex/latex/lm/t1lmss.fd
+ (/usr/local/texlive/2012/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 *geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
+*geometry* detected driver: dvips
 *geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
+* driver: dvips
 * paper: custom
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
@@ -1073,44 +1139,22 @@ File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count166
-\scratchdimen=\dimen197
-\scratchbox=\box56
-\nofMPsegments=\count167
-\nofMParguments=\count168
-\everyMPshowfont=\toks44
-\MPscratchCnt=\count169
-\MPscratchDim=\dimen198
-\MPnumerator=\count170
-\makeMPintoPDFobject=\count171
-\everyMPtoPDFconversion=\toks45
-) (/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
-(/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
-)
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
-(/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-)) ABD: EveryShipout initializing macros
+ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box57
 Package hyperref Info: Link coloring OFF on input line 79.
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
+
 (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count172
+\c@section@level=\count166
 )
 LaTeX Info: Redefining \ref on input line 79.
 LaTeX Info: Redefining \pageref on input line 79.
 LaTeX Info: Redefining \nameref on input line 79.
+
 (./aalborgtheme.out) (./aalborgtheme.out)
 \@outlinefile=\write5
 \openout5 = `aalborgtheme.out'.
@@ -1183,21 +1227,24 @@ r-theorem-dictionary/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
 LaTeX Info: Redefining \includegraphics on input line 79.
+
 (./aalborgtheme.nav)
 LaTeX Font Info:    Try loading font information for T1+lmtt on input line 83.
-(/usr/local/texlive/2012/texmf-dist/tex/latex/lm/t1lmtt.fd
+ (/usr/local/texlive/2012/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OML+lmm on input line 83.
-(/usr/local/texlive/2012/texmf-dist/tex/latex/lm/omllmm.fd
+ (/usr/local/texlive/2012/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 83.
+
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OMX+lmex on input line 83.
+
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -1209,10 +1256,12 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 83.
 LaTeX Font Info:    Try loading font information for U+msa on input line 83.
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 83.
+
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
@@ -1227,262 +1276,707 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 83--83
 []$[]  
  []
 
-<img/background.pdf, id=70, 597.51233pt x 532.91197pt>
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 83.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.83 \end{frame}
+                
+? R
+OK, entering \nonstopmode...
 [1
 
-{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./img/b
-ackground.pdf>] (./aalborgtheme.toc)
+] (./aalborgtheme.toc)
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <14.4> on input line 89.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <14.4> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 89.
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 89.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[2
 
- <./aau_logo.pdf>]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 100.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[3
 
-]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 100.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[4
+! LaTeX Error: File `img/background' not found.
 
-]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 100.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[5
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.89 \end{frame}
+                
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [2
 
 ]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 119.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[6
 
-]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 134.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[7
+! LaTeX Error: File `img/background' not found.
 
-]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 134.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[8
-
-]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 134.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[9
-
-]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 150.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[10
-
-] <img/3Points.pdf, id=329, 958.86159pt x 230.94594pt>
-File: img/3Points.pdf Graphic file (type pdf)
-<use img/3Points.pdf>
-Package pdftex.def Info: img/3Points.pdf used on input line 173.
-(pdftex.def)             Requested size: 239.00298pt x 57.56366pt.
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 173.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[11
-
- <./img/3Points.pdf>] <img/5Points.pdf, id=351, 962.82268pt x 466.15715pt>
-File: img/5Points.pdf Graphic file (type pdf)
-<use img/5Points.pdf>
-Package pdftex.def Info: img/5Points.pdf used on input line 192.
-(pdftex.def)             Requested size: 239.00298pt x 115.71388pt.
-
-Overfull \vbox (3.11172pt too high) detected at line 192
- []
-
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 192.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[12
-
- <./img/5Points.pdf>] <img/Auto_WP_Planning.png, id=374, 561.5379pt x 552.8655p
-t>
-File: img/Auto_WP_Planning.png Graphic file (type png)
-<use img/Auto_WP_Planning.png>
-Package pdftex.def Info: img/Auto_WP_Planning.png used on input line 208.
-(pdftex.def)             Requested size: 142.26378pt x 140.06352pt.
-pdfTeX warning (ext4): destination with the same identifier (name{fig:5points})
- has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.208 \end{frame}
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.100 \end{frame}
                  
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 208.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[13
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
- <./img/Auto_WP_Planning.png>]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 222.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[14
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [3
 
 ]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 255.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[15
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.100 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [4
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.100 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [5
+
+]
+
+! LaTeX Error: File `img/aauship' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.118 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.118 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [6
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.135 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [7
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 281.
+(Font)              <8> on input line 149.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 281.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 281.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <12> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 281.
+(Font)              <6> on input line 149.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 281.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 149.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 281.
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 281.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[16
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 149.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.149 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [8
 
 ]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 304.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[17
 
-] <img/reftrack.pdf, id=481, 490.80968pt x 400.47618pt>
-File: img/reftrack.pdf Graphic file (type pdf)
-<use img/reftrack.pdf>
-Package pdftex.def Info: img/reftrack.pdf used on input line 315.
-(pdftex.def)             Requested size: 233.3125pt x 190.37482pt.
+! LaTeX Error: File `img/background' not found.
 
-Overfull \vbox (6.67262pt too high) detected at line 315
- []
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.149 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 315.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[18
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
 
- <./img/reftrack.pdf>] <img/eng_inp.pdf, id=526, 487.9008pt x 395.87798pt>
-File: img/eng_inp.pdf Graphic file (type pdf)
-<use img/eng_inp.pdf>
-Package pdftex.def Info: img/eng_inp.pdf used on input line 326.
-(pdftex.def)             Requested size: 233.3125pt x 189.30647pt.
-
-Overfull \vbox (3.65985pt too high) detected at line 326
- []
-
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 326.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[19
-
- <./img/eng_inp.pdf>]
-Overfull \vbox (14.52034pt too high) detected at line 361
- []
-
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 361.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[20
+ [9
 
 ]
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 377.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[21
 
-] <img/track.pdf, id=613, 411.87175pt x 326.55402pt>
-File: img/track.pdf Graphic file (type pdf)
-<use img/track.pdf>
-Package pdftex.def Info: img/track.pdf used on input line 388.
-(pdftex.def)             Requested size: 233.3125pt x 184.98668pt.
+! LaTeX Error: File `img/background' not found.
 
-Overfull \vbox (11.34006pt too high) detected at line 388
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.149 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [10
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.164 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [11
+
+]
+
+! LaTeX Error: File `img/3Points' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.186 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.186 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [12
+
+]
+
+! LaTeX Error: File `img/5Points' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.204 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.204 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [13
+
+]
+
+! LaTeX Error: File `img/Auto_WP_Planning' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.219 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.219 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [14
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.233 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [15
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.265 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [16
+
+]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 291.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <12> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 291.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.291 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [17
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.314 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [18
+
+]
+
+! LaTeX Error: File `img/reftrack' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.325 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.325 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [19
+
+]
+
+! LaTeX Error: File `img/eng_inp' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.336 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.336 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [20
+
+]
+Overfull \vbox (14.52034pt too high) detected at line 370
  []
 
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 388.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[22
 
- <./img/track.pdf>] <img/error.pdf, id=656, 390.96063pt x 319.69438pt>
-File: img/error.pdf Graphic file (type pdf)
-<use img/error.pdf>
-Package pdftex.def Info: img/error.pdf used on input line 398.
-(pdftex.def)             Requested size: 233.3125pt x 190.78394pt.
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 398.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[23
+! LaTeX Error: File `img/background' not found.
 
- <./img/error.pdf>] <img/kalmanestimate.pdf, id=694, 484.78717pt x 319.17645pt>
-File: img/kalmanestimate.pdf Graphic file (type pdf)
-<use img/kalmanestimate.pdf>
-Package pdftex.def Info: img/kalmanestimate.pdf used on input line 411.
-(pdftex.def)             Requested size: 233.3125pt x 153.60718pt.
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 411.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[24
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.370 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
- <./img/kalmanestimate.pdf>] <img/motorinput.pdf, id=747, 406.51875pt x 326.218
-75pt>
-File: img/motorinput.pdf Graphic file (type pdf)
-<use img/motorinput.pdf>
-Package pdftex.def Info: img/motorinput.pdf used on input line 422.
-(pdftex.def)             Requested size: 233.3125pt x 187.22588pt.
-File: img/background.pdf Graphic file (type pdf)
-<use img/background.pdf>
-Package pdftex.def Info: img/background.pdf used on input line 422.
-(pdftex.def)             Requested size: 364.19536pt x 324.82375pt.
-[25
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
 
- <./img/motorinput.pdf>]
+ [21
+
+]
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.386 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [22
+
+]
+
+! LaTeX Error: File `img/track' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.397 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.397 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [23
+
+]
+
+! LaTeX Error: File `img/error' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.407 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.407 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [24
+
+]
+
+! LaTeX Error: File `img/kalmanestimate' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.420 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.420 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [25
+
+]
+
+! LaTeX Error: File `img/motorinput' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.431 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `img/background' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.431 \end{frame}
+                 
+I could not locate the file with any of these extensions:
+.eps,.ps,.eps.gz,.ps.gz,.eps.Z
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+File: aau_logo.pdf Graphic file (type eps)
+<aau_logo.pdf>
+Overfull \vbox (2.354pt too high) has occurred while \output is active []
+
+ [26
+
+]
 \tf@nav=\write6
 \openout6 = `aalborgtheme.nav'.
 
@@ -1492,48 +1986,27 @@ Package pdftex.def Info: img/background.pdf used on input line 422.
 \tf@snm=\write8
 \openout8 = `aalborgtheme.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 425.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 425.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 434.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 434.
+
 (./aalborgtheme.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 425.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 425.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 434.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 434.
 Package rerunfilecheck Info: File `aalborgtheme.out' has not changed.
-(rerunfilecheck)             Checksum: 0EC84282DDE0E9C83295C3C9FA8163AB;800.
+(rerunfilecheck)             Checksum: 698AB881ABB6EB31444B5A0D986A1E45;860.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 425.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 434.
  ) 
 Here is how much of TeX's memory you used:
- 18995 strings out of 493488
- 358627 string characters out of 3141326
- 437626 words of memory out of 3000000
- 21728 multiletter control sequences out of 15000+200000
+ 18441 strings out of 493489
+ 350390 string characters out of 3141349
+ 446055 words of memory out of 3000000
+ 21244 multiletter control sequences out of 15000+200000
  56415 words of font info for 67 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 53i,21n,65p,411b,1083s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/lo
-cal/texlive/2012/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/20
-12/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2012/texmf-d
-ist/fonts/enc/dvips/lm/lm-mathex.enc}</usr/local/texlive/2012/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2012/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2012/texmf-dist/fonts/typ
-e1/public/lm/lmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/
-lm/lmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/lm/lmmi12.
-pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/l
-ocal/texlive/2012/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/texli
-ve/2012/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2012/te
-xmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2012/texmf-dist/fo
-nts/type1/public/lm/lmsso10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1
-/public/lm/lmsso12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/l
-m/lmsso8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/lm/lmsy10.p
-fb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/lo
-cal/texlive/2012/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texliv
-e/2012/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb>
-Output written on aalborgtheme.pdf (25 pages, 1704225 bytes).
-PDF statistics:
- 869 PDF objects out of 1000 (max. 8388607)
- 719 compressed objects within 8 object streams
- 75 named destinations out of 1000 (max. 500000)
- 210 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 56i,20n,70p,15623b,1127s stack positions out of 5000i,500n,10000p,200000b,50000s
 
+Output written on aalborgtheme.dvi (26 pages, 332076 bytes).
