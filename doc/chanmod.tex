@@ -1,0 +1,36 @@
+\chapter{Channel Modeling}
+As the controller is run on two different masters, a link between these have to be established and modeled. The connection is seen as a connection from a master (ex. a "mothership") and a slave (ex. AAUSHIP). Where the communication goes both ways, as the master needs to compute what the slave should do next based on measurements from the slave, and the slave needs to respond to these data. Figure \vref{fig:chanmod} is an illustration of the communication. 
+
+\begin{figure}[htbp]
+		\begin{center}
+			\includegraphics[width=8.4cm]{img/chanmod}
+			\caption{Depiction of the communication link between the master and the slave.}
+			\label{fig:chanmod}
+		\end{center}
+\end{figure}
+
+As the protocol between the master and the slave, includes a validity check, the channel estimation becomes a simple question of wether or not the received package is valid or not - thus it can be estimated using a bernoulli distribution of the packages. The channel $\gamma$ is modeled using the bernoulli distribution which has a probability mass function that can be described as:
+\begin{align}
+\gamma[n] = 
+\left\{ 
+  \begin{array}{l l}
+    p & \quad \text{for}\,\, \gamma[n] = 1\\
+    q & \quad \text{for}\,\, \gamma[n] = 0
+  \end{array} \right.
+\end{align}
+For $n = 0,1,2,\dots$ and $q = (1-p)$. To determine the probability of succes $p$, a test have been carried out, where the device was held steady at a distance, to determine the PMF of the packet losses - which are used to estimate wether a packet is received or not. This test has been used to determine these factors, and the worst case scenario have been used, as the actual probability will always be better than this. 
+
+This probability will be on both of the devices - but as the modules are identical in hardware and software, the distribution is the same for both ways. As the transmission is running at 3 Hz but the sampling time of the individual sensor readings are different the probability for receiving a string of valid packages (in one second) is $p_\text{imu}^{3}$ for the IMU and $p_\text{GPS}$ for the GPS. This is caused by the difference in sampling time, where the IMU is sampled at 10 Hz (and are thus sent with every package) and the GPS is only sampled at 1 Hz (and are thus included in one of the above packages). 
+
+As the system is not time critical, any delay below 5 seconds does not matter, and the ship is programmed to zero the actuators if the ship does not receive any packets for 5 seconds. As this currently is the upper threshold, the probability for not receiving any packages is computed for different distances. 
+\todo[inline]{Note: During tests the ship will go to a standstill (set the actuator input to 0) if the LLI does not receive any package within 1 second, to make sure the ship will not be lost.}
+
+The ship can run for 5 hours without a recharge, the chance for not receiving any packages, is computed to be: whilst the probability of receiving 10\% of the packages can be computed to be:
+
+The test is carried out using a set of known distances where a 5 minute period is used, a counter packet is added and the same packet is sent constantly to see how many is lost. This generates the following plot for the number of lost packages. 
+
+The mean packet loss is derived to be: whilst the variance is given as: 
+
+Test results show that the communication link at a distance of X metres begin to have quite a high loss ratio with the current equipment mounted on the ship - and so the ship should never be further away, as communication begins to become faulty. To verify if the ship can still navigate without sending packets back and forth. As to verify if the ship can sail without a decent communications link a test have been carried out where the GPS packets were turned off for 
+
+To make a worst case test, a test is carried out where the GPS is turned off for 60 seconds, so only the IMU goes through. 
