@@ -63,7 +63,13 @@ int main (void)
 	uint8_t xacca[2];
 	char s[64];
 	char rmc[256];
-awake_flag = 0;
+
+	awake_flag = 0;
+
+	#ifdef RF_TEST_IDX
+	uint8_t gps_rf_test_idx = 0;
+	uint8_t imu_rf_test_idx = 0;
+	#endif
 
 
   /* set outputs */
@@ -134,6 +140,9 @@ awake_flag = 0;
 			hli_send(package(sizeof(adis8_t), 0x14, 0x0D, &adis_data_decoded), sizeof(adis8_t)); // Log to SD card
 			#endif
 
+			#ifdef RF_TEST_IDX
+			memcpy(&adis_data_decoded_reduced.zgyro[0],&imu_rf_test_idx,1);
+			#endif
 			memcpy(&meas_buffer[txtop],	(char *)package(sizeof(adis8_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced),sizeof(adis8_reduced_t)+6);
 			txtop=txtop+sizeof(adis8_reduced_t)+6;
 
@@ -196,6 +205,9 @@ awake_flag = 0;
 						if (rmc_cut(buffer3,rmc)) {
 							// Invalid RMC data
 						} else {
+							#ifdef RF_TEST_IDX
+							memcpy(&rmc[0],&gps_rf_test_idx,1);
+							#endif
 							memcpy(&meas_buffer[txtop],	(char *)package(rmc_idx, 30, 6, rmc),rmc_idx+6);
 							txtop=txtop+rmc_idx+6;
 
