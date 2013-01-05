@@ -142,8 +142,15 @@ int main (void)
 
 			#ifdef RF_TEST_IDX
 			memcpy(&adis_data_decoded_reduced.zgyro[0],&imu_rf_test_idx,1);
+			if (imu_rf_test_idx == 255)
+				imu_rf_test_idx = 1;
+			else
+				imu_rf_test_idx++;
+			memcpy(&meas_buffer[txtop],	(char *)package(sizeof(adis8_reduced_t), 0x14, 0x0F, &adis_data_decoded_reduced),sizeof(adis8_reduced_t)+6);
 			#endif
+			#ifndef RF_TEST_IDX
 			memcpy(&meas_buffer[txtop],	(char *)package(sizeof(adis8_reduced_t), 0x14, 0x0E, &adis_data_decoded_reduced),sizeof(adis8_reduced_t)+6);
+			#endif
 			txtop=txtop+sizeof(adis8_reduced_t)+6;
 
 			adis_ready_counter -= ADIS_READY;
@@ -207,8 +214,15 @@ int main (void)
 						} else {
 							#ifdef RF_TEST_IDX
 							memcpy(&rmc[0],&gps_rf_test_idx,1);
+							if (gps_rf_test_idx == 255)
+								gps_rf_test_idx = 1;
+							else
+								gps_rf_test_idx++;
+							memcpy(&meas_buffer[txtop],	(char *)package(rmc_idx, 30, 31, rmc),rmc_idx+6);
 							#endif
+							#ifndef RF_TEST_IDX
 							memcpy(&meas_buffer[txtop],	(char *)package(rmc_idx, 30, 6, rmc),rmc_idx+6);
+							#endif
 							txtop=txtop+rmc_idx+6;
 
 							PORTL ^= (1<<LED3);
