@@ -15,6 +15,7 @@ import ObjectLibrary as OL
 receivinglog = open("meas/received.txt",'w')
 acclog = open("meas/acc.txt",'w')
 gpslog = open("meas/gps.txt",'w')
+plog = open("meas/plog.txt",'w')
 
 '''LOGGING FOR THE SHIP WITH KALMAN FILTER'''
 
@@ -95,7 +96,7 @@ receiver.start()
 
 measuredstates = numpy.zeros((9,2))
 tempm = measuredstates
-parser = packetparser.packetParser(acclog,gpslog,measuredstates,receivinglog)
+parser = packetparser.packetParser(acclog,gpslog,measuredstates,receivinglog,plog)
 bla = True
 timeout = 1000
 p = receiver.constructPacket("",0,9)
@@ -188,13 +189,14 @@ try:
 						sendControl += 1
 						
 					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
-						print chr(27) + "[2J"
-						print measuredstates[0][1]
+						#print chr(27) + "[2J"
+						#print measuredstates[0][1]
 						if measuredstates[0][1] == 1:
 							print measuredstates
 						
 						#if measuredstates[0][1] == 1:
 						#	print "blaH"
+						print time.time()
 						if GPSFIX == True:
 							print "GPS FIX!"
 							#AAUSHIP2.ReadStates(tempm,motor)
@@ -214,16 +216,16 @@ try:
 						#print sendControl
 						#print "Sent data"
 						
-						print motor
-						print motor2
+						#print motor
+						#print motor2
 						#print "LastWP: \t" +  str(AAUSHIP.LastWP)
-						print "Theta_r: \t" + str(AAUSHIP.get_Thera_r()*180/pi)
-						print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
-						print "NextWP (N,E): \t" + str(AAUSHIP.NextSWP.get_Pos())
-						print "Pos (N,E): \t" + str(AAUSHIP.Pos.get_Pos())
-						print "NFPos (N,E): \t" + str(AAUSHIP2.Pos.get_Pos())
-						print "MeasPos: \t" + str(AAUSHIP.get_mp())
-						print "Vel: \t" + str(AAUSHIP.get_vel())
+						#print "Theta_r: \t" + str(AAUSHIP.get_Thera_r()*180/pi)
+						#print "Theta: \t\t" + str(AAUSHIP.Theta*180/pi)
+						#print "NextWP (N,E): \t" + str(AAUSHIP.NextSWP.get_Pos())
+						#print "Pos (N,E): \t" + str(AAUSHIP.Pos.get_Pos())
+						#print "NFPos (N,E): \t" + str(AAUSHIP2.Pos.get_Pos())
+						#print "MeasPos: \t" + str(AAUSHIP.get_mp())
+						#print "Vel: \t" + str(AAUSHIP.get_vel())
 						
 						
 						#print tempm
@@ -235,7 +237,7 @@ try:
 						Ncontrol.write(str(tosend2[0][0]) + ", " + str(tosend2[1][0]) + ", " + str(motor2[0,0]) + ", " + str(motor2[1,0]) + ", " + str(time.time()) +"\r\n")
 						
 						#print tosend
-						receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
+						#receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
 						#print measuredstates
 						#print ""
 						
@@ -346,6 +348,7 @@ Kstate.close()
 Nswp.close()
 Ncontrol.close()
 Nstate.close()
+plog.close()
 
 print "done"
 

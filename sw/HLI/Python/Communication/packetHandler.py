@@ -65,7 +65,7 @@ class seriald:
 class packetHandler(threading.Thread):
 	
 	def __init__(self,serialport,speed,time,queue):
-		self.connection = seriald.Serial(serialport,speed,timeout=time)	#Serial Connection
+		self.connection = serial.Serial(serialport,speed,timeout=time)	#Serial Connection
 		print self.connection
 		print self.connection.inWaiting()
 		self.myNewdata = []				#Array for storing new packets

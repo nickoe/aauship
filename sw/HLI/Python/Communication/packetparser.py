@@ -7,7 +7,7 @@ from math import pi, atan
 import gpsfunctions
 import time
 class packetParser():
-	def __init__(self,accelfile,gpsfile,measstate,fulllog):
+	def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
 		self.GPS = {0: 'Latitude', 1: 'Longtitude', 2: 'Velocity'}
 		self.IMU = {0: 'Acceleration X', 1: 'Acceleration Y', 2: 'Acceleration Z', 3: 'Gyroscope X', 4: 'Gyroscope Y', 5: 'GyroscopeZ', 6: 'MagnetometerX', 7: 'MagnetometerY', 8: 'MagnetometerZ', 9: 'Temperature'}
 		self.MsgID = {0: self.GPS, 1: self.IMU}
@@ -15,6 +15,7 @@ class packetParser():
 		self.accelburst = [0,0,0,0,0,0,0]
 		self.accellog = accelfile
 		self.fulllog = fulllog
+		self.plog = plog
 	#	self.accelwriter = csv.writer(self.accellog)
 		self.prevtime = 0
 		self.excount = 0
@@ -267,9 +268,17 @@ class packetParser():
 						#print chr(27) + "[2J"
 						#print self.measureddata
 						self.state = numpy.zeros((9,2))
-								
+							
+				elif(ord(packet['MsgID']) == 15):
+					msgnr = ord(packet['Data'][0])
+					#print msgnr
+					self.plog.write(str(msgnr))
+					self.plog.write(", 0\n")
+						
 						
 			elif (ord(packet['DevID']) == 30):
+				#print "GPS!"
+				#time.sleep(1)
 				if(ord(packet['MsgID']) == 6):
 					#print str("".join(packet['Data']))
 					content = "".join(packet['Data']).split(',')
@@ -320,6 +329,12 @@ class packetParser():
 						self.state[1] = [speed, 1]
 						self.state[3] = [float(pos[1,0]), 	1]
 						#self.state[3] = [5,1]
+						
+				elif(ord(packet['MsgID']) == 31):
+					msgnr = ord(packet['Data'][0])
+					self.plog.write("0, ")
+					self.plog.write(str(msgnr))
+					self.plog.write("\n")
 					
 					
 				'''	
@@ -368,7 +383,6 @@ class packetParser():
 				
 						#self.gpswriter.writerow(self.gpsdata)
 				'''
-			
 			else:
 				print packet
 		except Exception as e:
