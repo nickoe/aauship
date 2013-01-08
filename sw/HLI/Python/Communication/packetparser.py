@@ -22,6 +22,7 @@ class packetParser():
 		#self.accelburst = 0
 		self.gpspacket = 0
 		self.measureddata = measstate
+		self.n_rec = 0
 		
 		self.gpsdata = [0,0,0,0,0,0,0,0]
 		#Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
@@ -270,8 +271,10 @@ class packetParser():
 						self.state = numpy.zeros((9,2))
 							
 				elif(ord(packet['MsgID']) == 15):
+					self.n_rec += 1
 					msgnr = ord(packet['Data'][0])
 					#print msgnr
+					self.plog.write(str(self.n_rec) + ", ")
 					self.plog.write(str(msgnr))
 					self.plog.write(", 0\n")
 						
@@ -331,7 +334,9 @@ class packetParser():
 						#self.state[3] = [5,1]
 						
 				elif(ord(packet['MsgID']) == 31):
+					self.n_rec += 1
 					msgnr = ord(packet['Data'][0])
+					self.plog.write(str(self.n_rec) + ", ")
 					self.plog.write("0, ")
 					self.plog.write(str(msgnr))
 					self.plog.write("\n")

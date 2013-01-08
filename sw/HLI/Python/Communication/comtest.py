@@ -7,15 +7,16 @@ import numpy
 import os
 from math import pi
 
-import Ship_nofilter as Shipnf
-import Ship
-import ObjectLibrary as OL
+#import Ship_nofilter as Shipnf
+#import Ship
+#import ObjectLibrary as OL
 
 '''LOGGING FOR BOTH'''
 receivinglog = open("meas/received.txt",'w')
 acclog = open("meas/acc.txt",'w')
 gpslog = open("meas/gps.txt",'w')
 plog = open("meas/plog.txt",'w')
+inclog = open("meas/inclog.txt",'w')
 
 '''LOGGING FOR THE SHIP WITH KALMAN FILTER'''
 
@@ -38,9 +39,9 @@ Nstate = open("meas/NoFilter/state.txt",'w')
 #controllog = open("measurements/controllog141212.txt",'w')
 #swpnf = open("measurements/swpnf141212.txt",'w')
 #outputnf = open("measurements/outputnf.txt",'w')
-Startpos = OL.O_PosData(0, 0, 0, 1)
-AAUSHIP = Ship.O_Ship(Startpos,Kstate,Kswp)
-AAUSHIP2 = Shipnf.O_Ship(Startpos,Nstate,Nswp)
+#Startpos = OL.O_PosData(0, 0, 0, 1)
+#AAUSHIP = Ship.O_Ship(Startpos,Kstate,Kswp)
+#AAUSHIP2 = Shipnf.O_Ship(Startpos,Nstate,Nswp)
 
 '''
 EMBEDDED OPTIONAL STEP 2/B
@@ -59,15 +60,15 @@ Y = numpy.array([0,2.5574,0.5683,-16.3120,-40.7704]) #Easting
 X = numpy.array([0,-18.3388,-36.7722,-53.9444,-54.2330]) #Northing
 
 WPC = numpy.array([X,Y])
-AAUSHIP.SetWaypoints(WPC)
-AAUSHIP2.SetWaypoints(WPC)
+#AAUSHIP.SetWaypoints(WPC)
+#AAUSHIP2.SetWaypoints(WPC)
 
 '''
 EMBEDDED STEP 3
 Set first target WP (should be 0 or 1)
 '''
-AAUSHIP.FlushPath(-1)
-AAUSHIP2.FlushPath(-1)
+#AAUSHIP.FlushPath(-1)
+#AAUSHIP2.FlushPath(-1)
 
 '''
 EMBEDDED STEP 5
@@ -91,7 +92,7 @@ Control loop
 qu = Queue.Queue()
 kalqueue = Queue.Queue()
 to = 0.1665
-receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,0.02,qu)
+receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,0.02,qu,inclog)
 receiver.start()
 
 measuredstates = numpy.zeros((9,2))
@@ -144,10 +145,10 @@ try:
 							n += 1
 						parser.parse(p2)
 						parser.parse(p)
-						motor2 = AAUSHIP2.Control_Step()
-						motor = AAUSHIP.Control_Step()
-						AAUSHIP2.ReadStates(measuredstates,motor)
-						AAUSHIP.ReadStates(measuredstates, motor)
+						#motor2 = AAUSHIP2.Control_Step()
+						#motor = AAUSHIP.Control_Step()
+						#AAUSHIP2.ReadStates(measuredstates,motor)
+						#AAUSHIP.ReadStates(measuredstates, motor)
 						tempm = measuredstates
 						sendControl += 1
 					#	print measuredstates
@@ -162,11 +163,11 @@ try:
 						parser.parse(p2)
 						tempm = measuredstates
 						#print measuredstates[0]
-						motor2 = AAUSHIP.Control_Step()
-						motor = AAUSHIP.Control_Step()
+						#motor2 = AAUSHIP.Control_Step()
+						#motor = AAUSHIP.Control_Step()
 						
-						AAUSHIP2.ReadStates(measuredstates,motor)
-						AAUSHIP.ReadStates(measuredstates, motor)
+						#AAUSHIP2.ReadStates(measuredstates,motor)
+						#AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						#print measuredstates
 						#tempm = measuredstates
@@ -174,18 +175,18 @@ try:
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 20:
 						parser.parse(p2)
 						#print measuredstates[0]
-						motor2 = AAUSHIP2.Control_Step()
-						motor = AAUSHIP.Control_Step()
-						AAUSHIP2.ReadStates(measuredstates,motor)
-						AAUSHIP.ReadStates(measuredstates, motor)
+						#motor2 = AAUSHIP2.Control_Step()
+						#motor = AAUSHIP.Control_Step()
+						#AAUSHIP2.ReadStates(measuredstates,motor)
+						#AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						
 					elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 255:
 						parser.parse(p2)
-						motor2 = AAUSHIP2.Control_Step()
-						motor = AAUSHIP.Control_Step()
-						AAUSHIP2.ReadStates(measuredstates,motor)
-						AAUSHIP.ReadStates(measuredstates, motor)
+						#motor2 = AAUSHIP2.Control_Step()
+						#motor = AAUSHIP.Control_Step()
+						#AAUSHIP2.ReadStates(measuredstates,motor)
+						#AAUSHIP.ReadStates(measuredstates, motor)
 						sendControl += 1
 						
 					if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
@@ -209,10 +210,10 @@ try:
 						#motor2 = AAUSHIP2.Control_Step()
 						#AAUSHIP2.ReadStates(measuredstates,motor)
 						
-						sp = receiver.constructPacket(str(count)+"\r\n",10,19)
-						receiver.sendPacket(sp)
-						tosend = AAUSHIP.FtoM(motor)
-						tosend2 = AAUSHIP2.FtoM(motor2)
+						#sp = receiver.constructPacket(str(count)+"\r\n",10,19)
+						#receiver.sendPacket(sp)
+						#tosend = AAUSHIP.FtoM(motor)
+						#tosend2 = AAUSHIP2.FtoM(motor2)
 						#print sendControl
 						#print "Sent data"
 						
@@ -233,8 +234,8 @@ try:
 						#print tosend
 						
 						#print motor[1,0]
-						Kcontrol.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + ", " + str(time.time()) +"\r\n")
-						Ncontrol.write(str(tosend2[0][0]) + ", " + str(tosend2[1][0]) + ", " + str(motor2[0,0]) + ", " + str(motor2[1,0]) + ", " + str(time.time()) +"\r\n")
+						#Kcontrol.write(str(tosend[0][0]) + ", " + str(tosend[1][0]) + ", " + str(motor[0,0]) + ", " + str(motor[1,0]) + ", " + str(time.time()) +"\r\n")
+						#Ncontrol.write(str(tosend2[0][0]) + ", " + str(tosend2[1][0]) + ", " + str(motor2[0,0]) + ", " + str(motor2[1,0]) + ", " + str(time.time()) +"\r\n")
 						
 						#print tosend
 						#receiver.setMotor(int(round(tosend[0][0]*4)),int(round(tosend[1][0]*4)))
@@ -349,6 +350,7 @@ Nswp.close()
 Ncontrol.close()
 Nstate.close()
 plog.close()
+inclog.close()
 
 print "done"
 

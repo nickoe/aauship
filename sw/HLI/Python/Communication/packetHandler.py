@@ -64,10 +64,11 @@ class seriald:
 
 class packetHandler(threading.Thread):
 	
-	def __init__(self,serialport,speed,time,queue):
+	def __init__(self,serialport,speed,time,queue,inclog):
 		self.connection = serial.Serial(serialport,speed,timeout=time)	#Serial Connection
 		print self.connection
 		print self.connection.inWaiting()
+		self.inclog = inclog
 		self.myNewdata = []				#Array for storing new packets
 		self.q = queue					#Queue to share data between threads
 		self.errorcount = 0
@@ -113,11 +114,13 @@ class packetHandler(threading.Thread):
 			#print "Reading"
 			try:
 				checkchar = self.connection.read(1)
+				self.inclog.write(checkchar)
 				#print "successfull Read!"
 				#print checkchar	
 				if checkchar == chr(STARTCHAR):	#Read char until start char is found
 					#print "Checkchar is correct!"
 					length=self.connection.read(1)	#The next char after start byte is the length
+					self.inclog.write(length)
 					res = self.parser(length)	#Input the length into the parser function
 					#print res
 					if(res[0]):	#If the packet is valid, prepare the packet and put it in the queue
@@ -294,9 +297,11 @@ class packetHandler(threading.Thread):
 			extrabits = 4
 		for i in range((ord(packet[0])-length+5)):
 			tempc = self.connection.read(1)
+			self.inclog.write(tempc)
 			deltaerr = 0
 			if not tempc:
 				tempc = self.connection.read(1)
+				self.inclog.write(tempc)
 				self.errorcount += 1
 				if deltaerr > 10:
 					break
@@ -322,9 +327,11 @@ class packetHandler(threading.Thread):
 				index = packet.index(0x24)
 				if index == len(packet)-1:
 					tempc = self.connection.read(1)
+					self.inclog.write(tempc)
 					deltaerr = 0
 					while not tempc:
 						tempc = self.connection.read(1)
+						self.inclog.write(tempc)
 						self.errorcount += 1
 						if deltaerr > 10:
 							break
