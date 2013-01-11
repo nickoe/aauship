@@ -50,6 +50,22 @@ poster/*.bbl
 poster/*.toc
 poster/.goutputstream-*
 
+exam/*omut
+exam/*.aux
+exam/*.log
+exam/*.maf
+exam/*.mtc
+exam/*.mtc0
+exam/*.pdf
+exam/*.synctex.gz
+exam/*.fdb_latexmk
+exam/*.fls
+exam/*.blg
+exam/*.bbl
+exam/*.toc
+exam/.goutputstream-*
+exam/*.tdo
+
 # Software files
 *.out
 *.elf
