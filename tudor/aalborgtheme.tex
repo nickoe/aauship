@@ -1,0 +1,88 @@
+\documentclass[10pt]{beamer}
+\usetheme[
+%%% options passed to the outer theme
+%    hidetitle,           % hide the (short) title in the sidebar
+%    hideauthor,          % hide the (short) author in the sidebar
+%    hideinstitute,       % hide the (short) institute in the bottom of the sidebar
+%    shownavsym,          % show the navigation symbols
+%    width=2cm,           % width of the sidebar (default is 2 cm)
+%    hideothersubsections,% hide all subsections but the subsections in the current section
+%    hideallsubsections,  % hide all subsections
+%    right                % right of left position of sidebar (default is right)
+  ]{Aalborg}
+
+\definecolor{aaublue}{RGB}{33,26,82}
+\definecolor{aaugrey}{RGB}{84,97,110}
+
+% If you want to change the colors of the various elements in the theme, edit and uncomment the following lines
+% Change the bar and sidebar colors:
+\setbeamercolor{Aalborg}{fg=aaublue!10,bg=aaugrey!60}
+%\setbeamercolor{sidebar}{bg=blue!74}
+% Change the color of the structural elements:
+\setbeamercolor{structure}{fg=aaublue}
+ \setbeamercolor{subtitle}{fg=aaugrey}
+% Change the frame title text color:
+\setbeamercolor{frametitle}{fg=aaublue}
+% Change the normal text color background:
+%\setbeamercolor{normal text}{bg=aaugrey!10}
+% ... and you can of course change a lot more - see the beamer user manual.
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{img/background}}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+% ... or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+\usepackage{lmodern} %optional
+
+% colored hyperlinks
+\newcommand{\chref}[2]{%
+  \href{#1}{{\usebeamercolor[bg]{Aalborg}#2}}
+}
+
+\title[Centralized State Estimation\\ of Distributed Maritime Autonomous Surface Oceanographers]% optional, use only with long paper titles
+{Centralized State Estimation of Distributed Maritime Autonomous Surface Oceanographers}
+
+%\subtitle[v.\ 0.1.1] %optional
+%{v.\ 0.1.1}
+
+\author[Rasmus L. Christensen, Frederik Juul, Nick \O stergaard, Attila Fodor, Tudor Muresan] % optional, use only with lots of authors
+{
+  Rasmus L. Christensen \and Frederik Juul \and Nick \O stergaard \and Attila Fodor \and Tudor Muresan\\
+  {{\tt \{ralch,nickoe,fjuul,afodor12,tmures12\}@es.aau.dk}}
+}
+% - Give the names in the same order as they appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation. See the beamer manual for an example
+
+%specify some optional logos
+\pgfdeclareimage[height=1.2cm]{mainlogo}{aau_logo.pdf} % placed in the upper left/right corner
+\logo{\pgfuseimage{mainlogo}}
+
+\pgfdeclareimage[height=0.75cm]{logo2}{tu-logo} % placed in the lower left/right corner if the \pgfuseimage{logo2} command is uncommented in the \institute command below
+
+\institute[
+%  {\pgfuseimage{logo2}}\\ %insert a company or department logo
+  Dept.\ of Electronic Systems,\\
+  Aalborg University,\\
+  Denmark
+] % optional - is placed in the bottom of the sidebar on every slide
+{%
+  Department of Electronic Systems,\\
+  Aalborg University,\\
+  Denmark
+  
+  %there must be an empty line above this line - otherwise some unwanted space is added between the university and the country (I do not know why;( )
+}
+\date{\today}
+
+\begin{document}
+% the titlepage
+\begin{frame}[plain] % the plain option removes the sidebar and header from the title page
+  \titlepage
+\end{frame}
+%%%%%%%%%%%%%%%%
+
+\input{results}
+
+\end{document}
