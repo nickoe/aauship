@@ -31,6 +31,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
+\DeclareUnicodeCharacter{00A0}{~} % Fixes the "! Package inputenc Error: Unicode char \u8:  not set up for use with LaTeX."
 % ... or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
 \usepackage{lmodern} %optional
@@ -138,7 +139,6 @@ Pictures of the ship.
     \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
 \end{itemize}
 \end{frame}
-
 %%%%%%%%%%%%%%%%
 \begin{frame}{Development}{Protocol}
 The designed protocol is given as:
