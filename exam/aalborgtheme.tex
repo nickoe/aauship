@@ -31,6 +31,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
+\usepackage{soul} % use this (many fancier options)
 \DeclareUnicodeCharacter{00A0}{~} % Fixes the "! Package inputenc Error: Unicode char \u8:  not set up for use with LaTeX."
 % ... or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
@@ -89,16 +90,12 @@
 \end{frame}
 %%%%%%%%%%%%%%%%
 \section{Introduction}
-\begin{frame}{Introduction}{Purpose}
+\begin{frame}{Introduction}{Motivation}
   \begin{itemize}
   	\item<1-> Little to no research are currently devoted to maritime autonomous crafts.
     \item<2-> During the 2012 Fukushima accident in Japan, no measurements of the spread of radioactivity was available in the coastal zones, thus relying only on estimates. 
     \item<3-> The coastal area around Greenland has no up-to-date baymethric maps available, and with the growing interest in Greenland (both industrially and commercially) this poses a threat to the ships going in and out of the fjords.
   \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%
-\begin{frame}{Introduction}{Problem Description}
-Empty frame
 \end{frame}
 
 %%%%%%%%%%%%%%%%
@@ -144,14 +141,21 @@ Empty frame
 	\item 2 counter rotating 60mm propellers.
 	\item Inertial Measurement Unit.
 	\item Global Positioning System.
-	\item A 20mW 19.2 kbps radio link @ 470 MHz
+	\item A (currently) 20mW 19.2 kbps radio link @ 470 MHz
 	\item Arduino Mega with a custom made shield board mounted.
     \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%
 \begin{frame}{Development}{Protocol}
-The designed protocol is given as:
+The protocol designed for AAUSHIP is designed so the overhead of the package is as light as possible, as the bandwith between the ground station and the ship is relatively small. 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.2cm]{img/protocol}
+		\label{fig:protocol}
+	\end{center}
+\end{figure}
+The protocol is divided into 6 fields, a start byte, a length byte, a device byte, a message byte a 2 byte CRC16 field and a data field. The data field is varying in size to handle both the IMU and GPS packages.
 \end{frame}
 
 %%%%%%%%%%%%%%%%
@@ -205,7 +209,7 @@ x[n-1]\\
 \ddot{x}[n-1]
 \end{bmatrix}
 \end{align}
-This goes for the $y$-axis and the rotation about the $z$-axis as well.
+This goes for the $y$-axis and the rotation about the $z$-axis as well. Removal of acceleration in position estimation.
 \end{frame}
 
 \input{control/control.tex}
@@ -272,7 +276,7 @@ The above can be put an matrix form as:
 
 %%%%%%%%%%%%%%%%
 \begin{frame}{Modeling}{System Dynamics}
-As the motion in the $y$-direction is uncontrollable, and the thing to be controlled is the velocity and the angle, the combined system becomes:
+As the motion in the $y$-direction is uncontrollable, and the thing to be controlled is the forward velocity $\dot{x}$ and the angle $\theta$, the revised system becomes:
 \begin{align}
 \dot{\mathbf{x}} &= \mathbf{A}\mathbf{x} + \mathbf{B}\mathbf{u}\\
 \begin{bmatrix}
@@ -326,10 +330,10 @@ F_\text{total}\\
 		\begin{frame}{Kalman filter}{Monorate implementation}
 			First iteration of the Kalman filter design was a monorate variant. This produced the following results:
 			\begin{figure}
-				\begin{center}
+				\centering
 					\includegraphics[width=8.2cm]{img/xymono}
 					\label{fig:monoratekalman}
-				\end{center}
+			%	\end{center}
 			\end{figure}
 		\end{frame}
 
