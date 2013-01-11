@@ -317,6 +317,10 @@ F_\text{total}\\
 \end{frame}
 
 %%%%%%%%%%%%%%%%
+%###########################
+
+\renewcommand{\vec}[1]{\text{\boldmath$#1$}}
+
 \section{Results}
 	\subsection{Kalman filter}
 		\begin{frame}{Kalman filter}{Monorate implementation}
@@ -368,6 +372,7 @@ F_\text{total}\\
 			\end{figure}
 		\end{frame}
 
+
 %###########################
 
 	\subsection{Packet loss}
@@ -381,6 +386,21 @@ F_\text{total}\\
 		\end{itemize}
 	\end{frame}
 
+%###########################
+
+	\begin{frame}{Packet loss}{Advantages of Kalman filtering}
+		\begin{itemize}
+			\item Missing GPS samples
+			\item Better than simple estimation 
+		\end{itemize}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/kalmanestimate}
+				\label{fig:kalmanestimate}
+			\end{center}
+		\end{figure}
+	\end{frame}
+		
 %###########################
 
 	\begin{frame}{Packet loss}{Simulation Results}
@@ -399,7 +419,7 @@ F_\text{total}\\
 
 	\begin{frame}{Packet loss}{Simulation Results}
 		\begin{itemize}
-		  	\item As can be seen the peak error is around 23 m.
+		  	\item As can be seen, the peak error is around 23 m, which is acceptable
 			\begin{figure}
 				\begin{center}
 					\includegraphics[width=8.2cm]{img/error}
@@ -411,7 +431,56 @@ F_\text{total}\\
 
 %###########################
 
-%%%%%%%%%%%%%%%%
+	\subsection{Mayden voyage}
+	% the license
+	\begin{frame}{Mayden voyage}{Purpose and results}
+	%  \begin{block}{Ship development}
+	  Tested various parts of the ship design and functionality:
+	  \begin{itemize}
+	  	\item Manual control over wireless link
+	  	\item Motor operation and performance
+		\item Turning capability and ship stability
+		\item Data logging
+	  	\end{itemize}
+	  	We also added weights to correct its pitch.
+	%  \end{block}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=9.5cm, trim=0 0 0 50]{img/aauship8}
+				\label{fig:aauship}
+			\end{center}
+		\end{figure}
+	\end{frame}
+
+%###########################
+
+	\subsection{Control test}
+	\begin{frame}{Testing the control algorithms}{Purpose and results}
+		Tested the HLI's waypoint and subwaypoint planning algorithms:
+		\begin{itemize}
+		\item The ship sailing in Klingenberg lake
+		\end{itemize}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/position}
+				\label{fig:controltest1}
+			\end{center}
+		\end{figure}
+	\end{frame}
+
+%###########################
+
+	\begin{frame}{Testing the control algorithms}{Results}
+		\begin{itemize}
+		\item Plot of the ship states during the voyage
+		\end{itemize}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/states}
+				\label{fig:controltest3}
+			\end{center}
+		\end{figure}
+	\end{frame}
 
 {
 \setbeamertemplate{background canvas}{\centering\includegraphics[height=\paperheight,keepaspectratio]{{img/aauship}}}
