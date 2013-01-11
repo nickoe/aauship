@@ -1,0 +1,84 @@
+\section{Autonomous control}
+\begin{frame}{System levels}
+    \includegraphics[width = \textwidth]{control/img/vessel-block-overview}
+\end{frame}
+
+\begin{frame}{HLI features}
+		\begin{itemize}
+			\item Model-based development that allows multiple Ship instances
+			\centering
+			\includegraphics[trim = 5mm 5mm 5mm 5mm, clip, width = 0.8\textwidth]{control/img/actor-model}
+			\item Seamlessly integrated custom Simulation environment
+			\centering
+			\includegraphics[trim = 5mm 5mm 5mm 5mm, clip, width = 0.8\textwidth]{control/img/simmodel}
+		\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%
+
+\subsection{Path Planning}
+\begin{frame}{Waypoints and Sub-Waypoints}
+    \begin{block}{Waypoints}
+		\begin{itemize}
+			\item Key points of interest, defining the \textbf{approximate path}
+			\item Coastal information \textbf{known} $\rightarrow$ \textbf{automatic} WP generation
+			\item Coastal information \textbf{unknown} $\rightarrow$ \textbf{manual} WP placement
+		\end{itemize}
+    \end{block}
+    \begin{block}{Sub-Waypoints}
+		\begin{itemize}
+			\item Specific locations that the ship must approach
+			\item Placed in the $\lambda_{max}$ surrounding of the \textbf{approximate path}
+			\item The ship approaches each \textbf{SWP} at least to $\varepsilon$ \textbf{follow distance}
+			\item Each Waypoint is approached to \textbf{at least} $\lambda + \varepsilon$ distance
+		\end{itemize}
+	\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%
+
+\begin{frame}{Local path planning}
+		\begin{itemize}
+			\item Key points are determined to define an \textbf{Euler Spiral} $\rightarrow$ \textbf{Circular} $\rightarrow$ \textbf{Euler Spiral} path
+			\item The centrifugal force affecting the body of the ship changes continuously and linearly
+			\item The resulting sideways-movement is kept to a minimum and the control signal is better conditioned
+		\end{itemize}
+			\begin{tabular}{l l}
+			\hspace{-3.1mm}
+				\begin{minipage}{0.6\textwidth}
+					\begin{itemize}
+						\vspace{-2.5mm}
+						\item The path is populated with Sub-Waypoints and transformed to the proper position on the map 
+						\includegraphics[width = \textwidth]{control/img/positioning1}
+					\end{itemize}
+				\end{minipage}
+			&
+				\begin{minipage}{0.3\textwidth}
+					\includegraphics[width = \textwidth]{control/img/positioning2}
+				\end{minipage}
+			\end{tabular}
+			
+		
+\end{frame}
+%%%%%%%%%%%%%%%%
+
+\subsection{Ship Modeling}
+
+
+\subsection{Control system}
+\begin{frame}{Navigation}
+    \begin{block}{Navigation}
+		\begin{tabular}{l l}
+		\begin{minipage}{0.45\textwidth}
+		\begin{itemize}
+			\item The ship is always heading for the next Sub-Waypoint, outside of the $\varepsilon$ \textbf{follow distance}
+			\item The output of the Navigator is the \textbf{reference heading} $\Theta_r$
+			\item The image shows a simulation of the navigation and control based on noisy inputs
+		\end{itemize}
+		\end{minipage}
+		&
+		\begin{minipage}{0.50\textwidth}
+		\includegraphics[width=\textwidth,keepaspectratio]{control/img/navi}
+		\end{minipage}
+		\end{tabular}
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%
