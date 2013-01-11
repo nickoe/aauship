@@ -53,6 +53,7 @@
 			\end{figure}
 		\end{frame}
 
+
 %###########################
 
 	\subsection{Packet loss}
@@ -66,6 +67,21 @@
 		\end{itemize}
 	\end{frame}
 
+%###########################
+
+	\begin{frame}{Packet loss}{Advantages of Kalman filtering}
+		\begin{itemize}
+			\item Missing GPS samples
+			\item Better than simple estimation 
+		\end{itemize}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/kalmanestimate}
+				\label{fig:kalmanestimate}
+			\end{center}
+		\end{figure}
+	\end{frame}
+		
 %###########################
 
 	\begin{frame}{Packet loss}{Simulation Results}
@@ -84,7 +100,7 @@
 
 	\begin{frame}{Packet loss}{Simulation Results}
 		\begin{itemize}
-		  	\item As can be seen the peak error is around 23 m.
+		  	\item As can be seen, the peak error is around 23 m, which is acceptable
 			\begin{figure}
 				\begin{center}
 					\includegraphics[width=8.2cm]{img/error}
@@ -96,19 +112,67 @@
 
 %###########################
 
-	\subsection{AAUSHIP.01}
+	\subsection{Mayden voyage}
 	% the license
-	\begin{frame}{Introduction}{AAUSHIP.01}
-	  \begin{block}{Ship development}
+	\begin{frame}{Mayden voyage}{Purpose and results}
+	%  \begin{block}{Ship development}
+	  Tested various parts of the ship design and functionality:
 	  \begin{itemize}
-	  	\item During the project a ship was developed, using 3D modeling and rapid prototyping.
-	  	\item The ship is developed as a non-planing displacement hull.
+	  	\item Manual control over wireless link
+	  	\item Motor operation and performance
+		\item Turning capability and ship stability
+		\item Data logging
 	  	\end{itemize}
-	  \end{block}
-	  \begin{figure}
-				\begin{center}
-	%				\includegraphics[width=8.4cm]{img/aauship}
-					\label{fig:aauship}
-				\end{center}
-			\end{figure}
+	  	We also added weights to correct its pitch.
+	%  \end{block}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=9.5cm, trim=0 0 0 50]{img/aauship8}
+				\label{fig:aauship}
+			\end{center}
+		\end{figure}
+	\end{frame}
+
+%###########################
+
+	\subsection{Control test}
+	\begin{frame}{Testing the control algorithms}{Purpose and results}
+		Tested the HLI's waypoint and subwaypoint planning algorithms:
+		\begin{itemize}
+		\item The ship sailing in Klingenberg lake
+		\end{itemize}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/position}
+				\label{fig:controltest1}
+			\end{center}
+		\end{figure}
+	\end{frame}
+
+%###########################
+
+	\begin{frame}{Testing the control algorithms}{Results}
+		\begin{itemize}
+		\item Plot of the ship states during the voyage
+		\end{itemize}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/states}
+				\label{fig:controltest3}
+			\end{center}
+		\end{figure}
+	\end{frame}
+
+%###########################
+
+	\section{Demonstration}
+	\begin{frame}{Demonstration}{}
+		Long exposure photo:
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=9.6cm]{img/aauship}
+				\label{fig:aauship1}
+			\end{center}
+		\end{figure}
+		Next: video of the ship sailing autonomously in lake Klingenberg
 	\end{frame}

@@ -1,6 +1,10 @@
 \beamer@slide {fig:monoratekalman}{2}
 \beamer@slide {fig:multiratekalman1}{3}
 \beamer@slide {fig:multiratekalman2}{4}
-\beamer@slide {fig:packetloss}{9}
-\beamer@slide {fig:error}{10}
-\beamer@slide {fig:aauship}{11}
+\beamer@slide {fig:kalmanestimate}{9}
+\beamer@slide {fig:packetloss}{10}
+\beamer@slide {fig:error}{11}
+\beamer@slide {fig:aauship}{12}
+\beamer@slide {fig:controltest1}{13}
+\beamer@slide {fig:controltest3}{14}
+\beamer@slide {fig:aauship1}{15}
