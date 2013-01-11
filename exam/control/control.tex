@@ -58,7 +58,78 @@
 			
 		
 \end{frame}
+
 %%%%%%%%%%%%%%%%
+\subsection{Ship Model}
+\begin{frame}{Modeling}{System Dynamics}
+The Dynamics of the system are given by the drag the ship experiences when moving through the water. The drag is given as:
+\begin{align}
+F_\text{Drag}(\dot{x},\dot{y}) = \frac{1}{2} \cdot \rho \cdot C_\text{D} \cdot \dot{x}^2 \cdot A 
+\end{align}
+The formula changes when the ship is turning, as the drag then is converted into a torque - which is defined as:
+\begin{align}
+\tau_\text{Drag}(\omega) = \frac{1}{2} \cdot \rho \cdot C_\text{D} \cdot (d \cdot (r_f^4 + r_b^4)) \cdot \omega^2
+\end{align}
+The above can be put an matrix form as:
+\begin{align}
+\mathbf{A}\mathbf{x} = \begin{bmatrix}
+-\beta_X & 0 & 0\\
+0 & -\beta_Y & 0\\
+0 & 0 & -\beta_\omega
+\end{bmatrix}\begin{bmatrix}
+\dot{x}\\
+\dot{y}\\
+\dot{\theta}
+\end{bmatrix}
+\end{align}
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+\begin{frame}{Modeling}{System Dynamics}
+As the motion in the $y$-direction is uncontrollable, and the thing to be controlled is the velocity and the angle, the combined system becomes:
+\begin{align}
+\dot{\mathbf{x}} &= \mathbf{A}\mathbf{x} + \mathbf{B}\mathbf{u}\\
+\begin{bmatrix}
+\ddot{x}\\
+\dot{\theta}\\
+\dot{\omega}
+\end{bmatrix} &= \begin{bmatrix}
+\frac{-\beta_x}{m} & 0 & 0\\
+0 & 0 & 1\\
+0 & 0 & \frac{-\beta_\omega}{I}
+\end{bmatrix}\begin{bmatrix}
+\dot{x}\\
+\theta\\
+\omega
+\end{bmatrix} + \begin{bmatrix}
+\frac{1}{m} & 0\\
+0 & 0\\
+0 & \frac{1}{I}
+\end{bmatrix}\begin{bmatrix}
+F_\text{total}\\
+\tau
+\end{bmatrix}
+\end{align}
+And the output of the system $\mathbf{y}$ becomes:
+\begin{align}
+\mathbf{y} &= \mathbf{C}\mathbf{x} + D\mathbf{u}\\
+\begin{bmatrix}
+\dot{x}\\
+\theta\\
+\end{bmatrix} &= \begin{bmatrix}
+ 1 & 0 & 0\\
+ 0 & 1 & 0
+\end{bmatrix}\begin{bmatrix}
+\dot{x}\\
+\theta\\
+\omega
+\end{bmatrix} + \mathbf{0}\begin{bmatrix}
+F_\text{total}\\
+\tau
+\end{bmatrix}
+\end{align}
+\end{frame}
+
 \subsection{Control system}
 \begin{frame}{Navigation}
     \begin{block}{Navigation}
@@ -75,6 +146,16 @@
 		\includegraphics[width=\textwidth,keepaspectratio]{control/img/navi}
 		\end{minipage}
 		\end{tabular}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Engine controller}
+    \begin{block}{Navigation}
+		\begin{itemize}
+			\item The engine controller is based on the linearized State-Space model
+			\item Overview of the control system:
+		\end{itemize}
+		\includegraphics[trim = 0mm 21cm 0mm 0mm, clip, width=\textwidth]{control/img/controlloop}
     \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%
