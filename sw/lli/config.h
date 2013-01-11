@@ -11,7 +11,7 @@
 #define DEBUG 
 #define LOG_ENABLE
 #define AUTO_SHUTDOWN_ENABLE
-#define RF_TEST_IDX
+//#define RF_TEST_IDX
 
 extern int awake_flag;
 extern uint8_t rmc_idx;
