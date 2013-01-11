@@ -4,7 +4,7 @@ clc; clear all; clf;
 ts = 1/3;
 
 m = 12;
-I = (1/12)*m*(0.25*0.25+1.05*1.05);
+I = (1/12)*m*(0.25*0.25+1.05*1.05)*2;
 betaX = 8.9/m;
 betaW = 3.77/I;
 % The discrete state space model of the system is described below:
