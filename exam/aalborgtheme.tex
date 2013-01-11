@@ -317,7 +317,99 @@ F_\text{total}\\
 \end{frame}
 
 %%%%%%%%%%%%%%%%
-\input{result/results.tex}
+\section{Results}
+	\subsection{Kalman filter}
+		\begin{frame}{Kalman filter}{Monorate implementation}
+			First iteration of the Kalman filter design was a monorate variant. This produced the following results:
+			\begin{figure}
+				\begin{center}
+					\includegraphics[width=8.2cm]{img/xymono}
+					\label{fig:monoratekalman}
+				\end{center}
+			\end{figure}
+		\end{frame}
+
+%###########################
+
+		\begin{frame}{Kalman filter}{Multirate \& input holding}
+			\begin{itemize}
+				\item The realistic case, using different sampling frequencies
+				\item It holds the last GPS position when it does not receive an update
+			\end{itemize}
+			\begin{figure}
+				\begin{center}
+					\includegraphics[width=8.2cm]{img/xymnirate}
+					\label{fig:multiratekalman1}
+				\end{center}
+			\end{figure}
+		\end{frame}
+
+%###########################
+
+		\begin{frame}{Kalman filter}{Multirate \& input mask}
+			The final version: the input mask $ \vec{\Lambda} $ sets the Kalman gain to 0 for invalid inputs.
+			\[
+		 	\vec{\Lambda} = diag\{\lambda_x,\lambda_{\dot{x}},\lambda_{\ddot{x}},\lambda_{\lambda{y}},\lambda_{\dot{y}},\lambda_{\ddot{y}},\lambda_{\theta},\lambda_{\omega},\lambda_{\alpha} \}
+		 	, 
+		 	\quad \lambda =  
+			 	  \begin{cases}
+		 	    1, & \text{valid}\\
+		 	    0, & \text{invalid}
+			 	  \end{cases}
+			\]
+			\[
+		 	\bar{\vec{K}} = \vec{K} \vec{\Lambda}
+		 	\]
+			\begin{figure}
+				\begin{center}
+					\includegraphics[width=8.2cm]{img/xymultirate}
+					\label{fig:multiratekalman2}
+				\end{center}
+			\end{figure}
+		\end{frame}
+
+%###########################
+
+	\subsection{Packet loss}
+	% the license
+	\begin{frame}{Packet loss}{Considerations}
+		\begin{itemize}
+			\item<1-> We have a simplex communication link
+			\item<2-> It does not guarantee packet arrival or integrity
+			\item<3-> It implements a CRC so we can detect errors
+			\item<4-> We take advantage of the Kalman filter state estimation
+		\end{itemize}
+	\end{frame}
+
+%###########################
+
+	\begin{frame}{Packet loss}{Simulation Results}
+	  \begin{itemize}
+	  	\item Even with and enormously exaggerated packet loss of 100\% for 60 seconds, the Kalman filter still gives a relatively good approximation:
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=8.2cm]{img/track}
+				\label{fig:packetloss}
+			\end{center}
+		\end{figure}
+	  \end{itemize}
+	\end{frame}
+
+%###########################
+
+	\begin{frame}{Packet loss}{Simulation Results}
+		\begin{itemize}
+		  	\item As can be seen the peak error is around 23 m.
+			\begin{figure}
+				\begin{center}
+					\includegraphics[width=8.2cm]{img/error}
+					\label{fig:error}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	\end{frame}
+
+%###########################
 
 %%%%%%%%%%%%%%%%
 
