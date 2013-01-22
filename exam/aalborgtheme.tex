@@ -212,8 +212,6 @@ x[n-1]\\
 This goes for the $y$-axis and the rotation about the $z$-axis as well. Removal of acceleration in position estimation.
 \end{frame}
 
-\input{control/control.tex}
-%%%%%%%%%%%%%%%%
 \section{Modeling}
 \subsection{Engine model}
 \begin{frame}{Modeling}{Thrust/Torque Model}
@@ -229,27 +227,6 @@ As the engines are mounted on the starboard and port side the total thrust forwa
 Where $l$ denotes the distance from the centre of rotation to the top of the propellers.
 \end{frame}
 
-%%%%%%%%%%%%%%%%
-\begin{frame}{Modeling}{Thrust/Torque Model}
-Using Newtons 2nd law, the force and torque can be converted to an acceleration and an angular acceleration:
-\begin{align}
-\ddot{x} = \frac{F_\text{total}}{m} \quad \ddot{\theta} = \frac{\tau}{I}
-\end{align}
-Thus allowing for the input $\mathbf{u}$ to the system to be given as:
-\begin{align}
-\mathbf{u} = \begin{bmatrix}
-F_\text{total} & \tau
-\end{bmatrix}^T
-\end{align}
-And the $\mathbf{B}$ is given as the conversion from the force and torque to an acceleration and an angular acceleration respectively.
-\begin{align}
-\mathbf{B} = \begin{bmatrix}
-\frac{1}{m} & \frac{1}{I}
-\end{bmatrix}^T
-\end{align}
-\end{frame}
-
-%%%%%%%%%%%%%%%%
 \subsection{Ship Model}
 \begin{frame}{Modeling}{System Dynamics}
 The Dynamics of the system are given by the drag the ship experiences when moving through the water. The drag is given as:
@@ -276,7 +253,7 @@ The above can be put an matrix form as:
 
 %%%%%%%%%%%%%%%%
 \begin{frame}{Modeling}{System Dynamics}
-As the motion in the $y$-direction is uncontrollable, and the thing to be controlled is the forward velocity $\dot{x}$ and the angle $\theta$, the revised system becomes:
+As the motion in the $y$-direction is uncontrollable, and the thing to be controlled is the velocity and the angle, the combined system becomes:
 \begin{align}
 \dot{\mathbf{x}} &= \mathbf{A}\mathbf{x} + \mathbf{B}\mathbf{u}\\
 \begin{bmatrix}
@@ -319,6 +296,10 @@ F_\text{total}\\
 \end{bmatrix}
 \end{align}
 \end{frame}
+
+\input{control/control.tex}
+%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%
 %###########################
