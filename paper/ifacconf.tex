@@ -35,12 +35,11 @@
 \author{Rasmus L. Christensen,} 
 \author{Frederik Juul,} 
 \author{Nick \O stergaard,}
-\author{Attila Fodor,}
-\author{Tudor Muresan}
-\address{Section of Automation and Control, Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,tmures12,afodor12\}@es.aau.dk)}                                            
+\author{Jesper A. Larsen}
+\address{Section of Automation and Control, Department of Electronic Systems, Aalborg University, Fredrik Bajers Vej 7, 9220 Aalborg \O st, Denmark (e-mail: \{ralch,nickoe,fjuul,jal\}@es.aau.dk)}                                            
           
 \begin{keyword}                           % Five to ten keywords,  
-Path planning; centralized control; baud rates; state estimation; marine systems; master slave system.              % chosen from the IFAC 
+Centralized control; baud rates; state estimation; marine systems; master slave system.              % chosen from the IFAC 
 \end{keyword}                             % keyword list or with the 
                                           % help of the Automatica 
                                           % keyword wizard
@@ -84,61 +83,49 @@ Is it possible to develop a centralized state estimator for use in the maritime 
 
 \section{Methods}
 
-The methods of the project are described in this section. To develop a fully autonomous craft, capable of navigating around in coastal areas, first a path planning algorithm have been designed. The purpose of this is for the user to choose an area to cover, the algorithm then plans the path, and then set the ship into the water and begin measuring. The second part describes the development of a Kalman estimator used to enhance the precision of the craft - this is both to be used as a reference for where the measurement was taken, but also as an aid for the ship to be able to navigate more precisely. Both of the methods will have results posted towards the end of the paper. 
+This project is primarily based around the linearized state space model derived for the ship, which are then utilized as 
 
-\subsection{Path planning algorithm}
+\subsection{Modeling of the ship}
 
-The path planning algorithm is based around the train-track transition problem originally solved in \citep{Art:1}, which divides the path into straight and turning parts and describes the transition between these using the normalized Fresnel integral, describing an Euler spiral, which allows the ship to maintain a linear acceleration through the turn, keeping the amount of jerk $j$ as close to zero as possible. A series of key points are generated in the turn, which determine a path that meets the above requirements \citep{Art:2}. The two Fresnel integrals are given as in equation (\ref{eq:fresnel}):
+AAUSHIP.01 is designed as a non-planing displacement ship, which are not to sail in any form of rough sea, which makes for the simplification of the vessel being modeled as a 3 DOF vessel, with the states given as $(x,y,\theta)$, describing the motion in the x direction, the motion in y and the yaw angle about the z-axis. From this, the model is derived using the formula described in \cite{cyber} which gives the following model:
 \begin{align}
-C_F(x) = \int_0^x \cos(t^2)dt,\,\,\,\,S_F(x) = \int_0^x \sin(t^2)dt
-\label{eq:fresnel}
+\dot{\vec{x}} = \begin{bmatrix}
+-\beta_{\dot{x}} & 0 & 0\\
+0 & 0 & 1\\
+0 & 0 & -\beta_{\omega} \end{bmatrix}\begin{bmatrix}
+\dot{x}\\
+\theta\\
+\omega
+\end{bmatrix} + \begin{bmatrix}
+m^{-1} & 0\\
+0 & 0\\
+0 & m^{-1}
+\end{bmatrix}\begin{bmatrix}
+F\\
+\tau
+\end{bmatrix}
+\label{eq:sscont}
 \end{align}
-The functions two normalized Fresnel integrals produce the geometrical shape of the Euler spiral. However, the body on the track can endure only a limited amount of centripetal acceleration, which is the function of the speed $v$ and path curvature $\kappa$. Vehicles have limited angular acceleration $\dot{\kappa}_\text{max} = \alpha_\text{max}$ as well, which results in a necessary scaling $\eta$ of the Euler spiral:
+Where $\beta$ denotes the skin frictional drag divided by the mass $m$. This equation is a simplified version of the entire system, where the effects of damping, coriolis and the like have not been accounted for. This simplification is fair as AAUSHIP.01 is relatively small, and the areas it is built to map are small as well. For the purpose of controlling the vessel, a simple LQR feedback controller have been implemented alongside a reference gain, these are described in (\ref{eq:fcont}) and (\ref{eq:ncont}). The system is implemented on the on-board controller, and is digitized using the zero-order hold theorem. This gives converts the system to as in (\ref{eq:digit}). 
 \begin{align}
-A_{C_\text{max}} = \frac{v^2}{r} = v^2 \cdot \kappa \quad , \quad \eta = \frac{\alpha_\text{max}}{v^2_\text{max}}
+\vec{x}[k+1] = \begin{bmatrix}
+-\beta_{\dot{x}} & 0 & 0\\
+0 & 1 & 1\\
+0 & 0 & -\beta_{\omega} \end{bmatrix}\begin{bmatrix}
+\dot{x}[k]\\
+\theta[k]\\
+\omega[k]
+\end{bmatrix} + \begin{bmatrix}
+m^{-1} & 0\\
+0 & 0\\
+0 & m^{-1}
+\end{bmatrix}\begin{bmatrix}
+F[k]\\
+\tau[k]
+\end{bmatrix}
+\label{eq:digit}
 \end{align}
-A threshold angle of turn $\varepsilon_\text{max}$ can be determined based on the vehicle parameters above:
-\begin{align}
-\varepsilon_\text{max} = \frac{\kappa^2_\text{max}}{2\eta}
-\end{align}
-If the angle of the turn is lower than the threshold, the turn can be completed in two similar Euler spiral stages.
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=8.4cm]{img/3Points} % width of a column is 8.4 cm.
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is composed by two identical but mirrored Euler-spirals. 3 key points are generated, denoted $A_3$, $C_3$ and $E_3$}
-		\label{fig:3points}
-	\end{center}
-\end{figure}
-The 3 key points are given by the coordinate sets:
-\begin{align}
-A_3 = (-X_1,Y_1),\, C_3 = (0,\frac{y_d}{\cos(\varepsilon)}),\, E_3 = (X_1,Y_1)
-\end{align}
-From where the individual coordinates can be computed by simple trigonometric equations, if the angle of the turn $\varepsilon$ is known. $x_d$ and $y_d$ are the length of the scaled Euler-spiral, when the turn of the spiral equals to $\varepsilon$, where $x_d$ and $y_d$ represents the $(x,y)$ coordinate pair of the two normalized Fresnel integral functions with the same parameter $t$. 
-\begin{align}
-\varepsilon = \frac{\textrm{dx }F(t)}{\textrm{dy}} \quad \to \quad [x_d,y_d] = F^{-1}(\varepsilon)
-\end{align}
-Once the angle grows larger than $\varepsilon_\text{max}$ the system has to compute five key points, as the ship must transit onto a curve, and then back onto an Euler spiral ($\kappa_{Euler_\text{max}} = \kappa_{arc}$) This adds the extra waypoints $B_5$ and $D_5$, the entry and exit points of the curve. The center of the circular path segment is $O_5$ and the radius is $R_{min} = \frac{1}{\kappa_\text{max}}$. The waypoints are depicted on figure \ref{fig:5points}, which augments the waypoint calculations to:
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=8.4cm]{img/5Points}    % The printed column  
-		\caption{Path planning when $\varepsilon$ < $\varepsilon_\text{max}$, the path is approximated by a curve and 5 key points are generated, denoted $A_5$, $B_5$, $C_5$, $D_5$ and $E_5$}  % width of a column is 8.4 cm.
-		\label{fig:5points}               
-	\end{center}                                 % accordingly.
-\end{figure}
-\begin{align}
-A_5 &= (-X_1,Y_1),\, B_5 = (-X_2,Y_2),\, C_5 = (0,Y_R)\\
-D_5 &= (X_2,Y_2),\, E_5 = (X_1,Y_1)
-\end{align}
-Which is still a mirroring of points about the $x=0$ axis, as the entry angle is the same as the exit angle. The number of equations increases, and the individual coordinates can be computed by:
-\begin{align}
-X_R &= R_\text{min} \cdot \sin(\varepsilon - \varepsilon _\text{max}),\,\, P_X = X_R + y_d \cdot \sin(\varepsilon)\\
-X_1 &= P_X + x_d \cdot \cos(\varepsilon),\,\, Y_1 = X_1 \cdot \tan(\varepsilon)\\
-P_Y &= Y_1 - x_d \cdot \sin(\varepsilon),\,\, Y_2 = P_Y + y_d \cdot \cos(\varepsilon)\\
-O_Y &= R_\text{min} \cdot \cos(\varepsilon - \varepsilon _\text{max}) + Y_2,\,\, Y_R = O_Y - R_\text{min}\\
-X_2 &= X_R
-\end{align}
-
-The resulting path in both cases can not be described explicitly, therefore a Hermite-polynom is fit to the key points. In addition, a predefined number of uniformly distributed sub-waypoints are generated on the path, based on the describing polynom. The resulting sub-waypoints are rotated and moved to their correct position in the Local-Frame, thus concluding most of the work of the local-planner. The paths between turns are straight lines, populated with the same preset density of sub-waypoints.
+\textbf{indsæt rigtig formel!}
 
 \subsection{Navigation}
 
@@ -215,31 +202,7 @@ This ensures that when a measurement is invalid (the checksum is not true) the r
 This makes sure to zero out the Kalman gain $\bar{\vec{K}}$ if a packet is corrupted instead of making the filter run on faulty data. When this is implemented, the system handles packet loss by making the filter run on estimates for the next sample, rather than running on a faulty measurement.
 
 \subsection{Modelling and Controls}
-The model of the ASV is in continuos time given as the state space equation defined in (\ref{eq:ss_cont}) - the model considers the motion of the ship with 3 degrees of freedom, movement in the $x$-direction, $y$-direction and rotation about the z-axis $\omega$. 
-\begin{align}
-\dot{\begin{bmatrix}
-v\\
-\theta\\
-\omega
-\end{bmatrix}} = \begin{bmatrix}
--\beta_v & 0 & 0\\
-0 & 0 & 1\\
-0 & 0 & -\beta_\omega
-\end{bmatrix} \begin{bmatrix}
-v\\
-\theta\\
-\omega
-\end{bmatrix} + \begin{bmatrix}
-m^{-1} & 0\\
-0 & 0\\
-0 & I^{-1}
-\end{bmatrix}\begin{bmatrix}
-F\\
-\tau
-\end{bmatrix}
-\label{eq:ss_cont}
-\end{align}
-Where $\beta_{v,\omega}$ is the acceleration drag experienced by the ship in the $x$-direction. This reduced model is sufficient as it is only the velocity and the angle that is control variables. The control strategy for this project is to track the input reference, and use an optimal feedback gain to reach the desired values. This is done as in \cite{feedback} resulting in the following gains:
+The model of the ASV is in continuos time given as the state space equation defined in (\ref{eq:sscont}) - the model considers the motion of the ship with 3 degrees of freedom, movement in the $x$-direction, $y$-direction and rotation about the z-axis $\omega$. This reduced model is sufficient as it is only the velocity and the angle that is control variables. The control strategy for this project is to track the input reference, and use an optimal feedback gain to reach the desired values. This is done as in \cite{feedback} resulting in the following gains:
 \begin{align}
 F_{opt} &= \begin{bmatrix}
 15.1668 & 0 & 0\\
@@ -261,17 +224,12 @@ _\mathcal{D}N &=  \begin{bmatrix}
 0 & 2.2743
 \end{bmatrix}\label{eq:ndisc}
 \end{align}
-As the controller outputs a desired force $F$ and a torque $\tau$ dependent on the reference angle $\theta$ and velocity $\dot{x}$. This output must be converted to a set-point number of revolutions, as this is the input to the low-level system handling the engines. The force of the forward motion of the ship is given as a function of the number of revolutions of the propeller $n$, this relation is defined by \cite{cyber} to be:
+As the controller outputs a desired force $F$ and a torque $\tau$ dependent on the reference angle $\theta$ and velocity $\dot{x}$. This output must be converted to a set-point number of revolutions, as this is the input to the low-level system handling the engines. The force of the forward motion of the ship is given as a function of the number of revolutions of the propeller $n$, this relation is defined by \cite{cyber} to be as in (\ref{eq:soren}):
 \begin{align}
-F_1 &= C_1 \cdot \text{abs}\{n_1\} \cdot n_1\\
-F_2 &= C_1 \cdot \text{abs}\{n_2\} \cdot n_2
+F = \rho \cdot D^4 \cdot K_T \cdot |n| \cdot n
+\label{eq:soren}
 \end{align}
-Where $C_1 = \rho \cdot K_T \cdot D^4$, which are constant for both the engines. The two propellers thus produce a total force as a sum of these functions. The torque produced by the propellers can be described as $F$ multiplied with the distance to the propeller $l$ and the angle of attack on the ship. This angle is the same for both engines (with opposite sign), as they are mounted symmetrically around the centre.
-\begin{align}
-\tau_1 &= F_1 \cdot l \cdot \sin(\theta_\text{stbd.})\\
-\tau_2 &= F_2 \cdot l \cdot \sin(\theta_\text{port})
-\end{align}
-As the two engines both produce a force and a torque, as a function of the same revolutions, the matrix equation $\vec{x} = \vec{A}^{-1}\vec{b}$ can be solved for the number of revolutions the engines need to produce as in (\ref{eq:solver}):
+As the two engines both produce both a force and a torque, as a function of the same revolutions, the matrix equation $\vec{x} = \vec{A}^{-1}\vec{b}$ can be solved for the number of revolutions the engines need to produce as in (\ref{eq:solver}):
 \begin{align}
 \begin{bmatrix}
 n_1^2\\
@@ -284,67 +242,58 @@ F_\text{desired}\\
 \tau_\text{desired}
 \end{bmatrix}\label{eq:solver}
 \end{align}
-Whats left to do is to solve for $n_1$ and $n_2$. These can be solved by:
+The revolutions of the propeller can assume negative values (if the ship is reversing), so what is left to do now, is to solve for $n_1$ and $n_2$. These can be solved by rearranging (\ref{eq:solver}):
 \begin{align}
-n_1 = \frac{n_1^2}{\text{abs}\{n_1^2\}} \cdot \sqrt{n_1^2}\\
-n_2 = \frac{n_2^2}{\text{abs}\{n_2^2\}} \cdot \sqrt{n_2^2}
+n_{port-setpoint} = \text{sign}(n_1^2) \cdot \sqrt{n_1^2}\\
+n_{stbd-setpoint} = \text{sign}(n_2^2) \cdot \sqrt{n_2^2}
 \end{align}
-Thus giving the engine set-points as a function of the force of the system. The first term $\frac{n^2}{\text{abs}\{n^2\}}$ gives the sign of the engine input, wether this should be negative or positive is defined here. The last term computes the actual revolution to be sent. 
-
+Thus giving the engine set-points as a function of the forces of the system.
 
 \subsection{Controller verification}
-As the waters around Aalborg froze over before final tests of the controller could be conducted. The verification of the controllers are let out, and are to be tested once the waters around Aalborg clears out. However, a test of the controllers have been carried out on land, but as the control box has the functionality implemented, this have been used to produce figure \ref{fig:control}. As seen the engines do actually react to the path input, and tries to make the ship turn. Figure \ref{fig:control} depicts the inputs to the engines, to make the ship follow the force and torque reference given by the controllers.
+To verify wether the system actually works, two tests have been conducted in a small lake at the Aalborg University campus area. The goal of the test, was to verify that the theory used in developing AAUSHIP.01 actually worked. The test was performed in calm water, and the ship was programmed to follow a path.  
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/motorinput}    % The printed column  
-		\caption{Controller test, as seen the engine input changes according to the reference signal. }
-		\label{fig:control}               
+		\includegraphics[width=8.4cm]{img/position}    % The printed column  
+		\caption{Test 1 of the control and position estimation. The test is performed in the Klingenberg Pond at Aalborg University.}
+		\label{fig:position}               
+	\end{center}                                 % accordingly.
+\end{figure}
+The reason why the ship does not converge towards the track on the straights is due to a software bug, that couldn't be figured out, as it had worked in simulations, so the only place where the ship actually converges towards the track is in the corners.
+
+To verify that there is an actual difference in the inputs to the system, the following plot have been produced to verify that the controller actually acts on the input. On 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=8.4cm]{img/states}    % The printed column  
+		\caption{Different states the system produces when sailing along the track depicted on figure \ref{fig:position}. As seen the system running on the non filtered data gives a wrong response as the ship would sail in circles at the start.}  % width of a column is 8.4 cm.
+		\label{fig:states}               
 	\end{center}                                 % accordingly.
 \end{figure}
 
-\subsection{Path planning results}
-A test of the path planner was carried out, by generating a random shoreline, and then test if the planner produces a route which follows the general shape. Figure \ref{fig:navi} illustrates the test, and verifies that the path planner can be used to follow the shore line. 
+\subsection{System verification}
+To ensure that the track sailed on figure \ref{fig:position} was not just a one of, the system was run multiple times with the same track as a reference. This produced as shown on figure \ref{fig:position2}. On the figure it is clearly seen that the ship consistently follows the contours of the track, but the estimates sometimes wander of due to loss of GPS reception.
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/Navi}    % The printed column  
-		\caption{Part of the simulated path of the embedded system close to the shore along the sub-waypoints, during a regular oceanography task, based on GPS position measurements affected by white noise with 4m variance. The shoreline is generated by a random walk.}  % width of a column is 8.4 cm.
-		\label{fig:navi}               
+		\includegraphics[width=8.4cm]{img/position2}    % The printed column  
+		\caption{System verification with multiple tests run and plotted on top of the track. As seen the ship consistently follows the contours of the track, whilst at some points loosing some precision (due to bad GPS reception).}  % width of a column is 8.4 cm.
+		\label{fig:position2}               
 	\end{center}                                 % accordingly.
 \end{figure}
 
-\subsection{Kalman filtering verification}
-To test if the Kalman filter works as intended, the filter was tuned, and the navigation box of the ship was carried on a track. When the track was turning, the GPS was turned off for 60 seconds, allowing the ship only to rely on the Kalman estimates (which was based on the IMU). As seen on the two figures, the estimates follows the curvature nicely, and once the GPS comes back online, the estimates converges towards it. 
+\subsection{Errors}
+As seen on figure \ref{fig:position2} the estimates wander off when the ship navigates in areas of bad GPS reception, this is due to the nonlinearity of the IMU, and the Kalman filter implemented being linear. 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=8.4cm]{img/track}    % The printed column  
-		\caption{Kalman filtering verification, where the ship is to track the red crosses. (a) depicts the ship when the GPS is online at all times. (b) is when the GPS is turned off for 60 seconds.}  % width of a column is 8.4 cm.
-		\label{fig:track}               
-	\end{center}                                 % accordingly.
-\end{figure}
-As seen on figure \ref{fig:track} the Kalman filter behaves as expected. If the errors are plotted (seen on figure \ref{fig:error}), the convergence of the track becomes more clear, as it jumps from about 15 metres down to approximately zero. 
-
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=8.4cm]{img/error}    % The printed column  
+		\includegraphics[width=8.4cm]{img/states2}    % The printed column  
 		\caption{Kalman filtering, plot of the absolute position error. (a) depicts the error when the GPS is online at all times. (b) is when the GPS is offline for 60 seconds.}  % width of a column is 8.4 cm.
-		\label{fig:error}               
+		\label{fig:states2}               
 	\end{center}                                 % accordingly.
 \end{figure}
 
-\subsection{Test of Estimate vs. No Estimate}
-This test have been carried out to see wether the Kalman filter estimates are better than the raw measurements. As seen on figure \ref{fig:kalaman} the Kalman is better at estiamting its position when no GPS sample is present. Thus giving the system a higher tolerance towards noise. 
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=8.4cm]{img/kalmanestimate}    % The printed column  
-		\caption{Test of the Kalman filter versus regular measurments. As seen on the figure, the Kalman estimate follows the actual path closer than the measurements.}  % width of a column is 8.4 cm.
-		\label{fig:kalaman}               
-	\end{center}                                 % accordingly.
-\end{figure}
 
 \subsection{Discussion}
 To further improve on the system, the Kalman filter should be extended to allow for the acceleration data also to be included in the position estimates, thus increasing the precision further when the GPS is offline. To make this feasible the bias of the IMU should be included in the model. Another feature of the Kalman filter would be to estimate the wind and current bias, which would cause the ship to veer off course. 
 
-Throughout the tests the IMU have been assumed to always be level, which is hard to realize, so a slight bias is added, and with a linear Kalman filter which is hard compensate for as the IMU needs to always have the same bias.
+Throughout the tests the IMU have been assumed to always be level, which is hard to realize, so a slight bias is added, and with a linear Kalman filter which is hard compensate for as the IMU needs to always have the same bias for this to work. .
 
 \section{Conclusion}
 To sum up the project, a state estimator have been developed to improve on the GPS estimates allowing for a better precision if the GPS is offline. To plan the path the ship is to traverse a path planner have also been implemented showing good results. 
@@ -352,7 +301,7 @@ To sum up the project, a state estimator have been developed to improve on the G
 A final test of the combined system have not been conducted, as the waters around Aalborg have been frozen solid. 
 
 \begin{ack}                               % Place acknowledgements
-A special thank should be given to Assistant Professor Carles Navarro Manchòn, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter.  % here.
+A special thank should be given to Assistant Professor Carles Navarro Manchòn, Section for Navigation and Communication, Department of Electronic Systems, Aalborg University for his help with tuning the Kalman filter and to School of Information and Communication Technlogy for the donation without which this project would not have succeder.  % here.
 \end{ack}
 
 %\bibliographystyle{alpha}        % Include this if you use bibtex 
@@ -369,16 +318,6 @@ Birgitte Marfelt,
 \newblock Ingeni\o ren
 \newblock \emph{Tom pengekasse bremser søkort omkring Gr\o nland}
 \newblock Mediehuset Ingeniøren, 2012
-
-\bibitem[Talbot(1901)]{Art:1}
-Arthur N. Talbot,
-\newblock \emph{The Railway Transition Spiral}
-\newblock The Engeneering News Publishing Co., 1901
-
-\bibitem[K\'oml\'osi-Kiss(2011)]{Art:2} % The name shown in the report, and the lable \cite{Art:1}
-Istv\'an Koml\'{o}si \& B\'alint Kiss, % Name of the author
-\newblock \emph{Mobilis robotok auton\'{o}m navig\'aci\'{o}ja mozg\'{o} akad\'alyok elker\"ul\'es\'evel} % The name of the thesis
-\newblock Budapest University of Technology and Economics, 2011 % The publisher
 
 \bibitem[S\o rensen(2005)]{cyber}
 Asgeir J. S\o rensen,
