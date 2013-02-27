@@ -1,10 +1,10 @@
-\chapter{Channel Modeling}
+\chapter*{Channel Modeling}
 \section{Modeling}
 As the controller is run on two different masters, a link between these have to be established and modeled. The connection is seen as a connection from a master (ex. a "mothership") and a slave (ex. AAUSHIP). Where the communication goes both ways, as the master needs to compute what the slave should do next based on measurements from the slave, and the slave needs to respond to these data. Figure \vref{fig:chanmod} is an illustration of the communication. 
 
 \begin{figure}[htbp]
 		\begin{center}
-			\includegraphics[width=8.4cm]{img/chanmod}
+			\includegraphics[width=8.4cm]{/home/nickoe/aauship/doc/img/chanmod}
 			\caption{Depiction of the communication link between the master and the slave.}
 			\label{fig:chanmod}
 		\end{center}
@@ -36,7 +36,7 @@ The packet loss have been tested at 5 different distances as it has been seen th
 
 \begin{figure}[htbp]
 		\begin{center}
-			\includegraphics[width=\textwidth]{img/measpoint}
+			\includegraphics[width=\textwidth]{/home/nickoe/aauship/doc/img/measpoint}
 			\caption{Depiction Where the measurements have been taken.}
 			\label{fig:mpoint}
 		\end{center}
@@ -96,7 +96,7 @@ To determine if the packets loss are clustered (eg. due to the bigger GPS packet
 
 \begin{figure}[htbp]
 		\begin{center}
-			\includegraphics[width=\textwidth]{img/cluster}
+			\includegraphics[width=\textwidth]{/home/nickoe/aauship/doc/img/cluster}
 			\caption{The red represents the error density of the IMU packets, the blue represents the density of the GPS packets and the magenta is the sum of these. When this grows large it is either due to one of the packets being large or them both. }
 			\label{fig:cluster}
 		\end{center}
