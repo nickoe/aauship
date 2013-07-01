@@ -1,0 +1,61 @@
+/* MACHINE-GENERATED ! */
+
+frame pad {
+	__0: vec @(pad_x/2, pad_y/2)
+	__1: vec @(-pad_x/2, -pad_y/2)
+	rpad "$m" . __0
+	__2: vec @(hole_dia/2, hole_dia/2)
+	__3: vec @(-hole_dia/2, -hole_dia/2)
+	hole . __2
+}
+
+frame pads {
+	__0: vec @(pitch*(m-1), 0mm)
+	__1: vec .(0mm, shift*((m-2*floor(m/2))*2-1))
+	frame pad .
+}
+
+frame outline {
+	__0: vec @(pitch*n+pitch, -y_thickness)
+	rect @ . 0.2mm
+}
+
+package "JST-XH_TOP_ENTRY"
+unit mm
+
+set n = 5
+
+set pitch = 2.5mm
+
+set shift = 0mm
+
+set pad_x = width
+
+set pad_y = height
+
+set height = 2.5mm
+
+set width = 1.778mm
+
+set hole_dia = 1.02mm
+
+set y_shift = 3.4mm
+
+set y_thickness = 5.75mm
+
+loop m = 1, n
+
+__0: vec @(-pitch*n/2-pitch/2, y_shift)
+frame outline .
+__1: vec @(-pitch*n/2+pitch/2, 0mm)
+frame pads .
+__2: vec @(-pitch*n/2+pitch/2-0.7mm, -pitch)
+__3: vec @(-pitch*n/2+pitch/2+0.7mm, -pitch)
+line . __2 
+__4: vec @(pitch*n/2-pitch/2-0.7mm, -pitch)
+__5: vec @(pitch*n/2-pitch/2+0.7mm, -pitch)
+line . __4 
+measx __1 -> pads.__1 3mm
+measy __1 -> pads.__1 2mm
+measx pad.__3 -> pad.__2 -3.5mm
+measx __1 >> __0 3mm

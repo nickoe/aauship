@@ -1,0 +1,30 @@
+/* MACHINE-GENERATED ! */
+
+package "BANANA_PANEL"
+unit mm
+
+set spacing = 19.05mm
+
+set dia = 12mm
+
+set frontdia = 15mm
+
+__0: vec @(spacing/2, 0mm)
+__1: vec @(-spacing/2, 0mm)
+__2: vec .(dia/2, dia/2)
+circ __1 . 
+__3: vec __1(-dia/2, -dia/2)
+hole . __2
+__4: vec __0(dia/2, dia/2)
+circ __0 . 
+__5: vec __0(-dia/2, -dia/2)
+hole . __4
+__6: vec __1(-frontdia/2, -frontdia/2)
+__7: vec __1(frontdia/2, frontdia/2)
+rpad "1" __6 .
+__8: vec __0(-frontdia/2, -frontdia/2)
+__9: vec __0(frontdia/2, frontdia/2)
+rpad "2" __8 .
+measx __1 >> __0 10mm
+measx __5 >> __4 -5mm
+measx __8 >> __9 -8mm
