@@ -95,6 +95,9 @@ hw/*.ps
 hw/*.000
 hw/lib/*.bak
 hw/lib/*.bck
+atmega2560-cache.lib
+~*.fped
+~*.fpd
 
 # HLI stuff
 sw/HLI/Python/Communication/*.TXT
