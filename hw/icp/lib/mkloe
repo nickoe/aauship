@@ -1,7 +1,7 @@
 #!/bin/bash
 # Make a Library of Everything
 
-MODS="apc220 ml-24-2 f3611 banana-panel jst-xh_top_entry"
+MODS="apc220 ml-24-2 f3611 banana-panel jst-xh_top_entry kx1205"
 
 LIB=argo.mod
 

@@ -30,6 +30,7 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:jst-xh-illustration
+LIBS:argo
 LIBS:icp-cache
 EELAYER 27 0
 EELAYER END
@@ -37,7 +38,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 2
 Title ""
-Date "3 jul 2013"
+Date "4 jul 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -193,7 +194,7 @@ Text HLabel 6500 4700 2    60   Input ~ 0
 SDA
 Text HLabel 6500 4800 2    60   Input ~ 0
 SCL
-Text Notes 7000 4750 0    60   ~ 0
+Text Notes 7300 4950 0    60   ~ 0
 I²C not using hardware, since they\nare taken by the ADC's so this\ndevice does not have to do a lot it\ncan slave easily in software.
 Wire Notes Line
 	6750 4850 6800 4800
@@ -201,46 +202,40 @@ Wire Notes Line
 	6800 4800 6800 4700
 Wire Notes Line
 	6800 4700 6750 4650
-Wire Notes Line
-	6800 4750 6950 4750
-Wire Notes Line
-	6950 4750 6900 4700
-Wire Notes Line
-	6950 4750 6900 4800
 $Comp
 L CRYSTAL X?
 U 1 1 51D4B87C
-P 7650 3300
-F 0 "X?" H 7650 3450 60  0000 C CNN
-F 1 "16MHz" H 7650 3150 60  0000 C CNN
-F 2 "~" H 7650 3300 60  0000 C CNN
-F 3 "~" H 7650 3300 60  0000 C CNN
-	1    7650 3300
+P 7700 3400
+F 0 "X?" H 7700 3550 60  0000 C CNN
+F 1 "16MHz" H 7700 3250 60  0000 C CNN
+F 2 "~" H 7700 3400 60  0000 C CNN
+F 3 "~" H 7700 3400 60  0000 C CNN
+	1    7700 3400
 	1    0    0    -1  
 $EndComp
 $Comp
 L C C?
 U 1 1 51D4B88B
-P 7900 3650
-F 0 "C?" H 7900 3750 40  0000 L CNN
-F 1 "C" H 7906 3565 40  0000 L CNN
-F 2 "~" H 7938 3500 30  0000 C CNN
-F 3 "~" H 7900 3650 60  0000 C CNN
-	1    7900 3650
+P 8050 3650
+F 0 "C?" H 8050 3750 40  0000 L CNN
+F 1 "22p" H 8056 3565 40  0000 L CNN
+F 2 "~" H 8088 3500 30  0000 C CNN
+F 3 "~" H 8050 3650 60  0000 C CNN
+	1    8050 3650
 	1    0    0    -1  
 $EndComp
 $Comp
 L C C?
 U 1 1 51D4B898
-P 7450 3650
-F 0 "C?" H 7450 3750 40  0000 L CNN
-F 1 "C" H 7456 3565 40  0000 L CNN
-F 2 "~" H 7488 3500 30  0000 C CNN
-F 3 "~" H 7450 3650 60  0000 C CNN
-	1    7450 3650
+P 7350 3650
+F 0 "C?" H 7350 3750 40  0000 L CNN
+F 1 "22p" H 7356 3565 40  0000 L CNN
+F 2 "~" H 7388 3500 30  0000 C CNN
+F 3 "~" H 7350 3650 60  0000 C CNN
+	1    7350 3650
 	1    0    0    -1  
 $EndComp
-Text HLabel 6500 3000 2    60   Input ~ 0
+Text HLabel 6500 4900 2    60   Input ~ 0
 LED1
 Text HLabel 6500 2900 2    60   Input ~ 0
 LED0
@@ -249,11 +244,73 @@ LED2
 Text HLabel 6500 3200 2    60   Input ~ 0
 LED3
 Wire Wire Line
-	6500 3300 6950 3300
-Wire Wire Line
-	6500 3400 6950 3400
-Text HLabel 6500 4900 2    60   Input ~ 0
-LED4
+	6500 3400 7400 3400
 Text HLabel 6500 5000 2    60   Input ~ 0
-LED5
+LED4
+Text HLabel 6500 3000 2    60   Input ~ 0
+BUZZ
+Text Notes 7400 2650 0    60   ~ 0
+The buzzer should be modulated with\n50% duty cycle sqyare wave with for\nexample a frequency of 2400 Hz.
+Wire Notes Line
+	6850 3000 6950 3000
+Wire Notes Line
+	6950 3000 7250 2700
+Wire Notes Line
+	7250 2700 7350 2700
+Wire Notes Line
+	7350 2700 7300 2650
+Wire Notes Line
+	7350 2700 7300 2750
+Wire Notes Line
+	6800 4750 6900 4750
+Wire Notes Line
+	6900 4750 7150 5050
+Wire Notes Line
+	7150 5050 7250 5050
+Wire Notes Line
+	7250 5050 7200 5000
+Wire Notes Line
+	7250 5050 7200 5100
+$Comp
+L GND #PWR?
+U 1 1 51D5684A
+P 8050 3900
+F 0 "#PWR?" H 8050 3900 30  0001 C CNN
+F 1 "GND" H 8050 3830 30  0001 C CNN
+F 2 "" H 8050 3900 60  0000 C CNN
+F 3 "" H 8050 3900 60  0000 C CNN
+	1    8050 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51D56857
+P 7350 3900
+F 0 "#PWR?" H 7350 3900 30  0001 C CNN
+F 1 "GND" H 7350 3830 30  0001 C CNN
+F 2 "" H 7350 3900 60  0000 C CNN
+F 3 "" H 7350 3900 60  0000 C CNN
+	1    7350 3900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7350 3450 7350 3400
+Connection ~ 7350 3400
+Wire Wire Line
+	7350 3900 7350 3850
+Wire Wire Line
+	8050 3900 8050 3850
+Wire Wire Line
+	8050 3150 8050 3450
+Wire Wire Line
+	8050 3400 8000 3400
+Connection ~ 8050 3400
+Wire Wire Line
+	6500 3300 6900 3300
+Wire Wire Line
+	6900 3300 7600 3150
+Wire Wire Line
+	7600 3150 8050 3150
+Text Notes 8100 3300 0    60   ~ 0
+As close to\nchip as possible
 $EndSCHEMATC
