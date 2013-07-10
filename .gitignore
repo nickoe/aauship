@@ -95,6 +95,8 @@ hw/*.ps
 hw/*.000
 hw/lib/*.bak
 hw/lib/*.bck
+*.kicad_pcb-bak
+*.bak
 atmega2560-cache.lib
 ~*.fped
 ~*.fpd
