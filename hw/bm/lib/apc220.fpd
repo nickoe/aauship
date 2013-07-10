@@ -1,0 +1,81 @@
+/* MACHINE-GENERATED ! */
+
+frame pad {
+	__0: vec @(-p_dia/2, -p_dia/2)
+	__1: vec @(p_dia/2, p_dia/2)
+	rpad "$name" . __0
+	__2: vec @(-h_dia/2, h_dia/2)
+	__3: vec @(h_dia/2, -h_dia/2)
+	hole __2 .
+}
+
+frame pads {
+	set name = n+1
+
+	loop n = 0, 6
+
+	__0: vec @(p_dist*n, 0mm)
+	frame pad .
+}
+
+frame border {
+	__0: vec @(17mm, 37mm)
+	rect . @ 
+}
+
+frame mount {
+	__0: vec @(-p_dia/2, -p_dia/2)
+	__1: vec @(p_dia/2, p_dia/2)
+	rpad "NC" . __0
+	__2: vec @(h_dia/2, -h_dia/2)
+	__3: vec @(-h_dia/2, h_dia/2)
+	hole . __2
+}
+
+frame thread {
+	__0: vec @(6mm, 0.5mm)
+	line . @ 
+}
+
+frame ant {
+	loop k = 0, 4
+
+	__0: vec @(-5mm/2, 1mm)
+	__1: vec @(5.1mm/2, 3mm)
+	rect __0 . 
+	__2: vec @(6mm/2, 3mm)
+	__3: vec @(-6mm/2, 9.5mm-1mm)
+	rect . __2 
+	__4: vec @(-6mm/2, 4mm)
+	__5: vec .(0mm, 0.8mm*k)
+	frame thread .
+	__6: vec @(5mm/2, 9.5mm)
+	__7: vec @(-5mm/2, 9.5mm-1mm)
+	rect __6 . 
+	__8: vec @(6mm/2, 1mm)
+	__9: vec @(-6mm/2, 0mm)
+	rect __8 . 
+}
+
+package "APC220"
+unit mm
+
+set p_dia = 1.6mm
+
+set p_dist = 2.5mm
+
+set h_dia = 0.8mm
+
+__0: vec @(1mm, 1.3mm)
+frame pads .
+__1: vec .(p_dist*6, 34.3mm)
+frame mount .
+__2: vec .(-p_dist, 0mm)
+frame mount .
+__3: vec @(1mm+2.5mm, 37mm)
+frame ant .
+frame border @
+measx __0 -> pads.__0 -4mm
+measy pad.__0 -> pad.__1 1mm
+measy __1 << pads.__0 -5mm
+measx __0 >> pads.__0 -5mm

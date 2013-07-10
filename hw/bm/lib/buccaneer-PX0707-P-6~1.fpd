@@ -1,0 +1,48 @@
+/* MACHINE-GENERATED ! */
+
+package "PX0707/P/6"
+unit mm
+
+set N = 6
+
+set a = n*60
+
+set x = sin(a)
+
+set y = cos(a)
+
+set pad_dia = 3mm
+
+set pad_hole_dia = 1.1mm
+
+set pin_dia = 10.95mm
+
+set mount_hole_dia = 2.2mm
+
+set mount_hole_dist = 34mm
+
+set silk_dia = 40mm
+
+loop n = 1, N
+
+__0: vec @(cos(n*60)*pin_dia/2, sin(n*60)*pin_dia/2)
+__1: vec .(pad_dia/2, pad_dia/2)
+__2: vec __0(-pad_dia/2, -pad_dia/2)
+rpad "$n" . __1
+__3: vec __0(-pad_hole_dia/2, pad_hole_dia/2)
+__4: vec __0(pad_hole_dia/2, -pad_hole_dia/2)
+hole __3 .
+__5: vec @(mount_hole_dist/2, 0mm)
+__6: vec @(-mount_hole_dist/2, 0mm)
+__7: vec __5(mount_hole_dia/2, -mount_hole_dia/2)
+__8: vec __5(-mount_hole_dia/2, mount_hole_dia/2)
+hole . __7
+__9: vec __6(-mount_hole_dia/2, mount_hole_dia/2)
+__10: vec __6(mount_hole_dia/2, -mount_hole_dia/2)
+hole __9 .
+__11: vec @(silk_dia/2, 0mm)
+circ @ . 
+measx __9 >> __10 20mm
+measy __2 -> __1 5mm
+measx __3 -> __4 3mm
+measx __6 >> __5 -25mm

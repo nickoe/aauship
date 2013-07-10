@@ -1,0 +1,35 @@
+/* MACHINE-GENERATED ! */
+
+package "KX1205"
+unit mm
+
+set pitch = 6.5mm
+
+set dia = 12mm
+
+set pad_dia = 2.4mm
+
+set hole_dia = 0.75mm
+
+__0: vec @(dia/2, 0mm)
+circ @ . 
+__1: vec @(pitch/2, 0mm)
+__2: vec @(-pitch/2, 0mm)
+__3: vec __1(pad_dia/2, pad_dia/2)
+__4: vec __1(-pad_dia/2, -pad_dia/2)
+rpad "2" . __3
+__5: vec __2(pad_dia/2, pad_dia/2)
+__6: vec __2(-pad_dia/2, -pad_dia/2)
+rpad "1" . __5
+__7: vec __1(-hole_dia/2, -hole_dia/2)
+__8: vec __1(hole_dia/2, hole_dia/2)
+hole __7 .
+__9: vec __2(hole_dia/2, hole_dia/2)
+__10: vec __2(-hole_dia/2, -hole_dia/2)
+hole . __9
+__11: vec @(pitch/2-1mm, 1.8mm+1mm)
+__12: vec @(pitch/2+1mm, 1.8mm+1mm)
+line __11 . 
+__13: vec @(pitch/2, 1.8mm)
+__14: vec @(pitch/2, 1.8mm+2mm)
+line __13 . 
