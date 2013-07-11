@@ -8,7 +8,7 @@
  * @author Nick Østergaard nickoe@es.aau.dk
  * @author Simon Als Nielsen
  *
- * @brief This file provides functions to grab data from the IMU.
+ * @brief This file provides functions to grab data from the ADIS16405 IMU.
  *
  */
 

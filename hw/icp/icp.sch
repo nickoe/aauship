@@ -38,7 +38,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 2
 Title "Intelligent Charge Port (ICP)"
-Date "4 jul 2013"
+Date "8 jul 2013"
 Rev "1.0"
 Comp "AAUSHIP"
 Comment1 "Aalborg University"
@@ -1631,4 +1631,56 @@ Wire Wire Line
 Wire Wire Line
 	7300 2750 7300 2800
 Connection ~ 7550 2750
+Wire Wire Line
+	2500 3500 2500 3550
+Wire Wire Line
+	2650 3600 2650 3650
+Wire Wire Line
+	2350 3900 2350 3950
+Wire Wire Line
+	2200 3300 2200 3350
+$Comp
+L GND #PWR?
+U 1 1 51DA8C65
+P 2650 3650
+F 0 "#PWR?" H 2650 3650 30  0001 C CNN
+F 1 "GND" H 2650 3580 30  0001 C CNN
+F 2 "" H 2650 3650 60  0000 C CNN
+F 3 "" H 2650 3650 60  0000 C CNN
+	1    2650 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51DA8CBC
+P 2500 3550
+F 0 "#PWR?" H 2500 3550 30  0001 C CNN
+F 1 "GND" H 2500 3480 30  0001 C CNN
+F 2 "" H 2500 3550 60  0000 C CNN
+F 3 "" H 2500 3550 60  0000 C CNN
+	1    2500 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51DA8D11
+P 2350 3950
+F 0 "#PWR?" H 2350 3950 30  0001 C CNN
+F 1 "GND" H 2350 3880 30  0001 C CNN
+F 2 "" H 2350 3950 60  0000 C CNN
+F 3 "" H 2350 3950 60  0000 C CNN
+	1    2350 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51DA8D17
+P 2200 3350
+F 0 "#PWR?" H 2200 3350 30  0001 C CNN
+F 1 "GND" H 2200 3280 30  0001 C CNN
+F 2 "" H 2200 3350 60  0000 C CNN
+F 3 "" H 2200 3350 60  0000 C CNN
+	1    2200 3350
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
