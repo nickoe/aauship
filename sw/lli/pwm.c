@@ -6,8 +6,6 @@
 #include "pwm.h"
 
 /*
-
-
 f_OCnA = fclk_IO/(2*N*(1+OCRnA)
 */
 // Initialiser PWM, specifikt for vores bil
