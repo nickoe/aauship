@@ -19,7 +19,7 @@ gpslog = open("meas/gps.txt",'w')
 plog = open("meas/plog.txt",'w')
 inclog = open("meas/inclog.txt",'w')
 echolog = open("meas/echolog.txt",'w')
-gps2log = open("meas/gps2log.txt",'w')
+gps2log = open("meas/gps2log.txt",'wb')
 
 Y = numpy.array([0,2.5574,0.5683,-16.3120,-40.7704]) #Easting
 X = numpy.array([0,-18.3388,-36.7722,-53.9444,-54.2330]) #Northing
@@ -30,9 +30,10 @@ qu = Queue.Queue()
 kalqueue = Queue.Queue()
 to = 0.1665
 #receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,0.02,qu,inclog)
-receiver = packetHandler.packetHandler("/dev/ttyACM1",115200,0.02,qu,inclog)
-echorcv = serial.Serial("/dev/ttyUSB0",4800,timeout=0.04)
-gps2rcv = serial.Serial("/dev/ttyACM0",115200,timeout=0.04)
+# Using the udev rules file 42-aauship.rules 
+receiver = packetHandler.packetHandler("/dev/lli",115200,0.02,qu,inclog)
+echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)
+gps2rcv = serial.Serial("/dev/gps2",115200,timeout=0.04)
 
 receiver.start()
 
@@ -152,10 +153,16 @@ try:
 				# Grabbing the GPS2 data
 				try:
 					gps2 = gps2rcv.readline()
-					gps2 = gps2.rstrip()
 					if gps2 != "":
-						#print gps2
+						gps2 = gps2.rstrip()
 						gps2log.write(gps2 + ',' + str(time.time()) + "\r\n")
+						#print gps2
+#						if gps[0:3]=='$GP':
+#							print "nullermand" + gps2
+#							gps2 = gps2.rstrip()
+#							gps2log.write(gps2 + ',' + str(time.time()) + "\r\n")
+#						else:
+#							gps2log.write(gps2)
 				except Exception:
 					pass
 
